@@ -1,0 +1,200 @@
+/**
+ * Bootstrap customised
+ *
+ * @see https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss
+ */
+// Keep concrete values — Bootstrap uses these in Sass math/color functions at compile time
+$font-size-root:             62.5%;           // 1rem = 10px
+$font-size-base:             1.8rem;          // 18px
+$line-height-base:           1.35;
+$font-weight-base:           400;
+$border-radius:              0;
+$primary:                    rgb(19, 187, 186);
+$grid-columns:               12;
+$grid-gutter-width:          3rem;
+$headings-font-weight:       700;
+$headings-line-height:       1.0;
+
+// Reference CSS custom properties — output as-is into the compiled stylesheet
+$font-family-sans-serif:     var(--wp--preset--font-family--body);
+$body-bg:                    var(--wp--preset--color--bg-primary);
+$body-color:                 var(--wp--preset--color--fg-primary);
+$link-color:                 var(--wp--preset--color--blue);
+$link-hover-color:           var(--wp--preset--color--teal);
+$headings-font-family:       var(--wp--preset--font-family--heading);
+$btn-transition:             color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out, box-shadow .3s ease-in-out;
+$btn-box-shadow:             none;
+$btn-active-box-shadow:      none;
+$btn-focus-box-shadow:       none;
+$input-btn-focus-box-shadow: none;
+$input-border-radius:        0;
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px
+);
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: 1320px
+);
+
+$spacers : (0: 0,
+    1: 1rem,
+    2: 2rem,
+    3: 3rem,
+    4: 4rem,
+    5: 5rem,
+    6: 6rem,
+    7: 7rem,
+    8: 8rem,
+    9: 9rem,
+    10: 10rem);
+
+/* theme-json: generated tokens */
+:root {
+    /* Backgrounds */
+    --color-bg-primary: rgb(1, 7, 31);
+    --color-bg-secondary: rgb(1, 9, 37);
+    --color-bg-tertiary: rgb(1, 6, 28);
+    --color-bg-card: rgba(12, 37, 84, 0.20);
+    --color-bg-navy: rgb(12, 37, 84);
+    --color-bg-navy-dark: rgb(13, 57, 98);
+
+    /* Primary accents */
+    --color-teal: rgb(19, 187, 186);
+    --color-teal-muted: rgba(19, 187, 186, 0.10);
+    --color-green: rgb(48, 199, 146);
+    --color-blue: rgb(0, 122, 255);
+    --color-blue-muted: rgba(0, 122, 255, 0.25);
+    --color-cyan: rgb(48, 176, 199);
+    --color-orange: rgb(199, 98, 48);
+    --color-orange-muted: rgba(199, 98, 48, 0.20);
+    --color-yellow: rgb(255, 204, 0);
+    --color-olive: rgb(176, 199, 48);
+
+    /* Text */
+    --color-fg-primary: rgb(255, 255, 255);
+    --color-fg-secondary: rgb(255, 253, 254);
+    --color-fg-muted: rgb(95, 97, 102);
+    --color-fg-light: rgb(245, 246, 250);
+
+    /* Borders */
+    --color-border-teal: rgb(19, 187, 186);
+    --color-border-blue: rgba(0, 122, 255, 0.50);
+    --color-border-navy: rgb(12, 37, 84);
+    --color-border-grey: rgb(230, 230, 230);
+
+    /* Shadows */
+    --shadow-black: rgba(0, 0, 0, 0.50);
+    --shadow-warm: rgba(127, 124, 111, 0.67);
+    --shadow-blue: rgba(68, 157, 255, 0.70);
+
+    /* Semantic aliases */
+    --color-bg: var(--color-bg-primary);
+    --color-bg-alt: var(--color-bg-secondary);
+    --color-accent: var(--color-teal);
+    --color-accent-hover: var(--color-green);
+    --color-link: var(--color-blue);
+    --color-cta-border: var(--color-teal);
+    --color-cta-icon-bg: var(--color-teal-muted);
+    --color-heading-alt: var(--color-orange);
+    --color-marquee: var(--color-green);
+
+    /* Font families */
+    --font-display: 'Barlow Condensed', 'Roboto Condensed', sans-serif;
+    --font-heading: 'Roboto Condensed', sans-serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-icons: 'Font Awesome 6 Free', 'Font Awesome 5 Free', sans-serif;
+
+    /* Typography scale — Display */
+    --text-display-xl: 120px;
+    --text-display-lg: 79px;
+    --text-display-md: 58px;
+    --text-display-sm: 56px;
+
+    /* Typography scale — Headings */
+    --text-h1: 88px;
+    --text-h2: 64px;
+    --text-h3: 58px;
+    --text-h4: 46px;
+    --text-h5: 40px;
+    --text-h6: 32px;
+
+    /* Typography scale — Service */
+    --text-service: 70px;
+
+    /* Typography scale — Body */
+    --text-body-xl: 40px;
+    --text-body-lg: 28px;
+    --text-body-md: 24px;
+    --text-body-base: 22px;
+    --text-body-sm: 20px;
+    --text-body-xs: 18px;
+    --text-label: 16px;
+    --text-caption: 14px;
+    --text-tiny: 13px;
+    --text-micro: 12px;
+
+    /* Typography scale — Mono */
+    --text-mono-lg: 28px;
+    --text-mono-md: 20px;
+    --text-mono-sm: 18px;
+    --text-mono-xs: 14px;
+
+    /* Line heights */
+    --leading-tight: 1.0;
+    --leading-snug: 1.2;
+    --leading-normal: 1.35;
+    --leading-relaxed: 1.5;
+
+    /* Letter spacing */
+    --tracking-tight: 0.005em;
+    --tracking-normal: 0.010em;
+    --tracking-wide: 0.030em;
+    --tracking-wider: 0.100em;
+    --tracking-menu: 0.030em;
+    --tracking-label: 0.500px;
+
+    /* Spacing & layout */
+    --page-margin-desktop: 94px;
+    --page-margin-mobile: 20px;
+    --section-padding-y: 80px;
+    --gap-section: 30px;
+    --gap-cards: 50px;
+    --gap-content: 25px;
+
+    /* Borders & geometry */
+    --border-cta: 3px solid var(--color-teal);
+    --border-card: 3px solid rgba(0, 122, 255, 0.25);
+    --border-field: 2px solid rgba(0, 122, 255, 0.50);
+    --border-nav: 2px solid var(--color-bg-navy);
+    --border-radius: 0px;
+    --border-radius-pill: 50%;
+
+    /* CTA button */
+    --cta-height-lg: 62px;
+    --cta-height-md: 60px;
+    --cta-px: 30px;
+    --cta-icon-w: 58px;
+
+    /* Arrow button */
+    --btn-arrow-size: 64px;
+
+    /* Form field */
+    --field-height: 64px;
+    --field-px: 13px;
+    --field-py: 20px;
+
+    /* Header */
+    --header-height-desktop: 98px;
+    --header-height-mobile: 40px;
+}

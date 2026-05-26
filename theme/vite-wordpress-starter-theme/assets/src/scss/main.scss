@@ -1,0 +1,25 @@
+// abstracts
+@use "abstracts/variables";
+
+// vendors
+
+// vendors overrides
+// @use "vendors/myvendor";
+
+// base
+@use "base/fonts";
+@use "base/base";
+
+// layout
+@use "layout/header";
+@use "layout/footer";
+@use "layout/forms";
+@use "layout/grid";
+
+// components
+@use "components/buttons";
+@use "components/modal";
+
+// pages
+@use "pages/front-page";
+@use "pages/page";

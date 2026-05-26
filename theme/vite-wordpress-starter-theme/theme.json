@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "color": {
+      "palette": [
+        { "name": "Bg Primary",   "slug": "bg-primary",   "color": "#01071f" },
+        { "name": "Bg Secondary", "slug": "bg-secondary", "color": "#010925" },
+        { "name": "Bg Tertiary",  "slug": "bg-tertiary",  "color": "#01061c" },
+        { "name": "Bg Card",      "slug": "bg-card",      "color": "rgba(12,37,84,0.2)" },
+        { "name": "Bg Navy",      "slug": "bg-navy",      "color": "#0c2554" },
+        { "name": "Bg Navy Dark", "slug": "bg-navy-dark", "color": "#0d3962" },
+        { "name": "Teal",         "slug": "teal",         "color": "#13bbba" },
+        { "name": "Teal Muted",   "slug": "teal-muted",   "color": "rgba(19,187,186,0.1)" },
+        { "name": "Green",        "slug": "green",        "color": "#30c792" },
+        { "name": "Blue",         "slug": "blue",         "color": "#007aff" },
+        { "name": "Blue Muted",   "slug": "blue-muted",   "color": "rgba(0,122,255,0.25)" },
+        { "name": "Cyan",         "slug": "cyan",         "color": "#30b0c7" },
+        { "name": "Orange",       "slug": "orange",       "color": "#c76230" },
+        { "name": "Orange Muted", "slug": "orange-muted", "color": "rgba(199,98,48,0.2)" },
+        { "name": "Yellow",       "slug": "yellow",       "color": "#ffcc00" },
+        { "name": "Olive",        "slug": "olive",        "color": "#b0c730" },
+        { "name": "Fg Primary",   "slug": "fg-primary",   "color": "#ffffff" },
+        { "name": "Fg Secondary", "slug": "fg-secondary", "color": "#fffdfe" },
+        { "name": "Fg Muted",     "slug": "fg-muted",     "color": "#5f6166" },
+        { "name": "Fg Light",     "slug": "fg-light",     "color": "#f5f6fa" },
+        { "name": "Border Teal",  "slug": "border-teal",  "color": "#13bbba" },
+        { "name": "Border Blue",  "slug": "border-blue",  "color": "rgba(0,122,255,0.5)" },
+        { "name": "Border Navy",  "slug": "border-navy",  "color": "#0c2554" },
+        { "name": "Border Grey",  "slug": "border-grey",  "color": "#e6e6e6" }
+      ],
+      "custom": true,
+      "customDuotone": false,
+      "customGradient": false
+    },
+    "typography": {
+      "fontSizes": [
+        { "name": "Heading 1", "slug": "h1",   "size": "5.5rem"   },
+        { "name": "Heading 2", "slug": "h2",   "size": "4rem"     },
+        { "name": "Heading 3", "slug": "h3",   "size": "3.625rem" },
+        { "name": "Heading 4", "slug": "h4",   "size": "2.875rem" },
+        { "name": "Base",      "slug": "base", "size": "1.125rem" }
+      ],
+      "fontFamilies": [
+        { "name": "Display", "slug": "display", "fontFamily": "'Barlow Condensed', 'Roboto Condensed', sans-serif" },
+        { "name": "Heading", "slug": "heading", "fontFamily": "'Roboto Condensed', sans-serif" },
+        { "name": "Body",    "slug": "body",    "fontFamily": "'IBM Plex Sans', sans-serif" },
+        { "name": "Mono",    "slug": "mono",    "fontFamily": "'IBM Plex Mono', monospace" },
+        { "name": "Icons",   "slug": "icons",   "fontFamily": "'Font Awesome 6 Free', 'Font Awesome 5 Free', sans-serif" }
+      ],
+      "customFontSize": true
+    },
+    "useRootPaddingAwareAlignments": false
+  }
+}
