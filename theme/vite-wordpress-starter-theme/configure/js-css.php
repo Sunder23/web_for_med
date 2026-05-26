@@ -64,11 +64,18 @@ function add_vite_assets() {
 
     foreach ( $js_files as $handle => $file ) {
         $js_uri = VITE_SERVER . '/assets/src/js/' . $file;
+        $script_dependencies = 'main' === $handle ? array( 'jquery' ) : null;
         if ( VITE_BUILD ) {
-            $js_uri = DIST_URI . '/' . $manifest[ 'assets/src/js/' . $file ]['file'];
+            $manifest_entry = $manifest[ 'assets/src/js/' . $file ] ?? [];
+            $js_uri = DIST_URI . '/' . $manifest_entry['file'];
+
+            // Enqueue CSS extracted from JS imports (e.g. swiper/css)
+            foreach ( $manifest_entry['css'] ?? [] as $i => $css_file ) {
+                wp_enqueue_style( $handle . '-js-' . $i, DIST_URI . '/' . $css_file, null, null );
+            }
         }
 
-        wp_register_script( $handle, $js_uri, null, null, true );
+        wp_register_script( $handle, $js_uri, $script_dependencies, null, true );
         $vars = array(
 //			'ajaxUrl' => admin_url( 'admin-ajax.php' ), // uncomment to use - in your js : siteVars.ajaxUrl
         );
@@ -103,7 +110,6 @@ function add_module_type_attribute( $tag, $handle, $src ) {
     return $tag;
 }
 add_filter( 'script_loader_tag', 'add_module_type_attribute', 10, 3 );
-add_filter( 'style_loader_tag', 'add_module_type_attribute', 10, 3 );
 
 function _add_stylesheets() {
     wp_enqueue_style('adobe', 'https://use.typekit.net/jug2qva.css', null, null );

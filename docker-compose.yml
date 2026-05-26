@@ -25,8 +25,10 @@ services:
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
     volumes:
       - wordpress_data:/var/www/html
-      - ./theme:/var/www/html/wp-content/themes
-      - ./plugin:/var/www/html/wp-content/plugins
+      - ./theme/vite-wordpress-starter-theme:/var/www/html/wp-content/themes/vite-wordpress-starter-theme
+      # Add custom plugins here, one line per plugin:
+      # - ./plugin/my-custom-plugin:/var/www/html/wp-content/plugins/my-custom-plugin
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
   phpmyadmin:
     image: phpmyadmin:latest

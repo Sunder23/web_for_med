@@ -1,0 +1,12 @@
+.l-wrap,
+.s-banner__inner {
+    max-width: var(--page-w);
+    margin: 0 auto;
+    padding: 0 var(--pad-x);
+}
+
+.l-frame-x,
+.clinics-grid {
+    border-left: var(--border);
+    border-right: var(--border);
+}

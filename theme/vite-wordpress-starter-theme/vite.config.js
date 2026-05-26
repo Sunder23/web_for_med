@@ -10,10 +10,7 @@ import { defineConfig } from 'vite';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
 
-// Get the relative path of the vite.config.js file for the alias
-const fullPath = import.meta.url.slice(0, import.meta.url.lastIndexOf('/'));
-const getWpContentIndex = fullPath.indexOf('wp-content');
-const wpContentPath = fullPath.slice(getWpContentIndex);
+
 
 const scssEntries = () => {
   const scssDir = resolve(__dirname, 'assets/src/scss');
@@ -61,7 +58,8 @@ export default defineConfig({
         entryFileNames: '[name]-[hash].js',
         chunkFileNames: '[name]-[hash].js',
         assetFileNames: (assetInfo) => {
-          const extType = assetInfo.name.split('.');
+          const assetName = assetInfo.name || assetInfo.names?.[0] || '';
+          const extType = assetName.split('.');
 
           // group fonts in a folder
           if (
@@ -101,10 +99,10 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      '@':
-        process.env.NODE_ENV === 'development'
-          ? resolve(`${wpContentPath}/static`)
-          : '/static',
+      '@src': resolve(__dirname, 'assets/src'),
+      '@js': resolve(__dirname, 'assets/src/js'),
+      '@scss': resolve(__dirname, 'assets/src/scss'),
+      '@': resolve(__dirname, 'static'),
     },
   },
 });

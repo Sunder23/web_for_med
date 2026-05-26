@@ -4,30 +4,30 @@
  * @see https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss
  */
 // Keep concrete values — Bootstrap uses these in Sass math/color functions at compile time
-$font-size-root:             62.5%;           // 1rem = 10px
-$font-size-base:             1.8rem;          // 18px
-$line-height-base:           1.35;
-$font-weight-base:           400;
-$border-radius:              0;
-$primary:                    rgb(19, 187, 186);
-$grid-columns:               12;
-$grid-gutter-width:          3rem;
-$headings-font-weight:       700;
-$headings-line-height:       1.0;
+$font-size-root: 62.5%; // 1rem = 10px
+$font-size-base: 1.8rem; // 18px
+$line-height-base: 1.35;
+$font-weight-base: 400;
+$border-radius: 0;
+$primary: rgb(19, 187, 186);
+$grid-columns: 12;
+$grid-gutter-width: 3rem;
+$headings-font-weight: 700;
+$headings-line-height: 1.0;
 
 // Reference CSS custom properties — output as-is into the compiled stylesheet
-$font-family-sans-serif:     var(--wp--preset--font-family--body);
-$body-bg:                    var(--wp--preset--color--bg-primary);
-$body-color:                 var(--wp--preset--color--fg-primary);
-$link-color:                 var(--wp--preset--color--blue);
-$link-hover-color:           var(--wp--preset--color--teal);
-$headings-font-family:       var(--wp--preset--font-family--heading);
-$btn-transition:             color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out, box-shadow .3s ease-in-out;
-$btn-box-shadow:             none;
-$btn-active-box-shadow:      none;
-$btn-focus-box-shadow:       none;
+$font-family-sans-serif: var(--wp--preset--font-family--body);
+$body-bg: var(--wp--preset--color--bg-primary);
+$body-color: var(--wp--preset--color--fg-primary);
+$link-color: var(--wp--preset--color--blue);
+$link-hover-color: var(--wp--preset--color--teal);
+$headings-font-family: var(--wp--preset--font-family--heading);
+$btn-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out, box-shadow .3s ease-in-out;
+$btn-box-shadow: none;
+$btn-active-box-shadow: none;
+$btn-focus-box-shadow: none;
 $input-btn-focus-box-shadow: none;
-$input-border-radius:        0;
+$input-border-radius: 0;
 
 $grid-breakpoints: (
     xs: 0,
@@ -197,4 +197,54 @@ $spacers : (0: 0,
     /* Header */
     --header-height-desktop: 98px;
     --header-height-mobile: 40px;
+
+    /* web4med page tokens */
+    --color-brand-dark-blue: #092a4a;
+    --color-brand-blue: #1261a0;
+    --color-brand-blue-light: #218ed6;
+    --color-brand-navy: #144166;
+    --color-brand-dark: #2e2f30;
+    --color-brand-grey: #3b3e41;
+    --color-brand-white: #f8f9f9;
+    --color-brand-bg: #fbfcfd;
+    --color-brand-bg-light: #f8f8f8;
+    --color-brand-border: #dbdbdb;
+    --color-brand-secondary: #d8dde0;
+    --font-main: 'Fixel Display', sans-serif;
+    --font-logo: var(--font-main);
+    --radius-sm: 4px;
+    --border-default: 1px solid var(--color-brand-border);
+    --header-h: 66px;
+    --page-w: 1440px;
+    --pad-x: 45px;
+
+    /* Legacy aliases retained while templates/styles still reference them */
+    --c-dark-blue: var(--color-brand-dark-blue);
+    --c-blue: var(--color-brand-blue);
+    --c-blue-light: var(--color-brand-blue-light);
+    --c-navy: var(--color-brand-navy);
+    --c-dark: var(--color-brand-dark);
+    --c-grey: var(--color-brand-grey);
+    --c-white: var(--color-brand-white);
+    --c-bg: var(--color-brand-bg);
+    --c-bg-light: var(--color-brand-bg-light);
+    --c-border: var(--color-brand-border);
+    --c-secondary: var(--color-brand-secondary);
+    --f-main: var(--font-main);
+    --f-logo: var(--font-logo);
+    --radius: var(--radius-sm);
+    --border: var(--border-default);
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --pad-x: 24px;
+        --header-h: 46px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --pad-x: 16px;
+    }
 }

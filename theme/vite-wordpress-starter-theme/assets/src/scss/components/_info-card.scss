@@ -1,0 +1,32 @@
+.card-title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--c-dark);
+}
+
+.card-text {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--c-grey);
+}
+
+.info-card {
+    flex: 1;
+    padding: 48px 40px;
+    border-left: var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+.info-card__body {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .info-card {
+        padding: 32px 20px;
+    }
+}

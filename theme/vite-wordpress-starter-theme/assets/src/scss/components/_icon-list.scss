@@ -1,0 +1,32 @@
+.icon-list__item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: var(--border);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--c-dark);
+}
+
+.icon-list__item:last-child {
+    border-bottom: none;
+}
+
+.icon-list__icon {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    object-fit: contain;
+
+    @media (max-width: 768px) {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .icon-list__item {
+        font-size: 16px;
+    }
+}

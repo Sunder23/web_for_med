@@ -10,15 +10,19 @@
 @use "base/fonts";
 @use "base/base";
 
+// components
+@use "components/buttons";
+@use "components/tag";
+@use "components/section-title";
+@use "components/info-card";
+@use "components/icon-list";
+@use "components/modal";
+
 // layout
 @use "layout/header";
 @use "layout/footer";
 @use "layout/forms";
 @use "layout/grid";
-
-// components
-@use "components/buttons";
-@use "components/modal";
 
 // pages
 @use "pages/front-page";

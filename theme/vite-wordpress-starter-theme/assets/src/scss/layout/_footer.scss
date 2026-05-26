@@ -1,4 +1,210 @@
+.footer {
 
-.site-footer {
+    @media (max-width: 768px) {
+        .l-wrap {
+            border: 0;
+            padding: 0;
+        }
+    }
+
+    &__form-section {
+        background: var(--c-bg-light);
+        border-top: var(--border);
+        border-bottom: var(--border);
+    }
+
+    &__form-wrap {
+        max-width: var(--page-w);
+        margin: 0 auto;
+        padding: 90px var(--pad-x);
+        border-left: var(--border);
+        border-right: var(--border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    &__form-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+        max-width: 608px;
+
+        @media (max-width: 768px) {
+            gap: 8px;
+        }
+    }
+
+    &__form-title {
+        font-size: 48px;
+        font-weight: 600;
+        line-height: 1.01;
+        color: var(--c-dark);
+    }
+
+    &__form-subtitle {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.5;
+        color: var(--c-grey);
+    }
+
+    &__cover {
+        border-bottom: var(--border);
+        height: 454px;
+        overflow: hidden;
+    }
+
+    &__cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__bar {
+        border-bottom: var(--border);
+    }
+
+    &__bar-wrap {
+        max-width: var(--page-w);
+        margin: 0 auto;
+        padding: 0 var(--pad-x);
+    }
+
+    &__bar-inner {
+        height: 84px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-left: var(--border);
+        border-right: var(--border);
+        padding: 0 40px;
+        gap: 32px;
+    }
+
+    &__nav {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+    }
+
+    &__nav .menu {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+    }
+
+    &__nav a {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--c-grey);
+        white-space: nowrap;
+        transition: color 0.2s;
+    }
+
+    &__nav a:hover {
+        color: var(--c-blue);
+    }
+
+    &__contacts {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-shrink: 0;
+    }
+
+    &__email {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--c-blue);
+        white-space: nowrap;
+        transition: opacity 0.2s;
+    }
+
+    &__email:hover {
+        opacity: 0.75;
+    }
+
+    &__socials {
+        display: flex;
+        gap: 10px;
+    }
+
+    &__social {
+        height: 28px;
+        object-fit: contain;
+    }
+
+    @media (max-width: 1024px) {
+        &__bar-inner {
+            height: auto;
+            padding: 20px 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        &__form-title {
+            font-size: 36px;
+        }
+
+        &__cover {
+            height: 320px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        &__form-wrap {
+            padding: 60px 20px;
+        }
+
+        &__form-title {
+            font-size: 26px;
+        }
+
+        &__form-subtitle {
+            font-size: 16px;
+        }
+
+        &__cover {
+            height: auto;
+
+            img {
+                min-height: 200px;
+            }
+        }
+
+        &__bar-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            height: auto;
+            padding: 24px 20px;
+            gap: 16px;
+        }
+
+        &__nav {
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        &__nav .menu {
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        &__contacts {
+            flex-direction: row-reverse;
+            align-items: center;
+            gap: 10px;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        &__email {
+            font-size: 16px;
+        }
+    }
 
 }
