@@ -1,46 +1,4 @@
-# Environment variables
 .env
-.env.*.local
-
-# WordPress runtime and database (stored locally but not in git)
-.srv/
-
-# Third-party themes installed via WordPress (not tracked)
-theme/twentytwenty*/
-theme/twentytwentyone/
-
-# Third-party plugins installed via WordPress (not tracked)
-plugin/*/
-
-# Node modules
 node_modules/
 vendor/
-
-# Composer vendor (for PHP dependencies)
-vendor/
-
-# WordPress development files
-/wp-content/upgrade/
-/wp-content/cache/
-/wp-content/backup-db/
-/wp-content/backups/
-/wp-content/advanced-cache.php
-/wp-content/object-cache.php
-/wp-content/sunrise.php
-/wp-content/wp-debug.php
-
-# WordPress logs
-wp-content/debug.log
-
-# WordPress security
-/wp-content/uploads/backup-db-*.sql
-/wp-content/plugins/woocommerce-gateway-stripe/inc/rest-api/class-wc-rest-stripe-subscriptions-controller.php
-
-# Other development files
-*.swp
-*.swo
-*~
-debug.log
-*.log
-*.lock
-*.md
+dist/
