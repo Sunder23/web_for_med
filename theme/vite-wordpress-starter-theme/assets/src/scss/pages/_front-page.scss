@@ -399,8 +399,12 @@
     text-align: center;
 
     @media (max-width: 768px) {
-      padding: 60px 10px;
+      padding: 50px 10px;
       gap: 14px;
+
+      svg {
+        height: 30px;
+      }
     }
   }
 
@@ -474,6 +478,10 @@
 
 .sections_wrapper {
   position: relative;
+
+  @media (max-width: 768px) {
+    margin-top: 1px;
+  }
 }
 
 /* ============================================================
@@ -774,7 +782,7 @@
     align-items: center;
 
     @media (max-width: 768px) {
-      padding: 48px 20px;
+      padding: 50px 20px;
       width: calc(100% - calc(var(--pad-x) * 2));
       margin: 0 auto;
     }
@@ -790,10 +798,12 @@
   }
 
   &__body {
-    display: flex;
+    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    justify-content: flex-start;
 
     @media (max-width: 1024px) {
-      flex-direction: column;
+      grid-template-columns: repeat(1, 1fr);
     }
   }
 }
@@ -1134,7 +1144,7 @@
     padding: 90px 40px;
 
     @media (max-width: 768px) {
-      padding: 30px 10px;
+      padding: 50px 10px;
     }
 
     .section-title {
@@ -1280,7 +1290,12 @@
 }
 
 .why-chat {
-  background: var(--c-navy);
+  background:
+    repeating-radial-gradient(rgba(255, 255, 255, .025) 0 1px,
+      transparent 1px 2px),
+    var(--c-navy);
+
+  background-size: 4px 4px;
   flex: 0 0 666px;
   padding: 40px;
   display: flex;
@@ -1300,7 +1315,6 @@
   }
 
   &__screen {
-    background: rgba(20, 65, 102, 0.75);
     border-radius: 8px;
     padding: 26px 32px;
     display: none;

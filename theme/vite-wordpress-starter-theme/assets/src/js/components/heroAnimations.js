@@ -31,7 +31,7 @@ function animateSubtitleAndButtons() {
 	});
 }
 
-function initTitleScramble(el) {
+function initTitleScramble(el, delay = 0.2) {
 	return new Promise(resolve => {
 		if (!el) { resolve(); return; }
 
@@ -50,7 +50,7 @@ function initTitleScramble(el) {
 		gsap.set(el, { opacity: 1 });
 		gsap.set(split.chars, { opacity: 0 });
 
-		const tl = gsap.timeline({ delay: 0.2, onComplete: resolve });
+		const tl = gsap.timeline({ delay: delay, onComplete: resolve });
 
 		split.chars.forEach((char, i) => {
 			const original = char.textContent;
@@ -124,11 +124,36 @@ export function initFooterCoverText() {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
 					obs.disconnect();
-					initTitleScramble(el);
+					initTitleScramble(el, 0.7);
 				}
 			});
 		},
 		{ threshold: 0.5 },
+	);
+
+	observer.observe(el);
+}
+export function initFooterCoverImageGlitch() {
+	const el = document.querySelector('.footer__cover-img');
+	if (!el) return;
+
+	const observer = new IntersectionObserver(
+		(entries, obs) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					observer.disconnect();
+
+					setTimeout(() => {
+						el.classList.remove('glitch');
+
+						requestAnimationFrame(() => {
+							el.classList.add('glitch');
+						});
+					}, 3500);
+				}
+			});
+		},
+		{ threshold: 0.7 },
 	);
 
 	observer.observe(el);

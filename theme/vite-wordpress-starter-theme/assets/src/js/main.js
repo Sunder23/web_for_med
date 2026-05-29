@@ -2,7 +2,7 @@ import { initActiveNav } from '@js/components/activeNav.js';
 import { initCasesSlider } from '@js/components/casesSlider.js';
 import { initContactForm } from '@js/components/contactForm.js';
 import { initGlitchImage } from '@js/components/glitchImage.js';
-import { initHeroAnimations, initFooterCoverText, initFooterFormAOS } from '@js/components/heroAnimations.js';
+import { initHeroAnimations, initFooterCoverText, initFooterFormAOS, initFooterCoverImageGlitch } from '@js/components/heroAnimations.js';
 import { initMobileNav } from '@js/components/mobileNav.js';
 import { initServicesAccordion } from '@js/components/servicesAccordion.js';
 import { initSmoothScroll } from '@js/components/smoothScroll.js';
@@ -20,4 +20,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	initFooterCoverText();
 	initFooterFormAOS();
 	initContactForm();
+	initFooterCoverImageGlitch();
 });

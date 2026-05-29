@@ -11,6 +11,10 @@
         background: var(--c-bg-light);
         border-top: var(--border);
         border-bottom: var(--border);
+
+        @media (max-width: 768px) {
+            margin-top: -1px;
+        }
     }
 
     &__form-wrap {
@@ -57,6 +61,13 @@
         height: 454px;
         overflow: hidden;
 
+        &-img {
+            background-image: var(--footer-cover-image);
+            background-size: cover;
+            background-position: center;
+            height: 454px;
+        }
+
         .l-frame-x {
             position: relative;
         }
@@ -73,6 +84,7 @@
         color: var(--c-white);
         opacity: 0;
         white-space: nowrap;
+        z-index: 1;
 
         @media screen and (max-width: 768px) {
             font-size: 28px;
