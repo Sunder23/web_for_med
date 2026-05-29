@@ -39,7 +39,7 @@ export function initWhySection() {
 			screen.classList.add('why-chat__screen--entered');
 
 			messages.forEach((message, index) => {
-				message.style.transitionDelay = `${index * MESSAGE_REVEAL_DELAY}ms`;
+				message.style.transitionDelay = `${(index + 1.5) * MESSAGE_REVEAL_DELAY}ms`;
 				message.classList.add('why-msg--visible');
 			});
 		});

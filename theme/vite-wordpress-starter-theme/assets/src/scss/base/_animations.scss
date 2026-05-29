@@ -1,0 +1,423 @@
+@use 'sass:math';
+
+@function rand($min, $max) {
+    @return math.random() * ($max - $min)+$min;
+}
+
+$animation-duration: 3s;
+$glitch-duration: 20%;
+$glitch-frequency: 10;
+$glitch-interval: math.div($glitch-duration, $glitch-frequency);
+
+@mixin rgb-shift($name) {
+    @keyframes rgb-shift-#{$name} {
+        @for $i from 0 to $glitch-frequency {
+            #{$i * $glitch-interval} {
+                transform: translate(#{rand(-2, 2) * 1%},
+                    #{rand(-0.5, 0.5) * 1%});
+            }
+        }
+
+        #{$glitch-duration},
+        100% {
+            transform: none;
+        }
+    }
+
+    animation: rgb-shift-#{$name} $animation-duration steps(1, jump-end) infinite alternate both;
+}
+
+$glitch-offset-top: var(--glitch-offset, 10);
+
+@mixin glitch($name) {
+    @keyframes glitch-#{$name} {
+        @for $i from 0 to $glitch-frequency {
+            $left: 0%;
+            $right: 100%;
+            $top: calc(#{$glitch-offset-top} * 1%);
+            $bottom: calc(#{$top} + #{rand(1, 10)} * 1%);
+
+            #{$i * $glitch-interval} {
+                clip-path: polygon($left $top,
+                        $right $top,
+                        $right $bottom,
+                        $left $bottom );
+                transform: translate(#{rand(-8, 8) * 1%},
+                    #{rand(-0.5, 0.5) * 1%});
+            }
+        }
+
+        #{$glitch-duration},
+        100% {
+            clip-path: none;
+            transform: none;
+        }
+    }
+
+    animation: glitch-#{$name} $animation-duration linear 2 forwards;
+}
+
+
+.glitch {
+    background: #000 no-repeat center;
+    background-size: 0;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+
+    &::before,
+    &::after,
+    .channel {
+        background: inherit;
+        background-size: cover;
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    &::before {
+        @include glitch(before);
+        content: "";
+    }
+
+    &::after {
+        @include glitch(after);
+        content: "";
+    }
+
+    .channel {
+        mix-blend-mode: screen;
+
+        &::before {
+            bottom: 0;
+            content: "";
+            display: block;
+            mix-blend-mode: multiply;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+        }
+    }
+
+    .r {
+        @include rgb-shift(r);
+
+        &::before {
+            background: #f00;
+        }
+    }
+
+    .g {
+        @include rgb-shift(g);
+
+        &::before {
+            background: #0f0;
+        }
+    }
+
+    .b {
+        @include rgb-shift(b);
+
+        &::before {
+            background: #00f;
+        }
+    }
+}
+
+/* ── hero image: glitch reveal (bottom → top) ── */
+@keyframes hero-glitch-reveal {
+    0% {
+        clip-path: inset(100% 0 0 0);
+        transform: translateX(0);
+    }
+
+    25% {
+        clip-path: inset(75% 0 0 0);
+        transform: translateX(-5px);
+    }
+
+    28% {
+        clip-path: inset(70% 0 0 0);
+        transform: translateX(7px);
+    }
+
+    32% {
+        clip-path: inset(62% 0 0 0);
+        transform: translateX(-3px);
+    }
+
+    36% {
+        clip-path: inset(54% 0 0 0);
+        transform: translateX(0);
+    }
+
+    60% {
+        clip-path: inset(22% 0 0 0);
+        transform: translateX(4px);
+    }
+
+    65% {
+        clip-path: inset(12% 0 0 0);
+        transform: translateX(-6px);
+    }
+
+    70% {
+        clip-path: inset(5% 0 0 0);
+        transform: translateX(0);
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: translateX(0);
+    }
+}
+
+[data-aos="hero-glitch-reveal"] {
+    clip-path: inset(100% 0 0 0);
+}
+
+[data-aos="hero-glitch-reveal"].aos-animate {
+    animation: hero-glitch-reveal 0.8s ease-out 0.15s forwards;
+}
+
+/* ── after reveal: remove glitch overlays, show clean image ── */
+.hero__image.hero__image--revealed {
+    background-size: cover !important;
+
+    &::before,
+    &::after {
+        display: none;
+    }
+
+    .channel {
+        display: none;
+    }
+}
+
+@mixin imgGlitch($name, $intensity, $width, $height, $top, $left) {
+
+    $steps: $intensity;
+
+    @at-root {
+
+        @for $i from 1 through 2 {
+            @keyframes #{$name}-anim-#{$i} {
+                @for $i from 0 through $steps {
+                    #{math.percentage(math.div($i, $steps))} {
+                        clip: rect(math.random($height)+px,
+                                $width+px,
+                                math.random($height)+px,
+                                0);
+                    }
+                }
+            }
+        }
+    }
+
+    >img {
+        position: absolute;
+        top: $top+px;
+        left: $left+px;
+    }
+
+    >img:nth-child(2),
+    >img:nth-child(3) {
+        clip: rect(0, 0, 0, 0);
+    }
+
+    >img:nth-child(2) {
+        left: ($left + 1) + px;
+        animation: #{$name}-anim-1 4s infinite linear alternate-reverse;
+    }
+
+    >img:nth-child(3) {
+        left: ($left - 1) + px;
+        animation: #{$name}-anim-2 6s infinite linear alternate-reverse;
+    }
+}
+
+
+.glitch-image {
+    overflow: hidden;
+    position: relative;
+
+    &:hover,
+    &.glitch-image--glitching {
+        cursor: pointer;
+        @include imgGlitch("example-three", 10, 666, 687, 0, 0);
+    }
+}
+
+/* ── AOS custom small fade-up variants ──
+   Doubled selectors match AOS specificity (0,2,0) of [data-aos^=fade][data-aos^=fade].
+   opacity/transition-property are already set by AOS base rule — not repeated here. */
+[data-aos="fade-up-sm"][data-aos="fade-up-sm"] {
+    transform: translateY(20px);
+}
+
+[data-aos="fade-up-sm"][data-aos="fade-up-sm"].aos-animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[data-aos="fade-up-xs"][data-aos="fade-up-xs"] {
+    transform: translateY(14px);
+}
+
+[data-aos="fade-up-xs"][data-aos="fade-up-xs"].aos-animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[data-aos="fade-up-scale"][data-aos="fade-up-scale"] {
+    transform: translateY(20px) scale(0.97);
+}
+
+[data-aos="fade-up-scale"][data-aos="fade-up-scale"].aos-animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+
+
+
+/*main element*/
+.pulse-icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        width: 32px;
+    }
+
+    .icon-wrap {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0px 12px 12px 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: inline-block;
+        border-radius: 50%;
+        background: #efefef;
+        position: relative;
+        z-index: 2;
+    }
+
+    .icon {
+        line-height: 60px;
+        font-size: 1.75em;
+        animation: grow-shrink 4s ease-out infinite;
+    }
+
+    .elements {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+
+    .circle {
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .circle-inner {
+        width: 80px;
+        height: 80px;
+        background: rgba(9 42 74 / 0.2);
+        animation: grow-circles 4s linear infinite both;
+    }
+
+    .circle-outer {
+        width: 100px;
+        height: 100px;
+        background: rgba(9 42 74 / 0.1);
+        animation: grow-circles 4s linear infinite both;
+    }
+
+    .pulse {
+        position: absolute;
+        animation: pulse-wave 4s linear infinite both;
+        border-radius: 50%;
+    }
+
+    .pulse-1 {
+        border: solid 1px var(--color-brand-dark-blue);
+        width: 150px;
+        height: 150px;
+    }
+
+    .pulse-2 {
+        border: solid 1px var(--color-brand-dark-blue);
+        width: 200px;
+        height: 200px;
+    }
+
+    .pulse-3 {
+        border: solid 1px var(--color-brand-dark-blue);
+        width: 250px;
+        height: 250px;
+    }
+}
+
+
+
+@keyframes pulse-wave {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+}
+
+@keyframes grow-circles {
+    0% {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    30% {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+
+}
+
+
+@keyframes grow-shrink {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    15% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    30% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}

@@ -16,10 +16,10 @@
         <div class="footer__form-wrap">
           <div class="footer__form-content">
             <?php if (!empty($contant['title'])) : ?>
-              <h2 class="footer__form-title"><?php echo esc_html($contant['title']); ?></h2>
+              <h2 class="footer__form-title" data-aos="fade-up-sm" data-aos-duration="550" data-aos-delay="0" data-aos-anchor="#contacts"><?php echo esc_html($contant['title']); ?></h2>
             <?php endif; ?>
             <?php if (!empty($contant['text'])) : ?>
-              <p class="footer__form-subtitle"><?php echo esc_html($contant['text']); ?></p>
+              <p class="footer__form-subtitle" data-aos="fade-up-xs" data-aos-duration="500" data-aos-delay="150" data-aos-anchor="#contacts"><?php echo esc_html($contant['text']); ?></p>
             <?php endif; ?>
           </div>
           <?php if (!empty($contant['contact_form'])) : ?>
@@ -34,6 +34,9 @@
     <div class="footer__cover">
       <div class="l-wrap">
         <div class="l-frame-x">
+          <div class="footer__cover_text">
+            Далі буде...
+          </div>
           <?php echo wp_get_attachment_image($footer['cover'], 'full', '', ['class' => 'footer__cover-img']); ?>
         </div>
       </div>

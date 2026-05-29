@@ -8,10 +8,8 @@ export function initServicesAccordion() {
 		return;
 	}
 
-	const $section = $('.s-services').first();
-	const $list = $section.find('.services-list').first();
+	const $list = $('.s-services').first().find('.services-list').first();
 	const $items = $list.find('.services-list__item');
-	const $images = $section.find('.services-img__item[data-service-image]');
 
 	if (!$list.length || !$items.length) {
 		logDebug('Services accordion skipped: list not found');
@@ -19,9 +17,6 @@ export function initServicesAccordion() {
 	}
 
 	const setActiveItem = ($activeItem, animate = true) => {
-		const activeTarget = String($activeItem.data('service-target') ?? '');
-		const isAlreadyActive = $activeItem.hasClass('services-list__item--active');
-
 		$items.each((_, item) => {
 			const $item = $(item);
 			const isActive = item === $activeItem[0];
@@ -36,34 +31,26 @@ export function initServicesAccordion() {
 				$desc[animate ? (isActive ? 'slideDown' : 'slideUp') : isActive ? 'show' : 'hide'](250);
 			}
 		});
+	};
 
-		if (isAlreadyActive) {
-			return;
+	const closeItem = ($item) => {
+		$item.attr('aria-expanded', 'false');
+		$item.removeClass('services-list__item--active');
+		const $desc = $item.find('.services-list__desc').first();
+		if ($desc.length) {
+			$desc.attr('aria-hidden', 'true');
+			$desc.stop(true, true).slideUp(250);
 		}
+	};
 
-		$images.each((_, image) => {
-			const $image = $(image);
-			const isActive = String($image.data('service-image') ?? '') === activeTarget;
-			$image.stop(true, true);
+	const $glitchImage = $('.s-services').first().find('.glitch-image').first();
+	let glitchTimeout = null;
 
-			if (!animate) {
-				$image.toggleClass('services-img__item--active', isActive);
-				$image[isActive ? 'show' : 'hide']();
-				return;
-			}
-
-			if (isActive) {
-				$image
-					.addClass('services-img__item--active')
-					.hide()
-					.fadeIn(500);
-				return;
-			}
-
-			$image.fadeOut(500, () => {
-				$image.removeClass('services-img__item--active');
-			});
-		});
+	const triggerGlitch = () => {
+		if (!$glitchImage.length) return;
+		clearTimeout(glitchTimeout);
+		$glitchImage.addClass('glitch-image--glitching');
+		glitchTimeout = setTimeout(() => $glitchImage.removeClass('glitch-image--glitching'), 1800);
 	};
 
 	const $initialActiveItem = $items.filter('.services-list__item--active').first().length
@@ -79,7 +66,15 @@ export function initServicesAccordion() {
 		});
 
 		$item.on('click', () => {
-			setActiveItem($item);
+			const isMobile = window.matchMedia('(max-width: 767px)').matches;
+			const isAlreadyActive = $item.hasClass('services-list__item--active');
+
+			if (isMobile && isAlreadyActive) {
+				closeItem($item);
+			} else {
+				setActiveItem($item);
+				triggerGlitch();
+			}
 		});
 
 		$item.on('keydown', (event) => {
@@ -89,6 +84,7 @@ export function initServicesAccordion() {
 
 			event.preventDefault();
 			setActiveItem($item);
+			triggerGlitch();
 		});
 	});
 

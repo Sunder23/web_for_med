@@ -1,22 +1,118 @@
 .contact-form,
 .wpcf7-form {
-    width: 608px;
+    width: 628px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
+// ── Field wrapper ──────────────────────────────────────────────────────────────
 .form-field {
+    position: relative;
     width: 100%;
 }
 
+// ── Floating label ─────────────────────────────────────────────────────────────
+.form-field-label {
+    position: absolute;
+    left: 14px;
+    top: 18px;
+    font-family: var(--f-main);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--c-grey);
+    opacity: 0.8;
+    pointer-events: none;
+    white-space: nowrap;
+    background: transparent;
+    padding: 0 3px;
+    transition: top 0.2s ease, transform 0.2s ease, font-size 0.2s ease,
+        color 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+    z-index: 1;
+
+    @media (max-width: 768px) {
+        top: 16px;
+    }
+}
+
+// Textarea: label starts at top-left (not vertically centred)
+.form-field--textarea .form-field-label {
+    top: 18px;
+    transform: none;
+}
+
+// Focused or filled — label floats to the top border
+.form-field.is-focused .form-field-label,
+.form-field.is-filled .form-field-label {
+    top: 0;
+    transform: translateY(-50%);
+    font-size: 11px;
+    opacity: 1;
+    background: var(--c-bg);
+    padding: 0 4px;
+}
+
+.form-field.is-focused .form-field-label {
+    color: var(--c-blue);
+}
+
+.form-field.is-filled:not(.is-focused) .form-field-label {
+    color: var(--c-grey);
+}
+
+// Validation error — red label
+.form-field:has(.wpcf7-not-valid) .form-field-label {
+    color: #B3261E;
+    opacity: 1;
+}
+
+.wpcf7-not-valid-tip,
+.form-field.is-focused:has(.wpcf7-not-valid),
+.form-field:has(.wpcf7-not-valid) .form-field__input {
+    border-color: #B3261E !important;
+}
+
+.form-field:has(.wpcf7-not-valid) {
+    &.is-filled {
+        .wpcf7-form-control-wrap:after {
+            display: none;
+        }
+    }
+
+    .wpcf7-form-control-wrap {
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            right: 10px;
+            display: flex;
+            width: 24px;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 17C12.2833 17 12.5208 16.9042 12.7125 16.7125C12.9042 16.5208 13 16.2833 13 16C13 15.7167 12.9042 15.4792 12.7125 15.2875C12.5208 15.0958 12.2833 15 12 15C11.7167 15 11.4792 15.0958 11.2875 15.2875C11.0958 15.4792 11 15.7167 11 16C11 16.2833 11.0958 16.5208 11.2875 16.7125C11.4792 16.9042 11.7167 17 12 17ZM11 13H13V7H11V13ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22Z' fill='%23B3261E'/%3E%3C/svg%3E%0A");
+            background-position: center;
+            background-size: contain;
+        }
+    }
+
+}
+
+.wpcf7-not-valid-tip {
+    font-size: 12px;
+    margin-left: 16px;
+    margin-top: 5px;
+}
+
+// ── Input / textarea ───────────────────────────────────────────────────────────
 .form-field__input,
 .wpcf7-form-control:not(.wpcf7-submit) {
     display: block;
     width: 100%;
     height: 56px;
-    padding: 0 16px;
+    padding: 16px;
+    padding-right: 44px; // room for clear button
     border: var(--border);
     border-radius: var(--radius);
     background: var(--c-bg);
@@ -27,9 +123,16 @@
     outline: none;
     transition: border-color 0.2s;
 
+    // Hide the native placeholder — the floating label replaces it visually
+    &::placeholder {
+        color: transparent;
+        opacity: 0;
+    }
+
     @media (max-width: 768px) {
         height: 50px;
         padding: 10px;
+        padding-right: 40px;
     }
 }
 
@@ -38,31 +141,97 @@
     border-color: var(--c-blue);
 }
 
-.form-field__input::placeholder,
-.wpcf7-form-control:not(.wpcf7-submit)::placeholder {
-    color: var(--c-grey);
-    opacity: 0.8;
-}
-
 .form-field__textarea,
 textarea.wpcf7-form-control {
-    height: 86px !important;
+    height: 120px !important;
     padding-top: 18px;
     resize: vertical;
     line-height: 1.55;
 }
 
+// ── Clear button ───────────────────────────────────────────────────────────────
+.form-field__clear {
+    position: absolute;
+    right: 12px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--c-grey);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, color 0.2s;
+    z-index: 2;
+
+    &:hover {
+        color: var(--c-blue);
+    }
+
+    @media (max-width: 768px) {
+        top: 17px;
+    }
+}
+
+.form-field--textarea .form-field__clear {
+    top: 16px;
+    transform: none;
+}
+
+// Show clear button only when field has a value
+.form-field.is-filled .form-field__clear {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+// ── Submit button ──────────────────────────────────────────────────────────────
 .wpcf7-submit {
     width: 100%;
     padding: 21px 24px;
 }
 
-.wpcf7-not-valid-tip,
+// ── Validation messages ────────────────────────────────────────────────────────
+
+.wpcf7-form-control-wrap {
+    position: relative;
+    display: block;
+}
+
+// Our custom error state — mirrors the existing wpcf7-not-valid visual
+.form-field.is-error .form-field-label {
+    color: #B3261E;
+    opacity: 1;
+}
+
+.form-field.is-error .form-field__input {
+    border-color: #B3261E !important;
+}
+
+// Error text below the input
+.form-field__error {
+    display: block;
+    font-size: 12px;
+    color: #B3261E;
+    margin-left: 16px;
+    margin-top: 5px;
+
+    &[hidden] { display: none; }
+}
+
+// Hide CF7's own inline error tip — we display .form-field__error instead
+.wpcf7-not-valid-tip {
+    display: none !important;
+}
+
 .wpcf7-response-output {
     font-size: 14px;
     color: var(--c-blue);
 }
 
+// ── Success state ──────────────────────────────────────────────────────────────
 .form-success {
     width: 608px;
     max-width: 100%;

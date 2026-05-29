@@ -31,7 +31,7 @@
         align-items: center;
         gap: 16px;
         text-align: center;
-        max-width: 608px;
+        max-width: 628px;
 
         @media (max-width: 768px) {
             gap: 8px;
@@ -56,6 +56,36 @@
         border-bottom: var(--border);
         height: 454px;
         overflow: hidden;
+
+        .l-frame-x {
+            position: relative;
+        }
+    }
+
+    &__cover_text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 48px;
+        font-weight: 600;
+        line-height: 1.01;
+        color: var(--c-white);
+        opacity: 0;
+        white-space: nowrap;
+
+        @media screen and (max-width: 768px) {
+            font-size: 28px;
+        }
+
+        .split-word {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .split-char {
+            display: inline-block;
+        }
     }
 
     &__cover img {

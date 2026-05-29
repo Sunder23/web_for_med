@@ -10,25 +10,36 @@
     font-weight: 500;
     letter-spacing: 0.01em;
     line-height: 1;
+    transition: background 0.3s ease-in-out;
     cursor: pointer;
-    transition: opacity 0.2s;
     white-space: nowrap;
 }
 
 .btn:hover,
-.wpcf7-submit:hover {
-    opacity: 0.85;
-}
+.wpcf7-submit:hover {}
 
 .btn--primary,
 .wpcf7-submit {
     background: var(--c-blue);
     color: var(--c-white);
+    // transition: background 0.3s ease-in-out !important;
+
+    &:hover {
+        background: var(--c-navy);
+        color: var(--c-white);
+        opacity: 1;
+    }
 }
 
 .btn--secondary {
     background: var(--c-secondary);
-    color: var(--c-dark);
+    color: var(--c-blue);
+
+    &:hover {
+        background: var(--c-blue);
+        color: var(--c-white);
+        opacity: 1;
+    }
 }
 
 .btn--sm {

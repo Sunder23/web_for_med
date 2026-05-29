@@ -4,7 +4,11 @@
       "Bash(Remove-Item *)",
       "PowerShell(Move-Item *)",
       "PowerShell(New-Item *)",
-      "PowerShell(docker exec web_for_med-wordpress-1 *)"
+      "PowerShell(docker exec web_for_med-wordpress-1 *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(npm uninstall *)",
+      "Bash(node *)"
     ]
   }
 }
