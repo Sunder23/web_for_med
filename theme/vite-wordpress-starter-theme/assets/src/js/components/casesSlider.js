@@ -15,7 +15,7 @@ export function initCasesSlider() {
 		modules: [Navigation, Pagination],
 		slidesPerView: 1,
 		spaceBetween: 0,
-		loop: true,
+		// loop: true,
 		navigation: {
 			prevEl: '#casePrev',
 			nextEl: '#caseNext',

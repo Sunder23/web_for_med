@@ -996,13 +996,28 @@
     transition: opacity 0.2s;
     flex-shrink: 0;
 
-    &:hover {
-      svg {
-        path {
+    svg {
+      path {
+        fill: var(--c-navy);
+        transition: fill .3s ease;
+
+        &:hover {
           fill: var(--c-navy);
         }
       }
     }
+
+    &.swiper-button-disabled {
+      pointer-events: none;
+
+      svg {
+        path {
+          fill: #AEBBC4;
+
+        }
+      }
+    }
+
 
 
     img {
