@@ -1,4 +1,7 @@
 .footer {
+    position: relative;
+    z-index: 10;
+    background: var(--c-bg);
 
     @media (max-width: 768px) {
         .l-wrap {

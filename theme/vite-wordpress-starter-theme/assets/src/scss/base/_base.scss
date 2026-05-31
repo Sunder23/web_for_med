@@ -43,6 +43,18 @@ ol {
 
 section {
     position: relative;
+    display: flex;
+    flex-direction: column;
+
+    &:not(.hero, .s-quote, .s-banner, .s-process--top) {
+        &::after {
+            content: '';
+            width: 100%;
+            height: 90px;
+            background-color: var(--c-bg);
+            border-top: var(--border);
+        }
+    }
 
     &:not(.s-clinics) {
         @media screen and (max-width: 768px) {

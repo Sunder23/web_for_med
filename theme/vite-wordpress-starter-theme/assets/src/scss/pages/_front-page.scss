@@ -8,6 +8,8 @@
    ============================================================ */
 .hero {
   background: var(--c-bg);
+  position: relative;
+  z-index: 10;
 
   @media (max-width: 767px) {
     &__wrap {
@@ -246,6 +248,9 @@
 .s-clinics {
   border-top: var(--border);
   border-bottom: var(--border);
+  background: var(--c-bg);
+  position: relative;
+  z-index: 10;
 
   &__wrap {
     display: flex;
@@ -382,9 +387,11 @@
    QUOTE (03_1)
    ============================================================ */
 .s-quote {
-  margin: 90px 0 0;
-  border-top: var(--border);
+  margin: 0px 0 100vh;
   border-bottom: var(--border);
+  position: relative;
+  z-index: 10;
+  background-color: var(--c-bg);
 
   @media (max-width: 768px) {
     margin: 50px 0 0px;
@@ -488,8 +495,10 @@
    PROBLEMS (03_2)
    ============================================================ */
 .s-problems {
-  position: sticky;
+  position: fixed;
   top: var(--header-h);
+  left: 0;
+  right: 0;
   z-index: 1;
   background: var(--c-bg);
   border-bottom: var(--border);
@@ -524,6 +533,16 @@
   justify-content: space-between;
   min-height: 574px;
 
+  @media (max-width: 1400px) and (min-width: 1025px) {
+    &__title {
+      min-height: 75px;
+    }
+  }
+
+  @media screen and (min-width: 1025px) {
+    height: calc(100vh - 66px);
+  }
+
   .tag {
     position: relative;
     display: flex;
@@ -533,7 +552,7 @@
     @media screen and (min-width: 1024px) {
       &::after {
         content: '';
-        height: 250px;
+        height: calc(90vh - 350px);
         width: 100%;
       }
     }
@@ -631,13 +650,11 @@
    SOLUTIONS (03_4)
    ============================================================ */
 .s-solutions {
-  margin-bottom: 90px;
   background: var(--c-bg-light);
-  border-bottom: var(--border);
 
   @media (min-width: 1025px) {
     position: sticky;
-    bottom: 0;
+    bottom: -90px;
     z-index: 3;
   }
 
@@ -729,9 +746,10 @@
    SERVICES (04)
    ============================================================ */
 .s-services {
-  margin-bottom: 82px;
   border-top: var(--border);
-  border-bottom: var(--border);
+  position: relative;
+  z-index: 10;
+  background: var(--c-bg);
 
   @media (max-width: 768px) {
     margin-bottom: 50px;
@@ -895,9 +913,10 @@
    CASES (05)
    ============================================================ */
 .s-cases {
-  margin-bottom: 90px;
   border-top: var(--border);
-  border-bottom: var(--border);
+  position: relative;
+  z-index: 10;
+  background: var(--c-bg);
 
   @media (max-width: 768px) {
     margin-bottom: 50px;
@@ -1117,6 +1136,9 @@
 .s-process {
   border-top: var(--border);
   border-bottom: var(--border);
+  position: relative;
+  z-index: 10;
+  background: var(--c-bg);
 
   &--top {
     border-bottom: none;
@@ -1124,10 +1146,10 @@
   }
 
   &--bottom {
-    margin-bottom: 90px;
+    border-bottom: none;
 
     @media (max-width: 768px) {
-      margin-bottom: 50px;
+      // margin-bottom: 50px;
     }
 
     .s-process__wrap {
@@ -1259,9 +1281,11 @@
    WHY US (07)
    ============================================================ */
 .s-why {
+  position: relative;
+  z-index: 10;
+  background-color: var(--c-bg);
   border-top: var(--border);
-  border-bottom: var(--border);
-  margin-bottom: 90px;
+
 
   @media (max-width: 768px) {
     position: relative;
@@ -1290,12 +1314,7 @@
 }
 
 .why-chat {
-  background:
-    repeating-radial-gradient(rgba(255, 255, 255, .025) 0 1px,
-      transparent 1px 2px),
-    var(--c-navy);
-
-  background-size: 4px 4px;
+  background-image: url('http://localhost:8080/wp-content/uploads/2026/05/noice_bg.png');
   flex: 0 0 666px;
   padding: 40px;
   display: flex;
@@ -1390,8 +1409,7 @@
   line-height: 1.25;
   opacity: 0;
   transform: translateY(18px);
-  transition:
-    opacity 320ms ease,
+  transition: opacity 320ms ease,
     transform 320ms ease;
   will-change: opacity, transform;
 
@@ -1501,8 +1519,7 @@
     align-items: center;
     gap: 16px;
     position: relative;
-    transition:
-      background-color 220ms ease,
+    transition: background-color 220ms ease,
       color 220ms ease;
 
     &--active {
