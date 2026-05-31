@@ -5,9 +5,15 @@
     color: var(--c-dark);
 }
 
+@media (max-width: 1440px) {
+    .section-title {
+        font-size: 36px;
+    }
+}
+
 @media (max-width: 1024px) {
     .section-title {
-        font-size: 32px;
+        font-size: 28px;
     }
 }
 

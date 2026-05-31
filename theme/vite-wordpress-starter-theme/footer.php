@@ -49,7 +49,7 @@
           <a href="<?php echo esc_url(home_url('/')); ?>" class="logo logo--sm">
             <?php echo wp_get_attachment_image($footer['logo'], 'full', '', ['class' => 'logo__img']); ?>
           </a>
-          <nav class="footer__nav" aria-label="<?php esc_attr_e('Footer navigation', 'textdomaintomodify'); ?>">
+          <!-- <nav class="footer__nav" aria-label="<?php esc_attr_e('Footer navigation', 'textdomaintomodify'); ?>">
             <?php
             wp_nav_menu(
               [
@@ -60,7 +60,7 @@
               ]
             );
             ?>
-          </nav>
+          </nav> -->
           <div class="footer__contacts">
             <?php if (!empty($footer['mail'])) : ?>
               <a href="<?php echo esc_attr($footer['mail']['url']); ?>" class="footer__email" target="_blank" rel="noopener noreferrer"><?php echo esc_html($footer['mail']['title']); ?></a>

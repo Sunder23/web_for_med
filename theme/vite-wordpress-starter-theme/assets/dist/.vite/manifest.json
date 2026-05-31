@@ -1,0 +1,37 @@
+{
+  "assets/src/js/main.js": {
+    "file": "js/main-x2pl7bI-.js",
+    "name": "js/main",
+    "src": "assets/src/js/main.js",
+    "isEntry": true,
+    "css": [
+      "css/main-CXymHqrH.css"
+    ]
+  },
+  "assets/src/scss/main.scss": {
+    "file": "css/main-os_XEDSn.css",
+    "name": "main",
+    "names": [
+      "main.css"
+    ],
+    "src": "assets/src/scss/main.scss",
+    "isEntry": true,
+    "assets": [
+      "fonts/FixelDisplay-Regular-DOGXzqkj.woff2",
+      "fonts/FixelDisplay-Medium-D2zi-W_K.woff2",
+      "fonts/FixelDisplay-SemiBold-BZx_vR05.woff2"
+    ]
+  },
+  "static/fonts/FixelDisplay-Medium.woff2": {
+    "file": "fonts/FixelDisplay-Medium-D2zi-W_K.woff2",
+    "src": "static/fonts/FixelDisplay-Medium.woff2"
+  },
+  "static/fonts/FixelDisplay-Regular.woff2": {
+    "file": "fonts/FixelDisplay-Regular-DOGXzqkj.woff2",
+    "src": "static/fonts/FixelDisplay-Regular.woff2"
+  },
+  "static/fonts/FixelDisplay-SemiBold.woff2": {
+    "file": "fonts/FixelDisplay-SemiBold-BZx_vR05.woff2",
+    "src": "static/fonts/FixelDisplay-SemiBold.woff2"
+  }
+}

@@ -133,7 +133,7 @@ $contact_form_shortcode = get_field('front_page_contact_form_shortcode');
 							<div class="solution-card info-card">
 								<?php if ($item['image']) : ?>
 									<div class="solution-card-image">
-										<?php echo wp_get_attachment_image($item['image'], 'full'); ?>
+										<?php echo wp_get_attachment_image($item['image'], [200, 308]); ?>
 									</div>
 								<?php endif; ?>
 								<div class="solution-card__body info-card__body">
@@ -286,7 +286,7 @@ $contact_form_shortcode = get_field('front_page_contact_form_shortcode');
 					<div class="process-step info-card">
 						<?php if (!empty($item['image'])): ?>
 							<div class="process-step--image">
-								<?php echo wp_get_attachment_image($item['image'], [260, 200], '', ['class' => 'process-step--image__item']); ?>
+								<?php echo wp_get_attachment_image($item['image'], [200, 173], '', ['class' => 'process-step--image__item']); ?>
 							</div>
 						<?php endif; ?>
 						<div class="process-step__top info-card__body">

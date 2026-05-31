@@ -46,21 +46,24 @@ section {
     display: flex;
     flex-direction: column;
 
-    &:not(.hero, .s-quote, .s-banner, .s-process--top) {
-        &::after {
-            content: '';
-            width: 100%;
-            height: 90px;
-            background-color: var(--c-bg);
-            border-top: var(--border);
+    @media screen and (min-width: 768px) {
+        &:not(.hero, .s-quote, .s-banner, .s-process--top) {
+            &::after {
+                content: '';
+                width: 100%;
+                height: 90px;
+                background-color: var(--c-bg);
+                border-top: var(--border);
+
+                @media screen and (max-width: 768px) {
+                    height: 50px;
+                }
+            }
         }
     }
 
-    &:not(.s-clinics) {
-        @media screen and (max-width: 768px) {
-            margin-bottom: 0;
-        }
-    }
+
+
 
     &:not(s-quote) {
         @media screen and (max-width: 768px) {
