@@ -37,7 +37,10 @@
           <div class="footer__cover_text">
             Далі буде...
           </div>
-          <div class="footer__cover-img" style="--footer-cover-image: url('<?php echo esc_url(wp_get_attachment_image_url($footer['cover'], 'full')); ?>');">
+          <div class="footer__cover-img glitch" style="--footer-cover-image: url('<?php echo esc_url(wp_get_attachment_image_url($footer['cover'], 'full')); ?>');">
+            <div class="channel r"></div>
+            <div class="channel g"></div>
+            <div class="channel b"></div>
           </div>
         </div>
       </div>

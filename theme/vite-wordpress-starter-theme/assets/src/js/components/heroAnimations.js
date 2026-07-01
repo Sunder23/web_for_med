@@ -149,7 +149,7 @@ export function initFooterCoverImageGlitch() {
 						requestAnimationFrame(() => {
 							el.classList.add('glitch');
 						});
-					}, 3500);
+					}, 2500);
 				}
 			});
 		},

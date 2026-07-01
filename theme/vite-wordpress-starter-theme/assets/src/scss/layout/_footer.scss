@@ -63,6 +63,7 @@
         border-bottom: var(--border);
         height: 454px;
         overflow: hidden;
+        background: var(--c-bg-light);
 
         &-img {
             background-image: var(--footer-cover-image);
@@ -176,11 +177,26 @@
     &__socials {
         display: flex;
         gap: 10px;
+
+        @media screen and (max-width: 768px) {
+            gap: 12px;
+        }
     }
 
     &__social {
         height: 28px;
         object-fit: contain;
+
+        @media screen and (max-width: 768px) {
+            width: 34px;
+            height: 34px;
+
+
+            img {
+                width: 34px;
+                height: 34px;
+            }
+        }
     }
 
     @media (max-width: 1024px) {
@@ -225,8 +241,13 @@
             flex-direction: column;
             align-items: flex-start;
             height: auto;
-            padding: 24px 20px;
+            padding: 12px 10px;
             gap: 16px;
+
+            .logo {
+                display: none;
+            }
+
         }
 
         &__nav {

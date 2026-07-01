@@ -8,22 +8,18 @@ export function initMobileNav() {
 
 	const openNav = () => {
 		nav.classList.add('is-open');
+		nav.setAttribute('aria-hidden', 'false');
 		burger.classList.add('is-open');
 		burger.setAttribute('aria-expanded', 'true');
-		document.addEventListener('click', outsideClick, true);
+		document.body.style.overflow = 'hidden';
 	};
 
 	const closeNav = () => {
 		nav.classList.remove('is-open');
+		nav.setAttribute('aria-hidden', 'true');
 		burger.classList.remove('is-open');
 		burger.setAttribute('aria-expanded', 'false');
-		document.removeEventListener('click', outsideClick, true);
-	};
-
-	const outsideClick = (event) => {
-		if (!nav.contains(event.target) && !burger.contains(event.target)) {
-			closeNav();
-		}
+		document.body.style.overflow = '';
 	};
 
 	burger.addEventListener('click', () => {

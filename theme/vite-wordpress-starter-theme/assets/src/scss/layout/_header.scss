@@ -45,13 +45,7 @@
     padding: 12px 35px;
 }
 
-.nav {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    flex: 1;
-    justify-content: center;
-}
+// Shared nav base
 
 .nav .menu {
     display: flex;
@@ -75,6 +69,28 @@
     color: var(--c-blue);
 }
 
+// Desktop nav (inside header)
+
+.nav--desktop {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+    justify-content: center;
+}
+
+// Mobile overlay nav (outside header) — hidden on desktop
+
+.nav--mobile-overlay {
+    display: none;
+}
+
+.nav__mobile-footer {
+    display: none;
+}
+
+// Header extras
+
 .header__cta {
     flex-shrink: 0;
 }
@@ -87,6 +103,7 @@
     background: none;
     border: none;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 .burger span {
@@ -118,59 +135,140 @@
         justify-content: space-between;
     }
 
-    .nav {
+    .nav--desktop {
         gap: 24px;
     }
 
-    .nav .menu {
+    .nav--desktop .menu {
         gap: 24px;
     }
 }
 
+// Mobile: hide desktop nav, show overlay
+
 @media (max-width: 768px) {
-    .nav {
+    .nav--desktop {
         display: none;
-        flex-direction: column;
-        gap: 4px;
+    }
+
+    // Overlay slides from top — outside header stacking context, so z-index works correctly
+    .nav--mobile-overlay {
         position: fixed;
         top: var(--header-h);
         left: 0;
-        right: 0;
-        background: var(--c-bg);
-        padding: 20px;
+        width: 100%;
+        height: calc(100dvh - var(--header-h));
+        background: var(--color-brand-bg-light);
+        transform: translateY(-100%);
+        transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0.45s;
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        z-index: 150;
+        gap: 0;
+        padding: 0;
         border-bottom: var(--border);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        z-index: 199;
     }
 
-    .nav .menu {
+    .nav--mobile-overlay.is-open {
+        transform: translateY(0);
+        visibility: visible;
+        transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0s;
+    }
+
+    // Links area — fills space, aligned to bottom
+    .nav--mobile-overlay .nav__links {
+        display: flex;
+        flex: 1;
+        align-items: flex-end;
+        justify-content: center;
+        width: calc(100% - 32px);
+        margin: 0 auto;
+        border-left: var(--border);
+        border-right: var(--border);
+        padding-bottom: 30px;
+    }
+
+    .nav--mobile-overlay .menu {
         flex-direction: column;
-        gap: 4px;
+        align-items: center;
+        gap: 8px;
         width: 100%;
     }
 
-    .nav.is-open {
-        display: flex;
-    }
-
-    .nav__link,
-    .nav .menu-item {
+    .nav--mobile-overlay .menu-item {
         width: 100%;
         text-align: center;
-
-        a {
-            font-size: 18px;
-            padding: 10px 4px;
-            border-bottom: var(--border);
-            display: block;
-
-        }
     }
 
-
-    .nav__link:last-child,
-    .nav .menu-item:last-child a {
+    .nav--mobile-overlay .menu-item a {
+        font-size: 20px;
+        font-weight: 500;
+        display: block;
+        color: var(--c-grey);
+        white-space: normal;
         border-bottom: none;
+    }
+
+    .nav--mobile-overlay .menu-item a:hover {
+        color: var(--c-blue);
+    }
+
+    // Bottom sections
+    .nav__mobile-footer {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        width: calc(100% - 32px);
+        margin: 0 auto;
+        border-left: var(--border);
+        border-right: var(--border);
+    }
+
+    .nav__socials-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 24px 16px;
+        border-top: var(--border);
+    }
+
+    .nav__social-icons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .nav__social-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav__social-icon {
+        width: 44px;
+        height: 44px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .nav__email {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--c-blue);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .nav__cta-row {
+        padding: 30px 40px 40px;
+        border-top: var(--border);
+    }
+
+    .nav__cta-btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .header__cta {
