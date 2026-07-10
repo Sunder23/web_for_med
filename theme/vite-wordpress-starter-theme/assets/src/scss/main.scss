@@ -18,6 +18,7 @@
 @use "components/info-card";
 @use "components/icon-list";
 @use "components/modal";
+@use "components/breadcrumbs";
 
 // layout
 @use "layout/header";
@@ -28,3 +29,7 @@
 // pages
 @use "pages/front-page";
 @use "pages/page";
+@use "pages/cpt-common";
+@use "pages/service";
+@use "pages/direction";
+@use "pages/case";

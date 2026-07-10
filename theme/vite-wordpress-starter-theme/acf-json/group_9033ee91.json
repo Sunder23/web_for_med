@@ -139,6 +139,70 @@
                             "append": ""
                         }
                     ]
+                },
+                {
+                    "key": "field_3c484fe2",
+                    "label": "Blurbs (two-column layout)",
+                    "name": "blurbs",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Blurb",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_58d28001",
+                            "label": "Title",
+                            "name": "title",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_03654e40",
+                            "label": "Text",
+                            "name": "text",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "new_lines": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -1595,5 +1659,5 @@
     "active": true,
     "description": "Fields for the services CPT single pages.",
     "show_in_rest": 0,
-    "modified": 1783689823
+    "modified": 1783690038
 }

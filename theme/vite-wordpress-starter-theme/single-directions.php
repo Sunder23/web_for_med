@@ -1,0 +1,46 @@
+<?php
+get_header();
+
+$hero          = get_field( 'direction_hero' );
+$sections      = get_field( 'direction_sections' );
+$sidebar_who   = get_field( 'direction_sidebar_who' );
+$sidebar_needs = get_field( 'direction_sidebar_needs' );
+$cta           = get_field( 'direction_cta' );
+?>
+
+<main class="single-cpt single-direction">
+	<section class="s-cpt-hero">
+		<div class="s-cpt-hero__wrap l-wrap">
+			<div class="s-cpt-hero__inner l-frame-x">
+				<?php custom_theme_breadcrumbs(); ?>
+				<h1 class="s-cpt-hero__title"><?php the_title(); ?></h1>
+				<?php if ( ! empty( $hero['description'] ) ) : ?>
+					<p class="s-cpt-hero__subtitle"><?php echo esc_html( $hero['description'] ); ?></p>
+				<?php endif; ?>
+				<?php if ( ! empty( $hero['blurbs'] ) ) : ?>
+					<div class="s-cpt-hero__blurbs">
+						<?php foreach ( $hero['blurbs'] as $blurb ) : ?>
+							<div class="hero-blurb info-card">
+								<div class="info-card__body">
+									<h3 class="hero-blurb__title card-title"><?php echo esc_html( $blurb['title'] ); ?></h3>
+									<p class="hero-blurb__text card-text"><?php echo esc_html( $blurb['text'] ); ?></p>
+								</div>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</section>
+
+	<?php
+	get_template_part( 'template-parts/two-column-page', null, array(
+		'sections'      => $sections,
+		'sidebar_who'   => $sidebar_who,
+		'sidebar_needs' => $sidebar_needs,
+	) );
+	?>
+
+	<?php get_template_part( 'template-parts/cpt-cta', null, (array) $cta ); ?>
+</main>
+<?php get_footer();
