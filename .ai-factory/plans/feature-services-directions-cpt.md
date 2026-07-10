@@ -69,9 +69,9 @@ Source: .ai-factory/RESEARCH.md (Active Summary — different topic, but its pro
 <!-- Commit checkpoint: tasks 10-11 -->
 
 ### Phase 4: Content Import (wp-cli)
-- [ ] Task 12: Transcribe ALL copy from ref doc into `scripts/import/data/{services,directions,cases,posts}.php` (UA verbatim, HTML strings for wysiwyg sections)
-- [ ] Task 13: Idempotent `wp eval-file` import scripts per CPT + posts (update_field by FIELD KEYS, media sideload for blog images, rewrite flush) (depends on 1, 3, 4, 5, 12)
-- [ ] Task 14: Menu setup script (Головна / Послуги▾ / Напрямки роботи / Кейси / Блог), `page_for_posts`, run full import, verify all pages in browser (depends on 7–11, 13)
+- [x] Task 12: Transcribe ALL copy from ref doc into `scripts/import/data/{services,directions,cases,posts}.php` (UA verbatim, HTML strings for wysiwyg sections)
+- [x] Task 13: Idempotent `wp eval-file` import scripts per CPT + posts (update_field by FIELD KEYS, media sideload for blog images, rewrite flush) (depends on 1, 3, 4, 5, 12)
+- [x] Task 14: Menu setup script (Головна / Послуги▾ / Напрямки роботи / Кейси / Блог), `page_for_posts`, run full import, verify all pages in browser (depends on 7–11, 13)
 <!-- Commit checkpoint: tasks 12-14 -->
 
 ## Verification Criteria (task 14)
