@@ -1,0 +1,95 @@
+// Shared archive layout for services / directions / cases: card grid.
+
+.s-archive {
+    background: var(--c-bg);
+    padding-bottom: 80px;
+}
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: var(--border);
+}
+
+.archive-card {
+    justify-content: space-between;
+    gap: 24px;
+    padding: 40px 32px;
+    border-bottom: var(--border);
+    text-decoration: none;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background: var(--c-bg-light);
+
+        .archive-card__title {
+            color: var(--c-blue);
+        }
+    }
+
+    .archive-card__title {
+        margin: 0 0 12px;
+        transition: color 0.3s ease-in-out;
+    }
+}
+
+.archive-empty {
+    padding: 48px 40px;
+    font-size: 18px;
+    color: var(--c-grey);
+    border-top: var(--border);
+}
+
+.pagination {
+    margin-top: 40px;
+
+    .nav-links {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .page-numbers {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        height: 44px;
+        padding: 0 12px;
+        border: var(--border);
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--c-blue);
+        text-decoration: none;
+
+        &.current {
+            background: var(--c-blue);
+            color: var(--c-white);
+            border-color: var(--c-blue);
+        }
+
+        &:hover:not(.current) {
+            background: var(--c-bg-light);
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .archive-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .archive-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .archive-card {
+        padding: 28px 20px;
+    }
+
+    .s-archive {
+        padding-bottom: 48px;
+    }
+}

@@ -64,8 +64,8 @@ Source: .ai-factory/RESEARCH.md (Active Summary — different topic, but its pro
 - [x] Task 8: `single-directions.php` + `pages/_direction.scss` — two-column layout shared with analytics service page (depends on 4, 6)
 - [x] Task 9: `single-cases.php` + `pages/_case.scss` with KPI metric tiles (depends on 5, 6)
 <!-- Commit checkpoint: tasks 6-9 -->
-- [ ] Task 10: `archive-services.php`, `archive-directions.php`, `archive-cases.php` + shared `pages/_archive.scss` (depends on 2, 6)
-- [ ] Task 11: Blog templates `home.php` + `single.php` + `pages/_single-post.scss` (depends on 6)
+- [x] Task 10: `archive-services.php`, `archive-directions.php`, `archive-cases.php` + shared `pages/_archive.scss` (depends on 2, 6)
+- [x] Task 11: Blog templates `home.php` + `single.php` + `pages/_single-post.scss` (depends on 6)
 <!-- Commit checkpoint: tasks 10-11 -->
 
 ### Phase 4: Content Import (wp-cli)
