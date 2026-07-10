@@ -25,7 +25,14 @@
       "Bash(git add *)",
       "Bash(git commit -m 'feat: add wp-cli content import scripts and navigation setup *)",
       "Bash(git commit -m 'fix: apply instant accordion initial state and front-page animation tweaks *)",
-      "Bash(git commit -m 'chore: install AI Factory skills and agents, update local settings *)"
+      "Bash(git commit -m 'chore: install AI Factory skills and agents, update local settings *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git pull *)",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "mcp__chromeDevtools__take_snapshot",
+      "mcp__chromeDevtools__hover"
     ]
   }
 }
