@@ -28,7 +28,17 @@ export function initServicesAccordion() {
 			if ($desc.length) {
 				$desc.attr('aria-hidden', String(!isActive));
 				$desc.stop(true, true);
-				$desc[animate ? (isActive ? 'slideDown' : 'slideUp') : isActive ? 'show' : 'hide'](250);
+
+				if (animate) {
+					$desc[isActive ? 'slideDown' : 'slideUp'](250);
+				} else {
+					// [FIX] instant, non-animated initial state — an animated
+					// collapse here shifts page height ~250ms after DOMContentLoaded,
+					// which is after AOS has already cached scroll-trigger offsets
+					// for elements below (e.g. .s-process .section-title), making
+					// their fade-in animations trigger far too late on mobile.
+					$desc[isActive ? 'show' : 'hide']();
+				}
 			}
 		});
 	};

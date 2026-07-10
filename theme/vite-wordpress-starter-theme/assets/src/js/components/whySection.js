@@ -1,6 +1,6 @@
 import { logDebug } from '../utils/logDebug.js';
 
-const MESSAGE_REVEAL_DELAY = 400;
+const MESSAGE_REVEAL_DELAY = 600;
 
 export function initWhySection() {
 	const section = document.querySelector('.s-why');

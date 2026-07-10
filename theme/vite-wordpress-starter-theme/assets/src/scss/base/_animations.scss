@@ -303,8 +303,8 @@ $glitch-offset-top: var(--glitch-offset, 10);
 
     .icon-wrap {
         position: relative;
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: #0472C5;
         position: relative;
@@ -338,23 +338,18 @@ $glitch-offset-top: var(--glitch-offset, 10);
     }
 
     .circle-inner {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         background: rgba(4, 114, 197, 0.50);
         animation: grow-circles 4s linear infinite both;
 
     }
 
     .circle-outer {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         background: rgba(4, 114, 197, 0.30);
         animation: grow-circles 4s linear infinite both;
-
-        @media screen and (max-width: 768px) {
-            width: 80px;
-            height: 80px;
-        }
     }
 
     .pulse {
@@ -364,21 +359,21 @@ $glitch-offset-top: var(--glitch-offset, 10);
     }
 
     .pulse-1 {
-        border: solid 1px rgba(4, 114, 197, 0.25);
+        border: solid 2px rgba(4, 114, 197, 0.25);
+        width: 38px;
+        height: 38px;
+    }
+
+    .pulse-2 {
+        border: solid 2px rgba(4, 114, 197, 0.35);
         width: 44px;
         height: 44px;
     }
 
-    .pulse-2 {
-        border: solid 1px rgba(4, 114, 197, 0.25);
+    .pulse-3 {
+        border: solid 2px rgba(4, 114, 197, 0.45);
         width: 50px;
         height: 50px;
-    }
-
-    .pulse-3 {
-        border: solid 1px rgba(4, 114, 197, 0.25);
-        width: 56px;
-        height: 56px;
     }
 }
 
