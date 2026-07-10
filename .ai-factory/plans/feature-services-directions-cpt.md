@@ -53,9 +53,9 @@ Source: .ai-factory/RESEARCH.md (Active Summary — different topic, but its pro
 <!-- Commit checkpoint: tasks 1-2 -->
 
 ### Phase 2: SCF Field Groups (depends on 2)
-- [ ] Task 3: Services field group JSON (tabs: hero, audience, triggers, included, stages, strategy, examples, formats, faq, cta; defaults on structural labels)
-- [ ] Task 4: Directions field group JSON (hero+blurbs, content_sections repeater [title+wysiwyg], two sidebar groups with default titles, cta)
-- [ ] Task 5: Cases field group JSON (facts repeater, content_sections, results with metrics repeater, cta)
+- [x] Task 3: Services field group JSON (tabs: hero, audience, triggers, included, stages, strategy, examples, formats, faq, cta; defaults on structural labels)
+- [x] Task 4: Directions field group JSON (hero+blurbs, content_sections repeater [title+wysiwyg], two sidebar groups with default titles, cta)
+- [x] Task 5: Cases field group JSON (facts repeater, content_sections, results with metrics repeater, cta)
 <!-- Commit checkpoint: tasks 3-5 -->
 
 ### Phase 3: Templates & Styles
