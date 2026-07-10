@@ -16,3 +16,15 @@ db-shell:
 fresh:
 	docker compose down -v
 	docker compose up -d
+
+# Usage: make wp cmd="plugin list"
+wp:
+	docker compose run --rm cli wp $(cmd)
+
+import:
+	docker compose run --rm cli wp eval-file /scripts/import/import-services.php
+	docker compose run --rm cli wp eval-file /scripts/import/import-directions.php
+	docker compose run --rm cli wp eval-file /scripts/import/import-cases.php
+	docker compose run --rm cli wp eval-file /scripts/import/import-posts.php
+	docker compose run --rm cli wp eval-file /scripts/import/setup-menu.php
+	docker compose run --rm cli wp rewrite flush --hard

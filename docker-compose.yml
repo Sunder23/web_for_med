@@ -30,6 +30,25 @@ services:
       # - ./plugin/my-custom-plugin:/var/www/html/wp-content/plugins/my-custom-plugin
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
+  cli:
+    image: wordpress:cli
+    profiles: ["cli"]
+    depends_on:
+      - db
+      - wordpress
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./theme/vite-wordpress-starter-theme:/var/www/html/wp-content/themes/vite-wordpress-starter-theme
+      - ./scripts:/scripts:ro
+      - ./ref/images:/import-images:ro
+
   phpmyadmin:
     image: phpmyadmin:latest
     restart: unless-stopped
