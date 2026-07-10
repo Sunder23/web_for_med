@@ -8,7 +8,24 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Bash(npm uninstall *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "mcp__chromeDevtools__new_page",
+      "mcp__chromeDevtools__emulate",
+      "mcp__chromeDevtools__evaluate_script",
+      "mcp__chromeDevtools__navigate_page",
+      "mcp__chromeDevtools__take_screenshot",
+      "mcp__chromeDevtools__close_page",
+      "Bash(printenv HANDOFF_MODE)",
+      "Bash(printenv HANDOFF_TASK_ID)",
+      "PowerShell(git checkout *)",
+      "Skill(aif-implement)",
+      "Skill(aif-commit)",
+      "PowerShell(python \"C:\\\\Users\\\\Max\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--Work-web-for-med\\\\62f2f7ff-0901-427d-bd54-c335a6d1712d\\\\scratchpad\\\\dump_group.py\" \"theme/vite-wordpress-starter-theme/acf-json/group_57587b53.json\")",
+      "PowerShell(py *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: add wp-cli content import scripts and navigation setup *)",
+      "Bash(git commit -m 'fix: apply instant accordion initial state and front-page animation tweaks *)",
+      "Bash(git commit -m 'chore: install AI Factory skills and agents, update local settings *)"
     ]
   }
 }

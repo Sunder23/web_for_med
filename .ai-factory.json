@@ -52,11 +52,11 @@
         "security-sidecar.md"
       ],
       "mcp": {
-        "github": true,
+        "github": false,
         "filesystem": false,
         "postgres": false,
-        "chromeDevtools": true,
-        "playwright": true
+        "chromeDevtools": false,
+        "playwright": false
       },
       "managedSkills": {
         "aif": {
