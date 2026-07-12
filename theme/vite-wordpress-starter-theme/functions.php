@@ -16,6 +16,10 @@ include( 'configure/configure.php' );
 
 include( 'configure/js-css.php' );
 
+// ACF BLOCKS
+
+include( 'configure/blocks.php' );
+
 // TABLE OF CONTENTS
 
 include( 'configure/toc.php' );

@@ -7,7 +7,7 @@
  */
 
 import { defineConfig } from 'vite';
-import { readdirSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 
 
@@ -19,6 +19,26 @@ const scssEntries = () => {
     .reduce((entries, entry) => {
       const name = entry.name.replace(/\.scss$/, '');
       entries[name] = resolve(scssDir, entry.name);
+      return entries;
+    }, {});
+};
+
+// ACF block styles: acf-blocks/<block>/<block>.scss compiled per block,
+// manifest key stays "acf-blocks/<block>/<name>.scss" for PHP lookup
+const acfBlockScssEntries = () => {
+  const blocksDir = resolve(__dirname, 'acf-blocks');
+  if (!existsSync(blocksDir)) {
+    return {};
+  }
+  return readdirSync(blocksDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .reduce((entries, dir) => {
+      for (const file of readdirSync(resolve(blocksDir, dir.name))) {
+        if (file.endsWith('.scss') && !file.startsWith('_')) {
+          const name = file.replace(/\.scss$/, '');
+          entries[`acf-blocks/${dir.name}/${name}`] = resolve(blocksDir, dir.name, file);
+        }
+      }
       return entries;
     }, {});
 };
@@ -53,6 +73,7 @@ export default defineConfig({
       input: {
         'js/main': resolve(`${__dirname}/assets/src/js/main.js`),
         ...scssEntries(),
+        ...acfBlockScssEntries(),
       },
       output: {
         entryFileNames: '[name]-[hash].js',

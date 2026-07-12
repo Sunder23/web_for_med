@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/info-block",
+    "title": "Info Block",
+    "description": "Titled info card with rich text, inserted anywhere in post content.",
+    "category": "text",
+    "icon": "info-outline",
+    "keywords": ["info", "card", "інфо", "блок"],
+    "textdomain": "textdomaintomodify",
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "render.php"
+    },
+    "supports": {
+        "anchor": true,
+        "html": false,
+        "mode": true
+    },
+    "style": "info-block"
+}
