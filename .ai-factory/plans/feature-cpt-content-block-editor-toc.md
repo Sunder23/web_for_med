@@ -66,4 +66,4 @@ Refactor single templates for all CPTs (`services`, `directions`, `cases`) and t
 <!-- Commit checkpoint: tasks 8-10 -->
 
 ### Phase 4: Verification
-- [ ] Task 11: `npm run build` + manual browser verification of all four page types and Gutenberg editor (depends on all)
+- [x] Task 11: `npm run build` + manual browser verification of all four page types and Gutenberg editor (depends on all)

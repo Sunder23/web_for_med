@@ -16,6 +16,11 @@
  *   directions: sections
  *   cases:      facts, sections, results
  * Hero, FAQ, sidebar who/needs and CTA stay in ACF (rendered by templates).
+ *
+ * Values are read from raw postmeta (ACF naming: group "{name}_{sub}",
+ * repeater "{name}" = row count + "{name}_{i}_{sub}") — NOT via get_field() —
+ * because the migrated fields are already removed from the acf-json
+ * definitions and get_field() can no longer resolve them.
  */
 
 if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
@@ -23,8 +28,34 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 	exit( 1 );
 }
 
-if ( ! function_exists( 'get_field' ) ) {
-	WP_CLI::error( 'SCF/ACF is not active — get_field() is unavailable. Activate the plugin first.' );
+// ---------------------------------------------------------------------------
+// Raw postmeta readers (ACF storage conventions)
+// ---------------------------------------------------------------------------
+
+function w4m_meta( $post_id, $name ) {
+	return get_post_meta( $post_id, $name, true );
+}
+
+/**
+ * Read an ACF repeater from raw postmeta: "{base}" holds the row count,
+ * "{base}_{i}_{sub}" holds each sub value.
+ *
+ * @param string[] $subs Sub-field names.
+ * @return array[] Rows of sub => value.
+ */
+function w4m_meta_rows( $post_id, $base, array $subs ) {
+	$count = (int) get_post_meta( $post_id, $base, true );
+	$rows  = array();
+
+	for ( $i = 0; $i < $count; $i++ ) {
+		$row = array();
+		foreach ( $subs as $sub ) {
+			$row[ $sub ] = get_post_meta( $post_id, "{$base}_{$i}_{$sub}", true );
+		}
+		$rows[] = $row;
+	}
+
+	return $rows;
 }
 
 $w4m_mig_args  = isset( $args ) ? (array) $args : array();
@@ -212,7 +243,15 @@ function w4m_blk_sections( $sections ) {
 function w4m_build_service_blocks( $post_id ) {
 	$blocks = array();
 
-	$audience = get_field( 'service_audience', $post_id );
+	$audience = array(
+		'title'  => w4m_meta( $post_id, 'service_audience_title' ),
+		'intro'  => w4m_meta( $post_id, 'service_audience_intro' ),
+		'cards'  => w4m_meta_rows( $post_id, 'service_audience_cards', array( 'title', 'text' ) ),
+		'notice' => array(
+			'title' => w4m_meta( $post_id, 'service_audience_notice_title' ),
+			'text'  => w4m_meta( $post_id, 'service_audience_notice_text' ),
+		),
+	);
 	if ( ! empty( $audience['title'] ) || ! empty( $audience['cards'] ) ) {
 		$blocks[] = w4m_blk_heading( $audience['title'] ?? '' );
 		$blocks[] = w4m_blk_paragraph_text( $audience['intro'] ?? '' );
@@ -223,7 +262,11 @@ function w4m_build_service_blocks( $post_id ) {
 		}
 	}
 
-	$triggers = get_field( 'service_triggers', $post_id );
+	$triggers = array(
+		'title' => w4m_meta( $post_id, 'service_triggers_title' ),
+		'intro' => w4m_meta( $post_id, 'service_triggers_intro' ),
+		'items' => w4m_meta_rows( $post_id, 'service_triggers_items', array( 'text' ) ),
+	);
 	if ( ! empty( $triggers['title'] ) || ! empty( $triggers['items'] ) ) {
 		$blocks[] = w4m_blk_heading( $triggers['title'] ?? '' );
 		$blocks[] = w4m_blk_paragraph_text( $triggers['intro'] ?? '' );
@@ -235,45 +278,63 @@ function w4m_build_service_blocks( $post_id ) {
 		) );
 	}
 
-	$included = get_field( 'service_included', $post_id );
+	$included = array(
+		'title' => w4m_meta( $post_id, 'service_included_title' ),
+		'items' => w4m_meta_rows( $post_id, 'service_included_items', array( 'title', 'text' ) ),
+	);
 	if ( ! empty( $included['title'] ) || ! empty( $included['items'] ) ) {
 		$blocks[] = w4m_blk_heading( $included['title'] ?? '' );
 		$blocks   = array_merge( $blocks, w4m_blk_titled_items( $included['items'] ?? array() ) );
 	}
 
-	$stages = get_field( 'service_stages', $post_id );
+	$stages = array(
+		'title' => w4m_meta( $post_id, 'service_stages_title' ),
+		'items' => w4m_meta_rows( $post_id, 'service_stages_items', array( 'title', 'text' ) ),
+	);
 	if ( ! empty( $stages['title'] ) || ! empty( $stages['items'] ) ) {
 		$blocks[] = w4m_blk_heading( $stages['title'] ?? '' );
 		$blocks   = array_merge( $blocks, w4m_blk_titled_items( $stages['items'] ?? array() ) );
 	}
 
-	$strategy = get_field( 'service_strategy', $post_id );
+	$strategy = array(
+		'title' => w4m_meta( $post_id, 'service_strategy_title' ),
+		'text'  => w4m_meta( $post_id, 'service_strategy_text' ),
+	);
 	if ( ! empty( $strategy['title'] ) || ! empty( $strategy['text'] ) ) {
 		$blocks[] = w4m_blk_heading( $strategy['title'] ?? '' );
 		$blocks[] = w4m_blk_from_html( $strategy['text'] ?? '' );
 	}
 
-	$examples = get_field( 'service_examples', $post_id );
+	$examples = array(
+		'title'        => w4m_meta( $post_id, 'service_examples_title' ),
+		'items'        => w4m_meta_rows( $post_id, 'service_examples_items', array( 'title', 'text' ) ),
+		'button_label' => w4m_meta( $post_id, 'service_examples_button_label' ),
+		'button_url'   => w4m_meta( $post_id, 'service_examples_button_url' ),
+	);
 	if ( ! empty( $examples['title'] ) || ! empty( $examples['items'] ) ) {
 		$blocks[] = w4m_blk_heading( $examples['title'] ?? '' );
 		$blocks   = array_merge( $blocks, w4m_blk_titled_items( $examples['items'] ?? array(), false ) );
 		$blocks[] = w4m_blk_button( $examples['button_label'] ?? '', $examples['button_url'] ?? '' );
 	}
 
-	$formats = get_field( 'service_formats', $post_id );
+	$formats = array(
+		'title' => w4m_meta( $post_id, 'service_formats_title' ),
+		'intro' => w4m_meta( $post_id, 'service_formats_intro' ),
+		'items' => w4m_meta_rows( $post_id, 'service_formats_items', array( 'title', 'text' ) ),
+	);
 	if ( ! empty( $formats['title'] ) || ! empty( $formats['items'] ) ) {
 		$blocks[] = w4m_blk_heading( $formats['title'] ?? '' );
 		$blocks[] = w4m_blk_paragraph_text( $formats['intro'] ?? '' );
 		$blocks   = array_merge( $blocks, w4m_blk_titled_items( $formats['items'] ?? array() ) );
 	}
 
-	$blocks = array_merge( $blocks, w4m_blk_sections( get_field( 'service_sections', $post_id ) ) );
+	$blocks = array_merge( $blocks, w4m_blk_sections( w4m_meta_rows( $post_id, 'service_sections', array( 'title', 'content' ) ) ) );
 
 	return implode( "\n\n", array_filter( $blocks ) );
 }
 
 function w4m_build_direction_blocks( $post_id ) {
-	$blocks = w4m_blk_sections( get_field( 'direction_sections', $post_id ) );
+	$blocks = w4m_blk_sections( w4m_meta_rows( $post_id, 'direction_sections', array( 'title', 'content' ) ) );
 
 	return implode( "\n\n", array_filter( $blocks ) );
 }
@@ -281,7 +342,7 @@ function w4m_build_direction_blocks( $post_id ) {
 function w4m_build_case_blocks( $post_id ) {
 	$blocks = array();
 
-	$facts = get_field( 'case_facts', $post_id );
+	$facts = w4m_meta_rows( $post_id, 'case_facts', array( 'label', 'value' ) );
 	if ( ! empty( $facts ) ) {
 		$blocks[] = w4m_blk_list( array_map(
 			static function ( $fact ) {
@@ -293,9 +354,13 @@ function w4m_build_case_blocks( $post_id ) {
 		) );
 	}
 
-	$blocks = array_merge( $blocks, w4m_blk_sections( get_field( 'case_sections', $post_id ) ) );
+	$blocks = array_merge( $blocks, w4m_blk_sections( w4m_meta_rows( $post_id, 'case_sections', array( 'title', 'content' ) ) ) );
 
-	$results = get_field( 'case_results', $post_id );
+	$results = array(
+		'title'   => w4m_meta( $post_id, 'case_results_title' ),
+		'metrics' => w4m_meta_rows( $post_id, 'case_results_metrics', array( 'value', 'label' ) ),
+		'text'    => w4m_meta( $post_id, 'case_results_text' ),
+	);
 	if ( ! empty( $results['metrics'] ) || ! empty( $results['text'] ) ) {
 		$blocks[] = w4m_blk_heading( $results['title'] ?? '' );
 		if ( ! empty( $results['metrics'] ) ) {
