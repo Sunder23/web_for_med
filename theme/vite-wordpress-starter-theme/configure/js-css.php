@@ -162,11 +162,16 @@ function cleaning_wordpress() {
     remove_action('wp_head', 'wp_print_head_scripts', 9);
     remove_action('wp_head', 'wp_enqueue_scripts', 1);
 
-    // removing all WP css files enqueued by default
-    wp_dequeue_style('wp-block-library');
-    wp_dequeue_style('wp-block-library-theme');
+    // removing all WP css files enqueued by default,
+    // except on singular views that render block content via the_content()
+    if ( ! custom_theme_is_block_content_view() ) {
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('wp-block-library-theme');
+        wp_dequeue_style('global-styles');
+        remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
+        remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+    }
     wp_dequeue_style('wc-block-style');
-    wp_dequeue_style('global-styles');
     wp_dequeue_style('classic-theme-styles');
 }
 add_action('wp_enqueue_scripts', 'cleaning_wordpress', 100);

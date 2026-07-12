@@ -3,6 +3,14 @@
 add_filter('wpcf7_autop_or_not', '__return_false');
 
 /**
+ * Singular views whose main body is rendered by the_content() with Gutenberg blocks.
+ * Core block assets (wp-block-library, layout support) must stay enabled here.
+ */
+function custom_theme_is_block_content_view() {
+	return is_singular( array( 'post', 'services', 'directions', 'cases' ) );
+}
+
+/**
  * Render breadcrumbs for CPT singles/archives and blog pages.
  * Echoes nothing on the front page.
  */

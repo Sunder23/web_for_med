@@ -16,6 +16,10 @@ include( 'configure/configure.php' );
 
 include( 'configure/js-css.php' );
 
+// TABLE OF CONTENTS
+
+include( 'configure/toc.php' );
+
 // SHORTCODES
 
 include( 'configure/shortcodes.php' );

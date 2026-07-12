@@ -23,7 +23,7 @@ function custom_theme_register_cpts() {
 		'show_in_rest' => true,
 		'menu_icon'    => 'dashicons-hammer',
 		'menu_position'=> 20,
-		'supports'     => array( 'title', 'thumbnail' ),
+		'supports'     => array( 'title', 'editor', 'thumbnail' ),
 		'rewrite'      => array( 'slug' => 'services', 'with_front' => false ),
 	) );
 
@@ -46,7 +46,7 @@ function custom_theme_register_cpts() {
 		'show_in_rest' => true,
 		'menu_icon'    => 'dashicons-heart',
 		'menu_position'=> 21,
-		'supports'     => array( 'title', 'thumbnail' ),
+		'supports'     => array( 'title', 'editor', 'thumbnail' ),
 		'rewrite'      => array( 'slug' => 'directions', 'with_front' => false ),
 	) );
 
@@ -69,7 +69,7 @@ function custom_theme_register_cpts() {
 		'show_in_rest' => true,
 		'menu_icon'    => 'dashicons-portfolio',
 		'menu_position'=> 22,
-		'supports'     => array( 'title', 'thumbnail' ),
+		'supports'     => array( 'title', 'editor', 'thumbnail' ),
 		'rewrite'      => array( 'slug' => 'cases', 'with_front' => false ),
 	) );
 }
