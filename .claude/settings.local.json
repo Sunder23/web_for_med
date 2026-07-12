@@ -32,7 +32,8 @@
       "Bash(git merge *)",
       "Bash(git stash *)",
       "mcp__chromeDevtools__take_snapshot",
-      "mcp__chromeDevtools__hover"
+      "mcp__chromeDevtools__hover",
+      "mcp__chromeDevtools__resize_page"
     ]
   }
 }
