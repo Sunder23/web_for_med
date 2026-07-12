@@ -1549,12 +1549,15 @@
     "style": "default",
     "label_placement": "top",
     "instruction_placement": "label",
-    "hide_on_screen": "",
+    "hide_on_screen": [
+        "the_content",
+        "excerpt"
+    ],
     "active": true,
     "description": "Generated from html_static\/index.html for ACF Pro.",
     "show_in_rest": 0,
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1779894549
+    "modified": 1783862586
 }

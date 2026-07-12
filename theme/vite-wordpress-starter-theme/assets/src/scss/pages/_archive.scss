@@ -3,21 +3,35 @@
 .s-archive {
     background: var(--c-bg);
     padding-bottom: 80px;
+    border-top: var(--border);
+
+    &::after {
+        margin-top: -1px;
+    }
 }
 
 .archive-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: var(--border);
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .archive-card {
+    margin-top: -1px;
     justify-content: space-between;
     gap: 24px;
     padding: 40px 32px;
+    border: 0;
+    border-top: var(--border);
     border-bottom: var(--border);
     text-decoration: none;
     transition: background 0.3s ease-in-out;
+
+    @media screen and (min-width: 769px) {
+        &:nth-child(odd) {
+            border-right: var(--border);
+        }
+    }
+
 
     &:hover {
         background: var(--c-bg-light);
@@ -90,6 +104,6 @@
     }
 
     .s-archive {
-        padding-bottom: 48px;
+        padding-bottom: 0;
     }
 }

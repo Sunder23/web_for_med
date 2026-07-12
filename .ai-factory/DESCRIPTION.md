@@ -21,7 +21,7 @@ A WordPress development boilerplate combining a custom PHP theme and plugin scaf
 - **CSS Preprocessor:** SCSS (Sass)
 - **Linter/Formatter:** Biome.js
 - **Package Manager:** npm (Node.js), Composer (PHP)
-- **Integrations:** ACF Pro, Yoast SEO, jQuery (CDN)
+- **Integrations:** ACF Pro, Yoast SEO, jQuery (CDN), Fancybox v6 (@fancyapps/ui — content image lightbox)
 
 ## Architecture Notes
 - Theme lives under `theme/vite-wordpress-starter-theme/` and can be deployed directly to `wp-content/themes/`

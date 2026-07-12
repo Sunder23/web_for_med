@@ -8,8 +8,13 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 56px 40px 64px;
+    padding: 56px 40px;
+
+    &:has(.s-cpt-hero__blurbs) {
+        padding: 0;
+    }
 }
+
 
 .s-cpt-hero__title {
     max-width: 900px;
@@ -51,7 +56,7 @@
 }
 
 .hero-blurb {
-    padding: 32px 40px 32px 0;
+    padding: 32px 40px;
 
     &:not(:first-child) {
         padding-left: 40px;

@@ -33,7 +33,9 @@
       "Bash(git stash *)",
       "mcp__chromeDevtools__take_snapshot",
       "mcp__chromeDevtools__hover",
-      "mcp__chromeDevtools__resize_page"
+      "mcp__chromeDevtools__resize_page",
+      "Bash(git commit -m 'fix\\(migrate\\): read ACF values from raw postmeta instead of get_field *)",
+      "Bash(php -l \"D:/Work/web_for_med/theme/vite-wordpress-starter-theme/configure/configure.php\")"
     ]
   }
 }

@@ -1,5 +1,6 @@
 .btn,
-.wpcf7-submit {
+.wpcf7-submit,
+.wp-element-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -15,13 +16,13 @@
     white-space: nowrap;
 }
 
-.btn:hover,
-.wpcf7-submit:hover {}
 
 .btn--primary,
-.wpcf7-submit {
+.wpcf7-submit,
+.wp-element-button {
     background: var(--c-blue);
-    color: var(--c-white);
+    color: var(--c-white) !important;
+    text-decoration: none !important;
     // transition: background 0.3s ease-in-out !important;
 
     &:hover {

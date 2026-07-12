@@ -1,0 +1,87 @@
+/*
+ * Block editor styles (admin only).
+ * Loaded via add_editor_style() — WP prefixes every selector with
+ * .editor-styles-wrapper, so plain selectors below are safe.
+ * Widths/typography mirror the front-end content column
+ * (.entry-content.svc-prose, see _toc.scss / _cpt-common.scss).
+ */
+
+body {
+	background: #fbfcfd;
+	padding: 32px 24px;
+	font-family: 'Fixel Display', 'IBM Plex Sans', sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	color: #3b3e41;
+}
+
+/* Content container: constrain top-level blocks to the front-end column width */
+.wp-block {
+	max-width: 760px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wp-block[data-align='wide'],
+.wp-block.alignwide {
+	max-width: 1080px;
+}
+
+.wp-block[data-align='full'],
+.wp-block.alignfull {
+	max-width: none;
+}
+
+/* Post title */
+.editor-post-title__input,
+.wp-block-post-title {
+	font-size: 36px;
+	font-weight: 600;
+	line-height: 1.1;
+	color: #2e2f30;
+}
+
+/* Prose: mirrors .entry-content h2 and .svc-prose */
+h2 {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 1.15;
+	color: #2e2f30;
+	margin: 48px 0 20px;
+}
+
+h3,
+h4 {
+	font-size: 20px;
+	font-weight: 500;
+	line-height: 1.2;
+	color: #2e2f30;
+	margin: 28px 0 12px;
+}
+
+p {
+	margin: 0 0 16px;
+}
+
+ul,
+ol {
+	margin: 0 0 16px;
+	padding-left: 22px;
+}
+
+li {
+	margin-bottom: 8px;
+}
+
+li::marker {
+	color: #218ed6;
+}
+
+a {
+	color: #1261a0;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}

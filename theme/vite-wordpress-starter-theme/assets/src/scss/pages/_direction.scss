@@ -2,6 +2,7 @@
 // Shared by directions single pages and the «Аналітика і моніторинг» service page.
 
 .s-two-col {
+    border-top: var(--border);
     background: var(--c-bg);
 }
 
@@ -10,7 +11,7 @@
     grid-template-columns: minmax(0, 1fr) 360px;
     gap: 64px;
     padding: 64px 40px;
-    border-top: var(--border);
+
 }
 
 .s-two-col__content {
