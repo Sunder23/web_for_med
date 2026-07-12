@@ -2,19 +2,11 @@
 
 /**
  * Content + TOC two-column layout: block-editor content on the left,
- * sticky table of contents (auto-built from h2/h3 headings) with optional
- * who/needs info cards below it on the right.
+ * sticky table of contents (auto-built from content headings) on the right.
  *
  * Used by all CPT singles and the blog single. Evolved from two-column-page.php.
- *
- * @param array $args {
- *     @type array $sidebar_who   Group [title, items[]].
- *     @type array $sidebar_needs Group [title, items[]].
- * }
+ * Supplementary info cards live inside post content as acf/info-block blocks.
  */
-
-$sidebar_who   = ! empty($args['sidebar_who']) ? $args['sidebar_who'] : array();
-$sidebar_needs = ! empty($args['sidebar_needs']) ? $args['sidebar_needs'] : array();
 
 $toc = custom_theme_get_toc();
 ?>
@@ -39,25 +31,6 @@ $toc = custom_theme_get_toc();
 								</ul>
 							</nav>
 						<?php endif; ?>
-						<?php foreach (array($sidebar_who, $sidebar_needs) as $block) : ?>
-							<?php if (empty($block['title']) && empty($block['items'])) {
-								continue;
-							} ?>
-							<div class="sidebar-card info-card">
-								<div class="info-card__body">
-									<?php if (! empty($block['title'])) : ?>
-										<h3 class="sidebar-card__title card-title"><?php echo esc_html($block['title']); ?></h3>
-									<?php endif; ?>
-									<?php if (! empty($block['items'])) : ?>
-										<ul class="sidebar-card__list">
-											<?php foreach ($block['items'] as $item) : ?>
-												<li class="sidebar-card__item card-text"><?php echo esc_html($item['text']); ?></li>
-											<?php endforeach; ?>
-										</ul>
-									<?php endif; ?>
-								</div>
-							</div>
-						<?php endforeach; ?>
 					</div>
 				</aside>
 			<?php endif; ?>

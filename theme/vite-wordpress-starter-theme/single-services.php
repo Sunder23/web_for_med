@@ -1,11 +1,9 @@
 <?php
 get_header();
 
-$hero          = get_field('service_hero');
-$faq           = get_field('service_faq');
-$sidebar_who   = get_field('service_sidebar_who');
-$sidebar_needs = get_field('service_sidebar_needs');
-$cta           = get_field('service_cta');
+$hero = get_field('service_hero');
+$faq  = get_field('service_faq');
+$cta  = get_field('service_cta');
 ?>
 
 <main class="single-cpt single-service">
@@ -50,12 +48,7 @@ $cta           = get_field('service_cta');
 	</section>
 
 	<?php while (have_posts()) : the_post(); ?>
-		<?php
-		get_template_part('template-parts/content-with-toc', null, array(
-			'sidebar_who'   => $sidebar_who,
-			'sidebar_needs' => $sidebar_needs,
-		));
-		?>
+		<?php get_template_part('template-parts/content-with-toc'); ?>
 	<?php endwhile; ?>
 
 	<?php get_template_part('template-parts/cpt-faq', null, (array) $faq); ?>

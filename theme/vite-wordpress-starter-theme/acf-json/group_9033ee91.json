@@ -327,188 +327,6 @@
             ]
         },
         {
-            "key": "field_169507e3",
-            "label": "Sidebar",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
-        },
-        {
-            "key": "field_be8bbd50",
-            "label": "Sidebar: Who it's for",
-            "name": "service_sidebar_who",
-            "aria-label": "",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_bb6dbf44",
-                    "label": "Title",
-                    "name": "title",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "Кому підходить це рішення",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": ""
-                },
-                {
-                    "key": "field_71452e62",
-                    "label": "Items",
-                    "name": "items",
-                    "aria-label": "",
-                    "type": "repeater",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "pagination": 0,
-                    "min": 0,
-                    "max": 0,
-                    "collapsed": "",
-                    "button_label": "Add Item",
-                    "rows_per_page": 20,
-                    "sub_fields": [
-                        {
-                            "key": "field_7c16ccaf",
-                            "label": "Text",
-                            "name": "text",
-                            "aria-label": "",
-                            "type": "textarea",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "new_lines": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "rows": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "key": "field_142218cc",
-            "label": "Sidebar: What we need from you",
-            "name": "service_sidebar_needs",
-            "aria-label": "",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "sub_fields": [
-                {
-                    "key": "field_8d82f7a3",
-                    "label": "Title",
-                    "name": "title",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "Що потрібно з вашого боку",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": ""
-                },
-                {
-                    "key": "field_47aa6685",
-                    "label": "Items",
-                    "name": "items",
-                    "aria-label": "",
-                    "type": "repeater",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "block",
-                    "pagination": 0,
-                    "min": 0,
-                    "max": 0,
-                    "collapsed": "",
-                    "button_label": "Add Item",
-                    "rows_per_page": 20,
-                    "sub_fields": [
-                        {
-                            "key": "field_93e0a15a",
-                            "label": "Text",
-                            "name": "text",
-                            "aria-label": "",
-                            "type": "textarea",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "new_lines": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "rows": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "key": "field_6edc9729",
             "label": "CTA",
             "name": "",
@@ -616,7 +434,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "/#contact",
+                    "default_value": "\/#contact",
                     "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
@@ -643,5 +461,5 @@
     "active": true,
     "description": "Fields for the services CPT single pages.",
     "show_in_rest": 0,
-    "modified": 1783860864
+    "modified": 1783883833
 }
