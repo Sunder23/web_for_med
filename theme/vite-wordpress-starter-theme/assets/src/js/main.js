@@ -7,6 +7,7 @@ import { initHeroAnimations, initFooterCoverText, initFooterFormAOS, initFooterC
 import { initMobileNav } from '@js/components/mobileNav.js';
 import { initServicesAccordion } from '@js/components/servicesAccordion.js';
 import { initSmoothScroll } from '@js/components/smoothScroll.js';
+import { initToc } from '@js/components/toc.js';
 import { initWhySection } from '@js/components/whySection.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initSmoothScroll();
 	initServicesAccordion();
 	initFaqAccordion();
+	initToc();
 	initMobileNav();
 	initCasesSlider();
 	initActiveNav();
