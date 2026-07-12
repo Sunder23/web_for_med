@@ -14,15 +14,7 @@ get_header();
 			</div>
 		</section>
 
-		<section class="s-post">
-			<div class="s-post__wrap l-wrap">
-				<div class="s-post__inner l-frame-x">
-					<article class="post-content svc-prose">
-						<?php the_content(); ?>
-					</article>
-				</div>
-			</div>
-		</section>
+		<?php get_template_part( 'template-parts/content-with-toc' ); ?>
 	<?php endwhile; ?>
 </main>
 <?php get_footer();

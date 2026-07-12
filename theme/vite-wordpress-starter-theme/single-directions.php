@@ -2,7 +2,7 @@
 get_header();
 
 $hero          = get_field( 'direction_hero' );
-$sections      = get_field( 'direction_sections' );
+$faq           = get_field( 'direction_faq' );
 $sidebar_who   = get_field( 'direction_sidebar_who' );
 $sidebar_needs = get_field( 'direction_sidebar_needs' );
 $cta           = get_field( 'direction_cta' );
@@ -33,13 +33,16 @@ $cta           = get_field( 'direction_cta' );
 		</div>
 	</section>
 
-	<?php
-	get_template_part( 'template-parts/two-column-page', null, array(
-		'sections'      => $sections,
-		'sidebar_who'   => $sidebar_who,
-		'sidebar_needs' => $sidebar_needs,
-	) );
-	?>
+	<?php while ( have_posts() ) : the_post(); ?>
+		<?php
+		get_template_part( 'template-parts/content-with-toc', null, array(
+			'sidebar_who'   => $sidebar_who,
+			'sidebar_needs' => $sidebar_needs,
+		) );
+		?>
+	<?php endwhile; ?>
+
+	<?php get_template_part( 'template-parts/cpt-faq', null, (array) $faq ); ?>
 
 	<?php get_template_part( 'template-parts/cpt-cta', null, (array) $cta ); ?>
 </main>
