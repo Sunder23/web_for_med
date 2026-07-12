@@ -1,0 +1,17 @@
+// Fancybox v6 overrides — core styles are imported in components/lightbox.js
+
+// Content images decorated by initLightbox() are clickable
+.entry-content .wp-block-image {
+    a[data-fancybox],
+    img[data-fancybox] {
+        cursor: zoom-in;
+    }
+}
+
+.fancybox__dialog {
+    // Above the sticky header (z-index: 200) and mobile overlay (210)
+    z-index: 300;
+
+    // Brand backdrop: --color-brand-dark-blue (#092a4a) at 95%
+    --fancybox-backdrop-bg: rgba(9, 42, 74, 0.95);
+}

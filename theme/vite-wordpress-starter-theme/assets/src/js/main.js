@@ -4,6 +4,7 @@ import { initContactForm } from '@js/components/contactForm.js';
 import { initFaqAccordion } from '@js/components/faqAccordion.js';
 import { initGlitchImage } from '@js/components/glitchImage.js';
 import { initHeroAnimations, initFooterCoverText, initFooterFormAOS, initFooterCoverImageGlitch } from '@js/components/heroAnimations.js';
+import { initLightbox } from '@js/components/lightbox.js';
 import { initMobileNav } from '@js/components/mobileNav.js';
 import { initServicesAccordion } from '@js/components/servicesAccordion.js';
 import { initSmoothScroll } from '@js/components/smoothScroll.js';
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initServicesAccordion();
 	initFaqAccordion();
 	initToc();
+	initLightbox();
 	initMobileNav();
 	initCasesSlider();
 	initActiveNav();
