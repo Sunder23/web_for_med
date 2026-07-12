@@ -1,7 +1,14 @@
   </div><!-- #content -->
 
   <?php
-  $contant = get_field('front_page_contact');
+  // The contact-form group lives on the static front page; read it from there
+  // explicitly so the footer form renders on every page, not only the front one.
+  $front_page_id = (int) get_option('page_on_front');
+  $contant       = $front_page_id ? get_field('front_page_contact', $front_page_id) : get_field('front_page_contact');
+  $has_contact   = !empty($contant['title']) || !empty($contant['text']) || !empty($contant['contact_form']);
+  if (!$has_contact && defined('WP_DEBUG') && WP_DEBUG) {
+    error_log('[FIX] footer.php: front_page_contact is empty (front page ID ' . $front_page_id . '), skipping footer form section');
+  }
   $footer = [
     'logo' => get_field('logo', 'options'),
     'cover' => get_field('cover', 'options'),
@@ -11,6 +18,7 @@
   ?>
 
   <footer class="footer" id="contacts">
+    <?php if ($has_contact) : ?>
     <div class="footer__form-section">
       <div class="l-wrap">
         <div class="footer__form-wrap">
@@ -30,6 +38,7 @@
         </div>
       </div>
     </div>
+    <?php endif; ?>
 
     <div class="footer__cover  ">
       <div class="l-wrap">
