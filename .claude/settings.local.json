@@ -35,7 +35,12 @@
       "mcp__chromeDevtools__hover",
       "mcp__chromeDevtools__resize_page",
       "Bash(git commit -m 'fix\\(migrate\\): read ACF values from raw postmeta instead of get_field *)",
-      "Bash(php -l \"D:/Work/web_for_med/theme/vite-wordpress-starter-theme/configure/configure.php\")"
+      "Bash(php -l \"D:/Work/web_for_med/theme/vite-wordpress-starter-theme/configure/configure.php\")",
+      "Bash(git commit -m 'feat\\(theme\\): add acf/info-block block with block.json registration and Vite SCSS pipeline' -m '- configure/blocks.php scans acf-blocks/*/block.json and registers blocks on init *)",
+      "Bash(git commit -m 'refactor\\(theme\\): replace CPT sidebar who/needs cards with info-block content block' -m '- drop service/direction sidebar_who/sidebar_needs fields from templates and acf-json *)",
+      "Bash(netstat -ano)",
+      "Bash(npx --no-install sass --load-path=node_modules assets/src/scss/main.scss /tmp/_check2.css)",
+      "Bash(git commit *)"
     ]
   }
 }
