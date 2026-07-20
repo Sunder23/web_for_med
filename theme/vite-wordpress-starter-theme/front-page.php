@@ -126,7 +126,7 @@ $contact_form_shortcode = get_field('front_page_contact_form_shortcode');
 				</div>
 			</section>
 
-			<section class="s-solutions">
+			<section class="s-solutions" id="about">
 				<div class="s-solutions__wrap l-wrap">
 					<div class="s-solutions__inner">
 						<?php foreach ($solutions as $item) : ?>
@@ -149,7 +149,7 @@ $contact_form_shortcode = get_field('front_page_contact_form_shortcode');
 	</div>
 
 
-	<section class="s-services" id="about">
+	<section class="s-services" id="services">
 		<div class="s-services__wrap l-wrap">
 			<div class="s-services__header l-frame-x">
 				<svg viewBox="-30 -30 60 60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="galaxy_icon" data-name="Galaxy icon">
@@ -252,7 +252,7 @@ $contact_form_shortcode = get_field('front_page_contact_form_shortcode');
 		</div>
 	</section>
 
-	<section class="s-process s-process--top">
+	<section class="s-process s-process--top" id="process">
 		<div class="s-process__wrap l-wrap">
 			<div class="s-process__header l-frame-x">
 				<div class="pulse-icon">
