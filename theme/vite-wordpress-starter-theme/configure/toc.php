@@ -1,13 +1,12 @@
 <?php
 
-// Table of contents: heading anchor injection + TOC data helper
+// Heading anchor injection for block content views.
 
 /**
  * Extract h2/h3 headings from HTML and compute a unique anchor id for each.
  *
  * Existing id attributes are respected; missing ids are generated from the
- * heading text. Both the anchor-injection filter and custom_theme_get_toc()
- * use this function on the same heading sequence, so ids always match.
+ * heading text.
  *
  * @param string $html HTML markup to scan.
  * @return array[] List of [ 'level' => 2|3, 'title' => string, 'id' => string ].
@@ -105,22 +104,3 @@ function custom_theme_inject_heading_anchors($content)
 	return $content;
 }
 add_filter('the_content', 'custom_theme_inject_heading_anchors', 20);
-
-/**
- * Build the TOC data for a post from its h2/h3 headings.
- *
- * Parses raw post_content (block markup contains literal heading tags),
- * so it can be called before the_content() runs in the template.
- *
- * @param int|WP_Post|null $post Post to build the TOC for. Defaults to current post.
- * @return array[] List of [ 'level' => 2|3, 'title' => string, 'id' => string ].
- */
-function custom_theme_get_toc($post = null)
-{
-	$post = get_post($post);
-	if (! $post) {
-		return array();
-	}
-
-	return custom_theme_collect_headings($post->post_content);
-}

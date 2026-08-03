@@ -1,5 +1,11 @@
 // Blog single post pages.
 
+.post-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .s-post {
     background: var(--c-bg);
     padding-bottom: 80px;
@@ -14,6 +20,14 @@
     max-width: 820px;
     font-size: 17px;
 
+    // Lead paragraph — first paragraph of the article, styled larger per
+    // the narrow blog-article design (05-blog-post.html).
+    > p:first-child {
+        font-size: 20px;
+        font-weight: 500;
+        color: var(--c-dark);
+    }
+
     h2 {
         font-size: 28px;
         font-weight: 600;
@@ -24,6 +38,12 @@
         &:first-child {
             margin-top: 0;
         }
+    }
+
+    // Anchored headings (custom_theme_inject_heading_anchors) clear the sticky header.
+    h2[id],
+    h3[id] {
+        scroll-margin-top: calc(var(--header-h) + 24px);
     }
 
     img {

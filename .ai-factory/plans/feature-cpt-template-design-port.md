@@ -55,7 +55,7 @@ Open questions: none blocking.
 <!-- Commit checkpoint: tasks 3-7 -->
 
 ### Phase 3: Blog post rebuild & cleanup
-- [ ] Task 8: Rebuild single.php as narrow single-column blog article
-- [ ] Task 9: Remove dead TOC code after single.php rebuild (depends on 8)
-- [ ] Task 10: Build assets and visually verify all rebuilt templates against reference mockups (depends on 3, 4, 6, 7, 9)
+- [x] Task 8: Rebuild single.php as narrow single-column blog article
+- [x] Task 9: Remove dead TOC code after single.php rebuild (depends on 8)
+- [x] Task 10: Build assets and visually verify all rebuilt templates against reference mockups (depends on 3, 4, 6, 7, 9)
 <!-- Commit checkpoint: tasks 8-10 -->
