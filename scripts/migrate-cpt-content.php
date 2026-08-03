@@ -43,6 +43,42 @@ if ( ! is_array( $content_map ) ) {
 	WP_CLI::error( 'Data file must return an array keyed by post slug.' );
 }
 
+/**
+ * Loosely compare a written value against what get_field() reads back. WYSIWYG sub-fields
+ * get normalized on save (wpautop adds trailing newlines, etc.), so an exact === compare
+ * would false-flag a correct write; this only cares that content matches after trimming.
+ */
+function w4m_loosely_equal( $expected, $actual ) {
+	// ACF returns false (not []) for an empty repeater — both mean "no rows".
+	if ( is_array( $expected ) && empty( $expected ) && empty( $actual ) ) {
+		return true;
+	}
+
+	if ( is_array( $expected ) && is_array( $actual ) ) {
+		// Only the keys we actually set are checked — ACF fills in the full group
+		// schema (e.g. unset sub-fields/sub-groups) when reading a group back, so
+		// requiring exact key parity would false-flag a correct, partial write.
+		foreach ( $expected as $key => $value ) {
+			if ( ! array_key_exists( $key, $actual ) || ! w4m_loosely_equal( $value, $actual[ $key ] ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	if ( is_array( $expected ) !== is_array( $actual ) ) {
+		return false;
+	}
+
+	$normalize = static function ( $str ) {
+		$str = preg_replace( '/\s+/', ' ', (string) $str );
+		$str = preg_replace( '/>\s+</', '><', $str );
+		return trim( $str );
+	};
+
+	return $normalize( $expected ) === $normalize( $actual );
+}
+
 $updated       = 0;
 $missing       = 0;
 $failed_fields = 0;
@@ -65,9 +101,14 @@ foreach ( $content_map as $slug => $fields ) {
 			continue;
 		}
 
-		$ok = update_field( $field_name, $value, $post->ID );
+		// Note: update_field() returns an unreliable boolean for "group"-type fields
+		// (ACF's Group field update_value() does not consistently return true even on a
+		// successful write), so success is verified by re-reading the field instead of
+		// trusting the return value.
+		update_field( $field_name, $value, $post->ID );
+		$written = get_field( $field_name, $post->ID );
 
-		if ( false === $ok ) {
+		if ( ! w4m_loosely_equal( $value, $written ) ) {
 			WP_CLI::warning( "  Failed to write \"{$field_name}\" for {$label}." );
 			$failed_fields++;
 			continue;

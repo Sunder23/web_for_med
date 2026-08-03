@@ -48,10 +48,10 @@ Open questions: none blocking.
 
 ### Phase 2: Templates & content migration
 - [x] Task 3: Update single-directions.php to render new structured direction fields (depends on 2)
-- [ ] Task 4: Migrate content for all 7 published "directions" posts (depends on 1, 2)
-- [ ] Task 5: Add numbered ordered-list styling for case "process" content
-- [ ] Task 6: Migrate content for all 4 published "cases" posts into Challenge/Process shape (depends on 1, 5)
-- [ ] Task 7: Migrate content for all 4 published "services" posts to the "linear" layout (depends on 1)
+- [x] Task 4: Migrate content for all 7 published "directions" posts (depends on 1, 2)
+- [x] Task 5: Add numbered ordered-list styling for case "process" content
+- [x] Task 6: Migrate content for all 4 published "cases" posts into Challenge/Process shape (depends on 1, 5) — note: only 3 "cases" posts actually exist/are published (compliment, lviv-medical-center, khmilclinic-redesign); all 3 migrated
+- [x] Task 7: Migrate content for all 4 published "services" posts to the "linear" layout (depends on 1)
 <!-- Commit checkpoint: tasks 3-7 -->
 
 ### Phase 3: Blog post rebuild & cleanup

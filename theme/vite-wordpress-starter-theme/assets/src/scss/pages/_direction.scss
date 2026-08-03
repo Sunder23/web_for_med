@@ -25,6 +25,29 @@
     margin: 0 0 24px;
 }
 
+// InfoCard grid (direction "formats" section — 2 cards with tag + title + text)
+.info-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: var(--border);
+    border-left: var(--border);
+}
+
+.info-card-grid .info-card {
+    border-right: var(--border);
+    border-bottom: var(--border);
+}
+
+.info-card__tag {
+    margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .info-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .s-two-col__sidebar {
     display: flex;
     flex-direction: column;

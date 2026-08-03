@@ -71,6 +71,31 @@
     margin-bottom: 12px;
 }
 
+.s-cpt-hero__highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+}
+
+.hero-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 280px;
+}
+
+.hero-highlight__icon {
+    color: var(--c-blue-light);
+    font-weight: 600;
+}
+
+.hero-highlight__text {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--c-grey);
+}
+
 .s-cpt-cta {
     background: var(--c-navy);
 }

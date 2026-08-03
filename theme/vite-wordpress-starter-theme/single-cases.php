@@ -51,11 +51,12 @@ $cta  = get_field( 'case_cta' );
 			<div class="s-case-content__wrap l-wrap">
 				<div class="s-case-content__inner l-frame-x">
 					<?php foreach ( $sections as $section ) : ?>
+						<?php $is_process = false !== stripos( (string) $section['content'], '<ol' ); ?>
 						<div class="content-section">
 							<?php if ( ! empty( $section['title'] ) ) : ?>
 								<h2 class="content-section__title section-title"><?php echo esc_html( $section['title'] ); ?></h2>
 							<?php endif; ?>
-							<div class="content-section__body svc-prose"><?php echo wp_kses_post( $section['content'] ); ?></div>
+							<div class="content-section__body svc-prose<?php echo $is_process ? ' case-process' : ''; ?>"><?php echo wp_kses_post( $section['content'] ); ?></div>
 						</div>
 					<?php endforeach; ?>
 				</div>
