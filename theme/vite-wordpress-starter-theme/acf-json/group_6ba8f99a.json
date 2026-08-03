@@ -273,6 +273,130 @@
                     "append": ""
                 }
             ]
+        },
+        {
+            "key": "field_9c3f0010",
+            "label": "Facts",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_9c3f0011",
+            "label": "Facts",
+            "name": "facts",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Optional facts bar (project/niche/duration/scale/team/etc.). Leave empty to hide the facts section.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "layout": "block",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Fact",
+            "rows_per_page": 20,
+            "sub_fields": [
+                { "key": "field_9c3f0012", "label": "Label", "name": "label", "aria-label": "", "type": "text", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "maxlength": "", "placeholder": "", "prepend": "", "append": "", "parent_repeater": "field_9c3f0011" },
+                { "key": "field_9c3f0013", "label": "Value", "name": "value", "aria-label": "", "type": "text", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "maxlength": "", "placeholder": "", "prepend": "", "append": "", "parent_repeater": "field_9c3f0011" }
+            ]
+        },
+        {
+            "key": "field_9c3f0020",
+            "label": "Sections",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_9c3f0021",
+            "label": "Sections",
+            "name": "sections",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "\"Виклик\" / \"Проблеми до\" / \"Хід роботи\" style content blocks.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "layout": "block",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Section",
+            "rows_per_page": 20,
+            "sub_fields": [
+                { "key": "field_9c3f0022", "label": "Title", "name": "title", "aria-label": "", "type": "text", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "maxlength": "", "placeholder": "", "prepend": "", "append": "", "parent_repeater": "field_9c3f0021" },
+                { "key": "field_9c3f0023", "label": "Content", "name": "content", "aria-label": "", "type": "wysiwyg", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "tabs": "all", "toolbar": "full", "media_upload": 1, "delay": 0, "parent_repeater": "field_9c3f0021" }
+            ]
+        },
+        {
+            "key": "field_9c3f0030",
+            "label": "Results",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_9c3f0031",
+            "label": "Results",
+            "name": "results",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": { "width": "", "class": "", "id": "" },
+            "layout": "block",
+            "sub_fields": [
+                { "key": "field_9c3f0032", "label": "Title", "name": "title", "aria-label": "", "type": "text", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "Результати", "maxlength": "", "placeholder": "", "prepend": "", "append": "" },
+                {
+                    "key": "field_9c3f0033",
+                    "label": "Metrics",
+                    "name": "metrics",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "Optional KPI tiles (e.g. 15.8M / 448K / 2.8% / 9.9). Leave empty to hide the metrics grid.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": { "width": "", "class": "", "id": "" },
+                    "layout": "block",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Metric",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        { "key": "field_9c3f0034", "label": "Value", "name": "value", "aria-label": "", "type": "text", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "maxlength": "", "placeholder": "", "prepend": "", "append": "", "parent_repeater": "field_9c3f0033" },
+                        { "key": "field_9c3f0035", "label": "Label", "name": "label", "aria-label": "", "type": "text", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "maxlength": "", "placeholder": "", "prepend": "", "append": "", "parent_repeater": "field_9c3f0033" }
+                    ]
+                },
+                { "key": "field_9c3f0036", "label": "Text", "name": "text", "aria-label": "", "type": "wysiwyg", "instructions": "", "required": 0, "conditional_logic": 0, "wrapper": { "width": "", "class": "", "id": "" }, "default_value": "", "tabs": "all", "toolbar": "full", "media_upload": 1, "delay": 0 }
+            ]
         }
     ],
     "location": [

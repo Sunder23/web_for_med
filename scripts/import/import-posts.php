@@ -98,7 +98,8 @@ function w4m_import_resolve_image_tokens( $content, $post_id, array &$errors ) {
 	);
 }
 
-$w4m_posts = require __DIR__ . '/data/posts.php';
+$w4m_posts   = require __DIR__ . '/data/posts.php';
+$w4m_cta_map = w4m_import_load_key_map( 'group_9d4a1b2c' );
 
 $w4m_created = 0;
 $w4m_updated = 0;
@@ -139,6 +140,17 @@ foreach ( $w4m_posts as $w4m_slug => $w4m_entry ) {
 	if ( is_wp_error( $w4m_result ) ) {
 		$w4m_errors[] = "{$w4m_slug}: " . $w4m_result->get_error_message();
 		continue;
+	}
+
+	if ( ! empty( $w4m_entry['fields']['cta'] ) ) {
+		$w4m_field_errors = array();
+		w4m_import_update_fields( $w4m_post_id, array( 'cta' => $w4m_entry['fields']['cta'] ), 'post', $w4m_cta_map, $w4m_field_errors );
+
+		foreach ( $w4m_field_errors as $w4m_message ) {
+			$w4m_errors[] = "{$w4m_slug}: {$w4m_message}";
+		}
+
+		WP_CLI::debug( "Post CTA field written for {$w4m_slug}", 'w4m-import' );
 	}
 
 	if ( $w4m_was_created ) {
