@@ -5,9 +5,12 @@ add_filter('wpcf7_autop_or_not', '__return_false');
 /**
  * Singular views whose main body is rendered by the_content() with Gutenberg blocks.
  * Core block assets (wp-block-library, layout support) must stay enabled here.
+ *
+ * Services/directions/cases singles are now fully ACF-field-driven (structured
+ * sections) and no longer call the_content(), so only the blog single remains here.
  */
 function custom_theme_is_block_content_view() {
-	return is_singular( array( 'post', 'services', 'directions', 'cases' ) );
+	return is_singular( 'post' );
 }
 
 /**

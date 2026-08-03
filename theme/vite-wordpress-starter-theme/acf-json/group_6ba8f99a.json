@@ -291,7 +291,7 @@
         {
             "key": "field_9c3f0011",
             "label": "Facts",
-            "name": "facts",
+            "name": "case_facts",
             "aria-label": "",
             "type": "repeater",
             "instructions": "Optional facts bar (project/niche/duration/scale/team/etc.). Leave empty to hide the facts section.",
@@ -327,7 +327,7 @@
         {
             "key": "field_9c3f0021",
             "label": "Sections",
-            "name": "sections",
+            "name": "case_sections",
             "aria-label": "",
             "type": "repeater",
             "instructions": "\"Виклик\" / \"Проблеми до\" / \"Хід роботи\" style content blocks.",
@@ -363,7 +363,7 @@
         {
             "key": "field_9c3f0031",
             "label": "Results",
-            "name": "results",
+            "name": "case_results",
             "aria-label": "",
             "type": "group",
             "instructions": "",

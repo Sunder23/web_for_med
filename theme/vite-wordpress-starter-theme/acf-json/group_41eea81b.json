@@ -355,7 +355,7 @@
         {
             "key": "field_9b2f0011",
             "label": "Sections",
-            "name": "sections",
+            "name": "direction_sections",
             "aria-label": "",
             "type": "repeater",
             "instructions": "Generic content blocks: \"Що входить\", \"Особливості сегментів\", \"Як виглядає співпраця\", etc.",
@@ -391,7 +391,7 @@
         {
             "key": "field_9b2f0021",
             "label": "Sidebar: Who fits",
-            "name": "sidebar_who",
+            "name": "direction_sidebar_who",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -427,7 +427,7 @@
         {
             "key": "field_9b2f0025",
             "label": "Sidebar: What you need",
-            "name": "sidebar_needs",
+            "name": "direction_sidebar_needs",
             "aria-label": "",
             "type": "group",
             "instructions": "",

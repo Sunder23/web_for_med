@@ -42,10 +42,10 @@ Open questions: none — resolved during exploration/planning.
 <!-- Commit checkpoint: tasks 1-4 -->
 
 ### Phase 2: Templates
-- [ ] Task 5: Rewrite `single-services.php` (depends on 1) — branch on `layout`, render all linear/two-column sections with the existing `.svc-*` / `.s-two-col` SCSS, drop `content-with-toc`.
-- [ ] Task 6: Rewrite `single-directions.php` (depends on 2) — render `sections` + `sidebar_who`/`sidebar_needs` via `.s-two-col`, drop `content-with-toc`.
-- [ ] Task 7: Rewrite `single-cases.php` (depends on 3) — render `facts`/`sections`/`results` via `.case-facts`/`.s-case-content`/`.s-case-results`/`.case-metrics`, drop `content-with-toc`.
-- [ ] Task 8: Scope `custom_theme_is_block_content_view()` to `post` only (depends on 5, 6, 7); verify `js-css.php` block-library enqueue and `toc.php` heading-anchor injection are unaffected for blog.
+- [x] Task 5: Rewrite `single-services.php` (depends on 1) — branch on `layout`, render all linear/two-column sections with the existing `.svc-*` / `.s-two-col` SCSS, drop `content-with-toc`.
+- [x] Task 6: Rewrite `single-directions.php` (depends on 2) — render `sections` + `sidebar_who`/`sidebar_needs` via `.s-two-col`, drop `content-with-toc`.
+- [x] Task 7: Rewrite `single-cases.php` (depends on 3) — render `facts`/`sections`/`results` via `.case-facts`/`.s-case-content`/`.s-case-results`/`.case-metrics`, drop `content-with-toc`.
+- [x] Task 8: Scope `custom_theme_is_block_content_view()` to `post` only (depends on 5, 6, 7); verify `js-css.php` block-library enqueue and `toc.php` heading-anchor injection are unaffected for blog.
 <!-- Commit checkpoint: tasks 5-8 -->
 
 ### Phase 3: Blog

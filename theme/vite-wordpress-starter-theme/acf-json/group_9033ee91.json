@@ -209,7 +209,7 @@
         {
             "key": "field_9a1e0001",
             "label": "Layout",
-            "name": "layout",
+            "name": "service_layout",
             "aria-label": "",
             "type": "select",
             "instructions": "Linear = the standard one-column service page (web-development, seo, ppc). Two-column = the sidebar layout used by Аналітика і моніторинг.",
@@ -487,7 +487,7 @@
         {
             "key": "field_9a1e0011",
             "label": "Audience",
-            "name": "audience",
+            "name": "service_audience",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Для кого це рішення\" section. Linear layout only.",
@@ -557,7 +557,7 @@
         {
             "key": "field_9a1e0021",
             "label": "Triggers",
-            "name": "triggers",
+            "name": "service_triggers",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Коли варто оновлювати/інвестувати\" section. Linear layout only.",
@@ -610,7 +610,7 @@
         {
             "key": "field_9a1e0031",
             "label": "Included",
-            "name": "included",
+            "name": "service_included",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Що входить у послугу\" numbered section. Linear layout only.",
@@ -663,7 +663,7 @@
         {
             "key": "field_9a1e0041",
             "label": "Stages",
-            "name": "stages",
+            "name": "service_stages",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Як ми працюємо\" section. Linear layout only.",
@@ -716,7 +716,7 @@
         {
             "key": "field_9a1e0051",
             "label": "Strategy",
-            "name": "strategy",
+            "name": "service_strategy",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Роль послуги в загальній стратегії\" section. Linear layout only.",
@@ -748,7 +748,7 @@
         {
             "key": "field_9a1e0061",
             "label": "Examples",
-            "name": "examples",
+            "name": "service_examples",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Приклади проєктів\" section. Linear layout only.",
@@ -803,7 +803,7 @@
         {
             "key": "field_9a1e0071",
             "label": "Formats",
-            "name": "formats",
+            "name": "service_formats",
             "aria-label": "",
             "type": "group",
             "instructions": "\"Формат співпраці\" section. Linear layout only.",
@@ -857,7 +857,7 @@
         {
             "key": "field_9a1e0081",
             "label": "Sections",
-            "name": "sections",
+            "name": "service_sections",
             "aria-label": "",
             "type": "repeater",
             "instructions": "Generic content blocks. Two-column layout only (used by the Analytics service).",
@@ -881,7 +881,7 @@
         {
             "key": "field_9a1e0084",
             "label": "Sidebar: Who fits",
-            "name": "sidebar_who",
+            "name": "service_sidebar_who",
             "aria-label": "",
             "type": "group",
             "instructions": "Two-column layout only.",
@@ -919,7 +919,7 @@
         {
             "key": "field_9a1e0088",
             "label": "Sidebar: What you need",
-            "name": "sidebar_needs",
+            "name": "service_sidebar_needs",
             "aria-label": "",
             "type": "group",
             "instructions": "Two-column layout only.",

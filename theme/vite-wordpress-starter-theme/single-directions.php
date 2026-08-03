@@ -31,9 +31,59 @@ $cta  = get_field( 'direction_cta' );
 		</div>
 	</section>
 
-	<?php while ( have_posts() ) : the_post(); ?>
-		<?php get_template_part( 'template-parts/content-with-toc' ); ?>
-	<?php endwhile; ?>
+	<?php
+	$sections      = get_field( 'direction_sections' );
+	$sidebar_who   = get_field( 'direction_sidebar_who' );
+	$sidebar_needs = get_field( 'direction_sidebar_needs' );
+
+	if ( WP_DEBUG ) {
+		error_log( '[W4M single-directions] sections=' . count( (array) $sections ) . ' post=' . get_the_ID() );
+	}
+	?>
+	<section class="s-two-col">
+		<div class="s-two-col__wrap l-wrap">
+			<div class="s-two-col__inner l-frame-x">
+				<div class="s-two-col__content">
+					<?php if ( ! empty( $sections ) ) : ?>
+						<?php foreach ( $sections as $section ) : ?>
+							<div class="content-section">
+								<?php if ( ! empty( $section['title'] ) ) : ?>
+									<h2 class="content-section__title section-title"><?php echo esc_html( $section['title'] ); ?></h2>
+								<?php endif; ?>
+								<div class="svc-prose"><?php echo wp_kses_post( $section['content'] ); ?></div>
+							</div>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+				<aside class="s-two-col__sidebar">
+					<?php if ( ! empty( $sidebar_who['items'] ) ) : ?>
+						<div>
+							<?php if ( ! empty( $sidebar_who['title'] ) ) : ?>
+								<h3 class="card-title"><?php echo esc_html( $sidebar_who['title'] ); ?></h3>
+							<?php endif; ?>
+							<ul class="svc-list">
+								<?php foreach ( $sidebar_who['items'] as $item ) : ?>
+									<li class="svc-list__item"><?php echo esc_html( $item['text'] ); ?></li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					<?php endif; ?>
+					<?php if ( ! empty( $sidebar_needs['items'] ) ) : ?>
+						<div>
+							<?php if ( ! empty( $sidebar_needs['title'] ) ) : ?>
+								<h3 class="card-title"><?php echo esc_html( $sidebar_needs['title'] ); ?></h3>
+							<?php endif; ?>
+							<ul class="svc-list">
+								<?php foreach ( $sidebar_needs['items'] as $item ) : ?>
+									<li class="svc-list__item"><?php echo esc_html( $item['text'] ); ?></li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					<?php endif; ?>
+				</aside>
+			</div>
+		</div>
+	</section>
 
 	<?php get_template_part( 'template-parts/cpt-faq', null, (array) $faq ); ?>
 
