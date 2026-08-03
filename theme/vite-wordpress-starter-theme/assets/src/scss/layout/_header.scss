@@ -203,7 +203,7 @@ $nav-mobile-bg: #F4F6F8;
             height: calc(100dvh - var(--header-h));
             background: $nav-mobile-bg;
             transform: translateY(-100%);
-            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0.45s;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 1.2s;
             visibility: hidden;
             display: flex;
             flex-direction: column;
@@ -212,24 +212,14 @@ $nav-mobile-bg: #F4F6F8;
             padding: 0;
             border-bottom: var(--border);
 
-            // &::before {
-            //     content: '';
-            //     position: absolute;
-            //     inset: 0;
-            //     background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 65, .015) 2px, rgba(0, 255, 65, .015) 4px);
-            //     pointer-events: none;
-            //     z-index: 1;
-            // }
 
             &.is-open {
                 transform: translateY(0);
                 visibility: visible;
-                transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0s;
+                // Duration kept in sync with the GSAP scan-line delay in mobileNav.js.
+                transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0s;
             }
 
-            // Scan line element is created/positioned by mobileNav.js (GSAP-driven),
-            // this only supplies the static look. Vertical position comes from
-            // GSAP's `y` transform, not `top`.
             .nav__scan-line {
                 position: absolute;
                 top: 0;

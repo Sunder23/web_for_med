@@ -1,0 +1,220 @@
+- generic [ref=f5e2]:
+  - banner [ref=f5e3]:
+    - generic [ref=f5e5]:
+      - link [ref=f5e6] [cursor=pointer]:
+        - /url: http://localhost:8080/
+      - navigation "Main navigation" [ref=f5e7]:
+        - list [ref=f5e8]:
+          - listitem [ref=f5e9]:
+            - link "Послуги" [ref=f5e10] [cursor=pointer]:
+              - /url: http://localhost:8080/services/
+          - listitem [ref=f5e11]:
+            - link "Напрямки" [ref=f5e12] [cursor=pointer]:
+              - /url: http://localhost:8080/directions/
+          - listitem [ref=f5e13]:
+            - link "Кейси" [ref=f5e14] [cursor=pointer]:
+              - /url: http://localhost:8080/cases/
+          - listitem [ref=f5e15]:
+            - link "Блог" [ref=f5e16] [cursor=pointer]:
+              - /url: http://localhost:8080/blog/
+      - link "Обговорити задачі" [ref=f5e17] [cursor=pointer]:
+        - /url: "#contacts"
+  - main [ref=f5e19]:
+    - generic [ref=f5e22]:
+      - navigation "Хлібні крихти" [ref=f5e23]:
+        - list [ref=f5e24]:
+          - listitem [ref=f5e25]:
+            - link "Головна" [ref=f5e26] [cursor=pointer]:
+              - /url: http://localhost:8080/
+            - text: →
+          - listitem [ref=f5e27]:
+            - link "Кейси" [ref=f5e28] [cursor=pointer]:
+              - /url: http://localhost:8080/cases/
+            - text: →
+          - listitem [ref=f5e29]:
+            - generic [ref=f5e30]: "Клініка репродуктивної медицини: комплексна переробка сайту на WordPress з фокусом на стабільний ріст заявок"
+      - 'heading "Клініка репродуктивної медицини: комплексна переробка сайту на WordPress з фокусом на стабільний ріст заявок" [level=1] [ref=f5e31]'
+      - paragraph [ref=f5e32]: "Редизайн KhmilClinic: понад 2 роки постійної еволюції сайту — структура, UX/дизайн, SEO, технічна стабільність та аналітика конверсій."
+    - generic [ref=f5e36]:
+      - generic [ref=f5e37]:
+        - generic [ref=f5e38]: Проєкт
+        - paragraph [ref=f5e39]: khmilclinic.com.ua
+      - generic [ref=f5e40]:
+        - generic [ref=f5e41]: Ніша
+        - paragraph [ref=f5e42]: репродуктивна медицина
+      - generic [ref=f5e43]:
+        - generic [ref=f5e44]: Тривалість
+        - paragraph [ref=f5e45]: ">2 років (постійна еволюція сайту, не “разовий редизайн”)"
+      - generic [ref=f5e46]:
+        - generic [ref=f5e47]: Масштаб
+        - paragraph [ref=f5e48]: ~900–1000 сторінок
+      - generic [ref=f5e49]:
+        - generic [ref=f5e50]: Формат
+        - paragraph [ref=f5e51]: структура + UX/дизайн + SEO + технічна стабільність + аналітика конверсій
+      - generic [ref=f5e52]:
+        - generic [ref=f5e53]: Команда
+        - paragraph [ref=f5e54]: WebForMed (PM, SEO, дизайнер, розробник) + зі сторони клініки (маркетолог, контент-менеджер)
+      - generic [ref=f5e55]:
+        - generic [ref=f5e56]: Сінки
+        - paragraph [ref=f5e57]: раз на 2 тижні
+    - generic [ref=f5e60]:
+      - generic [ref=f5e61]:
+        - heading "Виклик (мовою власника/маркетолога)" [level=2] [ref=f5e62]
+        - generic [ref=f5e63]:
+          - paragraph [ref=f5e64]: "Сайт великий і “живий”: контент постійно додається, запускаються оновлення/активності, змінюються пріоритети напрямків. Потрібно було перебудувати сайт так, щоб:"
+          - list [ref=f5e65]:
+            - listitem [ref=f5e66]: пацієнту було простіше знайти потрібне і записатися;
+            - listitem [ref=f5e67]: сайт не втрачав позиції та трафік під час змін;
+            - listitem [ref=f5e68]: росли звернення (форми та дзвінки), а не просто “відвідуваність”.
+      - generic [ref=f5e69]:
+        - heading "Проблеми “до”" [level=2] [ref=f5e70]
+        - list [ref=f5e72]:
+          - listitem [ref=f5e73]:
+            - strong [ref=f5e74]: Заплутана структура
+            - text: "на великому обсязі сторінок: важко керувати, складно масштабувати без хаосу."
+          - listitem [ref=f5e75]:
+            - strong [ref=f5e76]: Дублювання тем і розпорошення релевантності
+            - text: між кількома сторінками (канібалізація).
+          - listitem [ref=f5e77]:
+            - strong [ref=f5e78]: Ризик SEO-втрат
+            - text: "при будь-яких змінах URL/структури: на масштабі 900+ сторінок навіть дрібна помилка швидко дає 404 і падіння видимості."
+          - listitem [ref=f5e79]:
+            - text: Паралельне
+            - strong [ref=f5e80]: постійне наповнення
+            - text: зі сторони клініки (контент-менеджер), тому “заморозити сайт і переробити” було неможливо.
+      - generic [ref=f5e81]:
+        - heading "Хід робіт (як ми забезпечили керованість і безпеку змін)" [level=2] [ref=f5e82]
+        - generic [ref=f5e83]:
+          - heading "1) 6 контрольованих релізів замість “одного великого запуску”" [level=3] [ref=f5e84]
+          - paragraph [ref=f5e85]:
+            - text: "Переробляли сайт по модулях: брали ключовий розділ і доводили до нового стандарту — після чого викладали в продакшн. Приклад логіки релізів:"
+            - strong [ref=f5e86]: головна → послуги → блог → лікарі
+            - text: (та інші секції).
+          - heading "2) SEO-міграція без втрат" [level=3] [ref=f5e87]
+          - list [ref=f5e88]:
+            - listitem [ref=f5e89]: Масові редіректи “за правилами” для типових змін структури.
+            - listitem [ref=f5e90]:
+              - strong [ref=f5e91]: 500+ точкових 301-редіректів
+              - text: для важливих сторінок/URL, щоб зберегти накопичені SEO-сигнали.
+          - heading "3) Контроль якості перед кожним релізом" [level=3] [ref=f5e92]
+          - paragraph [ref=f5e93]:
+            - text: Перед кожним викатом сканували сайт на помилки (в т.ч.
+            - strong [ref=f5e94]: "404"
+            - text: ) через Netpeak — закривали проблеми до релізу. Це дозволило уникати “провалів” після оновлень.
+          - heading "4) Аналітика під KPI клініки (не “для галочки”)" [level=3] [ref=f5e95]
+          - paragraph [ref=f5e96]: "Фіксували бізнес-дії:"
+          - list [ref=f5e97]:
+            - listitem [ref=f5e98]: відправка форми / клік на форму,
+            - listitem [ref=f5e99]: клік на номер телефону.
+          - paragraph [ref=f5e100]:
+            - text: Call tracking не використовували, але налаштували
+            - strong [ref=f5e101]: окремі конверсії по телефонах для кожної клініки/філії
+            - text: .
+          - heading "5) Ролі сторін (важливо для довіри)" [level=3] [ref=f5e102]
+          - list [ref=f5e103]:
+            - listitem [ref=f5e104]:
+              - text: Маркетолог клініки задавав
+              - strong [ref=f5e105]: напрям і пріоритети
+              - text: (що просувати в першу чергу).
+            - listitem [ref=f5e106]:
+              - text: Контент-менеджер клініки
+              - strong [ref=f5e107]: постійно наповнював сайт
+              - text: .
+            - listitem [ref=f5e108]:
+              - text: WebForMed забезпечував
+              - strong [ref=f5e109]: структуру, UX, технічну реалізацію, SEO-логіку, стабільність релізів і вимірювання конверсій
+              - text: .
+    - generic [ref=f5e112]:
+      - heading "Результати" [level=2] [ref=f5e113]
+      - generic [ref=f5e114]:
+        - generic [ref=f5e115]:
+          - paragraph [ref=f5e116]: 15.8M
+          - paragraph [ref=f5e117]: показів у видачі (GSC)
+        - generic [ref=f5e118]:
+          - paragraph [ref=f5e119]: 448K
+          - paragraph [ref=f5e120]: кліків із пошуку
+        - generic [ref=f5e121]:
+          - paragraph [ref=f5e122]: 2.8%
+          - paragraph [ref=f5e123]: CTR
+        - generic [ref=f5e124]:
+          - paragraph [ref=f5e125]: "9.9"
+          - paragraph [ref=f5e126]: середня позиція
+      - generic [ref=f5e127]:
+        - heading "1) SEO-видимість (Google Search Console)" [level=3] [ref=f5e128]
+        - paragraph [ref=f5e129]:
+          - text: По тренду видно
+          - strong [ref=f5e130]: стале зростання показів
+          - text: і
+          - strong [ref=f5e131]: стабільність позицій
+          - text: "на довгій дистанції. Важливо:"
+          - strong [ref=f5e132]: після жодного з 6 релізів не було просідань
+          - text: — зміни проходили контрольовано.
+        - heading "2) Конверсійні дії (GA4)" [level=3] [ref=f5e133]
+        - paragraph [ref=f5e134]: "На подіях видно зростання активності по ключових взаємодіях:"
+        - list [ref=f5e135]:
+          - listitem [ref=f5e136]:
+            - strong [ref=f5e137]: кліки на телефон
+            - text: (тернопільський номер — як приклад події) ростуть по місяцях,
+          - listitem [ref=f5e138]:
+            - text: аналогічно відстежуються
+            - strong [ref=f5e139]: форми
+            - text: (клік/відправка).
+        - paragraph [ref=f5e140]:
+          - text: "Це те, що напряму цікавить власника: не просто “трафік”, а"
+          - strong [ref=f5e141]: контактні звернення
+          - text: .
+        - heading "3) Бізнес-ефект у формулі “кероване зростання”" [level=3] [ref=f5e142]
+        - list [ref=f5e143]:
+          - listitem [ref=f5e144]:
+            - text: Сайт став
+            - strong [ref=f5e145]: керованим продуктом
+            - text: ", який можна розвивати релізами без страху “зламати SEO”."
+          - listitem [ref=f5e146]:
+            - text: Ріст відбувався
+            - strong [ref=f5e147]: стабільно
+            - text: ", попри зміни в Google та перерозподіл інформаційного трафіку — фокус залишався на сторінках, що приводять до звернень."
+          - listitem [ref=f5e148]: Команда клініки могла продовжувати наповнення, а структура не “розповзалася” назад у хаос.
+    - generic [ref=f5e151]:
+      - paragraph [ref=f5e152]: Хочете так само керовано розвивати сайт вашої клініки — без втрат SEO і з фокусом на звернення?
+      - link "Обговорити проєкт" [ref=f5e153] [cursor=pointer]:
+        - /url: /#contact
+  - contentinfo [ref=f5e154]:
+    - generic [ref=f5e157]:
+      - generic [ref=f5e158]:
+        - heading "Обговорімо ваш проєкт" [level=2] [ref=f5e159]
+        - paragraph [ref=f5e160]: Опишіть коротко ваш запит, і ми якнайшвидше повернемось із предметною відповіддю.
+      - generic [ref=f5e162]:
+        - generic [ref=f5e163]:
+          - status
+          - list
+        - form "Contact form" [ref=f5e164]:
+          - generic [ref=f5e165]:
+            - generic [ref=f5e166]:
+              - generic: Ім'я*
+              - textbox "Ім'я*" [ref=f5e168]
+              - button "Очистити поле"
+            - generic [ref=f5e169]:
+              - generic: Email*
+              - textbox [ref=f5e171]
+              - button "Очистити поле"
+            - generic [ref=f5e172]:
+              - generic: Назва компанії
+              - textbox [ref=f5e174]
+              - button "Очистити поле"
+            - generic [ref=f5e175]:
+              - generic: Питання, які б хотіли обговорити
+              - textbox "Питання, які б хотіли обговорити" [ref=f5e177]
+              - button "Очистити поле"
+            - button "Надіслати запит" [ref=f5e178] [cursor=pointer]
+    - generic [ref=f5e179]: Далі буде...
+    - generic [ref=f5e189]:
+      - link [ref=f5e190] [cursor=pointer]:
+        - /url: http://localhost:8080/
+      - generic [ref=f5e191]:
+        - link "web4med@gmail.com" [ref=f5e192] [cursor=pointer]:
+          - /url: mailto:web4med@gmail.com
+        - generic [ref=f5e193]:
+          - link [ref=f5e194] [cursor=pointer]:
+            - /url: https://ua.linkedin.com/
+          - link [ref=f5e195] [cursor=pointer]:
+            - /url: https://www.facebook.com/?locale=uk_UA

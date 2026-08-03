@@ -1,0 +1,94 @@
+- generic [ref=f7e2]:
+  - banner [ref=f7e3]:
+    - generic [ref=f7e5]:
+      - link [ref=f7e6] [cursor=pointer]:
+        - /url: http://localhost:8080/
+      - navigation "Main navigation" [ref=f7e7]:
+        - list [ref=f7e8]:
+          - listitem [ref=f7e9]:
+            - link "Послуги" [ref=f7e10] [cursor=pointer]:
+              - /url: http://localhost:8080/services/
+          - listitem [ref=f7e11]:
+            - link "Напрямки" [ref=f7e12] [cursor=pointer]:
+              - /url: http://localhost:8080/directions/
+          - listitem [ref=f7e13]:
+            - link "Кейси" [ref=f7e14] [cursor=pointer]:
+              - /url: http://localhost:8080/cases/
+          - listitem [ref=f7e15]:
+            - link "Блог" [ref=f7e16] [cursor=pointer]:
+              - /url: http://localhost:8080/blog/
+      - link "Обговорити задачі" [ref=f7e17] [cursor=pointer]:
+        - /url: "#contacts"
+  - main [ref=f7e19]:
+    - generic [ref=f7e22]:
+      - navigation "Хлібні крихти" [ref=f7e23]:
+        - list [ref=f7e24]:
+          - listitem [ref=f7e25]:
+            - link "Головна" [ref=f7e26] [cursor=pointer]:
+              - /url: http://localhost:8080/
+            - text: →
+          - listitem [ref=f7e27]:
+            - generic [ref=f7e28]: Блог
+      - heading "Блог" [level=1] [ref=f7e29]
+    - generic [ref=f7e32]:
+      - 'link "December 5, 2025 Соцмережі й месенджери є. Навіщо лікарю сайт Вступ: проблема не в контенті, а в керованості Соцмережі та месенджери добре працюють для комунікації: показати процес, відповісти на питання, тримати контакт із аудиторією. Але коли лікар хоче стабільний запис і менше… Читати далі →" [ref=f7e33] [cursor=pointer]':
+        - /url: http://localhost:8080/navishcho-likariu-sait/
+        - generic [ref=f7e34]:
+          - generic [ref=f7e35]: December 5, 2025
+          - heading "Соцмережі й месенджери є. Навіщо лікарю сайт" [level=2] [ref=f7e36]
+          - paragraph [ref=f7e37]: "Вступ: проблема не в контенті, а в керованості Соцмережі та месенджери добре працюють для комунікації: показати процес, відповісти на питання, тримати контакт із аудиторією. Але коли лікар хоче стабільний запис і менше…"
+        - generic [ref=f7e38]: Читати далі →
+      - 'link "October 30, 2025 SEO без ілюзій: позиції ≠ прибуток Колись «топ‑10 / топ‑5 / топ‑3 / топ‑1» були основною ціллю: ними марили, їх досягненням пишались, найбільш агресивні продажники їх гарантували. Та з роками цей показник дедалі слабше корелює з бізнес‑цілями. Сьогодні… Читати далі →" [ref=f7e39] [cursor=pointer]':
+        - /url: http://localhost:8080/seo-bez-iliuzii-pozytsii-ne-prybutok/
+        - generic [ref=f7e40]:
+          - generic [ref=f7e41]: October 30, 2025
+          - 'heading "SEO без ілюзій: позиції ≠ прибуток" [level=2] [ref=f7e42]'
+          - paragraph [ref=f7e43]: "Колись «топ‑10 / топ‑5 / топ‑3 / топ‑1» були основною ціллю: ними марили, їх досягненням пишались, найбільш агресивні продажники їх гарантували. Та з роками цей показник дедалі слабше корелює з бізнес‑цілями. Сьогодні…"
+        - generic [ref=f7e44]: Читати далі →
+      - link "March 25, 2025 Особливість просування закладів лікування залежностей Головна особливість інтернет-маркетингу у сфері лікування залежностей полягає в певних обмеженнях:обмеженості методів просування Основним доступним методом залишається SEO, оскільки контекстну рекламу практично неможливо запустити. Хоча прямої заборони немає, для запуску потрібно мати… Читати далі →" [ref=f7e45] [cursor=pointer]:
+        - /url: http://localhost:8080/osoblivist-prosuvannja-zakladiv-likuvannja-zalezhnostej/
+        - generic [ref=f7e46]:
+          - generic [ref=f7e47]: March 25, 2025
+          - heading "Особливість просування закладів лікування залежностей" [level=2] [ref=f7e48]
+          - paragraph [ref=f7e49]: Головна особливість інтернет-маркетингу у сфері лікування залежностей полягає в певних обмеженнях:обмеженості методів просування Основним доступним методом залишається SEO, оскільки контекстну рекламу практично неможливо запустити. Хоча прямої заборони немає, для запуску потрібно мати…
+        - generic [ref=f7e50]: Читати далі →
+  - contentinfo [ref=f7e51]:
+    - generic [ref=f7e54]:
+      - generic [ref=f7e55]:
+        - heading "Обговорімо ваш проєкт" [level=2] [ref=f7e56]
+        - paragraph [ref=f7e57]: Опишіть коротко ваш запит, і ми якнайшвидше повернемось із предметною відповіддю.
+      - generic [ref=f7e59]:
+        - generic [ref=f7e60]:
+          - status
+          - list
+        - form "Contact form" [ref=f7e61]:
+          - generic [ref=f7e62]:
+            - generic [ref=f7e63]:
+              - generic: Ім'я*
+              - textbox "Ім'я*" [ref=f7e65]
+              - button "Очистити поле"
+            - generic [ref=f7e66]:
+              - generic: Email*
+              - textbox [ref=f7e68]
+              - button "Очистити поле"
+            - generic [ref=f7e69]:
+              - generic: Назва компанії
+              - textbox [ref=f7e71]
+              - button "Очистити поле"
+            - generic [ref=f7e72]:
+              - generic: Питання, які б хотіли обговорити
+              - textbox "Питання, які б хотіли обговорити" [ref=f7e74]
+              - button "Очистити поле"
+            - button "Надіслати запит" [ref=f7e75] [cursor=pointer]
+    - generic [ref=f7e76]: Далі буде...
+    - generic [ref=f7e86]:
+      - link [ref=f7e87] [cursor=pointer]:
+        - /url: http://localhost:8080/
+      - generic [ref=f7e88]:
+        - link "web4med@gmail.com" [ref=f7e89] [cursor=pointer]:
+          - /url: mailto:web4med@gmail.com
+        - generic [ref=f7e90]:
+          - link [ref=f7e91] [cursor=pointer]:
+            - /url: https://ua.linkedin.com/
+          - link [ref=f7e92] [cursor=pointer]:
+            - /url: https://www.facebook.com/?locale=uk_UA

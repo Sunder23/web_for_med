@@ -54,6 +54,6 @@ Open questions: none — resolved during exploration/planning.
 <!-- Commit checkpoint: tasks 9-10 -->
 
 ### Phase 4: Import & Verify
-- [ ] Task 11: Run all 4 importers (`wp eval-file` via the `cli` docker-compose service) against the local stack; fix any field-name mismatches until all report 0 errors (depends on 1-10).
+- [x] Task 11: Run all 4 importers (`wp eval-file` via the `cli` docker-compose service) against the local stack; fix any field-name mismatches until all report 0 errors (depends on 1-10). All 4 succeeded with 0 errors on first run.
 - [ ] Task 12: Visual QA across all 4 services, 7 directions, 3 cases, blog list, and one blog single (depends on 11).
 <!-- Commit checkpoint: tasks 11-12 (final) -->

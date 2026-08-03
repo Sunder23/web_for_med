@@ -161,12 +161,23 @@ foreach ( $w4m_posts as $w4m_slug => $w4m_entry ) {
 	}
 
 	if ( ! empty( $w4m_post_categories[ $w4m_slug ] ) ) {
-		$w4m_category_result = wp_set_post_terms( $w4m_post_id, array( $w4m_post_categories[ $w4m_slug ] ), 'category' );
+		$w4m_category_name = $w4m_post_categories[ $w4m_slug ];
+		$w4m_term          = term_exists( $w4m_category_name, 'category' );
 
-		if ( is_wp_error( $w4m_category_result ) ) {
-			$w4m_errors[] = "{$w4m_slug}: " . $w4m_category_result->get_error_message();
+		if ( ! $w4m_term ) {
+			$w4m_term = wp_insert_term( $w4m_category_name, 'category' );
+		}
+
+		if ( is_wp_error( $w4m_term ) ) {
+			$w4m_errors[] = "{$w4m_slug}: " . $w4m_term->get_error_message();
 		} else {
-			WP_CLI::debug( "Category '{$w4m_post_categories[ $w4m_slug ]}' assigned to {$w4m_slug}", 'w4m-import' );
+			$w4m_category_result = wp_set_post_terms( $w4m_post_id, array( (int) $w4m_term['term_id'] ), 'category' );
+
+			if ( is_wp_error( $w4m_category_result ) ) {
+				$w4m_errors[] = "{$w4m_slug}: " . $w4m_category_result->get_error_message();
+			} else {
+				WP_CLI::debug( "Category '{$w4m_category_name}' assigned to {$w4m_slug}", 'w4m-import' );
+			}
 		}
 	}
 

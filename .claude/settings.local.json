@@ -40,7 +40,14 @@
       "Bash(git commit -m 'refactor\\(theme\\): replace CPT sidebar who/needs cards with info-block content block' -m '- drop service/direction sidebar_who/sidebar_needs fields from templates and acf-json *)",
       "Bash(netstat -ano)",
       "Bash(npx --no-install sass --load-path=node_modules assets/src/scss/main.scss /tmp/_check2.css)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Skill(aif-plan)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_click"
     ]
   }
 }

@@ -1,5 +1,4 @@
 import gsap from 'gsap';
-import { logDebug } from '@js/utils/logDebug.js';
 
 export function initMobileNav() {
 	const burger = document.getElementById('burger');
@@ -36,8 +35,6 @@ export function initMobileNav() {
 		});
 	};
 
-	// Any element the scan line should "activate" as it sweeps past —
-	// top-level menu items plus the footer email link.
 	const getScanTargets = () => nav.querySelectorAll('.nav__links .menu-item, .nav__email, .nav__social-icons');
 
 	const playScanEffect = () => {
@@ -56,9 +53,11 @@ export function initMobileNav() {
 			.filter((item) => item.bottom > item.top);
 
 		gsap.set(line, { y: -3 });
-		scanTimeline = gsap.timeline({ delay: 0.45 }).to(line, {
+		// Delay must match the panel's opening transition duration (_header.scss:.is-open)
+		// so the scan line starts right as the panel finishes sliding in.
+		scanTimeline = gsap.timeline({ delay: 1.2 }).to(line, {
 			y: travel - 3,
-			duration: 3,
+			duration: 4.3,
 			ease: 'none',
 			onUpdate: () => {
 				const currentY = gsap.getProperty(line, 'y');
@@ -112,11 +111,8 @@ export function initMobileNav() {
 	initSubmenuToggles(nav);
 }
 
-// Parent items link to real pages, so navigation stays on the <a>
-// and expand/collapse lives on a separate injected button.
 function initSubmenuToggles(nav) {
 	const parents = nav.querySelectorAll('.menu-item-has-children');
-	logDebug('[FIX] mobile submenu toggles init', { count: parents.length });
 
 	parents.forEach((item) => {
 		const link = item.querySelector(':scope > a');
@@ -137,7 +133,6 @@ function initSubmenuToggles(nav) {
 		toggle.addEventListener('click', () => {
 			const isOpen = item.classList.toggle('is-sub-open');
 			toggle.setAttribute('aria-expanded', String(isOpen));
-			logDebug('[FIX] mobile submenu toggled', { label, isOpen });
 		});
 	});
 }

@@ -1,0 +1,210 @@
+- generic [ref=f6e2]:
+  - banner [ref=f6e3]:
+    - generic [ref=f6e5]:
+      - link [ref=f6e6] [cursor=pointer]:
+        - /url: http://localhost:8080/
+      - navigation "Main navigation" [ref=f6e7]:
+        - list [ref=f6e8]:
+          - listitem [ref=f6e9]:
+            - link "Послуги" [ref=f6e10] [cursor=pointer]:
+              - /url: http://localhost:8080/services/
+          - listitem [ref=f6e11]:
+            - link "Напрямки" [ref=f6e12] [cursor=pointer]:
+              - /url: http://localhost:8080/directions/
+          - listitem [ref=f6e13]:
+            - link "Кейси" [ref=f6e14] [cursor=pointer]:
+              - /url: http://localhost:8080/cases/
+          - listitem [ref=f6e15]:
+            - link "Блог" [ref=f6e16] [cursor=pointer]:
+              - /url: http://localhost:8080/blog/
+      - link "Обговорити задачі" [ref=f6e17] [cursor=pointer]:
+        - /url: "#contacts"
+  - main [ref=f6e19]:
+    - generic [ref=f6e22]:
+      - navigation "Хлібні крихти" [ref=f6e23]:
+        - list [ref=f6e24]:
+          - listitem [ref=f6e25]:
+            - link "Головна" [ref=f6e26] [cursor=pointer]:
+              - /url: http://localhost:8080/
+            - text: →
+          - listitem [ref=f6e27]:
+            - link "Кейси" [ref=f6e28] [cursor=pointer]:
+              - /url: http://localhost:8080/cases/
+            - text: →
+          - listitem [ref=f6e29]:
+            - generic [ref=f6e30]: Редизайн головної сторінки Lviv Medical Center
+      - heading "Редизайн головної сторінки Lviv Medical Center" [level=1] [ref=f6e31]
+      - paragraph [ref=f6e32]: Як редизайн однієї лише головної сторінки змінив перше враження пацієнтів і спростив перший крок до запису.
+    - generic [ref=f6e35]:
+      - generic [ref=f6e36]:
+        - heading "Початкова ситуація" [level=2] [ref=f6e37]
+        - generic [ref=f6e38]:
+          - paragraph [ref=f6e39]:
+            - text: Коли користувач заходив на сайт Lviv Medical Center, він
+            - strong [ref=f6e40]: одразу бачив модальне вікно з вибором клініки
+            - text: ":"
+          - blockquote [ref=f6e41]:
+            - paragraph [ref=f6e42]: "Оберіть клініку: адреса 1 / адреса 2 / адреса 3"
+          - paragraph [ref=f6e43]: "На цьому етапі людина:"
+          - list [ref=f6e44]:
+            - listitem [ref=f6e45]:
+              - text: ще
+              - strong [ref=f6e46]: не знає нічого про центр
+              - text: ","
+            - listitem [ref=f6e47]: не розуміє, чим саме клініка займається,
+            - listitem [ref=f6e48]: не бачить гарантій, команди, напрямків.
+          - paragraph [ref=f6e49]:
+            - text: Тобто перша дія, яку від нього вимагали, —
+            - strong [ref=f6e50]: зробити вибір, до чого він ще не готовий
+            - text: ". Це створювало напруження й зайву плутанину: замість довіри й зрозумілого першого кроку — відразу “обери адресу”."
+          - paragraph [ref=f6e51]: "Додатково:"
+          - list [ref=f6e52]:
+            - listitem [ref=f6e53]:
+              - text: у шапці був
+              - strong [ref=f6e54]: масивний набір пунктів меню
+              - text: ": “Напрямки, Клініки, Лікарі, Ціни, Про нас, Блог, Контакти” — усе впереміш, без чітких пріоритетів;"
+            - listitem [ref=f6e55]:
+              - text: на першому екрані використовувався
+              - strong [ref=f6e56]: класичний слайдер
+              - text: ", який не давав цілісного першого враження — відвідувач бачив “уривки”, а не зрозуміле повідомлення."
+      - generic [ref=f6e57]:
+        - heading "Хід роботи" [level=2] [ref=f6e58]
+        - generic [ref=f6e59]:
+          - heading "1. Прибрали бар’єр на вході" [level=3] [ref=f6e60]
+          - paragraph [ref=f6e61]:
+            - text: Перше рішення —
+            - strong [ref=f6e62]: забрати модальне вікно з вибором клініки при заході на сайт
+            - text: .
+          - paragraph [ref=f6e63]: "Замість того, щоб змушувати людину одразу обирати адресу, ми:"
+          - list [ref=f6e64]:
+            - listitem [ref=f6e65]:
+              - text: даємо їй
+              - strong [ref=f6e66]: побачити сам центр
+              - text: — хто ви, чим займаєтесь, які напрямки є;
+            - listitem [ref=f6e67]: "пропонуємо зрозумілий перший крок: спланувати візит, обрати напрямок лікування, ознайомитися з послугами."
+          - paragraph [ref=f6e68]:
+            - text: Вибір конкретної клініки залишився доступним, але
+            - strong [ref=f6e69]: не перекриває весь екран
+            - text: і не блокує перше знайомство.
+          - heading "2. Перебудували навігацію" [level=3] [ref=f6e70]
+          - paragraph [ref=f6e71]:
+            - text: Попередня шапка “все в одному ряду” вимагала надто багато уваги від користувача. Ми переробили меню так, щоб
+            - strong [ref=f6e72]: на першому плані були саме послуги
+            - text: .
+          - paragraph [ref=f6e73]: "Зміни:"
+          - list [ref=f6e74]:
+            - listitem [ref=f6e75]:
+              - text: Замінили зв’язку “Напрямки / Клініки / Лікарі” на
+              - strong [ref=f6e76]: головний пункт “Послуги клініки”
+              - text: "з випадаючим меню: офтальмологія, хірургія, естетична медицина, діагностика тощо."
+            - listitem [ref=f6e77]:
+              - text: Решту пунктів (блог, детальна інформація про клініки, додаткові розділи)
+              - strong [ref=f6e78]: заховали в другорядні меню
+              - text: ", щоб не перевантажувати перший екран."
+          - paragraph [ref=f6e79]: "Так користувач одразу розуміє:"
+          - blockquote [ref=f6e80]:
+            - paragraph [ref=f6e81]: “Тут є потрібні мені медичні послуги. Ось, де їх знайти.”
+          - paragraph [ref=f6e82]: А вже потім, за потреби, може перейти до деталей про конкретну клініку, лікарів чи статті.
+          - heading "3. Замінили слайдер на відео" [level=3] [ref=f6e83]
+          - paragraph [ref=f6e84]: "Слайдер із кількома банерами рідко працює добре: людина бачить лише один слайд, решта пролітає фоном."
+          - paragraph [ref=f6e85]:
+            - text: Ми замінили його на
+            - strong [ref=f6e86]: одне якісне відео на першому екрані
+            - text: ", яке:"
+          - list [ref=f6e87]:
+            - listitem [ref=f6e88]: передає атмосферу центру;
+            - listitem [ref=f6e89]: показує інтер’єри, команду, логотип, елементи айдентики;
+            - listitem [ref=f6e90]: створює враження живого, сучасного медичного закладу.
+          - paragraph [ref=f6e91]: Одне чітке відео на фоні + зрозумілий заголовок і кнопка дії працюють краще, ніж 3–4 слайди з різними меседжами.
+          - heading "4. Прописали шлях пацієнта" [level=3] [ref=f6e92]
+          - paragraph [ref=f6e93]:
+            - text: Головна сторінка була перебудована так, щоб
+            - strong [ref=f6e94]: вести людину послідовно
+            - text: ":"
+          - list [ref=f6e95]:
+            - listitem [ref=f6e96]:
+              - strong [ref=f6e97]: Перше враження та довіра
+              - text: – відео, короткий меседж “де ви опинились” і чим займається центр.
+            - listitem [ref=f6e98]:
+              - strong [ref=f6e99]: Вибір напрямку / послуги
+              - text: "– блок із основними напрямками, що відповідають типовим запитам: зір, хірургія, діагностика, естетика тощо."
+            - listitem [ref=f6e100]:
+              - strong [ref=f6e101]: Знайомство з лікарями
+              - text: – посилання на розділ лікарів для тих, кому важливі конкретні спеціалісти.
+            - listitem [ref=f6e102]:
+              - strong [ref=f6e103]: Контакт і візит
+              - text: – зручні кнопки запису, інформація про контакти та клініки.
+          - paragraph [ref=f6e104]: Кожен наступний блок логічно продовжує попередній, без “стрибків” між різними темами.
+      - generic [ref=f6e105]:
+        - heading "Результат" [level=2] [ref=f6e106]
+        - generic [ref=f6e107]:
+          - paragraph [ref=f6e108]: "Для пацієнтів:"
+          - list [ref=f6e109]:
+            - listitem [ref=f6e110]:
+              - text: Замість того, щоб одразу обирати адресу, коли ще нічого не зрозуміло, користувач
+              - strong [ref=f6e111]: спочатку знайомиться з центром
+              - text: ", послугами й підходом."
+            - listitem [ref=f6e112]:
+              - text: Навігація стала
+              - strong [ref=f6e113]: простішою й логічнішою
+              - text: ": основний фокус — на послугах, а не на структурі клініки “зсередини”."
+            - listitem [ref=f6e114]:
+              - text: Відео на першому екрані створює
+              - strong [ref=f6e115]: емоційно зрозуміле враження
+              - text: ": це живий центр, а не абстрактний медичний сайт."
+          - paragraph [ref=f6e116]: "Для клініки:"
+          - list [ref=f6e117]:
+            - listitem [ref=f6e118]:
+              - text: Головна сторінка перетворилася з формальної “вітрини” на
+              - strong [ref=f6e119]: продуманий вхід у шлях пацієнта
+              - text: .
+            - listitem [ref=f6e120]: Знизилися “зайві” точки напруження на старті — пацієнту не потрібно робити складний вибір, не маючи інформації.
+            - listitem [ref=f6e121]: "Сайт краще підтримує бренд Lviv Medical Center: візуально сучасний, зрозумілий і дружній до користувача."
+          - paragraph [ref=f6e122]:
+            - text: Цей кейс добре показує, що навіть без глобальної “перебудови всього сайту”
+            - strong [ref=f6e123]: редизайн однієї лише головної сторінки
+            - text: може суттєво вплинути на те, як пацієнти сприймають клініку й як легко їм зробити перший крок до запису.
+    - generic [ref=f6e126]:
+      - paragraph [ref=f6e127]: Хочете, щоб головна сторінка вашої клініки вела пацієнта до запису, а не створювала бар’єри?
+      - link "Обговорити проєкт" [ref=f6e128] [cursor=pointer]:
+        - /url: /#contact
+  - contentinfo [ref=f6e129]:
+    - generic [ref=f6e132]:
+      - generic [ref=f6e133]:
+        - heading "Обговорімо ваш проєкт" [level=2] [ref=f6e134]
+        - paragraph [ref=f6e135]: Опишіть коротко ваш запит, і ми якнайшвидше повернемось із предметною відповіддю.
+      - generic [ref=f6e137]:
+        - generic [ref=f6e138]:
+          - status
+          - list
+        - form "Contact form" [ref=f6e139]:
+          - generic [ref=f6e140]:
+            - generic [ref=f6e141]:
+              - generic: Ім'я*
+              - textbox "Ім'я*" [ref=f6e143]
+              - button "Очистити поле"
+            - generic [ref=f6e144]:
+              - generic: Email*
+              - textbox [ref=f6e146]
+              - button "Очистити поле"
+            - generic [ref=f6e147]:
+              - generic: Назва компанії
+              - textbox [ref=f6e149]
+              - button "Очистити поле"
+            - generic [ref=f6e150]:
+              - generic: Питання, які б хотіли обговорити
+              - textbox "Питання, які б хотіли обговорити" [ref=f6e152]
+              - button "Очистити поле"
+            - button "Надіслати запит" [ref=f6e153] [cursor=pointer]
+    - generic [ref=f6e154]: Далі буде...
+    - generic [ref=f6e164]:
+      - link [ref=f6e165] [cursor=pointer]:
+        - /url: http://localhost:8080/
+      - generic [ref=f6e166]:
+        - link "web4med@gmail.com" [ref=f6e167] [cursor=pointer]:
+          - /url: mailto:web4med@gmail.com
+        - generic [ref=f6e168]:
+          - link [ref=f6e169] [cursor=pointer]:
+            - /url: https://ua.linkedin.com/
+          - link [ref=f6e170] [cursor=pointer]:
+            - /url: https://www.facebook.com/?locale=uk_UA
