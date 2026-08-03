@@ -94,6 +94,38 @@
     }
 }
 
+// Blog list category filter (home.php)
+.s-blog-filter {
+    background: var(--c-bg);
+    border-top: var(--border);
+}
+
+.s-blog-filter__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 32px 40px;
+}
+
+.blog-filter__item {
+    padding: 8px 16px;
+    border: var(--border);
+    background: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+
+    &.is-active,
+    &:hover {
+        background: var(--c-blue);
+        border-color: var(--c-blue);
+        color: var(--c-white);
+    }
+}
+
+.archive-card[hidden] {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .archive-grid {
         grid-template-columns: 1fr;
@@ -105,5 +137,9 @@
 
     .s-archive {
         padding-bottom: 0;
+    }
+
+    .s-blog-filter__inner {
+        padding: 20px;
     }
 }

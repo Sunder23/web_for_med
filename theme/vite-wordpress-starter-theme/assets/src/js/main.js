@@ -1,4 +1,5 @@
 import { initActiveNav } from '@js/components/activeNav.js';
+import { initBlogFilter } from '@js/components/blogFilter.js';
 import { initCasesSlider } from '@js/components/casesSlider.js';
 import { initContactForm } from '@js/components/contactForm.js';
 import { initFaqAccordion } from '@js/components/faqAccordion.js';
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initMobileNav();
 	initCasesSlider();
 	initActiveNav();
+	initBlogFilter();
 	initWhySection();
 	initGlitchImage();
 	initFooterCoverText();

@@ -101,6 +101,13 @@ function w4m_import_resolve_image_tokens( $content, $post_id, array &$errors ) {
 $w4m_posts   = require __DIR__ . '/data/posts.php';
 $w4m_cta_map = w4m_import_load_key_map( 'group_9d4a1b2c' );
 
+// slug => blog category name, used for the home.php filter section.
+$w4m_post_categories = array(
+	'seo-bez-iliuzii-pozytsii-ne-prybutok'                     => 'SEO',
+	'navishcho-likariu-sait'                                   => 'Сайт для лікаря',
+	'osoblivist-prosuvannja-zakladiv-likuvannja-zalezhnostej'  => 'Просування ніш',
+);
+
 $w4m_created = 0;
 $w4m_updated = 0;
 $w4m_errors  = array();
@@ -151,6 +158,16 @@ foreach ( $w4m_posts as $w4m_slug => $w4m_entry ) {
 		}
 
 		WP_CLI::debug( "Post CTA field written for {$w4m_slug}", 'w4m-import' );
+	}
+
+	if ( ! empty( $w4m_post_categories[ $w4m_slug ] ) ) {
+		$w4m_category_result = wp_set_post_terms( $w4m_post_id, array( $w4m_post_categories[ $w4m_slug ] ), 'category' );
+
+		if ( is_wp_error( $w4m_category_result ) ) {
+			$w4m_errors[] = "{$w4m_slug}: " . $w4m_category_result->get_error_message();
+		} else {
+			WP_CLI::debug( "Category '{$w4m_post_categories[ $w4m_slug ]}' assigned to {$w4m_slug}", 'w4m-import' );
+		}
 	}
 
 	if ( $w4m_was_created ) {

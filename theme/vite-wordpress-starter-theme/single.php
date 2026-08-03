@@ -15,6 +15,7 @@ get_header();
 		</section>
 
 		<?php get_template_part( 'template-parts/content-with-toc' ); ?>
+		<?php get_template_part( 'template-parts/cpt-cta', null, (array) get_field( 'post_cta' ) ); ?>
 	<?php endwhile; ?>
 </main>
 <?php get_footer();

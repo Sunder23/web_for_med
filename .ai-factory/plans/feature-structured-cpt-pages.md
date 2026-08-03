@@ -49,8 +49,8 @@ Open questions: none — resolved during exploration/planning.
 <!-- Commit checkpoint: tasks 5-8 -->
 
 ### Phase 3: Blog
-- [ ] Task 9: Add a category filter section to `home.php` (blog list) + client-side filter JS + category assignment in the importer.
-- [ ] Task 10: Wire the `post_cta` field into `single.php` via the shared `cpt-cta.php` partial (depends on 4).
+- [x] Task 9: Add a category filter section to `home.php` (blog list) + client-side filter JS + category assignment in the importer.
+- [x] Task 10: Wire the `post_cta` field into `single.php` via the shared `cpt-cta.php` partial (depends on 4).
 <!-- Commit checkpoint: tasks 9-10 -->
 
 ### Phase 4: Import & Verify

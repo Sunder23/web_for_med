@@ -15,12 +15,27 @@ $posts_page_title = $posts_page ? get_the_title( $posts_page ) : 'Блог';
 		</div>
 	</section>
 
+	<?php $blog_categories = get_categories( array( 'hide_empty' => true ) ); ?>
+	<?php if ( ! empty( $blog_categories ) ) : ?>
+		<section class="s-blog-filter">
+			<div class="s-blog-filter__wrap l-wrap">
+				<div class="s-blog-filter__inner l-frame-x">
+					<button type="button" class="blog-filter__item tag c-tag is-active" data-blog-filter="all"><?php esc_html_e( 'Всі', 'textdomaintomodify' ); ?></button>
+					<?php foreach ( $blog_categories as $category ) : ?>
+						<button type="button" class="blog-filter__item tag c-tag" data-blog-filter="<?php echo esc_attr( $category->slug ); ?>"><?php echo esc_html( $category->name ); ?></button>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</section>
+	<?php endif; ?>
+
 	<section class="s-archive">
 		<div class="s-archive__wrap l-wrap">
 			<?php if ( have_posts() ) : ?>
-				<div class="archive-grid l-frame-x">
+				<div class="archive-grid l-frame-x" data-blog-grid>
 					<?php while ( have_posts() ) : the_post(); ?>
-						<a class="archive-card info-card" href="<?php the_permalink(); ?>">
+						<?php $post_category_slugs = implode( ' ', wp_list_pluck( get_the_category(), 'slug' ) ); ?>
+						<a class="archive-card info-card" href="<?php the_permalink(); ?>" data-category="<?php echo esc_attr( $post_category_slugs ); ?>">
 							<div class="info-card__body">
 								<span class="archive-card__date tag c-tag"><?php echo esc_html( get_the_date() ); ?></span>
 								<h2 class="archive-card__title card-title"><?php the_title(); ?></h2>
