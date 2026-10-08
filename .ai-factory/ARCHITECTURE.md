@@ -34,7 +34,7 @@ wp-boilerplate/
     ├── partials/                        # breadcrumbs, header/{header,logo}, parts/*
     ├── page.php, single*.php, archive-*.php, home.php, header.php, footer.php, 404.php
     └── assets/src/
-        ├── js/        main.js, single-cpt.js, single-post.js, editor-link-guard.js,
+        ├── js/        main.js, single-cpt.js, single-post.js, editor-link-guard.js, editor-section-blocks.js,
         │              components/, utils/, template-parts/blocks/section-<slug>.js
         └── scss/      main.scss, single-cpt.scss, single-post.scss, archive.scss,
                        block-<slug>.scss, editor-section-blocks.scss, _tokens/_fonts/_base/_animations,

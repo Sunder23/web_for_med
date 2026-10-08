@@ -4,24 +4,26 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-export function initCasesSlider() {
-	const sliderEl = document.getElementById('casesSlider');
+// `root` scopes the lookup so the editor canvas can init each block preview
+// on its own (see editor-section-blocks.js). Returns the Swiper instance.
+export function initCasesSlider(root = document) {
+	const sliderEl = root.querySelector('#casesSlider');
 
-	if (!sliderEl) {
-		return;
+	if (!sliderEl || sliderEl.swiper) {
+		return sliderEl?.swiper ?? null;
 	}
 
-	new Swiper(sliderEl, {
+	return new Swiper(sliderEl, {
 		modules: [Navigation, Pagination],
 		slidesPerView: 1,
 		spaceBetween: 0,
 		loop: true,
 		navigation: {
-			prevEl: '#casePrev',
-			nextEl: '#caseNext',
+			prevEl: root.querySelector('#casePrev'),
+			nextEl: root.querySelector('#caseNext'),
 		},
 		pagination: {
-			el: '#casesDots',
+			el: root.querySelector('#casesDots'),
 			clickable: true,
 			bulletClass: 'cases-dot',
 			bulletActiveClass: 'is-active',

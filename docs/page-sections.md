@@ -32,9 +32,10 @@ Single CPT, blog and archive templates (`single*.php`, `home.php`, `archive-*.ph
 
 ## Editor canvas
 
-- `starter_vite_enqueue_editor_canvas_assets()` (`configure/js-css.php`) loads, for the **page** editor only, `main.scss`, every section stylesheet and `editor-section-blocks.scss`; `editor-link-guard.js` is loaded for every post type so links and form submits in block previews cannot navigate the canvas away.
-- `starter_strip_admin_styles_from_page_canvas()` (filter `block_editor_settings_all`) removes wp-admin stylesheets and the article editor stylesheet from the page canvas so previews match the front end.
-- Section JS does not run in the editor; reveal-style hidden states must be applied by JS only, so previews stay visible.
+- `starter_vite_enqueue_editor_canvas_assets()` (`configure/js-css.php`) loads, for the **page** editor only, `main.scss`, every section stylesheet (with `starter-editor-main` as dependency — the front-end `main` handle does not exist in the editor), `editor-section-blocks.scss` and `editor-section-blocks.js`; `editor-link-guard.js` is loaded for every post type so links and form submits in block previews cannot navigate the canvas away.
+- `starter_strip_admin_styles_from_page_canvas()` (filter `block_editor_settings_all`) removes wp-admin stylesheets and the article editor stylesheet from the page canvas so previews match the front end. It leaves one empty `theme` style entry: with none left, the editor falls back to core default editor styles (system font, 18px body).
+- Section JS (AOS, reveal animations, accordions) does not run in the editor. `editor-section-blocks.scss` resets `[data-aos]` and other pre-reveal hidden states (`.hero__title`, `.why-msg`, …) to their final visible state — add new ones there. Scroll-effect layers (`fixed` / `sticky`: `.s-problems`, `.s-solutions`, `.services-img`, `.why-chat`) are put back in flow there too, otherwise they cover neighbouring blocks and their fields cannot be selected.
+- Carousels are the exception: `editor-section-blocks.js` (re)initialises them in the canvas whenever ACF re-renders a preview and destroys detached instances. To add a slider section, make its init accept a root element and register it in the `CAROUSELS` list.
 
 ## Current sections (front page)
 

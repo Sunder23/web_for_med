@@ -35,10 +35,11 @@ function starter_get_section_slugs() {
  * Registers the style handle for a section slug.
  *
  * @param string $slug Section slug.
+ * @param array  $deps Style dependency handles (front end: the global "main" bundle).
  * @return string|false Registered style handle, or false on failure.
  */
-function starter_register_section_block_style( $slug ) {
-	return starter_vite_register_style( 'starter-section-' . $slug, 'template-parts/blocks/section-' . $slug . '.scss', array( 'main' ) );
+function starter_register_section_block_style( $slug, $deps = array( 'main' ) ) {
+	return starter_vite_register_style( 'starter-section-' . $slug, 'template-parts/blocks/section-' . $slug . '.scss', $deps );
 }
 
 /**

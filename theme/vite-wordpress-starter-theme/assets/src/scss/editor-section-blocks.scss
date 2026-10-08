@@ -1,10 +1,45 @@
 // Editor-only styles for acf/section-* blocks (page editor canvas).
-// Enqueued by starter_vite_enqueue_section_block_editor_assets() in configure/js-css.php.
+// Enqueued by starter_vite_enqueue_editor_canvas_assets() in configure/js-css.php.
 //
-// Section JS does not run in the editor, so reveal-animation hidden states
-// (classes added by JS only) are never applied there. Add
-// `.editor-styles-wrapper`-scoped overrides here if a section preview ever
-// turns out invisible without its script.
+// AOS and the section reveal scripts do not run in the editor. Their initial
+// (pre-reveal) hidden states are reset here so the preview shows the final,
+// post-animation state of the front end.
+.editor-styles-wrapper {
+
+	// Doubled attribute beats the doubled custom AOS selectors in _animations.scss.
+	[data-aos][data-aos] {
+		opacity: 1;
+		transform: none;
+		clip-path: none;
+		transition: none;
+	}
+
+	// Hidden by section styles until heroTitle.js / whySection.js reveal them.
+	.hero__title,
+	.hero .btn,
+	.why-msg {
+		opacity: 1;
+		transform: none;
+	}
+
+	// Scroll effects (fixed / sticky layers) overlap neighbouring sections in
+	// the canvas and make their fields unreachable: lay everything out in flow.
+	// .s-problems: fixed under the header; .s-solutions: sticky (>= 1025px);
+	// .services-img (<= 1024px) and .why-chat (<= 768px): sticky in the
+	// Tablet / Mobile previews.
+	.s-quote {
+		margin: 0;
+	}
+
+	.s-problems,
+	.s-solutions,
+	.services-img,
+	.why-chat {
+		position: relative;
+		inset: auto;
+		z-index: auto;
+	}
+}
 
 // Core's default editor styles for classic themes cap every `.wp-block` at
 // 840px and add 28px vertical gaps; sections are full-width layouts with

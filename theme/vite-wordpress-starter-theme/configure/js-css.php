@@ -284,7 +284,7 @@ function starter_vite_register_script( $handle, $filename, $deps = array() ) {
 }
 
 /**
- * Enqueues the main stylesheet, the link/form guard script and every section
+ * Enqueues the main stylesheet, the link/form guard script, the carousel script and every section
  * block style inside the block editor iframe canvas, so page previews match the front end.
  *
  * @return void
@@ -323,9 +323,11 @@ function starter_vite_enqueue_editor_canvas_assets() {
 	$key      = 'assets/src/scss/main.scss';
 	$css_uri  = VITE_DEV ? VITE_SERVER . '/' . $key : starter_vite_manifest_uri( $manifest, $key );
 
+	$section_deps = array();
 	if ( $css_uri ) {
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
 		wp_enqueue_style( 'starter-editor-main', $css_uri, array(), null );
+		$section_deps = array( 'starter-editor-main' );
 	}
 
 	foreach ( starter_get_section_slugs() as $slug ) {
@@ -333,7 +335,9 @@ function starter_vite_enqueue_editor_canvas_assets() {
 			continue;
 		}
 
-		$style_handle = starter_register_section_block_style( $slug );
+		// "main" is a front-end handle and is not registered in the editor:
+		// a missing dependency makes WordPress silently drop the section style.
+		$style_handle = starter_register_section_block_style( $slug, $section_deps );
 		if ( $style_handle ) {
 			wp_enqueue_style( $style_handle );
 		}
@@ -342,6 +346,12 @@ function starter_vite_enqueue_editor_canvas_assets() {
 	$editor_handle = starter_vite_register_style( 'starter-editor-section-blocks', 'editor-section-blocks.scss' );
 	if ( $editor_handle ) {
 		wp_enqueue_style( $editor_handle );
+	}
+
+	// Carousels only; other section JS (reveal animations, accordions) stays front-end only.
+	$editor_script_handle = starter_vite_register_script( 'starter-editor-section-blocks', 'editor-section-blocks.js' );
+	if ( $editor_script_handle ) {
+		wp_enqueue_script( $editor_script_handle );
 	}
 }
 add_action( 'enqueue_block_assets', 'starter_vite_enqueue_editor_canvas_assets' );
@@ -373,6 +383,15 @@ function starter_strip_admin_styles_from_page_canvas( $settings, $context ) {
 					return ! is_array( $style ) || 'theme' !== ( $style['__unstableType'] ?? '' );
 				}
 			)
+		);
+
+		// With no "theme" entry left, the editor (useEditorStyles) falls back to
+		// core default editor styles, whose body font/size override main.css.
+		// An empty theme entry keeps the canvas on theme styles only.
+		$settings['styles'][] = array(
+			'css'            => '',
+			'__unstableType' => 'theme',
+			'isGlobalStyles' => false,
 		);
 	}
 
