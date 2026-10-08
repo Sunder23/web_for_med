@@ -3,79 +3,73 @@
 > Keep this file up to date as the project structure evolves. It is the primary navigation map for AI agents working in this repository.
 
 ## Project Overview
-A WordPress development boilerplate combining a custom PHP theme (Vite + SCSS build pipeline) and a plugin scaffold. Designed as a starter kit for WordPress sites with a modern frontend workflow and opinionated PHP structure.
+A hybrid WordPress theme (Vite + SCSS frontend) with a plugin scaffold and a Docker dev environment. Pages are built from ACF section blocks (`acf/section-*`); single CPT, blog and archive views are plain PHP templates that reuse partials directly.
 
 ## Tech Stack
-- **Language:** PHP 8+, JavaScript (ES modules)
-- **CMS:** WordPress
-- **Frontend Build:** Vite 8
-- **CSS Preprocessor:** SCSS (Sass)
-- **Linter/Formatter:** Biome.js
-- **Package Manager:** npm (frontend), Composer (PHP)
-- **Integrations:** ACF Pro, Yoast SEO, jQuery (CDN)
+- **Language:** PHP 8.2+, JavaScript (ES modules)
+- **CMS:** WordPress (Secure Custom Fields as ACF replacement, Contact Form 7, Yoast SEO)
+- **Frontend Build:** Vite 8, SCSS (Sass), `postcss-pxtorem` on build
+- **Linters:** Biome.js (JS/JSON), PHPCS (WordPress standard) + PHPStan level 5
+- **Package Manager:** npm (frontend), Composer (PHP tooling)
+- **Environment:** Docker Compose (`docker/compose.yml`: db, wordpress, wpcli, phpmyadmin, mailpit)
 
 ## Project Structure
 ```
 wp-boilerplate/
+├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
+├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-│   └── index.php                    # Plugin entry point (placeholder)
-├── theme/
-│   ├── index.php                    # Theme directory placeholder
-│   └── vite-wordpress-starter-theme/  # WordPress classic theme
-│       ├── functions.php            # Theme entry — includes all configure files
-│       ├── configure/               # Modular theme configuration
-│       │   ├── configure.php        # Theme setup (menus, image sizes, cleanup)
-│       │   ├── js-css.php           # Vite asset enqueuing (dev + prod)
-│       │   ├── acf.php              # ACF custom field hooks
-│       │   ├── admin.php            # Admin-only customizations
-│       │   ├── cpt-taxonomy.php     # Custom Post Types and Taxonomies
-│       │   ├── shortcodes.php       # Custom shortcodes
-│       │   └── utilities.php        # Helper functions
-│       ├── assets/
-│       │   └── src/
-│       │       ├── js/              # JavaScript source (main.js entry point)
-│       │       └── scss/            # SCSS source (main.scss entry point)
-│       │           ├── abstracts/   # Variables, mixins, functions
-│       │           ├── base/        # Reset, fonts, base styles
-│       │           ├── components/  # Buttons, modals, reusable UI
-│       │           ├── layout/      # Header, footer, grid, forms
-│       │           ├── pages/       # Page-specific styles
-│       │           └── vendors/     # Third-party overrides
-│       ├── assets/dist/             # Vite build output (gitignored)
-│       ├── vite.config.js           # Vite build configuration
-│       ├── package.json             # Node dependencies
-│       ├── biome.json               # Biome linter/formatter config
-│       ├── composer.json            # PHP package definition
-│       ├── 404.php                  # 404 template
-│       ├── header.php               # Theme header template
-│       ├── footer.php               # Theme footer template
-│       └── index.php                # Default theme template
-├── .ai-factory/                     # AI agent context and artifacts
-│   ├── DESCRIPTION.md               # Project specification
-│   ├── ARCHITECTURE.md              # Architecture guidelines
-│   ├── config.yaml                  # AI Factory configuration
-│   └── rules/
-│       └── base.md                  # Detected coding conventions
-├── .mcp.json                        # MCP server configuration
-└── .ai-factory.json                 # AI Factory skills registry
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts)
+├── theme/vite-wordpress-starter-theme/
+│   ├── functions.php                # Composition root ($starter_modules list)
+│   ├── configure/
+│   │   ├── post-types.php + post-types/       # services, directions, cases
+│   │   ├── taxonomies.php + taxonomies/       # (empty)
+│   │   ├── theme-hooks.php + theme-hooks/     # one hook concern per file
+│   │   ├── utilities.php + helpers/           # starter_get_* helpers
+│   │   ├── shortcodes.php, ajax.php           # empty aggregators (+ folders)
+│   │   ├── js-css.php               # Vite integration + editor canvas assets
+│   │   ├── analytics.php            # GTM via ACF Options
+│   │   ├── optimize.php             # Optional front-end trims (flags)
+│   │   ├── acf.php                  # Local JSON save/load point
+│   │   ├── acf-blocks.php           # Content blocks (configure/acf/acf-blocks/*)
+│   │   ├── section-blocks.php       # Page section engine (configure/acf/section-blocks/*)
+│   │   ├── toc.php, admin.php
+│   │   └── acf/{acf-json,acf-blocks,section-blocks}/
+│   ├── template-parts/blocks/       # section-{slug}.php section markup
+│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/*
+│   ├── page.php, single*.php, archive-*.php, home.php, header.php, footer.php, 404.php
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, components/, template-parts/blocks/
+│   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
+│   ├── assets/dist/                 # Vite build output (gitignored)
+│   ├── vite.config.js, package.json, biome.json
+│   └── composer.json, phpcs.xml.dist, phpstan.neon, phpstan-baseline.neon, phpstan-bootstrap.php
+├── docs/                            # getting-started.md, page-sections.md
+├── .ai-factory/                     # AI agent context and plans
+├── .mcp.json
+└── Makefile                         # docker compose -f docker/compose.yml shortcuts
 ```
 
 ## Key Entry Points
 | File | Purpose |
 |------|---------|
-| `theme/vite-wordpress-starter-theme/functions.php` | Theme bootstrap — registers all hooks and includes configure files |
-| `theme/vite-wordpress-starter-theme/configure/js-css.php` | Vite asset integration (dev server vs production manifest) |
-| `theme/vite-wordpress-starter-theme/vite.config.js` | Vite build config — input entries, output paths, HMR for PHP files |
-| `theme/vite-wordpress-starter-theme/assets/src/js/main.js` | JavaScript entry point |
-| `theme/vite-wordpress-starter-theme/assets/src/scss/main.scss` | SCSS entry point |
-| `plugin/index.php` | Plugin entry point (scaffold) |
+| `theme/vite-wordpress-starter-theme/functions.php` | Theme bootstrap — defines `WFB_THEME_*`, requires modules |
+| `.../configure/js-css.php` | Vite integration (`VITE_BUILD` / `VITE_DEV`, manifest, register helpers) |
+| `.../configure/section-blocks.php` | Section slugs, rendering, conditional assets |
+| `.../configure/theme-hooks/enqueue-listing-templates-assets.php` | Per-template entries (archive, single-cpt, single-post) |
+| `.../vite.config.js` | Flat SCSS/JS entries + `template-parts/blocks/` level |
+| `.../assets/src/js/main.js`, `.../scss/main.scss` | Global entries |
+| `docker/compose.yml` | Dev environment |
 
 ## Documentation
 | Document | Path | Description |
 |----------|------|-------------|
-| AI Context | .ai-factory/DESCRIPTION.md | Full project specification and tech stack |
-| Architecture | .ai-factory/ARCHITECTURE.md | Architecture patterns and decisions |
-| Base Rules | .ai-factory/rules/base.md | Detected coding conventions |
+| README | README.md | Project landing page |
+| Getting Started | docs/getting-started.md | Environment, commands, asset modes |
+| Page Sections | docs/page-sections.md | `acf/section-*` blocks and migration |
+| AI Context | .ai-factory/DESCRIPTION.md | Project specification and tech stack |
+| Architecture | .ai-factory/ARCHITECTURE.md | Layers, module layout, asset pipeline |
+| Base Rules | .ai-factory/rules/base.md | Naming and coding conventions |
 
 ## AI Context Files
 | File | Purpose |
@@ -84,12 +78,22 @@ wp-boilerplate/
 | .ai-factory/DESCRIPTION.md | Full project description and tech stack |
 | .ai-factory/ARCHITECTURE.md | Architecture guidelines and patterns |
 | .ai-factory/config.yaml | AI Factory run configuration |
-| .ai-factory/rules/base.md | Coding conventions detected from codebase |
+| .ai-factory/rules/base.md | Coding conventions |
+| .ai-factory/plans/ | Implementation plans |
+
+## Commands
+- `docker compose -f docker/compose.yml up -d` (or `make up`) — start the environment (WP :8080, phpMyAdmin :8081, Mailpit :8025)
+- `make wp cmd="…"` — WP-CLI (`wpcli` service); on Windows Git Bash prefix raw calls with `MSYS_NO_PATHCONV=1`
+- `npm run dev` / `npm run build` / `npm run lint` — in the theme directory
+- `composer lint` — PHPCS + PHPStan
 
 ## Agent Rules
 - Decompose multi-step shell commands into separate steps — do not chain with `&&` in a single command
   - Incorrect (combined): `git checkout main && git pull`
   - Correct (decomposed): First `git checkout main`, then `git pull origin main`
-- When modifying theme PHP, always check `functions.php` to understand which configure files are loaded and in what order
-- Vite asset paths differ between dev and prod — always check `VITE_BUILD` constant before assuming asset URLs
+- When modifying theme PHP, check `functions.php` and the aggregator (`theme-hooks.php`, `utilities.php`, …) to see which files are loaded; new per-item files must be added to the aggregator array
+- Vite asset paths differ between dev and prod — check `VITE_BUILD` / `VITE_DEV` before assuming asset URLs
 - WordPress hooks must be registered at file scope (not inside conditionals) unless using `is_admin()` guards
+- Use the `starter_` prefix and the `vite-starter` text domain; run `composer lint` and `npm run lint` before committing
+- Page-specific styles/scripts depend on `main` and are enqueued at `wp_enqueue_scripts` priority 110
+- Do not assemble single CPT / blog / archive templates from section blocks

@@ -1,172 +1,96 @@
-# Architecture: Layered — WordPress Modular Theme/Plugin
+# Architecture: Hybrid Layered — WordPress Modular Theme
 
 ## Overview
-This project follows a **Layered Architecture** adapted to WordPress conventions. The structure separates concerns into distinct horizontal layers: WordPress core as the framework, modular PHP configuration files for theme behaviour, PHP templates for presentation, and a Vite-compiled frontend layer for all assets.
+The theme is a **hybrid**: `page` content is assembled from ACF section blocks (`acf/section-{slug}`), while single CPT, blog and archive views are plain PHP templates that reuse partials directly. The structure stays layered: WordPress core, modular PHP configuration under `configure/`, PHP templates/partials, and a Vite-compiled frontend.
 
-WordPress's hook system (actions and filters) acts as the communication bus between layers. Each concern is isolated in its own PHP file under `configure/`, and the theme's `functions.php` acts as the composition root that wires everything together via `include`.
-
-This pattern was chosen because WordPress enforces its own structural conventions, the project has no complex domain business logic, the team is small, and the existing codebase already naturally follows this layout.
-
-## Decision Rationale
-- **Project type:** WordPress classic theme + plugin scaffold (boilerplate/starter kit)
-- **Tech stack:** PHP/WordPress, Vite 8, SCSS, Biome.js, vanilla JS (ES modules)
-- **Key factor:** WordPress dictates the outer structure (hooks, templates, `functions.php`); modular PHP files within `configure/` map cleanly to layered separation by concern
+WordPress hooks (actions/filters) are the communication bus. `functions.php` is a pure composition root: it defines `WFB_THEME_*` constants and requires modules from an explicit list. Aggregator files (`post-types.php`, `taxonomies.php`, `theme-hooks.php`, `utilities.php`, `shortcodes.php`, `ajax.php`) each hold an explicit array of per-item files in a sub-folder — no `glob()` there. The only `glob()` calls are the block registrars (`acf-blocks.php`, `section-blocks.php`).
 
 ## Folder Structure
 ```
 wp-boilerplate/
-├── plugin/                              # Plugin layer
-│   └── index.php                        # Plugin bootstrap (registers hooks, includes)
-│
-└── theme/vite-wordpress-starter-theme/  # Theme root
-    │
-    ├── functions.php                    # Composition root — includes all configure files
-    │
-    ├── configure/                       # Configuration/business layer
-    │   ├── configure.php                # Theme setup (menus, image support, cleanup)
-    │   ├── js-css.php                   # Asset registration & Vite integration
-    │   ├── acf.php                      # ACF field group registration
-    │   ├── cpt-taxonomy.php             # Custom Post Types and Taxonomies
-    │   ├── shortcodes.php               # Shortcode definitions
-    │   ├── utilities.php                # Shared helper functions
-    │   └── admin.php                    # Admin-only hooks (loaded only when is_admin())
-    │
-    ├── *.php                            # Template layer (WordPress templates)
-    │   ├── index.php                    # Default template
-    │   ├── header.php / footer.php      # Layout partials
-    │   └── 404.php                      # Error template
-    │
-    └── assets/                          # Frontend layer
-        └── src/
-            ├── js/
-            │   ├── main.js              # JS entry point (imported by Vite)
-            │   └── _general.js          # Shared JS utilities (prefixed with _)
-            └── scss/
-                ├── main.scss            # SCSS entry point
-                ├── abstracts/           # Variables, mixins — no output
-                ├── base/                # Reset, fonts, global base
-                ├── components/          # Reusable UI (buttons, modals)
-                ├── layout/              # Structural (header, footer, grid)
-                ├── pages/               # Page-specific overrides
-                └── vendors/             # Third-party style overrides
+├── docker/                              # compose.yml (name: web_for_med), .env(.example), uploads.ini
+├── mu-plugins/mailpit.php               # local mail catcher (WP_ENVIRONMENT_TYPE=local only)
+├── plugin/                              # plugin scaffold
+├── scripts/                             # WP-CLI import / migration scripts
+└── theme/vite-wordpress-starter-theme/
+    ├── functions.php                    # composition root ($starter_modules)
+    ├── configure/
+    │   ├── post-types.php  + post-types/{services,directions,cases}.php
+    │   ├── taxonomies.php  + taxonomies/
+    │   ├── theme-hooks.php + theme-hooks/*.php   # one hook concern per file
+    │   ├── utilities.php   + helpers/*.php       # starter_get_* helpers
+    │   ├── shortcodes.php, ajax.php (+ folders)
+    │   ├── js-css.php                   # Vite integration, editor canvas assets
+    │   ├── analytics.php, optimize.php  # GTM (ACF Options), optional trims
+    │   ├── acf.php                      # local JSON save/load point
+    │   ├── acf-blocks.php               # content blocks (glob)
+    │   ├── section-blocks.php           # page section engine (glob)
+    │   ├── toc.php, admin.php
+    │   └── acf/
+    │       ├── acf-json/                # field groups (group_starter_section_*, options, CPT groups)
+    │       ├── acf-blocks/<slug>/       # content blocks (block.json, render.php)
+    │       └── section-blocks/section-<slug>/   # page section blocks
+    ├── template-parts/blocks/section-<slug>.php # section markup (blocks + direct reuse)
+    ├── partials/                        # breadcrumbs, header/{header,logo}, parts/*
+    ├── page.php, single*.php, archive-*.php, home.php, header.php, footer.php, 404.php
+    └── assets/src/
+        ├── js/        main.js, single-cpt.js, single-post.js, editor-link-guard.js,
+        │              components/, utils/, template-parts/blocks/section-<slug>.js
+        └── scss/      main.scss, single-cpt.scss, single-post.scss, archive.scss,
+                       block-<slug>.scss, editor-section-blocks.scss, _tokens/_fonts/_base/_animations,
+                       components/, mixins/, vendors/, template-parts/blocks/section-<slug>.scss
 ```
 
 ## Dependency Rules
-Communication flows top-down through layers. Lower layers must not reference higher layers.
-
 ```
-WordPress Core (framework)
+WordPress Core
     ↓
-configure/ files (hook registration, feature setup)
+configure/ modules (hooks, helpers, block registration)
     ↓
-PHP templates (*.php — consume registered hooks and functions)
+templates (page.php, single*.php …) and partials / template-parts
     ↓
-assets/src (JS/SCSS — compiled by Vite, enqueued by js-css.php)
+assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 ```
 
-- ✅ `functions.php` may include any file in `configure/`
-- ✅ `configure/` files may call WordPress core functions and register hooks
-- ✅ Template files may call functions defined in `configure/utilities.php`
-- ✅ `configure/js-css.php` may read `assets/dist/.vite/manifest.json` to locate compiled assets
-- ✅ SCSS partials (prefixed `_`) may be imported by other SCSS files
-- ❌ `configure/` files must NOT directly include or call template files
-- ❌ JS/SCSS source files must NOT reference PHP — communication happens only via `wp_localize_script()`
-- ❌ Admin-only logic must NOT be included outside the `is_admin()` guard in `functions.php`
-- ❌ Do NOT add business logic directly to `functions.php` — keep it as pure composition root
+- ✅ `functions.php` requires modules; aggregators require their per-item files from an explicit array
+- ✅ Templates call `starter_*` helpers and `get_template_part()` with `$args`
+- ✅ Section templates (`template-parts/blocks/section-*.php`) take all data through `$args` — usable by a block or by hand-built args
+- ✅ Page-specific assets are enqueued with `array( 'main' )` as dependency, on `wp_enqueue_scripts` priority 110 (after `main` at 100)
+- ❌ No logic in `functions.php`; no `glob()` in aggregators
+- ❌ Single CPT / blog / archive templates are not assembled from section blocks
+- ❌ JS/SCSS must not reference PHP; data goes through `wp_localize_script()`
+- ❌ Imports in JS/SCSS use `@js` / `@scss` aliases, not relative climbing
 
-## Layer Communication
-- **PHP → Frontend:** `wp_localize_script('main', 'siteVars', [...])` in `js-css.php` passes PHP data to JS as a global
-- **Frontend → PHP:** AJAX requests target `admin-ajax.php` (or REST API endpoints); the URL is passed via `siteVars.ajaxUrl`
-- **PHP → PHP:** WordPress `add_action()` / `add_filter()` hooks; direct function calls for utilities
-- **Dev vs Prod assets:** `VITE_BUILD` constant (set from manifest existence) switches between Vite dev server URLs and hashed production asset URLs
+## Asset Pipeline
+- **Entries** (`vite.config.js`): every non-underscore `.scss` / `.js` in `assets/src/{scss,js}/` plus one flat level `template-parts/blocks/`. Manifest keys are `assets/src/{js,scss}/<path>`.
+- **Global** (`main.scss`, `main.js`): tokens, fonts, base, header/footer/forms/grid, shared components, smooth scroll, mobile nav, footer animations.
+- **Per template**: `archive.scss`, `single-cpt.scss/js`, `single-post.scss/js` (see `theme-hooks/enqueue-listing-templates-assets.php`).
+- **Per section block**: `section-{slug}.scss/js`, enqueued only when the block is on the page (`section-blocks.php`).
+- **JS-imported CSS** (vendors) is resolved through manifest `css` + `imports` (`starter_vite_entry_css_files()`).
+- **Modes**: `VITE_BUILD` (manifest exists) → hashed files; `VITE_DEV` (no manifest, local env) → `localhost:5173`.
+- `postcss-pxtorem` runs on `vite build` only.
 
 ## Key Principles
-1. **One concern per configure file** — `configure/cpt-taxonomy.php` handles CPTs only, `configure/acf.php` handles ACF only, etc. Do not mix concerns across files.
-2. **functions.php is a composition root, not a logic file** — All logic lives in `configure/`; `functions.php` only includes files.
-3. **SCSS follows 7-1 light pattern** — Partials are prefixed with `_`; only `main.scss` is a Vite entry point; `abstracts/` must produce no CSS output.
-4. **Vite integration is the single source for all theme assets** — Never hardcode asset paths; always use the manifest-aware enqueue functions in `js-css.php`.
-5. **WordPress escaping at output** — Always use `esc_html()`, `esc_url()`, `esc_attr()` when rendering any user-supplied or database-sourced content in templates.
+1. **One concern per file** under `configure/`; per-item files hold one hook/helper/post type.
+2. **functions.php is a composition root.**
+3. **Prefix**: functions `starter_*`, constants `WFB_*` / `VITE_*`, text domain `vite-starter`, block names `acf/section-*`.
+4. **Escape at output**; WARN-level `error_log( 'WARN [area] … ' )` only on failures.
+5. **Footer data lives in ACF Options** (`footer_contact`), never on a particular page.
 
 ## Code Examples
 
-### Adding a new feature area (e.g., custom REST endpoints)
-Create a new file in `configure/`:
-
+### Adding a helper
 ```php
-<?php
-// configure/rest-api.php
-
-function my_theme_register_rest_routes() {
-    register_rest_route( 'my-theme/v1', '/posts', [
-        'methods'             => WP_REST_Server::READABLE,
-        'callback'            => 'my_theme_get_posts',
-        'permission_callback' => '__return_true',
-    ]);
-}
-add_action( 'rest_api_init', 'my_theme_register_rest_routes' );
-
-function my_theme_get_posts( WP_REST_Request $request ) {
-    // query and return data
-}
+// configure/helpers/get-thing.php
+function starter_get_thing( $id ) { /* … */ }
 ```
+Then append `'get-thing.php'` to the array in `configure/utilities.php`.
 
-Then include it in `functions.php`:
-```php
-include( 'configure/rest-api.php' );
-```
-
-### Passing PHP data to JavaScript via wp_localize_script
-In `configure/js-css.php`, extend `siteVars`:
-
-```php
-$vars = array(
-    'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
-    'restBase' => esc_url_raw( rest_url() ),
-    'nonce'    => wp_create_nonce( 'wp_rest' ),
-);
-wp_localize_script( 'main', 'siteVars', $vars );
-```
-
-Consume in `assets/src/js/main.js`:
-```js
-const { ajaxUrl, restBase, nonce } = window.siteVars ?? {};
-```
-
-### Adding a new SCSS component
-Create `assets/src/scss/components/_card.scss` (note the `_` prefix):
-
-```scss
-// _card.scss — component styles for card UI
-.card {
-  padding: var(--spacing-md);
-  border-radius: var(--radius-sm);
-}
-```
-
-Then import it in `main.scss`:
-```scss
-@use 'components/card';
-```
-
-### Registering a Custom Post Type
-In `configure/cpt-taxonomy.php`:
-
-```php
-function my_theme_register_project_cpt() {
-    register_post_type( 'project', [
-        'label'    => __( 'Projects', 'textdomaintomodify' ),
-        'public'   => true,
-        'supports' => [ 'title', 'editor', 'thumbnail' ],
-        'rewrite'  => [ 'slug' => 'projects' ],
-    ]);
-}
-add_action( 'init', 'my_theme_register_project_cpt' );
-```
+### Adding a section block
+See [docs/page-sections.md](../docs/page-sections.md) — template part, scss/js entries, block folder, field group, slug in `starter_get_section_slugs()`.
 
 ## Anti-Patterns
-- ❌ **Writing logic in `functions.php`** — it should only contain `include` statements; logic belongs in `configure/`
-- ❌ **Hardcoding asset URLs** — always use `DIST_URI` + manifest lookup from `js-css.php`, never raw file paths
-- ❌ **Skipping the `is_admin()` guard** for admin-only code — loading admin hooks on the frontend adds unnecessary overhead
-- ❌ **Importing `main.scss` from another SCSS partial** — `main.scss` is an entry point, not a partial; only `@use` other partials from it
-- ❌ **Adding business logic to PHP templates** — templates should only call pre-registered functions; keep templates as thin presentational wrappers
-- ❌ **Registering hooks inside conditional blocks at include time** (e.g., `if (condition) { add_action(...) }`) — register hooks unconditionally and apply conditions inside the callback
+- ❌ Hardcoding asset URLs — use `starter_vite_register_style()` / `starter_vite_register_script()`
+- ❌ Enqueueing page-specific assets at priority < 101 with a `main` dependency (WP 6.9 notice: dependency not registered)
+- ❌ Reading front-page ACF fields from other templates — use Options
+- ❌ Hooks registered inside conditionals at include time (apply the condition inside the callback)

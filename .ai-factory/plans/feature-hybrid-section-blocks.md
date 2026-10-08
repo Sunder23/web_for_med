@@ -139,7 +139,7 @@
   - Финальное визуальное сравнение всех baseline-страниц (build + dev).
   - Логи: нет.
 
-- [ ] **T14. Документация (docs-checkpoint).**
+- [x] **T14. Документация (docs-checkpoint).**
   - Через `/aif-docs`: `AGENTS.md` (новое дерево, точки входа, команды с `-f docker/compose.yml`), `.ai-factory/ARCHITECTURE.md` (гибридная модель, агрегаторы, плоский SCSS), `.ai-factory/DESCRIPTION.md` (Docker, Mailpit, PHPCS/PHPStan, GTM), `.ai-factory/rules/base.md` (префикс `starter_`, text domain, алиасы), `docs/page-sections.md` и `docs/getting-started.md` (по образцу референса), `README.md`.
   - Логи: нет.
 
