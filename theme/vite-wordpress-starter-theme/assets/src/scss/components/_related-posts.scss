@@ -1,0 +1,43 @@
+@use "../mixins/breakpoint" as *;
+
+// "Related materials" row under article singles (partials/parts/related-posts.php).
+.related-posts {
+    background: var(--c-bg);
+    border-top: var(--border);
+
+    &__title {
+        padding: 40px 16px 24px;
+
+        @include breakpoint(mobile) {
+            padding: 56px 32px 32px;
+        }
+
+        @include breakpoint(tablet) {
+            padding: 72px 40px 40px;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        border-top: var(--border);
+
+        @include breakpoint(tablet) {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    // Mixed with .post-card.
+    &__item {
+        & + & {
+            border-top: var(--border);
+        }
+
+        @include breakpoint(tablet) {
+            & + & {
+                border-top: 0;
+                border-left: var(--border);
+            }
+        }
+    }
+}

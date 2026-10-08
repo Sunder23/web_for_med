@@ -1,0 +1,183 @@
+@use "../mixins/breakpoint" as *;
+
+// Article layout of CPT singles and blog posts (partials/parts/article-layout.php).
+// Phones: one column — hero / image / blurbs / sidebar / content.
+// Tablet up: content column (max 885px) + sticky 295px sidebar spanning every row.
+.article {
+    background: var(--c-bg);
+
+    &__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "hero"
+            "image"
+            "blurbs"
+            "aside"
+            "content";
+        padding: 24px 16px 48px;
+
+        @include breakpoint(mobile) {
+            padding: 40px 32px 64px;
+        }
+
+        @include breakpoint(tablet) {
+            grid-template-columns: minmax(0, 885px) 295px;
+            grid-template-areas:
+                "hero aside"
+                "image aside"
+                "blurbs aside"
+                "content aside";
+            grid-template-rows: auto auto auto 1fr;
+            justify-content: space-between;
+            column-gap: 48px;
+            padding: 48px 40px 80px;
+        }
+
+        @include breakpoint(laptop) {
+            column-gap: 100px;
+        }
+    }
+
+    &__hero {
+        grid-area: hero;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+
+        @include breakpoint(mobile) {
+            gap: 20px;
+        }
+    }
+
+    &__title {
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1.1;
+        color: var(--c-dark);
+
+        @include breakpoint(mobile) {
+            font-size: 40px;
+        }
+
+        @include breakpoint(tablet) {
+            font-size: 48px;
+        }
+    }
+
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 24px;
+        font-size: 14px;
+        color: var(--c-grey);
+    }
+
+    &__lead {
+        max-width: 760px;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--c-grey);
+
+        @include breakpoint(mobile) {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+    }
+
+    &__note {
+        max-width: 760px;
+        font-size: 16px;
+        line-height: 1.55;
+        color: var(--c-grey);
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 4px;
+
+        @include breakpoint(mobile) {
+            gap: 16px;
+        }
+    }
+
+    &__image {
+        grid-area: image;
+        overflow: hidden;
+        border: var(--border);
+        border-radius: var(--radius);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // Spacing lives on the items, not in row-gap: absent optional areas
+    // (image, blurbs) would still leave empty gapped rows.
+    &__hero,
+    &__image,
+    &__blurbs,
+    &__aside {
+        margin-bottom: 24px;
+
+        @include breakpoint(mobile) {
+            margin-bottom: 32px;
+        }
+    }
+
+    // Front-page card style: thin borders, no shadows.
+    &__blurbs {
+        grid-area: blurbs;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        border: var(--border);
+
+        @include breakpoint(mobile) {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+    }
+
+    &__blurb {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 24px 20px;
+        background: var(--c-bg-light);
+
+        & + & {
+            border-top: var(--border);
+        }
+
+        @include breakpoint(mobile) {
+            padding: 28px 24px;
+
+            & + & {
+                border-top: 0;
+                border-left: var(--border);
+            }
+        }
+    }
+
+    &__aside {
+        grid-area: aside;
+
+        @include breakpoint(tablet) {
+            align-self: start;
+            position: sticky;
+            margin-bottom: 0;
+            top: calc(var(--header-h) + 20px);
+        }
+    }
+
+    &__content {
+        grid-area: content;
+        min-width: 0;
+    }
+}

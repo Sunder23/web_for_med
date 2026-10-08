@@ -1,68 +1,46 @@
 <?php
 /**
- * Theme file.
+ * Single service: shared article layout + FAQ, related services and CTA.
  *
  * @package Vite_Starter
  */
 
 get_header();
-
-$hero = get_field( 'service_hero' );
-$faq  = get_field( 'service_faq' );
-$cta  = get_field( 'service_cta' );
 ?>
 
 <main class="single-cpt single-service">
-	<section class="s-cpt-hero">
-		<div class="s-cpt-hero__wrap container">
-			<div class="s-cpt-hero__inner frame">
-				<?php get_template_part( 'partials/breadcrumbs' ); ?>
-				<h1 class="s-cpt-hero__title"><?php the_title(); ?></h1>
-				<?php if ( ! empty( $hero['subtitle'] ) ) : ?>
-					<p class="s-cpt-hero__subtitle"><?php echo esc_html( $hero['subtitle'] ); ?></p>
-				<?php endif; ?>
-				<?php if ( ! empty( $hero['buttons'] ) ) : ?>
-					<div class="s-cpt-hero__actions">
-						<?php foreach ( $hero['buttons'] as $key => $button ) : ?>
-							<a href="<?php echo esc_url( ! empty( $button['url'] ) ? $button['url'] : '#' ); ?>" class="button <?php echo 0 === $key ? 'button--primary' : 'button--secondary'; ?>"><?php echo esc_html( $button['label'] ); ?></a>
-						<?php endforeach; ?>
-					</div>
-				<?php endif; ?>
-				<?php if ( ! empty( $hero['text'] ) ) : ?>
-					<p class="s-cpt-hero__text"><?php echo esc_html( $hero['text'] ); ?></p>
-				<?php endif; ?>
-			</div>
-		</div>
-
-		<?php if ( ! empty( $hero['blurbs'] ) ) : ?>
-			<div class="s-cpt-hero__wrap container">
-				<div class="s-cpt-hero__inner frame">
-					<div class="s-cpt-hero__blurbs">
-						<?php foreach ( $hero['blurbs'] as $blurb ) : ?>
-							<div class="hero-blurb info-card">
-								<div class="info-card__body">
-									<h3 class="hero-blurb__title card-title"><?php echo esc_html( $blurb['title'] ); ?></h3>
-									<p class="hero-blurb__text card-text"><?php echo esc_html( $blurb['text'] ); ?></p>
-								</div>
-							</div>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-
-	</section>
-
 	<?php
 	while ( have_posts() ) :
 		the_post();
-		?>
-		<?php get_template_part( 'partials/parts/content-with-toc' ); ?>
-	<?php endwhile; ?>
 
-	<?php get_template_part( 'partials/parts/cpt-faq', null, (array) $faq ); ?>
+		$hero = (array) get_field( 'service_hero' );
 
-	<?php get_template_part( 'partials/parts/cpt-cta', null, (array) $cta ); ?>
+		get_template_part(
+			'partials/parts/article-layout',
+			null,
+			array(
+				'lead'    => $hero['subtitle'] ?? '',
+				'note'    => $hero['text'] ?? '',
+				'buttons' => $hero['buttons'] ?? array(),
+				'blurbs'  => $hero['blurbs'] ?? array(),
+			)
+		);
+
+		get_template_part( 'partials/parts/cpt-faq', null, (array) get_field( 'service_faq' ) );
+
+		get_template_part(
+			'partials/parts/related-posts',
+			null,
+			array(
+				'post_type' => 'services',
+				'exclude'   => get_the_ID(),
+				'title'     => __( 'Схожі послуги', 'vite-starter' ),
+			)
+		);
+
+		get_template_part( 'partials/parts/cpt-cta', null, (array) get_field( 'service_cta' ) );
+	endwhile;
+	?>
 </main>
 <?php
 get_footer();

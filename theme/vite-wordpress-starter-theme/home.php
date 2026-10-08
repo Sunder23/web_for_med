@@ -28,16 +28,17 @@ $posts_page_title = $posts_page ? get_the_title( $posts_page ) : 'Блог';
 					<?php
 					while ( have_posts() ) :
 						the_post();
-						?>
-						<a class="archive-card info-card" href="<?php the_permalink(); ?>">
-							<div class="info-card__body">
-								<span class="archive-card__date tag"><?php echo esc_html( get_the_date() ); ?></span>
-								<h2 class="archive-card__title card-title"><?php the_title(); ?></h2>
-								<p class="archive-card__text card-text"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 32 ) ); ?></p>
-							</div>
-							<span class="archive-card__more tag"><?php esc_html_e( 'Читати далі', 'vite-starter' ); ?> &rarr;</span>
-						</a>
-					<?php endwhile; ?>
+						get_template_part(
+							'partials/parts/post-card',
+							null,
+							array(
+								'class'     => 'archive-grid__item',
+								'title_tag' => 'h2',
+								'show_date' => true,
+							)
+						);
+					endwhile;
+					?>
 				</div>
 				<?php the_posts_pagination(); ?>
 			<?php else : ?>

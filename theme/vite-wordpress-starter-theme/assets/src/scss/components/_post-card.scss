@@ -1,0 +1,39 @@
+@use "../mixins/breakpoint" as *;
+
+// Post card (partials/parts/post-card.php). Borders come from the parent grid
+// via a mix class (archive-grid__item, related-posts__item).
+.post-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 20px;
+    background: var(--c-bg);
+    transition: background 0.3s ease-in-out;
+
+    @include breakpoint(mobile) {
+        padding: 40px 32px;
+    }
+
+    &:hover {
+        background: var(--c-bg-light);
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__title {
+        transition: color 0.3s ease-in-out;
+    }
+
+    &:hover &__title {
+        color: var(--c-blue);
+    }
+
+    &__date {
+        color: var(--c-grey);
+    }
+}

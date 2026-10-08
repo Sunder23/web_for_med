@@ -1,5 +1,8 @@
-// Single services / directions / cases templates.
-@use "components/cpt-common";
-@use "components/content-with-toc";
-@use "components/service";
-@use "components/case";
+// Single services / directions / cases templates (partials/parts/article-layout.php).
+@use "components/entry-content";
+@use "components/toc";
+@use "components/article";
+@use "components/faq";
+@use "components/post-card";
+@use "components/related-posts";
+@use "components/cta-banner";

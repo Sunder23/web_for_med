@@ -53,7 +53,7 @@
 
 ### Phase 2 — Разметка страниц
 
-- [ ] **Task 4. Общий layout статьи: `partials/parts/article-layout.php`** (заменяет `content-with-toc.php`)
+- [x] **Task 4. Общий layout статьи: `partials/parts/article-layout.php`** (заменяет `content-with-toc.php`)
 - Args: `lead` (string), `meta` (array строк/HTML: дата, рубрика-тег), `buttons` (array `label`/`url`), `blurbs` (array `title`/`text`), `show_thumbnail` (bool, default true).
 - Разметка (BEM без префиксов): `section.article` → `div.container.article__container` (рамка `.frame`) → `div.article__grid`:
   - `header.article__hero`: `partials/breadcrumbs`, `h1.article__title`, `div.article__meta`, `p.article__lead`, `div.article__actions` (кнопки `.button--primary` / `.button--secondary`);
@@ -66,18 +66,18 @@
 - Удалить `partials/parts/content-with-toc.php`, `components/_content-with-toc.scss`, `components/_two-col.scss` (проверить grep, что их больше никто не использует).
 - Logging: нет.
 
-- [ ] **Task 5. Single CPT: services / directions / cases** (зависит от 2–4)
+- [x] **Task 5. Single CPT: services / directions / cases** (зависит от 2–4)
 - `single-services.php`: `article-layout` с `lead = service_hero.subtitle`, `buttons = service_hero.buttons`, `blurbs = service_hero.blurbs`; `service_hero.text` — второй абзац lead (`p.article__note`) или в meta — по виду. Затем `cpt-faq` (`service_faq`), `related-posts`, `cpt-cta` (`service_cta`).
 - `single-directions.php`: `lead = direction_hero.description`, `blurbs = direction_hero.blurbs`; далее FAQ/related/CTA из `direction_*`.
 - `single-cases.php`: `lead = case_hero.subtitle`; далее FAQ/related/CTA из `case_*`.
 - Убрать `s-cpt-hero` из single-шаблонов (архив `partials/parts/archive-cpt.php` пока использует его — не ломать).
 - Logging: нет (данные опциональны, пустые поля просто не выводятся).
 
-- [ ] **Task 6. Single post (блог)** (зависит от 2–4)
+- [x] **Task 6. Single post (блог)** (зависит от 2–4)
 - `single.php`: `article-layout` с `meta` = тег первой рубрики (ссылка на рубрику, `.tag`) + дата `get_the_date( 'd.m.Y' )`, `lead` = `has_excerpt() ? get_the_excerpt() : ''`; затем `related-posts` (по рубрике, fallback — свежие) и `cpt-cta` с дефолтными строками (`__()`): «Обговорімо ваш медзаклад» / кнопка на контакт из Options.
 - Logging: нет.
 
-- [ ] **Task 7. Нижние блоки: FAQ, CTA, «Схожі матеріали»**
+- [x] **Task 7. Нижние блоки: FAQ, CTA, «Схожі матеріали»**
 - `partials/parts/cpt-faq.php`: BEM `faq-section`/`faq` в фирменном стиле (строки с `--border`, плюс/шеврон `--c-blue`, ширина = колонка контента, внутри `.frame`); JS `faqAccordion.js` не менять кроме селекторов при необходимости.
 - `partials/parts/cpt-cta.php`: navy-плашка как на главной (`--c-navy`, белый текст, кнопка `.button--primary` / светлая), классы `cta-banner__*`.
 - Новый `partials/parts/post-card.php` (вынести карточку из `archive-cpt.php`, переиспользовать в архиве и related — excerpt-map туда же) и `partials/parts/related-posts.php` (args: `post_type`, `exclude`, `tax_query` опц.; `WP_Query` 3 записи, `no_found_rows`, `ignore_sticky_posts`; заголовок «Схожі послуги/напрямки/кейси/матеріали»; сетка 1 → 3 колонки на `tablet`). Ничего не выводить, если записей нет.
@@ -86,13 +86,13 @@
 
 ### Phase 3 — Сборка, чистка, проверка
 
-- [ ] **Task 8. Entry-файлы, enqueue и удаление legacy SCSS**
+- [x] **Task 8. Entry-файлы, enqueue и удаление legacy SCSS**
 - `single-cpt.scss` / `single-post.scss`: подключить `_article`, `_entry-content`, `_toc`, `_faq`, `_cta-banner`, `_related-posts`, `_post-card`; убрать `cpt-common`, `content-with-toc`, `service`, `case`, `single-post`.
 - Удалить неиспользуемые legacy-partials (`_service`, `_case`, `_single-post`, `_two-col`, `_content-with-toc`; `_cpt-common` — только если `archive.scss`/`archive-cpt.php` от него не зависят, иначе оставить в архивном entry) и убрать их из `ignoreFiles` в `.stylelintrc.json`.
 - `single-post.js` / `single-cpt.js`: оставить `initToc` (+ `initFaqAccordion` где нужен FAQ — для posts не нужен). Проверить, что `enqueue-listing-templates-assets.php` (prio 110, dep `main`) не требует изменений; `jquery` в deps single-cpt убрать, если `faqAccordion.js` без jQuery.
 - Logging: существующий `WARN [vite] manifest entry missing` покрывает отсутствующие entries.
 
-- [ ] **Task 9. Проверка**
+- [x] **Task 9. Проверка**
 - `npm run build`, `npm run lint`, `composer lint` (PHPCS + PHPStan; baseline не расширять).
 - Playwright 1440 и 390 px: `/services/web-development/`, `/directions/addiction-treatment/`, `/cases/lviv-medical-center/`, `/navishcho-likariu-sait/` (уточнить permalink поста), главная — без регрессий; sticky TOC + индикатор, CTA в сайдбаре, related, FAQ, CTA.
 - Лайтбокс: временно вставить `core/image` в черновик поста через WP-CLI (или в редакторе), проверить открытие/закрытие оверлея, затем удалить тестовый контент.

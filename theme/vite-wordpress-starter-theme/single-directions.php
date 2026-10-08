@@ -1,52 +1,44 @@
 <?php
 /**
- * Theme file.
+ * Single direction: shared article layout + FAQ, related directions and CTA.
  *
  * @package Vite_Starter
  */
 
 get_header();
-
-$hero = get_field( 'direction_hero' );
-$faq  = get_field( 'direction_faq' );
-$cta  = get_field( 'direction_cta' );
 ?>
 
 <main class="single-cpt single-direction">
-	<section class="s-cpt-hero">
-		<div class="s-cpt-hero__wrap container">
-			<div class="s-cpt-hero__inner frame">
-				<?php get_template_part( 'partials/breadcrumbs' ); ?>
-				<h1 class="s-cpt-hero__title"><?php the_title(); ?></h1>
-				<?php if ( ! empty( $hero['description'] ) ) : ?>
-					<p class="s-cpt-hero__subtitle"><?php echo esc_html( $hero['description'] ); ?></p>
-				<?php endif; ?>
-				<?php if ( ! empty( $hero['blurbs'] ) ) : ?>
-					<div class="s-cpt-hero__blurbs">
-						<?php foreach ( $hero['blurbs'] as $blurb ) : ?>
-							<div class="hero-blurb info-card">
-								<div class="info-card__body">
-									<h3 class="hero-blurb__title card-title"><?php echo esc_html( $blurb['title'] ); ?></h3>
-									<p class="hero-blurb__text card-text"><?php echo esc_html( $blurb['text'] ); ?></p>
-								</div>
-							</div>
-						<?php endforeach; ?>
-					</div>
-				<?php endif; ?>
-			</div>
-		</div>
-	</section>
-
 	<?php
 	while ( have_posts() ) :
 		the_post();
-		?>
-		<?php get_template_part( 'partials/parts/content-with-toc' ); ?>
-	<?php endwhile; ?>
 
-	<?php get_template_part( 'partials/parts/cpt-faq', null, (array) $faq ); ?>
+		$hero = (array) get_field( 'direction_hero' );
 
-	<?php get_template_part( 'partials/parts/cpt-cta', null, (array) $cta ); ?>
+		get_template_part(
+			'partials/parts/article-layout',
+			null,
+			array(
+				'lead'   => $hero['description'] ?? '',
+				'blurbs' => $hero['blurbs'] ?? array(),
+			)
+		);
+
+		get_template_part( 'partials/parts/cpt-faq', null, (array) get_field( 'direction_faq' ) );
+
+		get_template_part(
+			'partials/parts/related-posts',
+			null,
+			array(
+				'post_type' => 'directions',
+				'exclude'   => get_the_ID(),
+				'title'     => __( 'Схожі напрямки', 'vite-starter' ),
+			)
+		);
+
+		get_template_part( 'partials/parts/cpt-cta', null, (array) get_field( 'direction_cta' ) );
+	endwhile;
+	?>
 </main>
 <?php
 get_footer();
