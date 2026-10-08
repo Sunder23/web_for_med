@@ -1,0 +1,88 @@
+// Content-with-TOC layout: block-editor prose + sticky table of contents
+// (template-parts/content-with-toc.php, scrollspy in components/toc.js).
+
+.s-content-toc__sticky {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.toc {
+    padding: 32px 28px;
+    border: var(--border);
+    background: var(--c-bg-light);
+}
+
+.toc__title {
+    margin: 0 0 16px;
+}
+
+.toc__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.toc__item--h3 {
+    padding-left: 16px;
+}
+
+.toc__link {
+    display: block;
+    padding-left: 12px;
+    border-left: 2px solid transparent;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--c-grey);
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        color: var(--c-blue-light);
+    }
+
+    &.is-active {
+        color: var(--c-blue);
+        border-left-color: var(--c-blue-light);
+    }
+}
+
+// Block-editor prose: svc-prose covers p/ul/h3-h4; content h2s get
+// section-title-like treatment, and anchored headings clear the sticky header.
+.entry-content {
+    h2 {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.15;
+        color: var(--c-dark);
+        margin: 48px 0 20px;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    h2[id],
+    h3[id] {
+        scroll-margin-top: calc(var(--header-h) + 24px);
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .toc {
+        padding: 24px 20px;
+    }
+
+    .entry-content h2 {
+        font-size: 24px;
+        margin-top: 36px;
+    }
+}
