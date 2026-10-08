@@ -1,0 +1,102 @@
+/* ============================================================
+   QUOTE (03_1)
+   ============================================================ */
+.s-quote {
+  margin: 0px 0 100vh;
+  border-bottom: var(--border);
+  position: relative;
+  z-index: 10;
+  background-color: var(--c-bg);
+
+  &__inner {
+    padding: 90px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      padding: 50px 10px;
+      gap: 14px;
+
+      svg {
+        height: 30px;
+      }
+    }
+  }
+
+  &__cogs {
+    width: 82px;
+    height: 50px;
+    display: block;
+  }
+
+  &__text {
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--c-dark);
+    max-width: 990px;
+
+    @media (max-width: 1024px) {
+      font-size: 32px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 20px;
+    }
+  }
+}
+
+.gear {
+  transform-box: view-box;
+  transform-origin: center;
+  will-change: transform;
+
+  &--1 {
+    transform-origin: 14px 14px;
+    animation: gear-spin-cw 10s linear infinite;
+  }
+
+  &--2 {
+    transform-origin: 51px 15px;
+    animation: gear-spin-ccw 7s linear infinite;
+  }
+
+  &--3 {
+    transform-origin: 33.5px 27.5px;
+    animation: gear-spin-ccw 8.5s linear infinite;
+  }
+}
+
+@keyframes gear-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gear-spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+
+.br-desktop {
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}

@@ -1,0 +1,249 @@
+/* ============================================================
+   CASES (05)
+   ============================================================ */
+.s-cases {
+  border-top: var(--border);
+  position: relative;
+  z-index: 10;
+  background: var(--c-bg);
+
+
+
+  @media (max-width: 768px) {
+    border-bottom: 0;
+  }
+
+  &__wrap {
+    width: 100%;
+
+    @media (max-width: 768px) {
+      padding: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+
+  &__header {
+    padding: 83px 33px 77px;
+    border-bottom: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+
+    @media (max-width: 768px) {
+      padding: 32px 10px;
+      margin: 0 auto;
+      width: calc(100% - calc(var(--pad-x) * 2));
+      border-bottom: 0;
+      font-size: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .section-title {
+      @media (max-width: 768px) {
+        font-size: 28px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 20px;
+      }
+    }
+  }
+
+  &__nav {
+    // display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+    display: none;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__btn {
+    width: 33px;
+    height: 33px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+
+    svg {
+      path {
+        transition: fill .3s ease;
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          fill: var(--c-navy);
+        }
+      }
+    }
+
+    &.swiper-button-disabled {
+      pointer-events: none;
+
+      svg {
+        path {
+          fill: #AEBBC4;
+
+        }
+      }
+    }
+
+
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+
+.cases-slider-wrap {
+  overflow: hidden;
+  position: relative;
+
+  @media screen and (min-width: 1024px) {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: var(--c-border);
+    }
+  }
+
+  @media (max-width: 768px) {
+    border-top: var(--border);
+  }
+}
+
+.cases-slider {
+  display: flex;
+}
+
+.cases-slider-bg {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: calc(100% - 170px);
+  object-fit: cover;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.cases-slide {
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+
+
+  &-card {
+    border-right: var(--border);
+  }
+
+
+
+  &__desc {
+    height: 170px;
+    padding: 48px 40px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--c-dark);
+    border-bottom: var(--border);
+    background-color: transparent;
+
+    @media (max-width: 768px) {
+      height: 120px;
+      padding: 24px;
+      font-size: 17px;
+    }
+  }
+
+  &__visual {
+    height: 380px;
+    background:
+      linear-gradient(to bottom, transparent 30%, rgba(9, 42, 74, 0.55)),
+      url("https://www.figma.com/api/mcp/asset/865c9968-be4a-4a96-8bce-422c96bdb6cc") center/cover no-repeat;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px 40px 60px;
+
+    @media (max-width: 768px) {
+      height: 320px;
+      padding: 16px 20px;
+      align-items: center;
+      background-image: var(--case-bg-mobile);
+      background-position: var(--case-bg-position);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  }
+
+  &__card {
+    background: #fbfdff;
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    box-shadow: 0 6px 20px rgba(73, 80, 86, 0.3);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--c-grey);
+    width: 100%;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      padding: 18px;
+    }
+  }
+}
+
+.cases-dots {
+  display: none;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  border-left: var(--border);
+  border-right: var(--border);
+
+  @media (max-width: 1024px) {
+    display: flex;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+
+.cases-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c-border);
+  border: none;
+  padding: 0;
+  opacity: 1;
+  transition: background 0.2s;
+
+  &.is-active {
+    background: var(--c-blue);
+  }
+}

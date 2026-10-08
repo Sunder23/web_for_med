@@ -1,0 +1,34 @@
+// Editor-only styles for acf/section-* blocks (page editor canvas).
+// Enqueued by starter_vite_enqueue_section_block_editor_assets() in configure/js-css.php.
+//
+// Section JS does not run in the editor, so reveal-animation hidden states
+// (classes added by JS only) are never applied there. Add
+// `.editor-styles-wrapper`-scoped overrides here if a section preview ever
+// turns out invisible without its script.
+
+// Core's default editor styles for classic themes cap every `.wp-block` at
+// 840px and add 28px vertical gaps; sections are full-width layouts with
+// their own wrappers and spacing, stacked edge to edge like on the front.
+.editor-styles-wrapper .wp-block[data-type^='acf/section-'] {
+	max-width: none;
+	margin: 0;
+}
+
+.section-block-placeholder {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 24px;
+	border: 2px dashed #dbdbdb;
+	background: #f8f8f8;
+	font-family: inherit;
+	color: #3b3e41;
+
+	&__title {
+		font-size: 20px;
+	}
+
+	&__text {
+		font-size: 14px;
+	}
+}

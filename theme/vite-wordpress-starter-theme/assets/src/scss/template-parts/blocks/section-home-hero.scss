@@ -1,0 +1,240 @@
+/* ============================================================
+   HERO (01)
+   ============================================================ */
+.hero {
+  background: var(--c-bg);
+  position: relative;
+  z-index: 10;
+
+
+
+  @media (max-width: 767px) {
+    &__wrap {
+      &.l-wrap {
+        padding: 0;
+      }
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 94px 35px 100px;
+    gap: 20px;
+    min-height: 495px;
+    overflow: hidden;
+
+    @media (max-width: 1024px) {
+      padding: 0;
+      grid-template-columns: 1fr;
+      min-height: auto;
+      gap: 0;
+      border: 0;
+    }
+  }
+
+  &__text {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    @media (max-width: 1024px) {
+      flex: none;
+      width: 100%;
+      padding: 60px 40px 40px;
+    }
+
+    @media (max-width: 768px) {
+      gap: 22px;
+      margin: 0;
+      padding: 80px 25px 40px;
+    }
+  }
+
+  &__titles {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (max-width: 768px) {
+      gap: 8px;
+    }
+  }
+
+  &__title {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.01;
+    color: var(--c-dark);
+    cursor: crosshair;
+    opacity: 0;
+
+    .split-word {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .split-char {
+      display: inline-block;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 36px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 28px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--c-grey);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 400ms ease, transform 400ms ease;
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      opacity: 0;
+
+      &.is-visible {
+        opacity: 1;
+      }
+
+      &--secondary.is-visible {
+        transition-delay: 100ms;
+      }
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+    }
+  }
+
+  &__image {
+    position: relative;
+    height: 360px;
+    overflow: hidden;
+    background: var(--hero-image);
+
+    @media (max-width: 1024px) {
+      flex: none;
+      width: 100%;
+      margin-top: 0;
+      min-height: 320px;
+    }
+
+    @media (max-width: 768px) {
+      min-height: 480px;
+      background-image: var(--hero-image-mobile);
+    }
+  }
+
+  &__mosaic {
+    @media screen and (min-width: 1025px) {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 4px;
+      animation: hero-mosaic-resize 4s ease-in-out infinite;
+    }
+  }
+
+  &__tile {
+    @media screen and (min-width: 1025px) {
+      background-image: var(--hero-image);
+      background-repeat: no-repeat;
+      background-size: 300% 300%;
+      background-color: var(--c-bg-light);
+
+      @media (max-width: 767px) {
+        background-image: var(--hero-image-mobile);
+      }
+    }
+
+    &--1 {
+      background-position: 0% 0%;
+    }
+
+    &--2 {
+      background-position: 50% 0%;
+    }
+
+    &--3 {
+      background-position: 100% 0%;
+    }
+
+    &--4 {
+      background-position: 0% 50%;
+    }
+
+    &--5 {
+      background-position: 50% 50%;
+    }
+
+    &--6 {
+      background-position: 100% 50%;
+    }
+
+    &--7 {
+      background-position: 0% 100%;
+    }
+
+    &--8 {
+      background-position: 50% 100%;
+    }
+
+    &--9 {
+      background-position: 100% 100%;
+    }
+  }
+}
+
+@keyframes hero-mosaic-resize {
+
+  0%,
+  100% {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+
+  25% {
+    grid-template-columns: 1fr 1.35fr 0.95fr;
+    grid-template-rows: 1fr 1.45fr 0.9fr;
+  }
+
+  50% {
+    grid-template-columns: 0.95fr 1.7fr 1.1fr;
+    grid-template-rows: 1.1fr 1.8fr 0.8fr;
+  }
+
+  75% {
+    grid-template-columns: 1.15fr 1fr 1.45fr;
+    grid-template-rows: 1.3fr 0.95fr 1.2fr;
+  }
+}

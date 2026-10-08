@@ -110,6 +110,50 @@ function starter_vite_manifest_uri( $manifest, $key ) {
 }
 
 /**
+ * Collects the CSS files emitted for a JS entry, including those of its static imports.
+ *
+ * Vite extracts CSS imported from JS (e.g. vendor styles) into separate files and lists
+ * them under the "css" key of the entry or of the shared chunks it imports.
+ *
+ * @param array  $manifest Decoded Vite manifest data.
+ * @param string $key      Manifest entry key (source-relative asset path).
+ * @param array  $seen     Manifest keys already visited.
+ * @return string[] Built CSS file paths relative to the dist directory.
+ */
+function starter_vite_entry_css_files( $manifest, $key, &$seen = array() ) {
+	if ( isset( $seen[ $key ] ) || ! isset( $manifest[ $key ] ) ) {
+		return array();
+	}
+
+	$seen[ $key ] = true;
+	$files        = $manifest[ $key ]['css'] ?? array();
+
+	foreach ( $manifest[ $key ]['imports'] ?? array() as $import_key ) {
+		$files = array_merge( $files, starter_vite_entry_css_files( $manifest, $import_key, $seen ) );
+	}
+
+	return array_values( array_unique( $files ) );
+}
+
+/**
+ * Enqueues the CSS extracted from a JS entry's imports (production build only).
+ *
+ * @param string     $handle   Handle prefix for the generated style handles.
+ * @param string     $key      Manifest entry key of the JS entry.
+ * @param array|null $manifest Decoded Vite manifest data.
+ * @return void
+ */
+function starter_vite_enqueue_entry_css( $handle, $key, $manifest ) {
+	if ( ! $manifest ) {
+		return;
+	}
+
+	foreach ( starter_vite_entry_css_files( $manifest, $key ) as $i => $css_file ) {
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+		wp_enqueue_style( $handle . '-js-' . $i, VITE_DIST_URI . '/' . $css_file, array(), null );
+	}
+}
+/**
  * Registers and enqueues the theme's main JS/SCSS entries, dev-server or built.
  *
  * @return void
@@ -133,10 +177,8 @@ function starter_vite_add_assets() {
 			}
 
 			// Enqueue CSS extracted from JS imports (e.g. vendor styles).
-			foreach ( $manifest[ $key ]['css'] ?? array() as $i => $css_file ) {
-				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
-				wp_enqueue_style( $handle . '-js-' . $i, VITE_DIST_URI . '/' . $css_file, array(), null );
-			}
+			starter_vite_enqueue_entry_css( $handle, $key, $manifest );
+
 		}
 
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
@@ -214,6 +256,8 @@ function starter_vite_register_style( $handle, $filename, $deps = array() ) {
 /**
  * Registers a theme script handle resolved through the Vite manifest.
  *
+ * In production the CSS extracted from the script's imports is enqueued right away.
+ *
  * @param string $handle   Script handle to register.
  * @param string $filename Vite-relative js path.
  * @param array  $deps     Script dependency handles.
@@ -231,9 +275,138 @@ function starter_vite_register_script( $handle, $filename, $deps = array() ) {
 	wp_register_script( $handle, $uri, $deps, null, true );
 	starter_vite_module_handles( $handle );
 
+	if ( ! VITE_DEV ) {
+		// CSS imported from the script (e.g. vendor styles) ships with it.
+		starter_vite_enqueue_entry_css( $handle, $key, starter_vite_manifest() );
+	}
+
 	return $handle;
 }
 
+/**
+ * Enqueues the main stylesheet, the link/form guard script and every section
+ * block style inside the block editor iframe canvas, so page previews match the front end.
+ *
+ * @return void
+ */
+function starter_vite_enqueue_editor_canvas_assets() {
+	// `enqueue_block_assets` fires once for the admin page itself and once more
+	// inside the temporary style queue core builds for the editor iframe
+	// (`_wp_get_iframed_editor_assets()`), which force-disables
+	// `should_load_block_editor_scripts_and_styles` right before replaying.
+	// Checking that filter targets only the iframe pass.
+	if ( ! is_admin() || apply_filters( 'should_load_block_editor_scripts_and_styles', true ) ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+
+	// Only the post-edit Gutenberg canvas — not the Widgets screen or Site Editor.
+	if ( ! $screen || 'post' !== $screen->base || ! $screen->is_block_editor() ) {
+		return;
+	}
+
+	// Cancels link clicks and form submits inside ACF block previews so they
+	// cannot navigate the canvas iframe away.
+	$guard_handle = starter_vite_register_script( 'starter-editor-link-guard', 'editor-link-guard.js' );
+	if ( $guard_handle ) {
+		wp_enqueue_script( $guard_handle );
+	}
+
+	// Pages are full-width section layouts: give the canvas the theme styles.
+	// Article editors keep the editor stylesheet from add_editor_style().
+	if ( 'page' !== $screen->post_type ) {
+		return;
+	}
+
+	$manifest = VITE_BUILD ? starter_vite_manifest() : null;
+	$key      = 'assets/src/scss/main.scss';
+	$css_uri  = VITE_DEV ? VITE_SERVER . '/' . $key : starter_vite_manifest_uri( $manifest, $key );
+
+	if ( $css_uri ) {
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+		wp_enqueue_style( 'starter-editor-main', $css_uri, array(), null );
+	}
+
+	foreach ( starter_get_section_slugs() as $slug ) {
+		if ( ! file_exists( WFB_THEME_PATH . '/assets/src/scss/template-parts/blocks/section-' . $slug . '.scss' ) ) {
+			continue;
+		}
+
+		$style_handle = starter_register_section_block_style( $slug );
+		if ( $style_handle ) {
+			wp_enqueue_style( $style_handle );
+		}
+	}
+
+	$editor_handle = starter_vite_register_style( 'starter-editor-section-blocks', 'editor-section-blocks.scss' );
+	if ( $editor_handle ) {
+		wp_enqueue_style( $editor_handle );
+	}
+}
+add_action( 'enqueue_block_assets', 'starter_vite_enqueue_editor_canvas_assets' );
+
+/**
+ * Strips wp-admin and article editor stylesheets from the page editor canvas.
+ *
+ * Core pulls `common` and `forms` into the editor iframe as dependencies of
+ * `wp-reset-editor-styles` — admin element rules then leak into the section
+ * previews. The theme's article editor stylesheet (add_editor_style) would
+ * also constrain section widths. Pages are built from front-end section
+ * markup, so the canvas must carry only theme styles.
+ *
+ * @param array                   $settings Block editor settings.
+ * @param WP_Block_Editor_Context $context  Editor context.
+ * @return array Filtered settings.
+ */
+function starter_strip_admin_styles_from_page_canvas( $settings, $context ) {
+	if ( empty( $context->post ) || 'page' !== $context->post->post_type ) {
+		return $settings;
+	}
+
+	// Theme editor styles (add_editor_style) are article-oriented.
+	if ( ! empty( $settings['styles'] ) && is_array( $settings['styles'] ) ) {
+		$settings['styles'] = array_values(
+			array_filter(
+				$settings['styles'],
+				static function ( $style ) {
+					return ! is_array( $style ) || 'theme' !== ( $style['__unstableType'] ?? '' );
+				}
+			)
+		);
+	}
+
+	// `__unstableResolvedAssets` is not a stable core API: report (instead of
+	// silently skipping) when its shape changes. Only on the editor screen
+	// itself — REST/AJAX callers of this filter do not carry resolved assets.
+	$is_editor_screen = is_admin() && ! wp_doing_ajax() && ! ( defined( 'REST_REQUEST' ) && REST_REQUEST );
+
+	if ( empty( $settings['__unstableResolvedAssets']['styles'] ) || ! is_string( $settings['__unstableResolvedAssets']['styles'] ) ) {
+		if ( $is_editor_screen ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional WARN-level diagnostic (minimal logging policy).
+			error_log( 'WARN [section-blocks] __unstableResolvedAssets.styles missing — admin styles not stripped from the page canvas' );
+		}
+		return $settings;
+	}
+
+	$removed = 0;
+
+	$settings['__unstableResolvedAssets']['styles'] = preg_replace(
+		"#<link[^>]+id=(['\"])(common|forms|wp-reset-editor-styles)-css\1[^>]*>\s*#",
+		'',
+		$settings['__unstableResolvedAssets']['styles'],
+		-1,
+		$removed
+	);
+
+	if ( 0 === $removed && $is_editor_screen ) {
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional WARN-level diagnostic (minimal logging policy).
+		error_log( 'WARN [section-blocks] no admin stylesheet links matched in the page canvas assets — check core markup' );
+	}
+
+	return $settings;
+}
+add_filter( 'block_editor_settings_all', 'starter_strip_admin_styles_from_page_canvas', 10, 2 );
 /**
  * Enqueues the Typekit stylesheet with the theme's script font.
  *

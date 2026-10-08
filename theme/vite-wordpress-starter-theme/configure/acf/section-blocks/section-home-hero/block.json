@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/section-home-hero",
+    "title": "Hero",
+    "category": "page-sections",
+    "icon": "cover-image",
+    "description": "",
+    "textdomain": "vite-starter",
+    "supports": {
+        "html": false,
+        "anchor": false,
+        "customClassName": false,
+        "align": false
+    },
+    "acf": {
+        "mode": "preview",
+        "blockVersion": 3,
+        "renderTemplate": "render.php"
+    }
+}

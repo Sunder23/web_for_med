@@ -100,32 +100,32 @@
 
 ### Phase 3 — Секционные блоки для страниц
 
-- [ ] **T8. Движок секций.**
+- [x] **T8. Движок секций.**
   - `configure/section-blocks.php` — порт из референса: `starter_get_section_slugs()`, регистрация `glob()` по `configure/acf/section-blocks/*`, категория «Секції сторінки», `starter_render_section_block()` (get_fields → `template-parts/blocks/section-{slug}.php`, плейсхолдер в редакторе), `starter_section_blocks_active_slugs()` / `starter_section_blocks_only_page()`, условный enqueue `section-{slug}.scss/js`. Ветки Swiper не нужны (только если какая-то секция его использует).
   - `page.php` — как в референсе. Блочный редактор для `page` и `post` (`theme-hooks/enable-block-editor-for-post.php`, если сейчас он где-то выключен).
   - `assets/src/scss/editor-section-blocks.scss`, `assets/src/js/editor-section-blocks.js`, `assets/src/js/editor-link-guard.js`; `toc.php` не вставляет TOC на страницах «только из секций».
   - Проверка: в инсертере есть категория (пока пустая), страница «Блог» и записи не изменились.
   - Логи: `WARN [section-blocks] unknown section slug: <slug>`, `WARN [section-blocks] __unstableResolvedAssets.styles missing …` (как в референсе).
 
-- [ ] **T9. Секции главной, часть 1: `home-hero`, `clinics`, `quote`, `problems-solutions`.**
+- [x] **T9. Секции главной, часть 1: `home-hero`, `clinics`, `quote`, `problems-solutions`.**
   - Для каждого slug: `template-parts/blocks/section-{slug}.php` (guard `empty( $args )`, поля через `starter_get_array_value()`, экранирование как в текущем `front-page.php`), `assets/src/scss/template-parts/blocks/section-{slug}.scss` (вырезать из `_front-page.scss`), JS-entry при необходимости (`section-home-hero.js` → `heroAnimations` / `glitchImage`, `section-problems-solutions.js`, если есть скролл-логика), `configure/acf/section-blocks/section-{slug}/{block.json,render.php}`, `configure/acf/acf-json/group_starter_section_{slug}.json`.
   - Добавить slug'и в `starter_get_section_slugs()`.
   - Проверка: блоки вставляются на тестовой черновой странице, превью в редакторе совпадает с фронтом.
   - Логи: нет новых (общие WARN движка).
 
-- [ ] **T10. Секции главной, часть 2: `services`, `cases`, `process`, `why`.**
+- [x] **T10. Секции главной, часть 2: `services`, `cases`, `process`, `why`.**
   - То же, что T9; JS: `section-services.js` (`servicesAccordion`), `section-cases.js` (`casesSlider`), `section-why.js` (`whySection`); пульс-иконка `process` — только CSS. Анкоры `id="services|cases|process|about"` сохранить (на них ссылается меню / `activeNav`).
   - После T9 + T10 `_front-page.scss` должен быть пустым → удалить; из `main.js` убрать секционные инициализации.
   - Проверка: тестовая страница со всеми 8 блоками визуально совпадает с baseline главной.
   - Логи: нет.
 
-- [ ] **T11. Контакты футера → Options.**
+- [x] **T11. Контакты футера → Options.**
   - Добавить поле-группу `footer_contact` (`title`, `text`, `contact_form`) во вкладку Footer группы Options; `footer.php` читает `starter_get_option( 'footer_contact' )`.
   - Перенос значения — шагом в скрипте T12 (или отдельным `wp eval`).
   - Проверка: форма в футере выводится на всех страницах, включая CPT и блог.
   - Логи: `WARN [footer] footer_contact option is empty`, только если поле пустое.
 
-- [ ] **T12. Миграция главной в блоки.**
+- [x] **T12. Миграция главной в блоки.**
   - `scripts/migrate-front-page-to-blocks.php` (как `migrate-page-sections-to-blocks.php` в референсе): читает сырые postmeta `front_page_*` страницы ID из `page_on_front`, собирает `data` для 8 блоков (`field_name` + `_field_name` → ключ поля, включая вложенные repeater-ключи), записывает `post_content` из `<!-- wp:acf/section-* {...} /-->`; копирует `front_page_contact` → option `footer_contact`. Режимы: dry-run (по умолчанию), `apply`, `apply cleanup` (удалить мету `front_page_*` у страницы и ревизий). Старый непустой `post_content` → мета `_starter_pre_blocks_content`; повторный запуск пропускает страницу, где уже есть `acf/section-*`.
   - Удалить `front-page.php` и `group_57587b53.json` (после `cleanup`).
   - `make` target `migrate-front-page`.

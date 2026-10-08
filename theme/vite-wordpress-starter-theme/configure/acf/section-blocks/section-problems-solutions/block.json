@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/section-problems-solutions",
+    "title": "Problems & Solutions",
+    "category": "page-sections",
+    "icon": "warning",
+    "description": "",
+    "textdomain": "vite-starter",
+    "supports": {
+        "html": false,
+        "anchor": false,
+        "customClassName": false,
+        "align": false
+    },
+    "acf": {
+        "mode": "preview",
+        "blockVersion": 3,
+        "renderTemplate": "render.php"
+    }
+}

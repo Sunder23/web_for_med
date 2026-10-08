@@ -26,6 +26,7 @@ $starter_modules = array(
 	'configure/analytics.php',
 	'configure/acf.php',
 	'configure/acf-blocks.php',
+	'configure/section-blocks.php',
 	'configure/toc.php',
 	'configure/optimize.php',
 );
