@@ -36,8 +36,12 @@ function starter_convert_image_to_webp( array $file ) {
 
 	$saved = $editor->save( $new_path, 'image/webp' );
 
-	if ( is_wp_error( $saved ) || empty( $saved['path'] ) || ! file_exists( $saved['path'] ) ) {
-		$reason = is_wp_error( $saved ) ? $saved->get_error_message() : 'file not written';
+	clearstatcache();
+	if ( is_wp_error( $saved ) || empty( $saved['path'] ) || ! file_exists( $saved['path'] ) || 0 === filesize( $saved['path'] ) ) {
+		$reason = is_wp_error( $saved ) ? $saved->get_error_message() : 'empty or missing file';
+		if ( ! is_wp_error( $saved ) && ! empty( $saved['path'] ) ) {
+			wp_delete_file( $saved['path'] );
+		}
 		error_log( 'WARN [webp] cannot save ' . basename( $new_path ) . ': ' . $reason ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		return $file;
 	}

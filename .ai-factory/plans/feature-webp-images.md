@@ -43,7 +43,7 @@ Active research summary (featured-image prompts) is unrelated to this task — n
 
 ### Phase 2: Bulk-convert existing media
 
-- [ ] **Task 3: WP-CLI bulk conversion script `scripts/convert-media-to-webp.php`**
+- [x] **Task 3: WP-CLI bulk conversion script `scripts/convert-media-to-webp.php`**
   - Run: `wp eval-file /scripts/convert-media-to-webp.php [dry-run] [ids=1,2,3]` (args parsing like `scripts/migrate-cpt-content.php`; guard `WP_CLI`).
   - For each attachment with mime `image/jpeg|image/png` (optionally filtered by IDs):
     1. Resolve original path (`wp_get_original_image_path` / `get_attached_file`); skip with warning if missing on disk.
@@ -57,7 +57,7 @@ Active research summary (featured-image prompts) is unrelated to this task — n
   - Logging: `WP_CLI::log` per attachment (`#ID file.png → file.webp, 512 KB → 120 KB`), `WP_CLI::debug` for each URL replacement and affected post/meta ID, `WP_CLI::warning` for skips/failures, `WP_CLI::success` summary.
   - Depends on Task 2 (quality constant, output-format filter must not double-convert — script saves explicitly as WebP).
 
-- [ ] **Task 4: Run the conversion on the local environment**
+- [x] **Task 4: Run the conversion on the local environment**
   - Back up first: `make wp cmd="db export /scripts/data/backup-before-webp.sql"` (do not commit the dump; add to `.gitignore` if `scripts/data/` is tracked) and tar the uploads volume (`docker compose -f docker/compose.yml exec wordpress tar czf /tmp/uploads-before-webp.tgz wp-content/uploads`, then `docker cp` to scratch).
   - Run dry-run, review output, then real run.
   - Verify: `wp db query` shows 0 `image/jpeg|image/png` attachments; no `.jpg/.png` upload URLs left in published `post_content`; spot-check front page, a service, a case, the blog post in the browser (no broken images, Network tab shows `.webp`); `wp media regenerate` not needed.
@@ -65,14 +65,14 @@ Active research summary (featured-image prompts) is unrelated to this task — n
 
 ### Phase 3: Theme static image
 
-- [ ] **Task 5: Convert `static/img/noice_bg.png` to WebP**
+- [x] **Task 5: Convert `static/img/noice_bg.png` to WebP**
   - Convert inside the container (`wp eval` with `wp_get_image_editor`) or via `cwebp` if available, quality 80, to `theme/vite-wordpress-starter-theme/static/img/noice_bg.webp`; delete the PNG.
   - Re-grep the theme (`grep -rn "noice_bg" theme/ --exclude-dir=node_modules --exclude-dir=dist`) and update any references (currently none found).
   - Logging: n/a (one-off asset change); note before/after size in the commit message.
 
 ### Phase 4: Lint & docs
 
-- [ ] **Task 6: Lint**
+- [x] **Task 6: Lint**
   - `composer lint` in the theme dir (PHPCS + PHPStan); if PHPStan complains about the script outside the theme — scripts are not in PHPStan paths, keep it that way. Fix issues; no new baseline entries.
 
 - [ ] **Task 7: Documentation**
@@ -83,3 +83,10 @@ Active research summary (featured-image prompts) is unrelated to this task — n
 - **Commit 1** (after Tasks 1–2): `feat(media): convert JPEG/PNG uploads to WebP`
 - **Commit 2** (after Tasks 3–5): `feat(scripts): bulk-convert existing media library to WebP` (+ static `noice_bg.webp`)
 - **Commit 3** (after Tasks 6–7): `docs(media): document WebP upload conversion and migration script`
+
+## Implementation Notes
+- First real run (Task 4) went through GD: the `wordpress:cli` image has Imagick **without** WebP, so WP picked GD; GD `imagewebp()` rejects palette PNGs and wrote 0-byte files (21 of 25). Restored DB + uploads from backup (`scripts/.backup-webp/`, git-excluded), then fixed:
+  - `configure/helpers/class-starter-image-editor-gd.php` — `Starter_Image_Editor_GD` promotes palette images to truecolor on load; swapped in via `wp_image_editors` in `optimize.php`.
+  - Upload helper and CLI script treat an empty output file as a failure (and delete it).
+- Second run: 25/25 converted, 6 MB → 3 MB; post 278 + 8 revisions rewritten; 0 JPEG/PNG files left in uploads; front page and post 278 verified in browser (all `/uploads/` images 200 `image/webp`).
+- Small 8-bit PNGs grew a bit in WebP (e.g. 34 → 59 KB); noise textures barely shrink (`noice_bg` 1.20 → 1.18 MB).
