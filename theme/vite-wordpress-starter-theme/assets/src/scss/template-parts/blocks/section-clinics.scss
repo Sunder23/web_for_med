@@ -1,101 +1,87 @@
+@use "../../mixins/breakpoint" as *;
+
 /* ============================================================
    CLINICS (02)
    ============================================================ */
-.s-clinics {
+.clinics {
   border-top: var(--border);
   border-bottom: var(--border);
   background: var(--c-bg);
   position: relative;
   z-index: 10;
 
-  @media screen and (max-width: 768px) {
-    &::after {
-      content: '';
-      width: 100%;
-      height: 50px;
-      background-color: var(--c-bg);
-      border-top: var(--border);
-    }
+  // Phone divider; from the mobile breakpoint the global section divider (_base.scss) takes over.
+  &::after {
+    content: '';
+    width: 100%;
+    height: 50px;
+    background-color: var(--c-bg);
+    border-top: var(--border);
   }
 
+  // Mixed with .container.
   &__wrap {
     display: flex;
+    flex-direction: column;
+    padding: 0;
 
-    @media (max-width: 768px) {
-      padding: 0;
-      flex-direction: column;
+    @include breakpoint(mobile) {
+      flex-direction: row;
+      padding: 0 var(--pad-x);
     }
   }
-}
 
-.clinics-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  flex: 0 0 72.2%;
-
-  @media (max-width: 1024px) {
-    flex: 1;
+  // Mixed with .frame. Two columns up to the tablet breakpoint, three above.
+  &__grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    flex: 1;
+
+    @include breakpoint(tablet) {
+      grid-template-columns: repeat(3, 1fr);
+      flex: 0 0 72.2%;
+    }
   }
 
   &__item {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 30px 32px;
+    padding: 10px;
     border-right: var(--border);
     border-bottom: var(--border);
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--c-dark);
     line-height: 1.05;
 
-    @media screen and (max-width: 768px) {
-      padding: 10px;
-      font-size: 13px;
-
-      &:nth-child(odd) {
-        border-right: var(--border);
-      }
+    @include breakpoint(mobile) {
+      padding: 30px 32px;
+      font-size: 16px;
     }
 
-    &:nth-child(3n) {
-      @media screen and (min-width: 1025px) {
-        border-right: none;
-      }
-    }
-
+    // Two columns: no right border on the second column, no bottom border on the last row.
     &:nth-child(2n) {
-      @media (max-width: 1024px) {
-        border-right: none;
-      }
+      border-right: none;
     }
 
-    &:nth-child(n+4) {
+    &:nth-child(5),
+    &:last-child {
       border-bottom: none;
+    }
 
-      @media (max-width: 1024px) {
+    // Three columns: no right border on the third column, bottom border on the first row only.
+    @include breakpoint(tablet) {
+      &:nth-child(n) {
+        border-right: var(--border);
         border-bottom: var(--border);
       }
-    }
 
-    @media screen and (max-width: 1024px) {
-      &:nth-child(5) {
-        border-bottom: none;
+      &:nth-child(3n) {
+        border-right: none;
       }
-    }
 
-    &:last-child {
-      @media (max-width: 1024px) {
-        border-bottom: none;
-      }
-    }
-
-    @media (max-width: 768px) {
-      border-right: none;
-      border-bottom: var(--border);
-
-      &:last-child {
+      &:nth-child(n+4) {
         border-bottom: none;
       }
     }
@@ -107,44 +93,46 @@
     flex-shrink: 0;
     object-fit: contain;
   }
-}
 
-.clinics-aside {
-  flex: 1;
-  padding: 26px 32px;
-  border-right: var(--border);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @media (max-width: 1024px) {
-    padding: 32px;
-    border-top: var(--border);
-    border-right: none;
+  &__aside {
+    flex: 1;
+    display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
-  }
+    padding: 32px;
+    border-top: var(--border);
 
-  &__icon {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-
-    @media (max-width: 1024px) {
-      width: 28px;
-      height: 28px;
+    @include breakpoint(tablet) {
+      flex-direction: column;
+      align-items: normal;
+      gap: normal;
+      padding: 26px 32px;
+      border-top: none;
+      border-right: var(--border);
     }
   }
 
-  &__text {
-    font-size: 20px;
+  &__aside-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+
+    @include breakpoint(tablet) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &__aside-text {
+    font-size: 17px;
     font-weight: 500;
     line-height: 1.2;
     color: var(--c-blue);
 
-    @media (max-width: 1024px) {
-      font-size: 17px;
+    @include breakpoint(tablet) {
+      font-size: 20px;
     }
   }
 }

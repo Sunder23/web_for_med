@@ -15,9 +15,9 @@ if ( empty( $args ) || ! is_array( $args ) ) {
 $why_items = $args['items'];
 if ( is_array( $why_items ) ) :
 	?>
-	<section class="s-why">
-		<div class="s-why__wrap l-wrap">
-			<div class="s-why__inner l-frame-x">
+	<section class="why">
+		<div class="why__wrap container">
+			<div class="why__inner frame">
 				<div class="why-chat">
 					<?php
 					foreach ( $why_items as $key => $why_item ) :
@@ -37,11 +37,11 @@ if ( is_array( $why_items ) ) :
 							<div class="why-chat__dialog">
 								<?php foreach ( $why_item['messages'] as $message_index => $message ) : ?>
 									<div
-										class="why-msg why-msg--<?php echo esc_attr( $message['side'] ); ?><?php echo 0 === $key ? ' why-msg--visible' : ''; ?>"
+										class="why-message why-message--<?php echo esc_attr( $message['side'] ); ?><?php echo 0 === $key ? ' why-message--visible' : ''; ?>"
 										data-why-message
 										data-message-index="<?php echo esc_attr( (string) $message_index ); ?>">
-										<p><?php echo esc_html( $message['text'] ); ?></p>
-										<span class="why-msg__time"><?php echo esc_html( $message['time'] ); ?></span>
+										<p class="why-message__text"><?php echo esc_html( $message['text'] ); ?></p>
+										<span class="why-message__time"><?php echo esc_html( $message['time'] ); ?></span>
 									</div>
 								<?php endforeach; ?>
 							</div>
@@ -67,7 +67,7 @@ if ( is_array( $why_items ) ) :
 									aria-controls="<?php echo esc_attr( $screen_id ); ?>"
 									aria-expanded="<?php echo 0 === $key ? 'true' : 'false'; ?>">
 									<?php echo wp_get_attachment_image( $why_item['reasons']['icon'], 'full', '', array( 'class' => 'why-reasons__icon icon-list__icon' ) ); ?>
-									<span><?php echo esc_html( $why_item['reasons']['text'] ); ?></span>
+									<span class="why-reasons__label"><?php echo esc_html( $why_item['reasons']['text'] ); ?></span>
 								</button>
 							</li>
 						<?php endforeach; ?>

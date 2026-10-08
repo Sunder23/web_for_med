@@ -1,7 +1,9 @@
+@use "../../mixins/breakpoint" as *;
+
 /* ============================================================
    QUOTE (03_1)
    ============================================================ */
-.s-quote {
+.quote {
   margin: 0px 0 100vh;
   border-bottom: var(--border);
   position: relative;
@@ -9,51 +11,49 @@
   background-color: var(--c-bg);
 
   &__inner {
-    padding: 90px 40px;
+    padding: 50px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 14px;
     text-align: center;
 
-    @media (max-width: 768px) {
-      padding: 50px 10px;
-      gap: 14px;
-
-      svg {
-        height: 30px;
-      }
+    @include breakpoint(mobile) {
+      padding: 90px 40px;
+      gap: 30px;
     }
   }
 
-  &__cogs {
-    width: 82px;
-    height: 50px;
-    display: block;
+  &__gears {
+    height: 30px;
+
+    @include breakpoint(mobile) {
+      height: 38px;
+    }
   }
 
   &__text {
-    font-size: 40px;
+    font-size: 20px;
     font-weight: 600;
     line-height: 1.15;
     color: var(--c-dark);
     max-width: 990px;
 
-    @media (max-width: 1024px) {
-      font-size: 32px;
-    }
-
-    @media (max-width: 768px) {
+    @include breakpoint(small) {
       font-size: 24px;
     }
 
-    @media (max-width: 480px) {
-      font-size: 20px;
+    @include breakpoint(mobile) {
+      font-size: 32px;
+    }
+
+    @include breakpoint(tablet) {
+      font-size: 40px;
     }
   }
 }
 
-.gear {
+.quote__gear {
   transform-box: view-box;
   transform-origin: center;
   will-change: transform;
@@ -94,9 +94,12 @@
   }
 }
 
+// Editors may add <br class="line-break--desktop"> to the quote text:
+// the break only applies from the tablet breakpoint up.
+.line-break--desktop {
+  display: none;
 
-.br-desktop {
-  @media (max-width: 1024px) {
-    display: none;
+  @include breakpoint(tablet) {
+    display: inline;
   }
 }

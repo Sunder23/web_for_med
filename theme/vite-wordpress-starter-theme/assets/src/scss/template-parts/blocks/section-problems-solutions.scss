@@ -1,15 +1,20 @@
-.sections_wrapper {
-  position: relative;
+@use "../../mixins/breakpoint" as *;
 
-  @media (max-width: 768px) {
-    margin-top: 1px;
+// Problems + banner + solutions scroll as one block: the problems layer is
+// fixed under the header while the banner and solutions slide over it.
+.problems-solutions {
+  position: relative;
+  margin-top: 1px;
+
+  @include breakpoint(mobile) {
+    margin-top: 0;
   }
 }
 
 /* ============================================================
    PROBLEMS (03_2)
    ============================================================ */
-.s-problems {
+.problems {
   position: fixed;
   top: var(--header-h);
   left: 0;
@@ -18,91 +23,84 @@
   background: var(--c-bg);
   border-bottom: var(--border);
 
+  // Mixed with .container.
   &__wrap {
-    @media (max-width: 768px) {
-      padding: 0;
+    padding: 0;
+
+    @include breakpoint(mobile) {
+      padding: 0 var(--pad-x);
     }
   }
 
-  // @media (max-width: 1024px) {
-  //   position: relative;
-  //   top: auto;
-  //   z-index: auto;
-  // }
-
-  // @media (max-width: 768px) {
-  //   position: relative;
-  //   top: auto;
-  // }
-
   &__inner {
     display: flex;
+    flex-direction: column;
 
-    @media (max-width: 1024px) {
-      flex-direction: column;
+    @include breakpoint(tablet) {
+      flex-direction: row;
     }
   }
 }
 
+// Mixed with .info-card.
 .problem-card {
   justify-content: space-between;
-  min-height: 574px;
+  min-height: auto;
+  padding: 35px 25px;
+  gap: 16px;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: var(--border);
 
-  @media (max-width: 1400px) and (min-width: 1025px) {
-    &__title {
-      min-height: 75px;
-    }
-  }
-
-  @media screen and (min-width: 1025px) {
+  @include breakpoint(tablet) {
     height: calc(100vh - 66px);
+    min-height: 574px;
+    padding: 48px 40px;
+    gap: normal;
+    border-left: var(--border);
+    border-bottom: 0;
   }
 
-  .tag {
+  &:last-child {
+    border-right: var(--border);
+    border-bottom: none;
+  }
+
+  // Mixed with .tag; the ::after spacer pushes the card body down on desktop.
+  &__tag {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 16px;
 
-    @media screen and (min-width: 1024px) {
+    @include breakpoint(tablet) {
       &::after {
         content: '';
         height: calc(90vh - 350px);
         width: 100%;
       }
     }
-
-  }
-
-  @media (max-width: 1024px) {
-    padding: 35px 25px;
-    min-height: auto;
-    gap: 16px;
-    border-right: 0;
-    border-left: 0;
-    border-bottom: var(--border);
-  }
-
-  &:last-child {
-    border-right: var(--border);
-
-    @media (max-width: 1024px) {
-      border-bottom: none;
-    }
   }
 
   &__body {
     gap: 16px;
     margin-bottom: auto;
-
-    // @media (max-width: 1024px) {
-    //   gap: 8px;
-    // }
   }
 
-  .card-title {
-    @media (max-width: 768px) {
-      font-size: 17px;
+  // Mixed with .card-title.
+  &__title {
+    font-size: 17px;
+
+    @include breakpoint(mobile) {
+      font-size: 20px;
+    }
+
+    @include breakpoint(tablet) {
+      min-height: 75px;
+    }
+
+    @include breakpoint(laptop) {
+      min-height: auto;
     }
   }
 }
@@ -110,53 +108,47 @@
 /* ============================================================
    BANNER (03_3)
    ============================================================ */
-.s-banner {
+.banner {
   position: relative;
   top: auto;
   z-index: 6;
   background: var(--c-navy);
   border-bottom: var(--border);
 
-  // @media (max-width: 1024px) {
-  //   position: relative;
-  //   top: auto;
-  //   z-index: auto;
-  // }
-
+  // Mixed with .container.
   &__inner {
-    padding: 90px 86px;
-    min-height: 318px;
     display: flex;
     align-items: center;
+    min-height: auto;
+    padding: 60px 35px;
 
-    @media (max-width: 1024px) {
+    @include breakpoint(mobile) {
       padding: 70px var(--pad-x);
-      min-height: auto;
     }
 
-    @media (max-width: 768px) {
-      padding: 60px 35px;
-      min-height: auto;
+    @include breakpoint(tablet) {
+      min-height: 318px;
+      padding: 90px 86px;
     }
   }
 
   &__text {
-    font-size: 40px;
+    font-size: 20px;
     font-weight: 600;
     line-height: 1.15;
     color: var(--c-white);
     max-width: 849px;
 
-    @media (max-width: 1024px) {
-      font-size: 32px;
-    }
-
-    @media (max-width: 768px) {
+    @include breakpoint(small) {
       font-size: 24px;
     }
 
-    @media (max-width: 480px) {
-      font-size: 20px;
+    @include breakpoint(mobile) {
+      font-size: 32px;
+    }
+
+    @include breakpoint(tablet) {
+      font-size: 40px;
     }
   }
 }
@@ -164,97 +156,93 @@
 /* ============================================================
    SOLUTIONS (03_4)
    ============================================================ */
-.s-solutions {
+.solutions {
   background: var(--c-bg-light);
+  z-index: 3;
 
-  @media (min-width: 1025px) {
+  @include breakpoint(tablet) {
     position: sticky;
     bottom: -90px;
   }
 
-  z-index: 3;
+  // Mixed with .container.
+  &__wrap {
+    padding: 0;
 
-  @media (max-width: 768px) {
-    bottom: 0px;
-
-    &__wrap {
-      padding: 0;
-      border-left: 0;
-      border-right: 0;
+    @include breakpoint(mobile) {
+      padding: 0 var(--pad-x);
     }
   }
 
   &__inner {
     display: flex;
-    height: 100vh;
+    flex-direction: column;
+    height: auto;
 
-    @media (max-width: 1024px) {
-      height: auto;
-      flex-direction: column;
+    @include breakpoint(tablet) {
+      flex-direction: row;
+      height: 100vh;
     }
   }
 }
 
+// Mixed with .info-card.
 .solution-card {
   justify-content: flex-end;
-  min-height: 580px;
+  min-height: auto;
+  border-right: var(--border);
+  border-bottom: var(--border);
 
-  &:hover img {
-    scale: 1.03;
-  }
-
-  img {
-    transition: scale 0.3s ease-in-out;
-  }
-
-  @media (max-width: 1024px) {
-    min-height: auto;
-    border-right: var(--border);
-    border-bottom: var(--border);
-  }
-
-  @media (max-width: 768px) {
-    min-height: auto;
+  @include breakpoint(tablet) {
+    min-height: 580px;
+    border-right: 0;
+    border-bottom: 0;
   }
 
   &:last-child {
     border-right: var(--border);
+    border-bottom: none;
+  }
 
-    @media (max-width: 1024px) {
-      border-bottom: none;
+  &__media {
+    margin-bottom: 16px;
+    max-width: 200px;
+
+    @include breakpoint(mobile) {
+      margin-bottom: 37px;
     }
   }
 
-  &-image {
-    margin-bottom: 37px;
-    max-width: 200px;
+  &__image {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    transition: scale 0.3s ease-in-out;
 
-    img {
-      object-fit: cover;
+    @include breakpoint(mobile) {
+      width: auto;
       height: auto;
     }
+  }
 
-    @media (max-width: 768px) {
-      margin-bottom: 16px;
-
-      img {
-        width: 110px;
-        height: 110px;
-      }
-    }
+  &:hover &__image {
+    scale: 1.03;
   }
 
   &__body {
     gap: 16px;
 
-    @media (min-width: 1024px) {
+    @include breakpoint(tablet) {
       min-height: 140px;
     }
   }
 
-  .card-title {
-    @media (max-width: 768px) {
-      font-size: 18px;
+  // Mixed with .card-title.
+  &__title {
+    font-size: 18px;
+
+    @include breakpoint(mobile) {
+      font-size: 20px;
     }
   }
 }

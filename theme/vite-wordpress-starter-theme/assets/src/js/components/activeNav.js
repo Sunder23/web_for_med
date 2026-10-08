@@ -2,9 +2,7 @@ export function initActiveNav() {
 	const sections = Array.from(
 		document.querySelectorAll('section[id], footer[id]'),
 	);
-	const links = Array.from(
-		document.querySelectorAll('.nav__link, .menu-item a'),
-	);
+	const links = Array.from(document.querySelectorAll('.nav__link'));
 
 	if (!sections.length || !links.length) {
 		return;

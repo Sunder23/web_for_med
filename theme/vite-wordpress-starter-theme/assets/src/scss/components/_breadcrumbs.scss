@@ -1,9 +1,15 @@
+@use "../mixins/breakpoint" as *;
+
 .breadcrumbs {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     line-height: 1.25;
+
+    @include breakpoint(mobile) {
+        font-size: 13px;
+    }
 }
 
 .breadcrumbs__list {
@@ -42,8 +48,3 @@
     color: var(--c-grey);
 }
 
-@media (max-width: 768px) {
-    .breadcrumbs {
-        font-size: 12px;
-    }
-}

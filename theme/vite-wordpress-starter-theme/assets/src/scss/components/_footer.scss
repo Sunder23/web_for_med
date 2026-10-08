@@ -1,12 +1,16 @@
+@use "../mixins/breakpoint" as *;
+
 .footer {
     position: relative;
     z-index: 10;
     background: var(--c-bg);
 
-    @media (max-width: 768px) {
-        .l-wrap {
-            border: 0;
-            padding: 0;
+    // Mixed with .container: edge-to-edge on phones, page gutter from the mobile breakpoint.
+    &__container {
+        padding: 0;
+
+        @include breakpoint(mobile) {
+            padding: 0 var(--pad-x);
         }
     }
 
@@ -14,75 +18,100 @@
         background: var(--c-bg-light);
         border-top: var(--border);
         border-bottom: var(--border);
+        margin-top: -1px;
 
-        @media (max-width: 768px) {
-            margin-top: -1px;
+        @include breakpoint(mobile) {
+            margin-top: 0;
         }
     }
 
     &__form-wrap {
         max-width: var(--page-w);
         margin: 0 auto;
-        padding: 90px var(--pad-x);
+        padding: 60px 20px;
         border-left: var(--border);
         border-right: var(--border);
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 30px;
+
+        @include breakpoint(mobile) {
+            padding: 90px var(--pad-x);
+        }
     }
 
     &__form-content {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 8px;
         text-align: center;
         max-width: 628px;
 
-        @media (max-width: 768px) {
-            gap: 8px;
+        @include breakpoint(mobile) {
+            gap: 16px;
         }
     }
 
     &__form-title {
-        font-size: 48px;
+        font-size: 26px;
         font-weight: 600;
         line-height: 1.01;
         color: var(--c-dark);
+
+        @include breakpoint(mobile) {
+            font-size: 36px;
+        }
+
+        @include breakpoint(tablet) {
+            font-size: 48px;
+        }
     }
 
     &__form-subtitle {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 500;
         line-height: 1.5;
         color: var(--c-grey);
+
+        @include breakpoint(mobile) {
+            font-size: 20px;
+        }
     }
 
     &__cover {
         border-bottom: var(--border);
-        height: 454px;
+        height: auto;
         overflow: hidden;
         background: var(--c-bg-light);
 
-        &-img {
-            background-image: var(--footer-cover-image);
-            background-size: cover;
-            background-position: center;
-            height: 454px;
+        @include breakpoint(mobile) {
+            height: 320px;
         }
 
-        .l-frame-x {
-            position: relative;
+        @include breakpoint(tablet) {
+            height: 454px;
         }
     }
 
-    &__cover_text {
+    &__cover-frame {
+        position: relative;
+    }
+
+    &__cover-image {
+        background-image: var(--footer-cover-image);
+        background-size: cover;
+        background-position: center;
+        height: 454px;
+    }
+
+    &__cover-text {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 48px;
+        font-size: 28px;
         font-weight: 600;
         line-height: 1.01;
         color: var(--c-white);
@@ -90,10 +119,11 @@
         white-space: nowrap;
         z-index: 1;
 
-        @media screen and (max-width: 768px) {
-            font-size: 28px;
+        @include breakpoint(mobile) {
+            font-size: 48px;
         }
 
+        // Spans injected by titleScramble.js (SplitType).
         .split-word {
             display: inline-block;
             white-space: nowrap;
@@ -102,12 +132,6 @@
         .split-char {
             display: inline-block;
         }
-    }
-
-    &__cover img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
     }
 
     &__bar {
@@ -121,156 +145,124 @@
     }
 
     &__bar-inner {
-        height: 84px;
+        height: auto;
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-start;
         justify-content: space-between;
         border-left: var(--border);
         border-right: var(--border);
-        padding: 0 40px;
-        gap: 32px;
+        padding: 12px 10px;
+        gap: 16px;
+
+        @include breakpoint(mobile) {
+            flex-direction: row;
+            align-items: center;
+            padding: 20px 24px;
+        }
+
+        @include breakpoint(tablet) {
+            height: 84px;
+            flex-wrap: nowrap;
+            padding: 0 40px;
+            gap: 32px;
+        }
     }
 
-    &__nav {
+    &__logo {
+        display: none;
+
+        @include breakpoint(mobile) {
+            display: block;
+        }
+    }
+
+    &__nav,
+    &__menu {
         display: flex;
-        gap: 40px;
+        flex-wrap: wrap;
         align-items: center;
+        gap: 16px;
+
+        @include breakpoint(mobile) {
+            flex-wrap: nowrap;
+            gap: 40px;
+        }
     }
 
-    &__nav .menu {
-        display: flex;
-        align-items: center;
-        gap: 40px;
-    }
-
-    &__nav a {
+    &__link {
         font-size: 14px;
         font-weight: 500;
         color: var(--c-grey);
         white-space: nowrap;
         transition: color 0.2s;
-    }
 
-    &__nav a:hover {
-        color: var(--c-blue);
+        &:hover {
+            color: var(--c-blue);
+        }
     }
 
     &__contacts {
         display: flex;
+        flex-direction: row-reverse;
         align-items: center;
-        gap: 20px;
+        justify-content: space-between;
+        gap: 10px;
+        width: 100%;
         flex-shrink: 0;
+
+        @include breakpoint(mobile) {
+            flex-direction: row;
+            justify-content: normal;
+            gap: 20px;
+            width: auto;
+        }
     }
 
     &__email {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
         color: var(--c-blue);
         white-space: nowrap;
         transition: opacity 0.2s;
-    }
 
-    &__email:hover {
-        opacity: 0.75;
+        @include breakpoint(mobile) {
+            font-size: 18px;
+        }
+
+        &:hover {
+            opacity: 0.75;
+        }
     }
 
     &__socials {
         display: flex;
-        gap: 10px;
+        gap: 12px;
 
-        @media screen and (max-width: 768px) {
-            gap: 12px;
+        @include breakpoint(mobile) {
+            gap: 10px;
         }
     }
 
     &__social {
-        height: 28px;
+        width: 34px;
+        height: 34px;
         object-fit: contain;
 
-        @media screen and (max-width: 768px) {
-            width: 34px;
-            height: 34px;
-
-
-            img {
-                width: 34px;
-                height: 34px;
-            }
+        @include breakpoint(mobile) {
+            width: auto;
+            height: 28px;
         }
     }
 
-    @media (max-width: 1024px) {
-        &__bar-inner {
+    &__social-icon {
+        width: 34px;
+        height: 34px;
+
+        @include breakpoint(mobile) {
+            width: auto;
             height: auto;
-            padding: 20px 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        &__form-title {
-            font-size: 36px;
-        }
-
-        &__cover {
-            height: 320px;
         }
     }
-
-    @media (max-width: 768px) {
-        &__form-wrap {
-            padding: 60px 20px;
-        }
-
-        &__form-title {
-            font-size: 26px;
-        }
-
-        &__form-subtitle {
-            font-size: 16px;
-        }
-
-        &__cover {
-            height: auto;
-
-            img {
-                min-height: 200px;
-            }
-        }
-
-        &__bar-inner {
-            flex-direction: column;
-            align-items: flex-start;
-            height: auto;
-            padding: 12px 10px;
-            gap: 16px;
-
-            .logo {
-                display: none;
-            }
-
-        }
-
-        &__nav {
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        &__nav .menu {
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        &__contacts {
-            flex-direction: row-reverse;
-            align-items: center;
-            gap: 10px;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        &__email {
-            font-size: 16px;
-        }
-    }
-
 }

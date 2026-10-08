@@ -14,8 +14,8 @@ $cta  = get_field( 'direction_cta' );
 
 <main class="single-cpt single-direction">
 	<section class="s-cpt-hero">
-		<div class="s-cpt-hero__wrap l-wrap">
-			<div class="s-cpt-hero__inner l-frame-x">
+		<div class="s-cpt-hero__wrap container">
+			<div class="s-cpt-hero__inner frame">
 				<?php get_template_part( 'partials/breadcrumbs' ); ?>
 				<h1 class="s-cpt-hero__title"><?php the_title(); ?></h1>
 				<?php if ( ! empty( $hero['description'] ) ) : ?>

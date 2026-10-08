@@ -1,70 +1,71 @@
+@use "../../mixins/breakpoint" as *;
+
 /* ============================================================
    CASES (05)
    ============================================================ */
-.s-cases {
+.cases {
   border-top: var(--border);
   position: relative;
   z-index: 10;
   background: var(--c-bg);
 
-
-
-  @media (max-width: 768px) {
-    border-bottom: 0;
-  }
-
+  // Mixed with .container: edge-to-edge on phones.
   &__wrap {
     width: 100%;
+    padding: 0;
 
-    @media (max-width: 768px) {
-      padding: 0;
-      border-left: 0;
-      border-right: 0;
+    @include breakpoint(mobile) {
+      padding: 0 var(--pad-x);
     }
   }
 
+  // Mixed with .frame.
   &__header {
-    padding: 83px 33px 77px;
-    border-bottom: var(--border);
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
+    width: calc(100% - calc(var(--pad-x) * 2));
+    margin: 0 auto;
+    padding: 32px 10px;
+    border-bottom: 0;
+    font-size: 20px;
 
-
-    @media (max-width: 768px) {
-      padding: 32px 10px;
-      margin: 0 auto;
-      width: calc(100% - calc(var(--pad-x) * 2));
-      border-bottom: 0;
-      font-size: 20px;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .section-title {
-      @media (max-width: 768px) {
-        font-size: 28px;
-      }
-
-      @media (max-width: 480px) {
-        font-size: 20px;
-      }
+    @include breakpoint(mobile) {
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+      margin: 0;
+      padding: 83px 33px 77px;
+      border-bottom: var(--border);
+      font-size: inherit;
     }
   }
 
+  // Mixed with .section-title (28px instead of 24px between the small and mobile breakpoints).
+  &__title {
+    @include breakpoint(small) {
+      font-size: 28px;
+    }
+
+    @include breakpoint(tablet) {
+      font-size: 36px;
+    }
+
+    @include breakpoint(desktop) {
+      font-size: 40px;
+    }
+  }
+
+  // Prev/next arrows: hidden for now (pagination dots are used instead).
   &__nav {
-    // display: flex;
+    display: none;
     gap: 12px;
     flex-shrink: 0;
-    display: none;
-
-    @media (max-width: 768px) {
-      display: none;
-    }
   }
 
-  &__btn {
+  &__button {
     width: 33px;
     height: 33px;
     padding: 0;
@@ -74,47 +75,64 @@
     transition: opacity 0.2s;
     flex-shrink: 0;
 
-    svg {
-      path {
-        transition: fill .3s ease;
-      }
+    path {
+      transition: fill .3s ease;
     }
 
-    &:hover {
-      svg {
-        path {
-          fill: var(--c-navy);
-        }
-      }
+    &:hover path {
+      fill: var(--c-navy);
     }
 
     &.swiper-button-disabled {
       pointer-events: none;
-
-      svg {
-        path {
-          fill: #AEBBC4;
-
-        }
-      }
     }
 
+    &.swiper-button-disabled path {
+      fill: #AEBBC4;
+    }
+  }
 
+  // Swiper pagination (bullets rendered by casesSlider.js); hidden once three slides fit.
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    border-left: var(--border);
+    border-right: var(--border);
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c-border);
+    border: none;
+    padding: 0;
+    opacity: 1;
+    transition: background 0.2s;
+
+    &.is-active {
+      background: var(--c-blue);
     }
   }
 }
 
-
-.cases-slider-wrap {
+// Swiper container (.swiper) with the shared background image.
+.cases-slider {
   overflow: hidden;
   position: relative;
+  border-top: var(--border);
 
-  @media screen and (min-width: 1024px) {
+  @include breakpoint(mobile) {
+    border-top: none;
+  }
+
+  @include breakpoint(tablet) {
     &::before {
       content: '';
       position: absolute;
@@ -125,75 +143,71 @@
     }
   }
 
-  @media (max-width: 768px) {
-    border-top: var(--border);
+  // .swiper-wrapper
+  &__track {
+    display: flex;
   }
-}
 
-.cases-slider {
-  display: flex;
-}
-
-.cases-slider-bg {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  height: calc(100% - 170px);
-  object-fit: cover;
-
-  @media (max-width: 768px) {
+  &__background {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: calc(100% - 170px);
+    object-fit: cover;
     display: none;
+
+    @include breakpoint(mobile) {
+      display: block;
+    }
   }
 }
 
+// .swiper-slide
 .cases-slide {
   height: auto;
-
   display: flex;
   flex-direction: column;
 
-
-  &-card {
+  &__inner {
     border-right: var(--border);
   }
 
-
-
   &__desc {
-    height: 170px;
-    padding: 48px 40px;
-    font-size: 20px;
+    height: 120px;
+    padding: 24px;
+    font-size: 17px;
     font-weight: 500;
     line-height: 1.25;
     color: var(--c-dark);
     border-bottom: var(--border);
     background-color: transparent;
 
-    @media (max-width: 768px) {
-      height: 120px;
-      padding: 24px;
-      font-size: 17px;
+    @include breakpoint(mobile) {
+      height: 170px;
+      padding: 48px 40px;
+      font-size: 20px;
     }
   }
 
+  // Phones show this slide's crop of the shared background (--case-bg-*).
   &__visual {
-    height: 380px;
-    background:
-      linear-gradient(to bottom, transparent 30%, rgba(9, 42, 74, 0.55)),
-      url("https://www.figma.com/api/mcp/asset/865c9968-be4a-4a96-8bce-422c96bdb6cc") center/cover no-repeat;
     display: flex;
-    align-items: flex-end;
-    padding: 20px 40px 60px;
+    align-items: center;
+    height: 320px;
+    padding: 16px 20px;
+    background-image: var(--case-bg-mobile);
+    background-position: var(--case-bg-position);
+    background-size: cover;
+    background-repeat: no-repeat;
 
-    @media (max-width: 768px) {
-      height: 320px;
-      padding: 16px 20px;
-      align-items: center;
-      background-image: var(--case-bg-mobile);
-      background-position: var(--case-bg-position);
-      background-size: cover;
-      background-repeat: no-repeat;
+    @include breakpoint(mobile) {
+      align-items: flex-end;
+      height: 380px;
+      padding: 20px 40px 60px;
+      background:
+        linear-gradient(to bottom, transparent 30%, rgba(9, 42, 74, 0.55)),
+        url("https://www.figma.com/api/mcp/asset/865c9968-be4a-4a96-8bce-422c96bdb6cc") center/cover no-repeat;
     }
   }
 
@@ -201,49 +215,17 @@
     background: #fbfdff;
     border: var(--border);
     border-radius: var(--radius);
-    padding: 22px 26px;
+    padding: 18px;
     box-shadow: 0 6px 20px rgba(73, 80, 86, 0.3);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.55;
     color: var(--c-grey);
     width: 100%;
 
-    @media (max-width: 768px) {
-      font-size: 14px;
-      padding: 18px;
+    @include breakpoint(mobile) {
+      padding: 22px 26px;
+      font-size: 16px;
     }
-  }
-}
-
-.cases-dots {
-  display: none;
-  justify-content: center;
-  gap: 8px;
-  padding: 20px;
-  border-left: var(--border);
-  border-right: var(--border);
-
-  @media (max-width: 1024px) {
-    display: flex;
-  }
-
-  @media (max-width: 768px) {
-    display: flex;
-  }
-}
-
-.cases-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--c-border);
-  border: none;
-  padding: 0;
-  opacity: 1;
-  transition: background 0.2s;
-
-  &.is-active {
-    background: var(--c-blue);
   }
 }

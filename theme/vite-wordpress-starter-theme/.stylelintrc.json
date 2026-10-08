@@ -1,0 +1,47 @@
+{
+	"customSyntax": "postcss-scss",
+	"plugins": ["stylelint-scss"],
+	"ignoreFiles": [
+		"assets/dist/**",
+		"assets/src/scss/vendors/**",
+		"assets/src/scss/components/_archive.scss",
+		"assets/src/scss/components/_case.scss",
+		"assets/src/scss/components/_cpt-common.scss",
+		"assets/src/scss/components/_service.scss",
+		"assets/src/scss/components/_single-post.scss",
+		"assets/src/scss/components/_toc.scss",
+		"assets/src/scss/components/_two-col.scss"
+	],
+	"rules": {
+		"max-nesting-depth": [
+			2,
+			{
+				"ignoreAtRules": [
+					"include",
+					"media",
+					"supports",
+					"container",
+					"at-root",
+					"for",
+					"each",
+					"if",
+					"else",
+					"keyframes"
+				],
+				"message": "Max 3 selector levels (.block > &__element > &--modifier); @include breakpoint() does not count"
+			}
+		],
+		"media-feature-name-disallowed-list": [
+			["width", "min-width", "max-width"],
+			{
+				"message": "Use @include breakpoint(mobile|tablet) from mixins/_breakpoint.scss (mobile first)"
+			}
+		],
+		"selector-class-pattern": [
+			"^(?!(?:s|l|c|svc|br)-)[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:__[a-z0-9]+(?:-[a-z0-9]+)*)?(?:--[a-z0-9]+(?:-[a-z0-9]+)*)?$",
+			{
+				"message": "Use BEM without legacy prefixes: block, block__element, block--modifier (kebab-case)"
+			}
+		]
+	}
+}

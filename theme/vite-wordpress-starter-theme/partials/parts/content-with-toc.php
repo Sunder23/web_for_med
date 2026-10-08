@@ -12,8 +12,8 @@
 $toc = starter_get_toc();
 ?>
 <section class="s-two-col s-content-toc">
-	<div class="s-two-col__wrap l-wrap">
-		<div class="s-two-col__inner l-frame-x">
+	<div class="s-two-col__wrap container">
+		<div class="s-two-col__inner frame">
 			<div class="s-two-col__content s-content-toc__content">
 				<div class="entry-content svc-prose"><?php the_content(); ?></div>
 			</div>

@@ -22,8 +22,8 @@ if ( ! $part_title && ! $text && ! $button_label ) {
 }
 ?>
 <section class="s-cpt-cta">
-	<div class="s-cpt-cta__wrap l-wrap">
-		<div class="s-cpt-cta__inner l-frame-x">
+	<div class="s-cpt-cta__wrap container">
+		<div class="s-cpt-cta__inner frame">
 			<?php if ( $part_title ) : ?>
 				<h2 class="s-cpt-cta__title section-title"><?php echo esc_html( $part_title ); ?></h2>
 			<?php endif; ?>
@@ -31,7 +31,7 @@ if ( ! $part_title && ! $text && ! $button_label ) {
 				<p class="s-cpt-cta__text"><?php echo esc_html( $text ); ?></p>
 			<?php endif; ?>
 			<?php if ( $button_label ) : ?>
-				<a href="<?php echo esc_url( $button_url ); ?>" class="btn btn--primary"><?php echo esc_html( $button_label ); ?></a>
+				<a href="<?php echo esc_url( $button_url ); ?>" class="button button--primary"><?php echo esc_html( $button_label ); ?></a>
 			<?php endif; ?>
 		</div>
 	</div>

@@ -1,144 +1,123 @@
+@use "../../mixins/breakpoint" as *;
+
 /* ============================================================
    PROCESS (06)
    ============================================================ */
-.s-process {
+.process {
   border-top: var(--border);
   border-bottom: var(--border);
   position: relative;
   z-index: 10;
   background: var(--c-bg);
 
-  &--top {
-    border-bottom: none;
-
-  }
-
+  &--top,
   &--bottom {
     border-bottom: none;
+  }
 
-    @media (max-width: 768px) {
-      // margin-bottom: 50px;
-    }
+  // Steps wrapper (mixed with .container): edge-to-edge on phones.
+  &--bottom &__wrap {
+    padding: 0;
 
-    .s-process__wrap {
-      border-left: 0;
-      border-right: 0;
-
-      @media (max-width: 768px) {
-        padding: 0;
-      }
+    @include breakpoint(mobile) {
+      padding: 0 var(--pad-x);
     }
   }
 
   &__header {
-    padding: 90px 40px;
+    padding: 50px 10px;
 
-    @media (max-width: 768px) {
-      padding: 50px 10px;
+    @include breakpoint(mobile) {
+      padding: 90px 40px;
     }
+  }
 
-    .section-title {
-      max-width: 860px;
-      text-align: center;
-      margin: 20px auto 0;
-    }
+  // Mixed with .section-title.
+  &__title {
+    max-width: 860px;
+    text-align: center;
+    margin: 20px auto 0;
   }
 
   &__steps {
     display: grid;
-    grid-template-columns: repeat(2, minmax(270px, 1fr));
-    min-height: 270px;
+    grid-template-columns: 1fr;
+    min-height: auto;
 
-    @media (max-width: 1024px) {
-      grid-template-columns: 1fr;
-      min-height: auto;
-    }
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      min-height: auto;
+    @include breakpoint(tablet) {
+      grid-template-columns: repeat(2, minmax(270px, 1fr));
+      min-height: 270px;
     }
   }
 }
 
+// Mixed with .info-card. One column with full borders up to the tablet
+// breakpoint; a 2×2 grid with inner borders only from there.
 .process-step {
-  justify-content: space-between;
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 35px 25px;
+  border-right: var(--border);
+  border-bottom: var(--border);
 
-  &:nth-child(1),
-  &:nth-child(2) {
-    border-bottom: var(--border);
-
-    @media screen and (max-widht:1024px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &:nth-child(even) {
-    border-right: var(--border);
-  }
-
-  @media (max-width: 1024px) {
-    border-bottom: var(--border);
-    border-right: var(--border);
-  }
-
-  @media (max-width: 768px) {
-    flex: none;
-    border-right: var(--border);
-    border-bottom: var(--border);
-    padding: 35px 25px;
-    min-height: auto;
-    grid-template-columns: 1fr;
-    grid-template-columns: 1fr;
-    gap: 16px;
-
-    .card-title {
-      font-size: 17px;
-    }
-
-    &--image {
-      img {
-        width: 110px;
-        height: 110px;
-      }
-    }
+  @include breakpoint(mobile) {
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    padding: 48px 40px;
   }
 
   &:last-child {
-    border-right: var(--border);
+    border-bottom: none;
 
-    @media (max-width: 768px) {
-      border-bottom: none;
+    @include breakpoint(mobile) {
+      border-bottom: var(--border);
     }
   }
 
-  &:nth-child(even) {
-    @media (max-width: 1024px) {
-      border-right: var(--border);
+  @include breakpoint(tablet) {
+    &:nth-child(n) {
+      border-right: 0;
+      border-bottom: 0;
     }
 
-    @media (max-width: 768px) {
+    &:nth-child(-n+2) {
+      border-bottom: var(--border);
+    }
+
+    &:nth-child(even),
+    &:last-child {
       border-right: var(--border);
     }
   }
 
   &__top {
-    gap: 10px;
+    gap: 16px;
 
-    @media (max-width: 768px) {
-      gap: 16px;
+    @include breakpoint(mobile) {
+      gap: 10px;
     }
   }
 
-  // &:hover img {
-  //   scale: 1.03;
-  // }
+  // Mixed with .card-title.
+  &__title {
+    font-size: 17px;
 
-  img {
-    transition: scale 0.3s ease-in-out;
+    @include breakpoint(mobile) {
+      font-size: 20px;
+    }
+  }
+
+  &__image {
+    width: 110px;
+    height: 110px;
     object-fit: cover;
+    transition: scale 0.3s ease-in-out;
+
+    @include breakpoint(mobile) {
+      width: auto;
+      height: auto;
+    }
   }
 }

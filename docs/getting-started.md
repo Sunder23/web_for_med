@@ -38,7 +38,11 @@ The compose project is pinned to `name: web_for_med`, so the existing `web_for_m
 | `npm run dev` | Vite dev server with HMR (used when `assets/dist` is absent and `WP_ENVIRONMENT_TYPE=local`) |
 | `npm run build` | Production build into `assets/dist/` |
 | `composer lint` | PHPCS + PHPStan (level 5, baseline in `phpstan-baseline.neon`) |
-| `npm run lint` / `npm run format` | Biome check / check with fixes |
+| `npm run lint` | `lint:js` (Biome) + `lint:css` (Stylelint for `assets/src/scss`) |
+| `npm run lint:css` / `npm run format:css` | Stylelint check / check with fixes |
+| `npm run format` | Biome fixes + `format:css` |
+
+SCSS rules checked by Stylelint (`.stylelintrc.json`): mobile first only through `@include breakpoint(...)` (no raw width media queries), at most 3 nested selector levels, BEM class names without the old `s-`/`l-`/`c-`/`svc-`/`br-` prefixes. The legacy CPT/archive/blog partials are temporarily listed in `ignoreFiles`.
 
 On Windows (Git Bash) prefix raw `docker compose ... run wpcli wp eval-file /scripts/...` calls with `MSYS_NO_PATHCONV=1`.
 

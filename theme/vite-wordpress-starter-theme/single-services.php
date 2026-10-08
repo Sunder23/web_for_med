@@ -14,8 +14,8 @@ $cta  = get_field( 'service_cta' );
 
 <main class="single-cpt single-service">
 	<section class="s-cpt-hero">
-		<div class="s-cpt-hero__wrap l-wrap">
-			<div class="s-cpt-hero__inner l-frame-x">
+		<div class="s-cpt-hero__wrap container">
+			<div class="s-cpt-hero__inner frame">
 				<?php get_template_part( 'partials/breadcrumbs' ); ?>
 				<h1 class="s-cpt-hero__title"><?php the_title(); ?></h1>
 				<?php if ( ! empty( $hero['subtitle'] ) ) : ?>
@@ -24,7 +24,7 @@ $cta  = get_field( 'service_cta' );
 				<?php if ( ! empty( $hero['buttons'] ) ) : ?>
 					<div class="s-cpt-hero__actions">
 						<?php foreach ( $hero['buttons'] as $key => $button ) : ?>
-							<a href="<?php echo esc_url( ! empty( $button['url'] ) ? $button['url'] : '#' ); ?>" class="btn <?php echo 0 === $key ? 'btn--primary' : 'btn--secondary'; ?>"><?php echo esc_html( $button['label'] ); ?></a>
+							<a href="<?php echo esc_url( ! empty( $button['url'] ) ? $button['url'] : '#' ); ?>" class="button <?php echo 0 === $key ? 'button--primary' : 'button--secondary'; ?>"><?php echo esc_html( $button['label'] ); ?></a>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
@@ -35,8 +35,8 @@ $cta  = get_field( 'service_cta' );
 		</div>
 
 		<?php if ( ! empty( $hero['blurbs'] ) ) : ?>
-			<div class="s-cpt-hero__wrap l-wrap">
-				<div class="s-cpt-hero__inner l-frame-x">
+			<div class="s-cpt-hero__wrap container">
+				<div class="s-cpt-hero__inner frame">
 					<div class="s-cpt-hero__blurbs">
 						<?php foreach ( $hero['blurbs'] as $blurb ) : ?>
 							<div class="hero-blurb info-card">

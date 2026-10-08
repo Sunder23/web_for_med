@@ -25,17 +25,17 @@ export function initCasesSlider(root = document) {
 		pagination: {
 			el: root.querySelector('#casesDots'),
 			clickable: true,
-			bulletClass: 'cases-dot',
+			bulletClass: 'cases__dot',
 			bulletActiveClass: 'is-active',
 			renderBullet(index, className) {
 				return `<button class="${className}" type="button" aria-label="Go to slide ${index + 1}"></button>`;
 			},
 		},
 		breakpoints: {
-			769: {
+			766: {
 				slidesPerView: 2,
 			},
-			1025: {
+			1024: {
 				slidesPerView: 3,
 			},
 		},

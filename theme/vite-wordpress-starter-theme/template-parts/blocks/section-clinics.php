@@ -12,19 +12,19 @@ if ( empty( $args ) || ! is_array( $args ) ) {
 }
 $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] : array();
 ?>
-<section class="s-clinics">
-	<div class="s-clinics__wrap l-wrap">
-		<div class="clinics-grid">
+<section class="clinics">
+	<div class="clinics__wrap container">
+		<div class="clinics__grid frame">
 			<?php foreach ( $items as $item ) : ?>
-				<div class="clinics-grid__item">
-					<?php echo wp_get_attachment_image( $item['icon'], 'full', '', array( 'class' => 'clinics-grid__icon' ) ); ?>
-					<span><?php echo esc_html( $item['title'] ); ?></span>
+				<div class="clinics__item">
+					<?php echo wp_get_attachment_image( $item['icon'], 'full', '', array( 'class' => 'clinics__icon' ) ); ?>
+					<span class="clinics__label"><?php echo esc_html( $item['title'] ); ?></span>
 				</div>
 			<?php endforeach; ?>
 		</div>
-		<div class="clinics-aside">
-			<?php echo wp_get_attachment_image( $args['aside_icon'], 'full', '', array( 'class' => 'clinics-aside__icon' ) ); ?>
-			<p class="clinics-aside__text"><?php echo esc_html( $args['aside_text'] ); ?></p>
+		<div class="clinics__aside">
+			<?php echo wp_get_attachment_image( $args['aside_icon'], 'full', '', array( 'class' => 'clinics__aside-icon' ) ); ?>
+			<p class="clinics__aside-text"><?php echo esc_html( $args['aside_text'] ); ?></p>
 		</div>
 	</div>
 </section>

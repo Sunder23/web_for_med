@@ -1,80 +1,90 @@
+@use "../../mixins/breakpoint" as *;
+
 /* ============================================================
    WHY US (07)
    ============================================================ */
-.s-why {
+.why {
   position: relative;
   z-index: 10;
   background-color: var(--c-bg);
-  border-top: var(--border);
+  border-bottom: var(--border);
 
+  @include breakpoint(mobile) {
+    border-top: var(--border);
+    border-bottom: 0;
+  }
 
-  @media (max-width: 768px) {
-    position: relative;
-    border: 0;
-    border-bottom: var(--border);
+  // Mixed with .container: edge-to-edge on phones.
+  &__wrap {
+    padding: 0;
 
-    .l-wrap {
-      padding: 0;
-      border-left: 0;
-      border-right: 0;
+    @include breakpoint(mobile) {
+      padding: 0 var(--pad-x);
     }
   }
 
+  // Mixed with .frame: side borders from the mobile breakpoint up.
   &__inner {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    border: 0;
 
-    @media (max-width: 1024px) {
-      grid-template-columns: 1fr;
+    @include breakpoint(mobile) {
+      border-left: var(--border);
+      border-right: var(--border);
     }
 
-    @media (max-width: 768px) {
-      border: 0;
+    @include breakpoint(tablet) {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
 
+// Chat mock-up: sticks under the header on phones while the reasons scroll.
 .why-chat {
-  background-color: var(--c-navy);
-  padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  flex: none;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--c-navy);
+  position: sticky;
+  top: 45px;
+  z-index: 2;
 
-  @media (max-width: 1024px) {
-    flex: none;
-    width: 100%;
+  @include breakpoint(mobile) {
+    padding: 40px;
+    position: static;
+    top: auto;
+    z-index: auto;
   }
 
-  @media (max-width: 768px) {
-    padding: 20px;
-    position: sticky;
-    top: 45px;
-    z-index: 2;
+  @include breakpoint(tablet) {
+    flex: 0 1 auto;
+    width: auto;
   }
 
   &__screen {
     border-radius: 8px;
-    padding: 26px 32px;
+    padding: 0;
     display: none;
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
 
-    @media (max-width: 768px) {
-      padding: 0;
-      gap: 10px;
+    @include breakpoint(mobile) {
+      padding: 26px 32px;
+      gap: 24px;
     }
 
     &--active {
       display: flex;
     }
+  }
 
-    &--entered {
-      .why-msg--visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  &__screen--entered .why-message--visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   &__header {
@@ -84,47 +94,48 @@
   }
 
   &__avatar {
-    width: 32px;
-    height: 32px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
 
-    @media (max-width: 768px) {
-      width: 22px;
-      height: 22px;
+    @include breakpoint(mobile) {
+      width: 32px;
+      height: 32px;
     }
   }
 
   &__name {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--c-white);
     line-height: 1;
 
-    @media (max-width: 768px) {
-      font-size: 17px;
+    @include breakpoint(mobile) {
+      font-size: 20px;
     }
   }
 
   &__dialog {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 10px;
 
-    @media screen and (max-width: 768px) {
-      gap: 10px;
+    @include breakpoint(mobile) {
+      gap: 18px;
     }
   }
 }
 
-.why-msg {
-  max-width: 90%;
-  padding: 15px 22px;
+// Chat bubble; revealed one by one by whySection.js (--visible).
+.why-message {
+  max-width: 95%;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1.25;
   opacity: 0;
@@ -133,23 +144,23 @@
     transform 320ms ease;
   will-change: opacity, transform;
 
-  @media (max-width: 768px) {
-    max-width: 95%;
-    padding: 10px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 14px;
-  }
-
-  p {
+  @include breakpoint(small) {
     font-size: 16px;
+  }
+
+  @include breakpoint(mobile) {
+    max-width: 90%;
+    padding: 15px 22px;
+  }
+
+  &__text {
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.25;
     color: var(--c-white);
 
-    @media (max-width: 480px) {
-      font-size: 14px;
+    @include breakpoint(small) {
+      font-size: 16px;
     }
   }
 
@@ -170,10 +181,10 @@
     border: 1.5px solid var(--c-blue-light);
     border-radius: 8px 0 8px 8px;
     align-self: flex-end;
+  }
 
-    .why-msg__time {
-      text-align: right;
-    }
+  &--agency &__time {
+    text-align: right;
   }
 }
 
@@ -181,51 +192,56 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  border-left: var(--border);
+  border-top: var(--border);
 
-  @media (max-width: 1024px) {
-    border-left: none;
-    border-top: var(--border);
+  @include breakpoint(tablet) {
+    border-top: none;
+    border-left: var(--border);
   }
 
   &__header {
-    padding: 48px 52px;
-    border-bottom: var(--border);
+    width: calc(100% - var(--pad-x) * 2);
+    margin: 0 auto;
+    padding: 32px 10px;
+    border-bottom: 0;
+    border-left: var(--border);
+    border-right: var(--border);
 
-    @media (max-width: 768px) {
-      padding: 32px 10px;
-      margin: 0 auto;
-      width: calc(100% - var(--pad-x) * 2);
-      border-bottom: 0;
-      border-left: var(--border);
-      border-right: var(--border);
+    @include breakpoint(mobile) {
+      width: auto;
+      margin: 0;
+      padding: 48px 52px;
+      border-bottom: var(--border);
+      border-left: 0;
+      border-right: 0;
     }
   }
 
   &__list {
-    @media (max-width: 768px) {
-      border-top: var(--border);
-    }
-
     list-style: none;
     display: flex;
     flex-direction: column;
     height: 100%;
+    border-top: var(--border);
+
+    @include breakpoint(mobile) {
+      border-top: 0;
+    }
   }
 
   &__item {
     height: 100%;
+    padding: 24px 20px;
     border-bottom: var(--border);
     transition: all .3s ease-in-out;
 
-    @media (max-width: 768px) {
-      padding: 24px 20px;
+    @include breakpoint(mobile) {
+      padding: 0;
     }
 
     &:last-child {
       border-bottom: none;
     }
-
 
     &--hl {
       background: #EDF6F8;
@@ -238,45 +254,44 @@
     }
   }
 
+  // Mixed with .icon-list__item.
   &__trigger {
     width: 100%;
-    padding: 48px 70px 48px 52px;
+    padding: 0;
     border: 0;
     background: transparent;
     color: inherit;
     text-align: left;
     cursor: pointer;
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 14px;
     position: relative;
     transition: background-color 220ms ease,
       color 220ms ease;
 
-    &:hover,
-    &--active {
-      img {
-        object-position: right;
-      }
+    @include breakpoint(mobile) {
+      align-items: center;
+      gap: 16px;
+      padding: 48px 52px;
     }
 
-    @media (max-width: 1024px) {
-      padding-right: 52px;
-    }
-
-    @media (max-width: 768px) {
-      padding: 0;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    span {
-      flex: 1;
+    @include breakpoint(tablet) {
+      padding-right: 70px;
     }
 
     &:focus-visible {
       outline: 2px solid var(--c-blue-light);
       outline-offset: -2px;
     }
+  }
+
+  &__trigger:hover &__icon,
+  &__trigger--active &__icon {
+    object-position: right;
+  }
+
+  &__label {
+    flex: 1;
   }
 }

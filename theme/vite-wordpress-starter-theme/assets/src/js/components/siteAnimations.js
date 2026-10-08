@@ -5,7 +5,7 @@ import { initTitleScramble } from '@js/components/titleScramble.js';
 
 function fixAosBtnHover() {
 	document
-		.querySelectorAll('.btn[data-aos], .wpcf7-submit[data-aos]')
+		.querySelectorAll('.button[data-aos], .wpcf7-submit[data-aos]')
 		.forEach((el) => {
 			el.addEventListener(
 				'transitionend',
@@ -31,7 +31,7 @@ export function initFooterFormAOS() {
 	if (!form) return;
 
 	const fields = form.querySelectorAll('.form-field');
-	const btn = form.querySelector('.btn--submit');
+	const btn = form.querySelector('.button--submit');
 
 	fields.forEach((field, i) => {
 		field.setAttribute('data-aos', 'fade-up-sm');
@@ -52,7 +52,7 @@ export function initFooterFormAOS() {
 }
 
 export function initFooterCoverText() {
-	const el = document.querySelector('.footer__cover_text');
+	const el = document.querySelector('.footer__cover-text');
 	if (!el) return;
 
 	const observer = new IntersectionObserver(
@@ -70,7 +70,7 @@ export function initFooterCoverText() {
 	observer.observe(el);
 }
 export function initFooterCoverImageGlitch() {
-	const el = document.querySelector('.footer__cover-img');
+	const el = document.querySelector('.footer__cover-image');
 	if (!el) return;
 
 	const observer = new IntersectionObserver(

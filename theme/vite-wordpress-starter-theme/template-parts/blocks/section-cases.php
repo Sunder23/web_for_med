@@ -12,29 +12,29 @@ if ( empty( $args ) || ! is_array( $args ) ) {
 }
 $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] : array();
 ?>
-<section class="s-cases" id="cases">
-	<div class="s-cases__wrap l-wrap">
-		<div class="s-cases__header l-frame-x">
-			<h2 class="section-title"><?php echo esc_html( $args['title'] ); ?></h2>
-			<div class="s-cases__nav">
-				<button class="s-cases__btn" id="casePrev" aria-label="<?php esc_attr_e( 'Стрілка вліво', 'vite-starter' ); ?>">
+<section class="cases" id="cases">
+	<div class="cases__wrap container">
+		<div class="cases__header frame">
+			<h2 class="section-title cases__title"><?php echo esc_html( $args['title'] ); ?></h2>
+			<div class="cases__nav">
+				<button class="cases__button" id="casePrev" aria-label="<?php esc_attr_e( 'Стрілка вліво', 'vite-starter' ); ?>">
 					<svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M13.6757 16.5L23 6.91667L20.1622 4L8 16.5L20.1622 29L23 26.0833L13.6757 16.5Z" fill="#AEBBC4" />
 					</svg>
 				</button>
-				<button class="s-cases__btn" id="caseNext" aria-label="<?php esc_attr_e( 'Стрілка вправо', 'vite-starter' ); ?>">
+				<button class="cases__button" id="caseNext" aria-label="<?php esc_attr_e( 'Стрілка вправо', 'vite-starter' ); ?>">
 					<svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M17.3243 16.5L8 6.91667L10.8378 4L23 16.5L10.8378 29L8 26.0833L17.3243 16.5Z" fill="#AEBBC4" />
 					</svg>
 				</button>
 			</div>
 		</div>
-		<div class="cases-slider-wrap swiper" id="casesSlider">
+		<div class="cases-slider swiper" id="casesSlider">
 			<?php
 			$image_url = wp_get_attachment_image_url( $args['bg_image'], 'full' );
-			echo wp_get_attachment_image( $args['bg_image'], 'full', '', array( 'class' => 'cases-slider-bg' ) );
+			echo wp_get_attachment_image( $args['bg_image'], 'full', '', array( 'class' => 'cases-slider__background' ) );
 			?>
-			<div class="cases-slider swiper-wrapper">
+			<div class="cases-slider__track swiper-wrapper">
 
 				<?php
 				foreach ( $items as $key => $item ) :
@@ -53,7 +53,7 @@ $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] 
 					}
 					?>
 					<div class="cases-slide swiper-slide">
-						<div class="cases-slide-card">
+						<div class="cases-slide__inner">
 							<div class="cases-slide__desc">
 								<p><?php echo esc_html( $item['description'] ); ?></p>
 							</div>
@@ -69,6 +69,6 @@ $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] 
 				<?php endforeach; ?>
 			</div>
 		</div>
-		<div class="cases-dots" id="casesDots"></div>
+		<div class="cases__dots" id="casesDots"></div>
 	</div>
 </section>

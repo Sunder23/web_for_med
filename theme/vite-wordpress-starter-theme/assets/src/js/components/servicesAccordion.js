@@ -10,7 +10,7 @@ export function initServicesAccordion() {
 		return;
 	}
 
-	const $list = $('.s-services').first().find('.services-list').first();
+	const $list = $('.services').first().find('.services-list').first();
 	const $items = $list.find('.services-list__item');
 
 	if (!$list.length || !$items.length) {
@@ -37,7 +37,7 @@ export function initServicesAccordion() {
 					// [FIX] instant, non-animated initial state — an animated
 					// collapse here shifts page height ~250ms after DOMContentLoaded,
 					// which is after AOS has already cached scroll-trigger offsets
-					// for elements below (e.g. .s-process .section-title), making
+					// for elements below (e.g. .process__title), making
 					// their fade-in animations trigger far too late on mobile.
 					$desc[isActive ? 'show' : 'hide']();
 				}
@@ -55,7 +55,7 @@ export function initServicesAccordion() {
 		}
 	};
 
-	const $glitchImage = $('.s-services').first().find('.glitch-image').first();
+	const $glitchImage = $('.services').first().find('.glitch-image').first();
 	let glitchTimeout = null;
 
 	const triggerGlitch = () => {
@@ -83,7 +83,7 @@ export function initServicesAccordion() {
 		});
 
 		$item.on('click', () => {
-			const isMobile = window.matchMedia('(max-width: 767px)').matches;
+			const isMobile = window.matchMedia('(max-width: 765px)').matches;
 			const isAlreadyActive = $item.hasClass('services-list__item--active');
 
 			if (isMobile && isAlreadyActive) {

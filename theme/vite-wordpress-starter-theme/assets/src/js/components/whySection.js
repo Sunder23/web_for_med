@@ -3,7 +3,7 @@ import { logDebug } from '../utils/logDebug.js';
 const MESSAGE_REVEAL_DELAY = 600;
 
 export function initWhySection() {
-	const section = document.querySelector('.s-why');
+	const section = document.querySelector('.why');
 
 	if (!section) {
 		logDebug('Why section skipped: section not found');
@@ -29,7 +29,7 @@ export function initWhySection() {
 		const messages = Array.from(screen.querySelectorAll('[data-why-message]'));
 
 		for (const message of messages) {
-			message.classList.remove('why-msg--visible');
+			message.classList.remove('why-message--visible');
 			message.style.transitionDelay = '0ms';
 		}
 
@@ -44,7 +44,7 @@ export function initWhySection() {
 
 			messages.forEach((message, index) => {
 				message.style.transitionDelay = `${(index + 1.5) * MESSAGE_REVEAL_DELAY}ms`;
-				message.classList.add('why-msg--visible');
+				message.classList.add('why-message--visible');
 			});
 		});
 	};
@@ -84,7 +84,7 @@ export function initWhySection() {
 
 			if (!isActive && !animate) {
 				for (const message of messages) {
-					message.classList.add('why-msg--visible');
+					message.classList.add('why-message--visible');
 				}
 			}
 		}
@@ -103,7 +103,7 @@ export function initWhySection() {
 		if (!animate) {
 			nextScreen.classList.add('why-chat__screen--entered');
 			for (const message of nextScreen.querySelectorAll('[data-why-message]')) {
-				message.classList.add('why-msg--visible');
+				message.classList.add('why-message--visible');
 			}
 
 			logDebug('Why section initialized with default screen', {

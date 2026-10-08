@@ -66,8 +66,7 @@ $glitch-offset-top: var(--glitch-offset, 10);
     overflow: hidden;
 
     &::before,
-    &::after,
-    .channel {
+    &::after {
         background: inherit;
         background-size: cover;
         bottom: 0;
@@ -87,7 +86,15 @@ $glitch-offset-top: var(--glitch-offset, 10);
         content: "";
     }
 
-    .channel {
+    // RGB split layers: <div class="glitch__channel glitch__channel--r|g|b">
+    &__channel {
+        background: inherit;
+        background-size: cover;
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
         mix-blend-mode: screen;
 
         &::before {
@@ -102,7 +109,7 @@ $glitch-offset-top: var(--glitch-offset, 10);
         }
     }
 
-    .r {
+    &__channel--r {
         @include rgb-shift(r);
 
         &::before {
@@ -110,7 +117,7 @@ $glitch-offset-top: var(--glitch-offset, 10);
         }
     }
 
-    .g {
+    &__channel--g {
         @include rgb-shift(g);
 
         &::before {
@@ -118,7 +125,7 @@ $glitch-offset-top: var(--glitch-offset, 10);
         }
     }
 
-    .b {
+    &__channel--b {
         @include rgb-shift(b);
 
         &::before {
@@ -183,20 +190,6 @@ $glitch-offset-top: var(--glitch-offset, 10);
     animation: hero-glitch-reveal 0.8s ease-out 0.15s forwards;
 }
 
-/* ── after reveal: remove glitch overlays, show clean image ── */
-.hero__image.hero__image--revealed {
-    background-size: cover !important;
-
-    &::before,
-    &::after {
-        display: none;
-    }
-
-    .channel {
-        display: none;
-    }
-}
-
 @mixin imgGlitch($name, $intensity, $width, $height, $top, $left) {
 
     $steps: $intensity;
@@ -217,23 +210,23 @@ $glitch-offset-top: var(--glitch-offset, 10);
         }
     }
 
-    >img {
+    > .glitch-image__layer {
         position: absolute;
         top: $top+px;
         left: $left+px;
     }
 
-    >img:nth-child(2),
-    >img:nth-child(3) {
+    > .glitch-image__layer:nth-child(2),
+    > .glitch-image__layer:nth-child(3) {
         clip: rect(0, 0, 0, 0);
     }
 
-    >img:nth-child(2) {
+    > .glitch-image__layer:nth-child(2) {
         left: ($left + 1) + px;
         animation: #{$name}-anim-1 4s infinite linear alternate-reverse;
     }
 
-    >img:nth-child(3) {
+    > .glitch-image__layer:nth-child(3) {
         left: ($left - 1) + px;
         animation: #{$name}-anim-2 6s infinite linear alternate-reverse;
     }
@@ -282,102 +275,78 @@ $glitch-offset-top: var(--glitch-offset, 10);
 }
 
 
-
-
-/*main element*/
+// Pulsing dot (process section header).
 .pulse-icon {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 
-
-    svg {
-        width: 32px;
-
-        @media screen and (max-width: 768px) {
-            width: 30px;
-            height: 30px;
-        }
-    }
-
-    .icon-wrap {
+    &__core {
         position: relative;
         width: 16px;
         height: 16px;
         border-radius: 50%;
         background: #0472C5;
-        position: relative;
         z-index: 2;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .icon {
-        line-height: 60px;
-        font-size: 1.75em;
-        animation: grow-shrink 4s ease-out infinite;
-    }
-
-    .elements {
+    &__rings {
         position: absolute;
         top: 50%;
         left: 50%;
         z-index: 1;
         transform: translate(-50%, -50%);
-        z-index: 1;
     }
 
-    .circle {
+    &__circle {
         border-radius: 50%;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        animation: grow-circles 4s linear infinite both;
     }
 
-    .circle-inner {
+    &__circle--inner {
         width: 24px;
         height: 24px;
         background: rgba(4, 114, 197, 0.50);
-        animation: grow-circles 4s linear infinite both;
-
     }
 
-    .circle-outer {
+    &__circle--outer {
         width: 32px;
         height: 32px;
         background: rgba(4, 114, 197, 0.30);
-        animation: grow-circles 4s linear infinite both;
     }
 
-    .pulse {
+    &__pulse {
         position: absolute;
         animation: pulse-wave 4s linear infinite both;
         border-radius: 50%;
     }
 
-    .pulse-1 {
+    &__pulse--1 {
         border: solid 2px rgba(4, 114, 197, 0.25);
         width: 38px;
         height: 38px;
     }
 
-    .pulse-2 {
+    &__pulse--2 {
         border: solid 2px rgba(4, 114, 197, 0.35);
         width: 44px;
         height: 44px;
     }
 
-    .pulse-3 {
+    &__pulse--3 {
         border: solid 2px rgba(4, 114, 197, 0.45);
         width: 50px;
         height: 50px;
     }
 }
-
-
 
 @keyframes pulse-wave {
     0% {
@@ -414,16 +383,3 @@ $glitch-offset-top: var(--glitch-offset, 10);
 
 }
 
-@keyframes grow-shrink {
-    0% {
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    15% {
-        transform: translate(-50%, -50%) scale(1.1);
-    }
-
-    30% {
-        transform: translate(-50%, -50%) scale(1);
-    }
-}

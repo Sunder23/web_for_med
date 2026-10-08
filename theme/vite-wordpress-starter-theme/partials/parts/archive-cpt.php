@@ -15,8 +15,8 @@ $excerpt_map = array(
 ?>
 <main class="archive-cpt">
 	<section class="s-cpt-hero">
-		<div class="s-cpt-hero__wrap l-wrap">
-			<div class="s-cpt-hero__inner l-frame-x">
+		<div class="s-cpt-hero__wrap container">
+			<div class="s-cpt-hero__inner frame">
 				<?php get_template_part( 'partials/breadcrumbs' ); ?>
 				<h1 class="s-cpt-hero__title"><?php post_type_archive_title(); ?></h1>
 			</div>
@@ -24,9 +24,9 @@ $excerpt_map = array(
 	</section>
 
 	<section class="s-archive">
-		<div class="s-archive__wrap l-wrap">
+		<div class="s-archive__wrap container">
 			<?php if ( have_posts() ) : ?>
-				<div class="archive-grid l-frame-x">
+				<div class="archive-grid frame">
 					<?php
 					while ( have_posts() ) :
 						the_post();
@@ -44,13 +44,13 @@ $excerpt_map = array(
 									<p class="archive-card__text card-text"><?php echo esc_html( wp_trim_words( $excerpt, 32 ) ); ?></p>
 								<?php endif; ?>
 							</div>
-							<span class="archive-card__more tag c-tag"><?php esc_html_e( 'Детальніше', 'vite-starter' ); ?> &rarr;</span>
+							<span class="archive-card__more tag"><?php esc_html_e( 'Детальніше', 'vite-starter' ); ?> &rarr;</span>
 						</a>
 					<?php endwhile; ?>
 				</div>
 				<?php the_posts_pagination(); ?>
 			<?php else : ?>
-				<p class="archive-empty l-frame-x"><?php esc_html_e( 'Записів поки немає.', 'vite-starter' ); ?></p>
+				<p class="archive-empty frame"><?php esc_html_e( 'Записів поки немає.', 'vite-starter' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</section>

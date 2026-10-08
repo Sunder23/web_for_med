@@ -23,6 +23,7 @@ $starter_header = array(
 				array(
 					'theme_location' => 'menu-main',
 					'menu_id'        => 'menu-main-desktop',
+					'bem_block'      => 'nav',
 					'container'      => false,
 					'fallback_cb'    => false,
 				)
@@ -31,13 +32,13 @@ $starter_header = array(
 			</nav>
 
 			<?php if ( ! empty( $starter_header['header_button'] ) ) : ?>
-			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="btn btn--primary btn--sm header__cta">
+			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="button button--primary button--sm header__cta">
 				<?php echo esc_html( $starter_header['header_button']['title'] ); ?>
 			</a>
 			<?php endif; ?>
 
 			<button class="burger" id="burger" aria-label="<?php esc_attr_e( 'Відкрити меню', 'vite-starter' ); ?>" aria-expanded="false" aria-controls="mainNav">
-			<span></span><span></span><span></span>
+			<span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
 			</button>
 		</div>
 		</div>
@@ -52,6 +53,7 @@ $starter_header = array(
 			array(
 				'theme_location' => 'menu-main',
 				'menu_id'        => 'menu-main-mobile',
+				'bem_block'      => 'nav',
 				'container'      => false,
 				'fallback_cb'    => false,
 			)
@@ -81,7 +83,7 @@ $starter_header = array(
 
 		<?php if ( ! empty( $starter_header['header_button'] ) ) : ?>
 			<div class="nav__cta-row">
-			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="btn btn--primary nav__cta-btn">
+			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="button button--primary nav__cta-button">
 				<?php echo esc_html( $starter_header['header_button']['title'] ); ?>
 			</a>
 			</div>

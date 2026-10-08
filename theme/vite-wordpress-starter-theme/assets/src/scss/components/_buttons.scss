@@ -1,4 +1,6 @@
-.btn,
+@use "../mixins/breakpoint" as *;
+
+.button,
 .wpcf7-submit,
 .wp-element-button {
     display: inline-flex;
@@ -16,14 +18,26 @@
     white-space: nowrap;
 }
 
+// Theme and CF7 buttons are compact on phones; core block buttons keep one size.
+.button,
+.wpcf7-submit {
+    padding: 14px 20px;
+    font-size: 16px;
+    min-height: 50px;
 
-.btn--primary,
+    @include breakpoint(mobile) {
+        padding: 18px 24px;
+        font-size: 18px;
+        min-height: auto;
+    }
+}
+
+.button--primary,
 .wpcf7-submit,
 .wp-element-button {
     background: var(--c-blue);
     color: var(--c-white) !important;
     text-decoration: none !important;
-    // transition: background 0.3s ease-in-out !important;
 
     &:hover {
         background: var(--c-navy);
@@ -32,7 +46,7 @@
     }
 }
 
-.btn--secondary {
+.button--secondary {
     background: var(--c-secondary);
     color: var(--c-blue);
 
@@ -43,27 +57,20 @@
     }
 }
 
-.btn--sm {
-    padding: 13px 16px;
-    font-size: 16px;
-}
+.button--sm {
+    padding: 9px 14px;
+    font-size: 14px;
 
-.btn--submit {
-    width: 100%;
-    padding: 21px 24px;
-}
-
-@media (max-width: 768px) {
-
-    .btn,
-    .wpcf7-submit {
-        padding: 14px 20px;
+    @include breakpoint(mobile) {
+        padding: 13px 16px;
         font-size: 16px;
-        min-height: 50px;
     }
+}
 
-    .btn--sm {
-        padding: 9px 14px;
-        font-size: 14px;
+.button--submit {
+    width: 100%;
+
+    @include breakpoint(mobile) {
+        padding: 21px 24px;
     }
 }

@@ -12,5 +12,5 @@ if ( empty( $starter_logo_id ) ) {
 }
 ?>
 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo">
-	<?php echo wp_get_attachment_image( $starter_logo_id, 'full' ); ?>
+	<?php echo wp_get_attachment_image( $starter_logo_id, 'full', false, array( 'class' => 'logo__image' ) ); ?>
 </a>

@@ -7,6 +7,7 @@
 
 $starter_theme_hooks = array(
 	'register-menus.php',
+	'nav-menu-bem-classes.php',
 	'theme-support.php',
 	'image-sizes.php',
 	'allow-svg-uploads.php',

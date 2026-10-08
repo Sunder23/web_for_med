@@ -69,6 +69,7 @@ assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 - **JS-imported CSS** (vendors) is resolved through manifest `css` + `imports` (`starter_vite_entry_css_files()`).
 - **Modes**: `VITE_BUILD` (manifest exists) → hashed files; `VITE_DEV` (no manifest, local env) → `localhost:5173`.
 - `postcss-pxtorem` runs on `vite build` only.
+- **SCSS style:** mobile first via the `breakpoint()` mixin (`mixins/_breakpoint.scss`), nesting ≤ 3 selector levels, BEM without prefixes; enforced by Stylelint (`.stylelintrc.json`, `npm run lint:css`). Details in `rules/base.md` → SCSS Conventions.
 
 ## Key Principles
 1. **One concern per file** under `configure/`; per-item files hold one hook/helper/post type.

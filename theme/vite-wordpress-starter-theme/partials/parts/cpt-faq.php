@@ -20,8 +20,8 @@ if ( empty( $items ) ) {
 }
 ?>
 <section class="s-svc s-svc--faq">
-	<div class="s-svc__wrap l-wrap">
-		<div class="s-svc__inner l-frame-x">
+	<div class="s-svc__wrap container">
+		<div class="s-svc__inner frame">
 			<?php if ( $part_title ) : ?>
 				<h2 class="s-svc__title section-title"><?php echo esc_html( $part_title ); ?></h2>
 			<?php endif; ?>

@@ -37,7 +37,7 @@ export function initMobileNav() {
 
 	const getScanTargets = () =>
 		nav.querySelectorAll(
-			'.nav__links .menu-item, .nav__email, .nav__social-icons',
+			'.nav__links .nav__item, .nav__email, .nav__social-icons',
 		);
 
 	const playScanEffect = () => {
@@ -77,14 +77,12 @@ export function initMobileNav() {
 	};
 
 	const closeSubmenus = () => {
-		nav
-			.querySelectorAll('.menu-item-has-children.is-sub-open')
-			.forEach((item) => {
-				item.classList.remove('is-sub-open');
-				item
-					.querySelector('.sub-toggle')
-					?.setAttribute('aria-expanded', 'false');
-			});
+		nav.querySelectorAll('.nav__item--parent.is-sub-open').forEach((item) => {
+			item.classList.remove('is-sub-open');
+			item
+				.querySelector('.nav__toggle')
+				?.setAttribute('aria-expanded', 'false');
+		});
 	};
 
 	const openNav = () => {
@@ -110,7 +108,7 @@ export function initMobileNav() {
 		nav.classList.contains('is-open') ? closeNav() : openNav();
 	});
 
-	nav.querySelectorAll('.nav__link, .menu-item a').forEach((link) => {
+	nav.querySelectorAll('.nav__link').forEach((link) => {
 		link.addEventListener('click', closeNav);
 	});
 
@@ -118,15 +116,15 @@ export function initMobileNav() {
 }
 
 function initSubmenuToggles(nav) {
-	const parents = nav.querySelectorAll('.menu-item-has-children');
+	const parents = nav.querySelectorAll('.nav__item--parent');
 
 	parents.forEach((item) => {
-		const link = item.querySelector(':scope > a');
+		const link = item.querySelector(':scope > .nav__link');
 		const label = link?.textContent.trim() ?? '';
 
 		const toggle = document.createElement('button');
 		toggle.type = 'button';
-		toggle.className = 'sub-toggle';
+		toggle.className = 'nav__toggle';
 		toggle.setAttribute('aria-expanded', 'false');
 		toggle.setAttribute('aria-label', `Показати підменю: ${label}`);
 

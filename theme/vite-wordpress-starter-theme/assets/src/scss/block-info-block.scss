@@ -3,11 +3,17 @@
 // carries a fallback mirroring _tokens.scss brand values so
 // the editor preview matches the frontend.
 
+@use "mixins/breakpoint" as *;
+
 .info-block {
     margin: 32px 0;
-    padding: 32px 28px;
+    padding: 24px 20px;
     border: var(--border, 1px solid #dbdbdb);
     background: var(--c-bg-light, #f8f8f8);
+
+    @include breakpoint(mobile) {
+        padding: 32px 28px;
+    }
 }
 
 .info-block__title {
@@ -62,10 +68,4 @@
     margin: 0;
     font-size: 14px;
     color: var(--c-grey, #3b3e41);
-}
-
-@media (max-width: 768px) {
-    .info-block {
-        padding: 24px 20px;
-    }
 }

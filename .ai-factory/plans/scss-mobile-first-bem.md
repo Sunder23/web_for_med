@@ -94,12 +94,12 @@
 
 ### Phase 0 — Инструменты и эталон
 
-- [ ] **Task 1. Эталонные скриншоты «до».**
+- [ ] **Task 1. Эталонные скриншоты «до».** ⏭ **Пропущено:** состояние «до» для главной потеряно, потому что секции уже переписаны в рабочем дереве. Вместо сверки «до/после» — проверка «после» в Task 15.
   - Через chrome devtools MCP (`http://localhost:8080`, контейнеры подняты `make up`, ассеты собраны `npm run build`) снять full-page скриншоты на 375 / 768 / 1280 px: главная `/`, `/blog/`, одна запись блога, архивы `/services/`, `/directions/`, `/cases/`, по одной single-странице каждого CPT, `404`. Дополнительно — открытое мобильное меню (375) и экран редактора страницы с секциями.
   - Сохранить в `.ai-factory/qa/scss-mobile-first-bem/before/{page}-{width}.png` (не коммитить — добавить путь в `.gitignore`, если он не игнорируется).
   - Логирование: список снятых URL × ширин записать в `.ai-factory/qa/scss-mobile-first-bem/README.md`.
 
-- [ ] **Task 2. Stylelint для SCSS.**
+- [x] **Task 2. Stylelint для SCSS.**
   - `$T/package.json`: devDependencies `stylelint`, `stylelint-scss`, `postcss-scss`; скрипты `"lint:css": "stylelint \"assets/src/scss/**/*.scss\""`, `"lint:js": "biome check ."`, `"lint": "npm run lint:js && npm run lint:css"`, `"format:css": "stylelint \"assets/src/scss/**/*.scss\" --fix"`.
   - `$T/.stylelintrc.json` (`customSyntax: postcss-scss`, плагин `stylelint-scss`), правила:
     - `max-nesting-depth: [2, { "ignoreAtRules": ["include", "media", "supports", "container"] }]` (Stylelint считает корневое правило уровнем 0 → 2 = три уровня селекторов);
@@ -112,28 +112,28 @@
 
 ### Phase 1 — Фундамент
 
-- [ ] **Task 3. Базовый слой: `_tokens.scss`, `_base.scss`, `_fonts.scss`, `_grid.scss`, `main.scss`.**
+- [x] **Task 3. Базовый слой: `_tokens.scss`, `_base.scss`, `_fonts.scss`, `_grid.scss`, `main.scss`.**
   - `_tokens.scss`: блоки `@media (max-width: 1024px/768px)` с переопределением CSS-переменных (`--pad-x`, `--header-h` и т.п.) перевернуть: мобильные значения в `:root`, планшет/десктоп — в `@include breakpoint(mobile|tablet) { :root { … } }`. Bootstrap-наследие `$grid-breakpoints`/`$container-max-widths` не трогать (если не используется — отметить в отчёте, не удалять в этом плане).
   - `_base.scss`: развернуть вложенность `section { @media { &:not(…) { &::after { @media … }}}}` (глубина 5) до ≤3; заменить ссылки на чужие блоки в `:not(.hero, .s-quote, .s-banner, .s-process--top)` на новые имена (`.hero, .quote, .banner, .process--top`) — а лучше на модификатор-маркер (например `.section--no-divider`, проставить его в шаблонах этих секций), чтобы база не знала про конкретные блоки. Исправить баг `&:not(s-quote)` (нет точки) → `&:not(.quote)` или тот же модификатор.
   - `_grid.scss`: `.l-wrap` → `.container`, `.l-frame-x` → `.frame`; убрать из файла чужие селекторы `.s-banner__inner` и `.clinics-grid` (перенести/заменить миксом `container`/`frame` в разметке соответствующих секций — задачи 7–8).
   - Глобальная замена `l-wrap`/`l-frame-x` во всех PHP (`footer.php`, `home.php`, `single-services.php`, `partials/parts/archive-cpt.php`, `template-parts/blocks/section-*.php`) и JS.
   - Логирование: нет.
 
-- [ ] **Task 4. Глобальные компоненты-примитивы.**
+- [x] **Task 4. Глобальные компоненты-примитивы.**
   - Файлы: `components/_buttons.scss` (`.btn` → `.button`), `_tag.scss` (`.c-tag` слить в `.tag`), `_section-title.scss`, `_info-card.scss` (`.card-title/.card-text` → `.info-card__title/__text`), `_icon-list.scss`, `_breadcrumbs.scss`, `_modal.scss` (пустой — оставить), `block-info-block.scss`.
   - Для каждого: mobile first через миксин, вложенность ≤3, переименование + замена в PHP (`grep -rn "btn\b\|c-tag\|card-title\|card-text"` по `$T` без `node_modules`/`dist`) и JS (`contactForm.js`, `mobileNav.js` и др., где есть `.btn`). Кнопки CF7 (`.wpcf7-submit`) и `.wp-element-button` — оставить как есть, только перевести их медиазапросы.
   - Проверить разметку CF7-формы (шаблон формы хранится в БД в `wpcf7_contact_form`): если в ней есть `btn`/`form-field-label` — зафиксировать в отчёте и обновить форму через WP-CLI (`wp post update <id> --post_content=…`) после подтверждения пользователя. На момент исследования совпадений в БД не найдено.
   - Логирование: нет.
   - Зависит от Task 3.
 
-- [ ] **Task 5. Header + мобильное меню (`components/_header.scss`, `partials/header/*.php`, `mobileNav.js`, `activeNav.js`).**
+- [x] **Task 5. Header + мобильное меню (`components/_header.scss`, `partials/header/*.php`, `mobileNav.js`, `activeNav.js`).**
   - Самый глубокий файл (7 уровней, 17 медиазапросов). Блоки: `.logo`, `.header`, `.nav`, `.burger` — имена уже без префиксов; проверить элементы/модификаторы на БЭМ (никаких `.nav li a` — выдать элементы `nav__item`, `nav__link`; если разметку меню генерирует `wp_nav_menu`, добавить классы через фильтры `nav_menu_css_class` / `nav_menu_link_attributes` в существующем файле `configure/theme-hooks/*` или новом `configure/theme-hooks/nav-menu-classes.php` с регистрацией в `theme-hooks.php`).
   - Mobile first: мобильная панель/бургер — база, десктопная горизонтальная навигация — `breakpoint(tablet)` (сверить, где сейчас граница: 768 или 1024).
   - `$nav-mobile-bg` и grid-flash анимацию мобильного меню сохранить без визуальных изменений.
   - Логирование: нет; в JS не добавлять `console.log`.
   - Зависит от Task 4.
 
-- [ ] **Task 6. Footer + формы (`_footer.scss`, `_forms.scss`, `footer.php`, `contactForm.js`).**
+- [x] **Task 6. Footer + формы (`_footer.scss`, `_forms.scss`, `footer.php`, `contactForm.js`).**
   - `_footer.scss`: 8 медиазапросов, глубина 4 → mobile first, ≤3.
   - `_forms.scss`: `.form-field-label` → `.form-field__label`, `.form-success` проверить на БЭМ (`.contact-form__success`, если это элемент формы); `wpcf7-*` не переименовывать, но их правила тоже ≤3 уровня и mobile first.
   - Обновить PHP-разметку футера/формы и селекторы в `contactForm.js`.
@@ -144,48 +144,48 @@
 
 Для каждой задачи фазы: SCSS-файл секции + её PHP-шаблон + её JS (если есть) + стили редактора, если они ссылаются на классы. Медиазапросы — mobile first; вложенность ≤3; имена по таблице.
 
-- [ ] **Task 7. Hero, quote, clinics + `_animations.scss`.**
+- [x] **Task 7. Hero, quote, clinics + `_animations.scss`.**
   - `section-home-hero.scss` (15 media), `section-quote.scss` (5; `.br-desktop` → `.line-break--desktop`, `.gear` → `.quote__gear`), `section-clinics.scss` (13; `.clinics-aside/.clinics-grid` → `.clinics__aside/__grid`, убрать дубль `.clinics-grid` из `_grid.scss`).
   - `_animations.scss` (глубина 6): развернуть вложенность миксинов `glitch`/`rgb-shift` в генерируемом CSS до ≤3; `.hero__image--revealed` и `.glitch-image` привести к новым именам; `[data-aos=…]`, `@keyframes` — без изменений. Правило `.hero…` перенести в `section-home-hero.scss`, если оно относится только к hero.
   - JS: `heroTitle.js`, `glitchImage.js`, `siteAnimations.js` — обновить селекторы.
   - Логирование: нет.
   - Зависит от Task 3.
 
-- [ ] **Task 8. Problems/solutions + process.**
+- [x] **Task 8. Problems/solutions + process.**
   - `section-problems-solutions.scss` (27 media — самый «медийный» файл): `.sections_wrapper` → `.problems-solutions`, `.s-problems/.s-banner/.s-solutions` → `.problems/.banner/.solutions`; `.s-banner__inner` из `_grid.scss` заменить миксом `class="banner__inner container"`.
   - `section-process.scss` (12 media): `.s-process*` → `.process*`; `.tag` вместо `.c-tag`.
   - JS: `servicesAccordion.js` (ссылается на `.s-process`).
   - Логирование: нет.
   - Зависит от Task 3, Task 4.
 
-- [ ] **Task 9. Services + cases.**
+- [x] **Task 9. Services + cases.**
   - `section-services.scss` (9 media): `.s-services` → `.services`, `.services-img` → `.services__image`.
   - `section-cases.scss` (14 media, глубина 5): `.s-cases` → `.cases`, `.cases-slider-*`/`.cases-slide`/`.cases-dot(s)` → элементы блока `.cases-slider`.
   - JS: `servicesAccordion.js` (`.s-services`), `casesSlider.js` (в рабочем дереве уже есть незакоммиченные правки — не затирать их, переименовывать поверх).
   - Логирование: нет.
   - Зависит от Task 8 (общий `servicesAccordion.js`).
 
-- [ ] **Task 10. Why.**
+- [x] **Task 10. Why.**
   - `section-why.scss` (18 media): `.s-why` → `.why`; `.why-msg` → `.why-message`; каскад `.s-why .l-wrap { padding: 0; border: 0 }` заменить модификатором `.container--flush` или миксом `why__container`; `.why-chat__screen--entered .why-msg--visible` развернуть до ≤3 уровней.
   - JS: `whySection.js`.
   - Логирование: нет.
   - Зависит от Task 3.
 
-- [ ] **Task 11. Редактор блоков.**
+- [x] **Task 11. Редактор блоков.**
   - `editor-section-blocks.scss` (в рабочем дереве незакоммиченные правки — сохранить), `assets/src/js/editor-section-blocks.js` (новый, untracked), `configure/js-css.php` (editor canvas assets), `configure/section-blocks.php` — проверить, что превью секций в Gutenberg использует новые классы и что `.editor-styles-wrapper` правила ≤3 уровня.
   - Логирование: нет.
   - Зависит от Task 7–10.
 
 ### Phase 3 — CPT, блог, архивы
 
-- [ ] **Task 12. Services/directions single (`_cpt-common.scss`, `_service.scss`, `_two-col.scss`, `_icon-list.scss`).**
+- [ ] **Task 12. Services/directions single (`_cpt-common.scss`, `_service.scss`, `_two-col.scss`, `_icon-list.scss`).** ⏭ **Пропущено по решению пользователя:** для CPT-страниц будут новые стили.
   - Переименования: `.s-cpt-hero` → `.cpt-hero` (`.hero-blurb` → `.cpt-hero__blurb`), `.s-cpt-cta` → `.cpt-cta`, `.s-svc*` → `.service-section*`, `.svc-*` → `.service-*` / `.numbered-list` / `.prose`, `.s-two-col` → `.two-col`, `.faq` — проверить элементы.
   - Шаблоны: `single-services.php`, `single-directions.php`, `partials/parts/cpt-cta.php`, `partials/parts/cpt-faq.php`.
   - SCSS-энтри `single-cpt.scss` — проверить `@use`.
   - Логирование: нет.
   - Зависит от Task 4.
 
-- [ ] **Task 13. Cases single + архивы + блог.**
+- [ ] **Task 13. Cases single + архивы + блог.** ⏭ **Пропущено по решению пользователя:** для кейсов, архивов и блога будут новые стили.
   - `_case.scss`: `.s-case-*` → `.case-content`, `.case-results`, факты — объединить `.s-case-facts` и `.case-facts` в один блок `.case-facts` с элементами. Шаблон `single-cases.php`.
   - `_archive.scss`: `.s-archive` → `.archive`; `.archive-card`, `.archive-grid`, `.archive-empty`, `.pagination` — проверить элементы. Шаблоны `partials/parts/archive-cpt.php`, `home.php` (фильтр категорий, `.c-tag`). JS: `blogFilter.js` удалён в рабочем дереве — не восстанавливать.
   - `_single-post.scss`, `_toc.scss`, `_content-with-toc.scss`: `.s-post` → `.post`, `.s-content-toc` → `.content-toc`; `.entry-content` (WP-класс контента) оставить, вложенные правила для контента (`.entry-content h2 a`) — ≤3 уровня. Шаблоны `single.php`, `partials/parts/content-with-toc.php`; JS `toc.js`; `configure/toc.php` — если генерирует классы в разметке, привести к БЭМ (`toc__item`, `toc__link`).
@@ -195,7 +195,7 @@
 
 ### Phase 4 — Проверка и документация
 
-- [ ] **Task 14. Глобальная зачистка и линт.**
+- [x] **Task 14. Глобальная зачистка и линт.**
   - `grep -rnE "\b(s|l|c|svc|br)-[a-z]" $T --include=*.php --include=*.js --include=*.scss --include=*.json` (без `node_modules`, `dist`, `vendor`) — должен вернуть 0 совпадений по классам (ложные срабатывания вроде `wp-`, `aria-`, переменных `--c-*` разобрать вручную).
   - `grep -rn "max-width" $S | grep "@media"` — 0; `grep -rn "@media" $S` — только `mixins/_breakpoint.scss` и не-ширинные запросы.
   - Скрипт глубины (см. «Текущее состояние») или `npm run lint:css` — 0 ошибок `max-nesting-depth`, `selector-class-pattern`, `media-feature-name-disallowed-list`.
@@ -209,11 +209,25 @@
   - Логирование: список найденных/исправленных расхождений — в `.ai-factory/qa/scss-mobile-first-bem/README.md`.
   - Зависит от Task 14.
 
-- [ ] **Task 16. Документация (docs-checkpoint).**
+- [x] **Task 16. Документация (docs-checkpoint).**
   - `.ai-factory/rules/base.md` → раздел SCSS: mobile first только через `breakpoint()`, вложенность ≤3 (at-rules не считаются), БЭМ без префиксов, `is-*` для состояний, список чужих классов-исключений, `npm run lint:css`.
   - `.ai-factory/ARCHITECTURE.md` (asset pipeline / SCSS), `docs/getting-started.md` (команды `lint`, `lint:css`, `format:css`), `AGENTS.md` (Commands, Agent Rules — «SCSS: mobile first через миксин, вложенность ≤3, БЭМ»; упомянуть `.stylelintrc.json` в структуре).
   - Логирование: нет.
   - Зависит от Task 14.
+
+## Implementation Notes (2026-10-08)
+
+- **Tasks 2–11** выполнены в рабочем дереве до запуска `/aif-implement`. Сверка: `npm run build` — ок; `biome check` — ок (форматирование 7 JS-файлов и `.stylelintrc.json` исправлено через `biome check --write`); stylelint — 0 ошибок вне файлов CPT/архивов/блога; в разметке главной нет классов со старыми префиксами; в браузере (1280 / 375) — все 8 секций и футер с CF7 на месте, мобильное меню открывается, горизонтального скролла и ошибок в консоли нет.
+- **Отступления от таблицы переименований** (оба имени проходят `selector-class-pattern`):
+  - `.card-title` / `.card-text` оставлены общими классами-миксами для `problem-card`, `solution-card`, `process-step` (вместо `.info-card__title` / `__text`);
+  - `.cases-slide` оставлен отдельным блоком (вместо `.cases-slider__slide`).
+- **Tasks 12–13 пропущены** → в `_cpt-common`, `_service`, `_two-col`, `_case`, `_archive`, `_single-post`, `_toc` остаются 87 ошибок stylelint (74 `selector-class-pattern`, 13 `media-feature-name-disallowed-list`). Эти 7 файлов временно добавлены в `ignoreFiles` в `.stylelintrc.json` — убрать оттуда, когда их заменят новые стили.
+- **Task 14:** `npm run lint` (Biome + Stylelint) — 0 ошибок; `npm run build` — без warning; `composer lint` (PHPCS + PHPStan) — 0 ошибок; grep по старым префиксам и ширинным `@media` вне CPT-файлов — пусто. PHPCS падал только на CRLF в 9 PHP-файлах CPT/блога (рабочая копия при `core.autocrlf=true`, в индексе LF) — исправлено `phpcbf --sniffs=Generic.Files.LineEndings`, содержимое не менялось.
+- **Task 15** (только «после», эталона «до» нет — см. Task 1; только главная, CPT-страницы вне объёма):
+  - 1280 / 768 / 375 — все 8 секций и футер на месте, горизонтального скролла нет, ошибок в консоли нет.
+  - Интерактив: аккордеон услуг переключает `services-list__item--active`; слайдер кейсов (Swiper инициализирован, 4 слайда, точки `.cases__dot` переключают слайд); чат «Почему мы» (триггер → `aria-expanded`, активный экран, сообщения появляются); мобильное меню открывается; CF7 отправляется («It has been sent»), письмо пришло в Mailpit.
+  - Известное (не регрессия): на 766–~860 px десктопное меню переносится в 2 строки (header 93 px вместо 63). В исходных стилях на 769–1024 были те же `gap: 24px` + `flex-wrap`, т.е. перенос был и раньше; при желании — отдельной задачей (бургер до `tablet` или меньший gap).
+  - Не проверено: превью секций в редакторе Gutenberg (нужна авторизация в wp-admin).
 
 ## Commit Plan
 

@@ -19,7 +19,7 @@ A hybrid WordPress theme (pages from `acf/section-*` ACF blocks, CPT/blog/archiv
 - **CMS:** WordPress
 - **Frontend Build:** Vite 8
 - **CSS Preprocessor:** SCSS (Sass)
-- **Linters:** Biome.js (JS/JSON), PHPCS + PHPStan (PHP)
+- **Linters:** Biome.js (JS/JSON), Stylelint + stylelint-scss (SCSS), PHPCS + PHPStan (PHP)
 - **Package Manager:** npm (Node.js), Composer (PHP)
 - **Integrations:** Secure Custom Fields (ACF-compatible), Contact Form 7, Yoast SEO, bundled WP jQuery (no migrate), Fancybox v6 (@fancyapps/ui — content image lightbox)
 

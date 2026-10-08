@@ -1,3 +1,5 @@
+@use "mixins/breakpoint" as *;
+
 /**
  * Bootstrap customised
  *
@@ -214,9 +216,9 @@ $spacers : (0: 0,
     --font-logo: var(--font-main);
     --radius-sm: 4px;
     --border-default: 1px solid var(--color-brand-border);
-    --header-h: 66px;
+    --header-h: 46px;
     --page-w: 1440px;
-    --pad-x: 45px;
+    --pad-x: 16px;
 
     /* Legacy aliases retained while templates/styles still reference them */
     --c-dark-blue: var(--color-brand-dark-blue);
@@ -236,15 +238,15 @@ $spacers : (0: 0,
     --border: var(--border-default);
 }
 
-@media (max-width: 1024px) {
+@include breakpoint(mobile) {
     :root {
         --pad-x: 24px;
-        --header-h: 46px;
     }
 }
 
-@media (max-width: 768px) {
+@include breakpoint(tablet) {
     :root {
-        --pad-x: 16px;
+        --pad-x: 45px;
+        --header-h: 66px;
     }
 }

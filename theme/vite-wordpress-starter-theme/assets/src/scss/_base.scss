@@ -1,3 +1,5 @@
+@use "mixins/breakpoint" as *;
+
 *,
 *::before,
 *::after {
@@ -41,33 +43,25 @@ ol {
     list-style: none;
 }
 
+// Sections overlap their top border on mobile; from the mobile breakpoint up
+// every section except the full-bleed ones closes with a 90px divider strip.
 section {
     position: relative;
     display: flex;
     flex-direction: column;
+    margin-top: -1px;
 
-    @media screen and (min-width: 768px) {
-        &:not(.hero, .s-quote, .s-banner, .s-process--top) {
-            &::after {
-                content: '';
-                width: 100%;
-                height: 90px;
-                background-color: var(--c-bg);
-                border-top: var(--border);
-
-                @media screen and (max-width: 768px) {
-                    height: 50px;
-                }
-            }
-        }
+    @include breakpoint(mobile) {
+        margin-top: 0;
     }
 
-
-
-
-    &:not(s-quote) {
-        @media screen and (max-width: 768px) {
-            margin-top: -1px;
+    &:not(.hero, .quote, .banner, .process--top)::after {
+        @include breakpoint(mobile) {
+            content: '';
+            width: 100%;
+            height: 90px;
+            background-color: var(--c-bg);
+            border-top: var(--border);
         }
     }
 }
@@ -81,9 +75,4 @@ button {
 *:hover,
 *:focus {
     outline: 0;
-}
-
-.transition,
-%transition {
-    transition: all 0.3s ease-in-out;
 }

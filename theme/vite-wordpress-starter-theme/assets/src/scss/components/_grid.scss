@@ -1,13 +1,13 @@
-.l-wrap,
-.s-banner__inner {
+// Page-width wrapper: centred, capped at --page-w, with the side gutter.
+.container {
     max-width: var(--page-w);
     margin: 0 auto;
     padding: 0 var(--pad-x);
     width: 100%;
 }
 
-.l-frame-x,
-.clinics-grid {
+// Vertical frame lines (left/right borders) shared by the page grid.
+.frame {
     border-left: var(--border);
     border-right: var(--border);
 }

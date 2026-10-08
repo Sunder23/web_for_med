@@ -9,7 +9,7 @@ A hybrid WordPress theme (Vite + SCSS frontend) with a plugin scaffold and a Doc
 - **Language:** PHP 8.2+, JavaScript (ES modules)
 - **CMS:** WordPress (Secure Custom Fields as ACF replacement, Contact Form 7, Yoast SEO)
 - **Frontend Build:** Vite 8, SCSS (Sass), `postcss-pxtorem` on build
-- **Linters:** Biome.js (JS/JSON), PHPCS (WordPress standard) + PHPStan level 5
+- **Linters:** Biome.js (JS/JSON), Stylelint + stylelint-scss (SCSS), PHPCS (WordPress standard) + PHPStan level 5
 - **Package Manager:** npm (frontend), Composer (PHP tooling)
 - **Environment:** Docker Compose (`docker/compose.yml`: db, wordpress, wpcli, phpmyadmin, mailpit)
 
@@ -42,7 +42,7 @@ wp-boilerplate/
 │   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, components/, template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
-│   ├── vite.config.js, package.json, biome.json
+│   ├── vite.config.js, package.json, biome.json, .stylelintrc.json
 │   └── composer.json, phpcs.xml.dist, phpstan.neon, phpstan-baseline.neon, phpstan-bootstrap.php
 ├── docs/                            # getting-started.md, page-sections.md
 ├── .ai-factory/                     # AI agent context and plans
@@ -84,7 +84,7 @@ wp-boilerplate/
 ## Commands
 - `docker compose -f docker/compose.yml up -d` (or `make up`) — start the environment (WP :8080, phpMyAdmin :8081, Mailpit :8025)
 - `make wp cmd="…"` — WP-CLI (`wpcli` service); on Windows Git Bash prefix raw calls with `MSYS_NO_PATHCONV=1`
-- `npm run dev` / `npm run build` / `npm run lint` — in the theme directory
+- `npm run dev` / `npm run build` / `npm run lint` (Biome + Stylelint) — in the theme directory; `npm run lint:css` / `format:css` for SCSS only
 - `composer lint` — PHPCS + PHPStan
 
 ## Agent Rules
@@ -97,3 +97,4 @@ wp-boilerplate/
 - Use the `starter_` prefix and the `vite-starter` text domain; run `composer lint` and `npm run lint` before committing
 - Page-specific styles/scripts depend on `main` and are enqueued at `wp_enqueue_scripts` priority 110
 - Do not assemble single CPT / blog / archive templates from section blocks
+- SCSS: mobile first only via `@include breakpoint(...)`, nesting ≤ 3 selector levels (at-rules don't count), BEM without `s-`/`l-`/`c-`/`svc-`/`br-` prefixes, `is-*` for JS states — see `.ai-factory/rules/base.md`

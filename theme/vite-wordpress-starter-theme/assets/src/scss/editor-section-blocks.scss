@@ -16,24 +16,24 @@
 
 	// Hidden by section styles until heroTitle.js / whySection.js reveal them.
 	.hero__title,
-	.hero .btn,
-	.why-msg {
+	.hero__button:not(.is-visible),
+	.why-message {
 		opacity: 1;
 		transform: none;
 	}
 
 	// Scroll effects (fixed / sticky layers) overlap neighbouring sections in
 	// the canvas and make their fields unreachable: lay everything out in flow.
-	// .s-problems: fixed under the header; .s-solutions: sticky (>= 1025px);
-	// .services-img (<= 1024px) and .why-chat (<= 768px): sticky in the
+	// .problems: fixed under the header; .solutions: sticky (tablet breakpoint up);
+	// .services__image (below tablet) and .why-chat (below mobile): sticky in the
 	// Tablet / Mobile previews.
-	.s-quote {
+	.quote {
 		margin: 0;
 	}
 
-	.s-problems,
-	.s-solutions,
-	.services-img,
+	.problems,
+	.solutions,
+	.services__image,
 	.why-chat {
 		position: relative;
 		inset: auto;
