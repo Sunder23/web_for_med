@@ -1,3 +1,5 @@
+@use "../mixins/breakpoint" as *;
+
 // Shared archive layout for services / directions / cases: card grid.
 
 .s-archive {
@@ -15,16 +17,11 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
-.archive-card {
+// Mixed with .post-card (partials/parts/post-card.php).
+.archive-grid__item {
     margin-top: -1px;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 40px 32px;
-    border: 0;
     border-top: var(--border);
     border-bottom: var(--border);
-    text-decoration: none;
-    transition: background 0.3s ease-in-out;
 
     @media screen and (min-width: 769px) {
         &:nth-child(odd) {
@@ -32,18 +29,12 @@
         }
     }
 
-
-    &:hover {
-        background: var(--c-bg-light);
-
-        .archive-card__title {
-            color: var(--c-blue);
+    // A lone card in the last row spans both columns instead of leaving a gap.
+    @include breakpoint(mobile) {
+        &:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            border-right: 0;
         }
-    }
-
-    .archive-card__title {
-        margin: 0 0 12px;
-        transition: color 0.3s ease-in-out;
     }
 }
 
@@ -99,15 +90,7 @@
         grid-template-columns: 1fr;
     }
 
-    .archive-card {
-        padding: 28px 20px;
-    }
-
     .s-archive {
         padding-bottom: 0;
     }
-}
-.archive-card__date {
-    color: var(--c-grey);
-    margin-bottom: 8px;
 }

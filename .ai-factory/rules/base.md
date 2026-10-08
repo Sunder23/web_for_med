@@ -17,8 +17,8 @@
 - Put the breakpoint inside the selector it modifies (`&__el { …; @include breakpoint(tablet) { … } }`), not in a block at the end of the file.
 - **Nesting ≤ 3 selector levels:** `.block` → `&__el` → `&--mod` / `&:hover` / `&::before`. At-rules (`@include`, `@media`, …) do not count. Instead of a block cascading into another block (`.why .container`), use a mix (`class="container why__container"`) or a modifier.
 - **BEM without prefixes:** `block`, `block__element`, `block--modifier`, kebab-case, full words — no `s-`, `l-`, `c-`, `svc-`, `br-`. One block is defined in one file.
-- JS-toggled states stay `is-*` (`is-open`, `is-active`, …). Third-party classes are not renamed: `wpcf7-*`, `wp-*`, `has-children`, `editor-styles-wrapper`, `fancybox*`, `aos-*`, `swiper-*`. WP menu markup gets BEM classes from `configure/theme-hooks/nav-menu-bem-classes.php`.
-- Enforced by Stylelint (`.stylelintrc.json`: `max-nesting-depth`, `media-feature-name-disallowed-list`, `selector-class-pattern`). The legacy CPT/archive/blog partials (`_archive`, `_case`, `_cpt-common`, `_service`, `_single-post`, `_toc`, `_two-col`) are temporarily in `ignoreFiles` until they are replaced by new styles — remove them from the list when that happens.
+- JS-toggled states stay `is-*` (`is-open`, `is-active`, …). Third-party classes are not renamed: `wpcf7-*`, `wp-*`, `has-children`, `editor-styles-wrapper`, `lightbox-trigger`, `scrim`, `close-button`, `aos-*`, `swiper-*`. WP menu markup gets BEM classes from `configure/theme-hooks/nav-menu-bem-classes.php`.
+- Enforced by Stylelint (`.stylelintrc.json`: `max-nesting-depth`, `media-feature-name-disallowed-list`, `selector-class-pattern`). The legacy archive partials (`_archive`, `_cpt-common` — archive hero and card grid) are temporarily in `ignoreFiles` until they are replaced by new styles — remove them from the list when that happens.
 
 ## Module Structure
 - `theme/vite-wordpress-starter-theme/functions.php` — composition root, explicit `$starter_modules` list

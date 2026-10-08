@@ -1,4 +1,4 @@
-[← Getting Started](getting-started.md) · [Back to README](../README.md)
+[← Getting Started](getting-started.md) · [Back to README](../README.md) · [Single Pages →](single-pages.md)
 
 # Page Sections (`acf/section-*` blocks)
 
@@ -80,4 +80,5 @@ Pages that already contain `acf/section-*` are skipped (re-running is safe). A n
 ## See Also
 
 - [Getting Started](getting-started.md) — environment, commands, verification
+- [Single Pages](single-pages.md) — article layout of CPT and blog singles
 - [Architecture](../.ai-factory/ARCHITECTURE.md) — theme layers and module layout

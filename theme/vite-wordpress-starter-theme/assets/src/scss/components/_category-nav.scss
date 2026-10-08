@@ -1,0 +1,53 @@
+@use "../mixins/breakpoint" as *;
+
+// Blog category chips (partials/parts/category-nav.php).
+.category-nav {
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border: var(--border);
+        border-radius: var(--radius);
+        background: var(--c-bg);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--c-dark);
+        transition:
+            background 0.3s ease-in-out,
+            border-color 0.3s ease-in-out,
+            color 0.3s ease-in-out;
+
+        @include breakpoint(mobile) {
+            padding: 12px 18px;
+            font-size: 15px;
+        }
+
+        &:hover {
+            border-color: var(--c-blue);
+            color: var(--c-blue);
+        }
+
+        &.is-active {
+            border-color: var(--c-blue);
+            background: var(--c-blue);
+            color: var(--c-white);
+        }
+    }
+
+    &__count {
+        font-size: 12px;
+        font-weight: 600;
+        opacity: 0.6;
+    }
+}

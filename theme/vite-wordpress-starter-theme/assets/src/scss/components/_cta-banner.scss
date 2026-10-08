@@ -1,0 +1,75 @@
+@use "../mixins/breakpoint" as *;
+
+// Final navy CTA under article singles (partials/parts/cpt-cta.php).
+.cta-banner {
+    background: var(--c-bg);
+    border-top: var(--border);
+
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+        padding: 40px 20px;
+        background: var(--c-navy);
+
+        @include breakpoint(mobile) {
+            padding: 56px 40px;
+        }
+
+        @include breakpoint(tablet) {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+            padding: 72px 56px;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 760px;
+    }
+
+    &__title {
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.15;
+        color: var(--c-white);
+
+        @include breakpoint(mobile) {
+            font-size: 32px;
+        }
+
+        @include breakpoint(tablet) {
+            font-size: 40px;
+        }
+    }
+
+    &__text {
+        font-size: 16px;
+        line-height: 1.55;
+        color: var(--c-secondary);
+
+        @include breakpoint(mobile) {
+            font-size: 18px;
+        }
+    }
+
+    // Primary hover is navy — invisible on the navy banner, so invert it.
+    // Labels come from ACF and can be long: wrap instead of overflowing on phones.
+    &__button {
+        flex-shrink: 0;
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.25;
+
+        &:hover {
+            background: var(--c-white);
+            color: var(--c-navy) !important;
+        }
+    }
+}

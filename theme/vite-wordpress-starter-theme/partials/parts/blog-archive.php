@@ -1,18 +1,29 @@
 <?php
 /**
- * Shared archive layout for the services / directions / cases CPTs:
- * simple hero + card grid over the main query.
+ * Blog listing layout shared by the posts page (home.php) and post archives
+ * (archive.php: categories, tags, dates): hero + category nav + card grid over the main query.
+ *
+ * @param array $args {
+ *     @type string $title       Page heading.
+ *     @type string $description Optional intro under the heading (term description, HTML allowed).
+ * }
  *
  * @package Vite_Starter
  */
 
+$part_title  = ! empty( $args['title'] ) ? $args['title'] : __( 'Блог', 'vite-starter' );
+$description = ! empty( $args['description'] ) ? $args['description'] : '';
 ?>
-<main class="archive-cpt">
+<main class="archive-cpt blog-archive">
 	<section class="s-cpt-hero">
 		<div class="s-cpt-hero__wrap container">
 			<div class="s-cpt-hero__inner frame">
 				<?php get_template_part( 'partials/breadcrumbs' ); ?>
-				<h1 class="s-cpt-hero__title"><?php post_type_archive_title(); ?></h1>
+				<h1 class="s-cpt-hero__title"><?php echo esc_html( $part_title ); ?></h1>
+				<?php if ( $description ) : ?>
+					<div class="blog-archive__description"><?php echo wp_kses_post( $description ); ?></div>
+				<?php endif; ?>
+				<?php get_template_part( 'partials/parts/category-nav' ); ?>
 			</div>
 		</div>
 	</section>
@@ -30,6 +41,7 @@
 							array(
 								'class'     => 'archive-grid__item',
 								'title_tag' => 'h2',
+								'show_date' => true,
 							)
 						);
 					endwhile;

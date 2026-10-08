@@ -1,0 +1,83 @@
+@use "../mixins/breakpoint" as *;
+
+// FAQ accordion (partials/parts/cpt-faq.php, components/faqAccordion.js).
+.faq {
+    display: flex;
+    flex-direction: column;
+    border-top: var(--border);
+
+    &__item {
+        border-bottom: var(--border);
+    }
+
+    &__question {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+        padding: 18px 0;
+        background: none;
+        border: none;
+        text-align: left;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1.3;
+        color: var(--c-dark);
+        transition: color 0.3s ease-in-out;
+
+        @include breakpoint(mobile) {
+            padding: 24px 0;
+            font-size: 20px;
+        }
+
+        &:hover,
+        &:focus-visible {
+            color: var(--c-blue);
+        }
+    }
+
+    // Plus that turns into a minus when the item is open.
+    &__icon {
+        position: relative;
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border: var(--border);
+        border-radius: var(--radius);
+        color: var(--c-blue);
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 2px;
+            background: currentcolor;
+            transform: translate(-50%, -50%);
+            transition: transform 0.25s ease-in-out;
+        }
+
+        &::after {
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+    }
+
+    &__item--open &__icon::after {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    &__answer {
+        display: none; // opened by faqAccordion.js
+    }
+
+    &__answer-inner {
+        padding: 0 0 24px;
+
+        @include breakpoint(mobile) {
+            padding-right: 52px;
+        }
+    }
+}

@@ -5,12 +5,7 @@
 		"assets/dist/**",
 		"assets/src/scss/vendors/**",
 		"assets/src/scss/components/_archive.scss",
-		"assets/src/scss/components/_case.scss",
-		"assets/src/scss/components/_cpt-common.scss",
-		"assets/src/scss/components/_service.scss",
-		"assets/src/scss/components/_single-post.scss",
-		"assets/src/scss/components/_toc.scss",
-		"assets/src/scss/components/_two-col.scss"
+		"assets/src/scss/components/_cpt-common.scss"
 	],
 	"rules": {
 		"max-nesting-depth": [

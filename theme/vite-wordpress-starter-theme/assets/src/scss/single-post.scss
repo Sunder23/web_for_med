@@ -1,4 +1,8 @@
-// Single blog post template.
-@use "components/cpt-common";
-@use "components/content-with-toc";
-@use "components/single-post";
+// Single blog post template (partials/parts/article-layout.php).
+@use "components/entry-content";
+@use "components/lightbox";
+@use "components/toc";
+@use "components/article";
+@use "components/post-card";
+@use "components/related-posts";
+@use "components/cta-banner";
