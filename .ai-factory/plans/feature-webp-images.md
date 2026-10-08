@@ -75,7 +75,7 @@ Active research summary (featured-image prompts) is unrelated to this task — n
 - [x] **Task 6: Lint**
   - `composer lint` in the theme dir (PHPCS + PHPStan); if PHPStan complains about the script outside the theme — scripts are not in PHPStan paths, keep it that way. Fix issues; no new baseline entries.
 
-- [ ] **Task 7: Documentation**
+- [x] **Task 7: Documentation**
   - `docs/getting-started.md`: section "Images / WebP" — upload auto-conversion, flags `STARTER_CONVERT_UPLOADS_TO_WEBP` / `STARTER_WEBP_UPLOAD_QUALITY`, how to run `scripts/convert-media-to-webp.php` (dry-run first, backup).
   - `AGENTS.md`: mention `convert-image-to-webp.php` helper and the new script under `scripts/` if the structure section lists them.
 
