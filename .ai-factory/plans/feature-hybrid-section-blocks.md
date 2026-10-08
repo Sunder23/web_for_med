@@ -41,14 +41,14 @@
 
 ### Phase 0 — Подготовка
 
-- [ ] **T0. Бэкап и baseline.**
+- [x] **T0. Бэкап и baseline.**
   - `mysqldump` из контейнера `db` → `backups/web_for_med-pre-hybrid-<date>.sql` (добавить `backups/` в `.gitignore`).
   - Скриншоты «до» (desktop 1440 + mobile 390): `/`, `/services/`, одна service/direction/case-запись, `/blog/` и одна запись блога → `screens/before/`.
   - Логи: не нужны (разовая операция); результат дампа проверить по размеру файла.
 
 ### Phase 1 — Окружение и тулинг
 
-- [ ] **T1. Docker как в референсе.**
+- [x] **T1. Docker как в референсе.**
   - Создать `docker/compose.yml` (`name: web_for_med`, сервисы `db` с healthcheck, `mailpit`, `wordpress` с `WORDPRESS_CONFIG_EXTRA` → `WP_ENVIRONMENT_TYPE=local`, `WP_DEBUG_LOG`, `WP_HOME/SITEURL`, `wpcli`, `phpmyadmin`), `docker/.env.example` (с `MAILPIT_PORT`), перенести `uploads.ini` → `docker/uploads.ini`, корневой `.env` → `docker/.env`.
   - Монтирования: тема, `../mu-plugins`, `../plugin`, `../scripts:/scripts`, `../ref/images:/import-images:ro`.
   - `mu-plugins/mailpit.php` — порт из референса.
@@ -56,7 +56,7 @@
   - Проверка: `docker compose -f docker/compose.yml up -d` поднимает **те же** тома (сайт отдаёт 200, контент на месте), Mailpit на `:8025`.
   - Логи: нет (конфигурация).
 
-- [ ] **T2. PHPCS + PHPStan.**
+- [x] **T2. PHPCS + PHPStan.**
   - `composer.json` (require-dev и scripts `lint`/`analyse`, как в референсе), `phpcs.xml.dist` (text domain `vite-starter`, `is_theme`), `phpstan.neon` (level 5, `configure` + `functions.php`, stubs SCF/ACF), `phpstan-bootstrap.php` (константы `WFB_*`, `VITE_*`); `vendor/` в `.gitignore`.
   - Baseline `phpstan-baseline.neon` генерировать **после** Phase 2, чтобы не захватить старый код.
   - Логи: нет.

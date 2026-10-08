@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset name="Vite WordPress Starter Theme">
+	<description>PHPCS ruleset for the Vite WordPress starter theme.</description>
+
+	<file>.</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/assets/dist/*</exclude-pattern>
+	<exclude-pattern>*/static/*</exclude-pattern>
+
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg value="sp"/>
+
+	<config name="testVersion" value="8.2-"/>
+	<config name="minimum_supported_wp_version" value="6.8"/>
+
+	<rule ref="WordPress"/>
+
+	<!-- Theme mode: allows template-hierarchy names like single-patient_story.php (post type slug with underscore). -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="is_theme" value="true"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="vite-starter"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
