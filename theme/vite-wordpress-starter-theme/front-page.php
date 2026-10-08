@@ -198,12 +198,12 @@ $contact_form_shortcode = get_field('front_page_contact_form_shortcode');
 			<div class="s-cases__header l-frame-x">
 				<h2 class="section-title"><?php echo esc_html($cases['title']); ?></h2>
 				<div class="s-cases__nav">
-					<button class="s-cases__btn" id="casePrev" aria-label="<?php esc_attr_e('Стрілка вліво', 'textdomaintomodify'); ?>">
+					<button class="s-cases__btn" id="casePrev" aria-label="<?php esc_attr_e('Стрілка вліво', 'vite-starter'); ?>">
 						<svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M13.6757 16.5L23 6.91667L20.1622 4L8 16.5L20.1622 29L23 26.0833L13.6757 16.5Z" fill="#AEBBC4" />
 						</svg>
 					</button>
-					<button class="s-cases__btn" id="caseNext" aria-label="<?php esc_attr_e('Стрілка вправо', 'textdomaintomodify'); ?>">
+					<button class="s-cases__btn" id="caseNext" aria-label="<?php esc_attr_e('Стрілка вправо', 'vite-starter'); ?>">
 						<svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M17.3243 16.5L8 6.91667L10.8378 4L23 16.5L10.8378 29L8 26.0833L17.3243 16.5Z" fill="#AEBBC4" />
 						</svg>

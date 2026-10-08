@@ -30,7 +30,7 @@
           <?php endif; ?>
 
           <!-- Desktop nav — inside header for flex layout -->
-          <nav class="nav nav--desktop" aria-label="<?php esc_attr_e('Main navigation', 'textdomaintomodify'); ?>">
+          <nav class="nav nav--desktop" aria-label="<?php esc_attr_e('Main navigation', 'vite-starter'); ?>">
             <?php
             wp_nav_menu([
               'theme_location' => 'menu-main',
@@ -47,7 +47,7 @@
             </a>
           <?php endif; ?>
 
-          <button class="burger" id="burger" aria-label="<?php esc_attr_e('Відкрити меню', 'textdomaintomodify'); ?>" aria-expanded="false" aria-controls="mainNav">
+          <button class="burger" id="burger" aria-label="<?php esc_attr_e('Відкрити меню', 'vite-starter'); ?>" aria-expanded="false" aria-controls="mainNav">
             <span></span><span></span><span></span>
           </button>
         </div>
@@ -55,7 +55,7 @@
     </header>
 
     <!-- Mobile overlay nav — outside header so its z-index is compared against header in root context -->
-    <nav class="nav nav--mobile-overlay" id="mainNav" aria-label="<?php esc_attr_e('Mobile navigation', 'textdomaintomodify'); ?>" aria-hidden="true">
+    <nav class="nav nav--mobile-overlay" id="mainNav" aria-label="<?php esc_attr_e('Mobile navigation', 'vite-starter'); ?>" aria-hidden="true">
 
       <div class="nav__links">
         <?php

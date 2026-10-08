@@ -8,7 +8,7 @@
  * Supplementary info cards live inside post content as acf/info-block blocks.
  */
 
-$toc = custom_theme_get_toc();
+$toc = starter_get_toc();
 ?>
 <section class="s-two-col s-content-toc">
 	<div class="s-two-col__wrap l-wrap">
@@ -20,8 +20,8 @@ $toc = custom_theme_get_toc();
 				<aside class="s-two-col__sidebar s-content-toc__sidebar">
 					<div class="s-content-toc__sticky">
 						<?php if (! empty($toc)) : ?>
-							<nav class="toc" data-toc aria-label="<?php esc_attr_e('Зміст сторінки', 'textdomaintomodify'); ?>">
-								<h2 class="toc__title card-title"><?php esc_html_e('Зміст', 'textdomaintomodify'); ?></h2>
+							<nav class="toc" data-toc aria-label="<?php esc_attr_e('Зміст сторінки', 'vite-starter'); ?>">
+								<h2 class="toc__title card-title"><?php esc_html_e('Зміст', 'vite-starter'); ?></h2>
 								<ul class="toc__list">
 									<?php foreach ($toc as $heading) : ?>
 										<li class="toc__item toc__item--h<?php echo esc_attr((string) $heading['level']); ?>">

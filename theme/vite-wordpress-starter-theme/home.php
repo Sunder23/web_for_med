@@ -9,7 +9,7 @@ $posts_page_title = $posts_page ? get_the_title( $posts_page ) : 'Блог';
 	<section class="s-cpt-hero">
 		<div class="s-cpt-hero__wrap l-wrap">
 			<div class="s-cpt-hero__inner l-frame-x">
-				<?php custom_theme_breadcrumbs(); ?>
+				<?php get_template_part( 'partials/breadcrumbs' ); ?>
 				<h1 class="s-cpt-hero__title"><?php echo esc_html( $posts_page_title ); ?></h1>
 			</div>
 		</div>
@@ -26,13 +26,13 @@ $posts_page_title = $posts_page ? get_the_title( $posts_page ) : 'Блог';
 								<h2 class="archive-card__title card-title"><?php the_title(); ?></h2>
 								<p class="archive-card__text card-text"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 32 ) ); ?></p>
 							</div>
-							<span class="archive-card__more tag c-tag"><?php esc_html_e( 'Читати далі', 'textdomaintomodify' ); ?> &rarr;</span>
+							<span class="archive-card__more tag c-tag"><?php esc_html_e( 'Читати далі', 'vite-starter' ); ?> &rarr;</span>
 						</a>
 					<?php endwhile; ?>
 				</div>
 				<?php the_posts_pagination(); ?>
 			<?php else : ?>
-				<p class="archive-empty l-frame-x"><?php esc_html_e( 'Записів поки немає.', 'textdomaintomodify' ); ?></p>
+				<p class="archive-empty l-frame-x"><?php esc_html_e( 'Записів поки немає.', 'vite-starter' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</section>

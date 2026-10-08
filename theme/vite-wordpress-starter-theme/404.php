@@ -9,7 +9,7 @@ get_header();
 
       <section>
         <p>
-            <?php esc_attr_e('Error 404, Ooops ! Cette page n’existe pas !','textdomaintomodify'); ?>
+            <?php esc_attr_e('Error 404, Ooops ! Cette page n’existe pas !','vite-starter'); ?>
         </p>
       </section>
 

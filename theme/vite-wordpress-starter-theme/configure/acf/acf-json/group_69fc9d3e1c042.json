@@ -192,6 +192,72 @@
                     "parent_repeater": "field_69fc9e374fdf4"
                 }
             ]
+        },
+        {
+            "key": "field_starter_options_analytics_tab",
+            "label": "Google \/ GTM",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_starter_options_analytics_enabled",
+            "label": "Analytics Enabled",
+            "name": "analytics_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Master switch for Google Tag Manager.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_starter_options_analytics_gtm_id",
+            "label": "GTM ID",
+            "name": "analytics_gtm_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Google Tag Manager container ID, e.g. GTM-XXXXXXX.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_starter_options_analytics_enabled",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "GTM-XXXXXXX",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -215,5 +281,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1778170053
+    "modified": 1791463568
 }

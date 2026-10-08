@@ -6,13 +6,13 @@
  * Extract h2/h3 headings from HTML and compute a unique anchor id for each.
  *
  * Existing id attributes are respected; missing ids are generated from the
- * heading text. Both the anchor-injection filter and custom_theme_get_toc()
+ * heading text. Both the anchor-injection filter and starter_get_toc()
  * use this function on the same heading sequence, so ids always match.
  *
  * @param string $html HTML markup to scan.
  * @return array[] List of [ 'level' => 2|3, 'title' => string, 'id' => string ].
  */
-function custom_theme_collect_headings($html)
+function starter_collect_headings($html)
 {
 	$headings = array();
 
@@ -66,17 +66,17 @@ function custom_theme_collect_headings($html)
 /**
  * the_content filter: inject anchor ids into h2/h3 headings on block content views.
  */
-function custom_theme_inject_heading_anchors($content)
+function starter_inject_heading_anchors($content)
 {
 	if (is_admin() || ! in_the_loop() || ! is_main_query()) {
 		return $content;
 	}
 
-	if (! custom_theme_is_block_content_view()) {
+	if (! starter_is_block_content_view()) {
 		return $content;
 	}
 
-	$headings = custom_theme_collect_headings($content);
+	$headings = starter_collect_headings($content);
 	if (empty($headings)) {
 		return $content;
 	}
@@ -104,7 +104,7 @@ function custom_theme_inject_heading_anchors($content)
 
 	return $content;
 }
-add_filter('the_content', 'custom_theme_inject_heading_anchors', 20);
+add_filter('the_content', 'starter_inject_heading_anchors', 20);
 
 /**
  * Build the TOC data for a post from its h2/h3 headings.
@@ -115,12 +115,12 @@ add_filter('the_content', 'custom_theme_inject_heading_anchors', 20);
  * @param int|WP_Post|null $post Post to build the TOC for. Defaults to current post.
  * @return array[] List of [ 'level' => 2|3, 'title' => string, 'id' => string ].
  */
-function custom_theme_get_toc($post = null)
+function starter_get_toc($post = null)
 {
 	$post = get_post($post);
 	if (! $post) {
 		return array();
 	}
 
-	return custom_theme_collect_headings($post->post_content);
+	return starter_collect_headings($post->post_content);
 }

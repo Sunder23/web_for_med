@@ -26,7 +26,7 @@ if (empty($title) && empty($text)) {
     // nothing to render on the frontend; show a hint in the editor only
     if (! empty($is_preview)) {
         echo '<div class="' . esc_attr($class_name) . '"><p class="info-block__placeholder">'
-            . esc_html__('Інфо-блок: заповніть заголовок і текст у бічній панелі.', 'textdomaintomodify')
+            . esc_html__('Інфо-блок: заповніть заголовок і текст у бічній панелі.', 'vite-starter')
             . '</p></div>';
     }
     return;

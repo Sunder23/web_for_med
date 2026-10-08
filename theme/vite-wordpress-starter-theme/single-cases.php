@@ -10,7 +10,7 @@ $cta  = get_field( 'case_cta' );
 	<section class="s-cpt-hero">
 		<div class="s-cpt-hero__wrap l-wrap">
 			<div class="s-cpt-hero__inner l-frame-x">
-				<?php custom_theme_breadcrumbs(); ?>
+				<?php get_template_part( 'partials/breadcrumbs' ); ?>
 				<h1 class="s-cpt-hero__title"><?php the_title(); ?></h1>
 				<?php if ( ! empty( $hero['subtitle'] ) ) : ?>
 					<p class="s-cpt-hero__subtitle"><?php echo esc_html( $hero['subtitle'] ); ?></p>

@@ -1,233 +1,368 @@
 <?php
+/**
+ * Theme file.
+ *
+ * @package Vite_Starter
+ */
 
-// Define dist directory, base uri, and path
-define( 'DIST_DIR', 'assets/dist' );
-define( 'DIST_URI', get_template_directory_uri() . '/' . DIST_DIR );
-define( 'DIST_PATH', get_template_directory() . '/' . DIST_DIR );
-
-// default server address, port, and entry point can be customized in vite.config.js
-define( 'VITE_SERVER', 'http://localhost:5173' );
-define( 'VITE_BUILD', file_exists( DIST_PATH . '/.vite/manifest.json' ) );
-
-function vite_asset_lists() {
-    return [
-        'js' => [
-            'main' => 'main.js',
-        ],
-        'scss' => [
-            'main' => 'main.scss',
-        ],
-        'fonts' => [
-            'shelley' => 'ShelleyLTStd-Script.woff2',
-        ],
-    ];
+if ( ! defined( 'VITE_DIST_DIR' ) ) {
+	define( 'VITE_DIST_DIR', 'assets/dist' );
+}
+if ( ! defined( 'VITE_DIST_URI' ) ) {
+	define( 'VITE_DIST_URI', WFB_THEME_URI . '/' . VITE_DIST_DIR );
+}
+if ( ! defined( 'VITE_DIST_PATH' ) ) {
+	define( 'VITE_DIST_PATH', WFB_THEME_PATH . '/' . VITE_DIST_DIR );
 }
 
-function vite_manifest() {
-    static $manifest = null;
-
-    if ( null !== $manifest ) {
-        return $manifest;
-    }
-
-    $manifest_path = DIST_PATH . '/.vite/manifest.json';
-    if ( ! file_exists( $manifest_path ) ) {
-        $manifest = null;
-        return $manifest;
-    }
-
-    $manifest = json_decode( file_get_contents( $manifest_path ), true );
-    if ( ! is_array( $manifest ) ) {
-        $manifest = null;
-    }
-
-    return $manifest;
+if ( ! defined( 'VITE_SERVER' ) ) {
+	// Default server address and port can be customized in vite.config.js.
+	$vite_server_env = getenv( 'VITE_SERVER' );
+	define( 'VITE_SERVER', $vite_server_env ? $vite_server_env : 'http://localhost:5173' );
+}
+if ( ! defined( 'VITE_BUILD' ) ) {
+	define( 'VITE_BUILD', file_exists( VITE_DIST_PATH . '/.vite/manifest.json' ) );
+}
+if ( ! defined( 'VITE_DEV' ) ) {
+	define( 'VITE_DEV', ! VITE_BUILD && wp_get_environment_type() === 'local' );
 }
 
-function vite_manifest_uri( $manifest, $key ) {
-    if ( ! $manifest || ! isset( $manifest[ $key ]['file'] ) ) {
-        return null;
-    }
-
-    return DIST_URI . '/' . $manifest[ $key ]['file'];
+/**
+ * Lists the theme's main JS/SCSS entry files, keyed by handle.
+ *
+ * @return array Map with "js" and "scss" entry-file lists.
+ */
+function starter_vite_asset_lists() {
+	return array(
+		'js'   => array(
+			'main' => 'main.js',
+		),
+		'scss' => array(
+			'main' => 'main.scss',
+		),
+	);
 }
 
-// add assets bundled by vite
-function add_vite_assets() {
-    $assets = vite_asset_lists();
-    $js_files = $assets['js'];
-    $scss_files = $assets['scss'];
+/**
+ * Loads and caches the Vite build manifest.
+ *
+ * @return array|null Decoded manifest data, or null when it cannot be read.
+ */
+function starter_vite_manifest() {
+	static $manifest = null;
 
-    if ( VITE_BUILD ) {
-        $manifest = vite_manifest();
-    }
+	if ( null !== $manifest ) {
+		return $manifest;
+	}
 
-    foreach ( $js_files as $handle => $file ) {
-        $js_uri = VITE_SERVER . '/assets/src/js/' . $file;
-        $script_dependencies = 'main' === $handle ? array( 'jquery' ) : null;
-        if ( VITE_BUILD ) {
-            $manifest_entry = $manifest[ 'assets/src/js/' . $file ] ?? [];
-            $js_uri = DIST_URI . '/' . $manifest_entry['file'];
+	$manifest_path = VITE_DIST_PATH . '/.vite/manifest.json';
+	if ( ! file_exists( $manifest_path ) ) {
+		return null;
+	}
 
-            // Enqueue CSS extracted from JS imports (e.g. swiper/css)
-            foreach ( $manifest_entry['css'] ?? [] as $i => $css_file ) {
-                wp_enqueue_style( $handle . '-js-' . $i, DIST_URI . '/' . $css_file, null, null );
-            }
-        }
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local theme file, not a remote request.
+	$manifest = json_decode( file_get_contents( $manifest_path ), true );
+	if ( ! is_array( $manifest ) ) {
+		$manifest = null;
+	}
 
-        wp_register_script( $handle, $js_uri, $script_dependencies, null, true );
-        $vars = array(
-//			'ajaxUrl' => admin_url( 'admin-ajax.php' ), // uncomment to use - in your js : siteVars.ajaxUrl
-        );
-        wp_localize_script( $handle, 'siteVars', $vars );
-        wp_enqueue_script( $handle );
-    }
-
-    foreach ( $scss_files as $handle => $file ) {
-        $css_uri = VITE_SERVER . '/assets/src/scss/' . $file;
-        if ( VITE_BUILD ) {
-            $css_uri = DIST_URI . '/' . $manifest[ 'assets/src/scss/' . $file ]['file'];
-        }
-
-        wp_enqueue_style( $handle, $css_uri, null, null );
-    }
+	return $manifest;
 }
-add_action( 'wp_enqueue_scripts', 'add_vite_assets', 100 );
 
-function vite_client_head_hook() {
-    if ( ! VITE_BUILD ) {
-        echo '<script type="module" crossorigin src="' . VITE_SERVER . '/@vite/client"></script>';
-    }
+/**
+ * Tracks script handles that must be output as ES modules, cached per request.
+ *
+ * @param string|null $add Handle to add to the tracked list, or null to just read it.
+ * @return array Tracked ES module script handles.
+ */
+function starter_vite_module_handles( $add = null ) {
+	static $handles = array();
+
+	if ( null !== $add ) {
+		$handles[] = $add;
+	}
+
+	return $handles;
 }
-add_action( 'wp_head', 'vite_client_head_hook' );
 
-function add_module_type_attribute( $tag, $handle, $src ) {
-    // The handles of the enqueued scripts we want to modify
-    if ( 'main' === $handle && ! VITE_BUILD ) {
-        return '<script type="module" src="' . esc_url( $src ) . '" crossorigin></script>';
-    }
+/**
+ * Resolves the built asset URI for a Vite manifest entry.
+ *
+ * Logs a WARN once per missing key when a production build is active.
+ *
+ * @param array|null $manifest Decoded Vite manifest data.
+ * @param string     $key      Manifest entry key (source-relative asset path).
+ * @return string|null Built asset URI, or null when the entry is missing.
+ */
+function starter_vite_manifest_uri( $manifest, $key ) {
+	static $reported = array();
 
-    return $tag;
+	if ( ! $manifest || ! isset( $manifest[ $key ]['file'] ) ) {
+		if ( VITE_BUILD && ! isset( $reported[ $key ] ) ) {
+			$reported[ $key ] = true;
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional WARN-level diagnostic (minimal logging policy).
+			error_log( 'WARN [vite] manifest entry missing: ' . $key );
+		}
+		return null;
+	}
+
+	return VITE_DIST_URI . '/' . $manifest[ $key ]['file'];
 }
-add_filter( 'script_loader_tag', 'add_module_type_attribute', 10, 3 );
 
-function _add_stylesheets() {
-    wp_enqueue_style('adobe', 'https://use.typekit.net/jug2qva.css', null, null );
+/**
+ * Registers and enqueues the theme's main JS/SCSS entries, dev-server or built.
+ *
+ * @return void
+ */
+function starter_vite_add_assets() {
+	$assets   = starter_vite_asset_lists();
+	$manifest = VITE_BUILD ? starter_vite_manifest() : null;
+
+	if ( ! VITE_DEV && ! $manifest ) {
+		return;
+	}
+
+	foreach ( $assets['js'] as $handle => $file ) {
+		$key    = 'assets/src/js/' . $file;
+		$js_uri = VITE_DEV ? VITE_SERVER . '/' . $key : null;
+
+		if ( $manifest ) {
+			$js_uri = starter_vite_manifest_uri( $manifest, $key );
+			if ( ! $js_uri ) {
+				continue;
+			}
+
+			// Enqueue CSS extracted from JS imports (e.g. vendor styles).
+			foreach ( $manifest[ $key ]['css'] ?? array() as $i => $css_file ) {
+				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+				wp_enqueue_style( $handle . '-js-' . $i, VITE_DIST_URI . '/' . $css_file, array(), null );
+			}
+		}
+
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+		wp_register_script( $handle, $js_uri, array( 'jquery' ), null, true );
+		starter_vite_module_handles( $handle );
+
+		wp_enqueue_script( $handle );
+	}
+
+	foreach ( $assets['scss'] as $handle => $file ) {
+		$key     = 'assets/src/scss/' . $file;
+		$css_uri = VITE_DEV ? VITE_SERVER . '/' . $key : starter_vite_manifest_uri( $manifest, $key );
+
+		if ( $css_uri ) {
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+			wp_enqueue_style( $handle, $css_uri, array(), null );
+		}
+	}
 }
-add_action('wp_enqueue_scripts', '_add_stylesheets');
+add_action( 'wp_enqueue_scripts', 'starter_vite_add_assets', 100 );
 
-function preload_files() {
-    if ( ! VITE_BUILD ) {
-        return;
-    }
-
-    $manifest = vite_manifest();
-    if ( ! $manifest ) {
-        return;
-    }
-
-    $assets = vite_asset_lists();
-    $js_files = $assets['js'];
-    $scss_files = $assets['scss'];
-    $fonts_files = $assets['fonts'];
-
-    foreach ( $js_files as $file ) {
-        $js_uri = vite_manifest_uri( $manifest, 'assets/src/js/' . $file );
-        if ( $js_uri ) {
-            echo '<link rel="preload" href="' . esc_url( $js_uri ) . '" as="script">';
-        }
-    }
-
-    foreach ( $scss_files as $file ) {
-        $css_uri = vite_manifest_uri( $manifest, 'assets/src/scss/' . $file );
-        if ( $css_uri ) {
-            echo '<link rel="preload" href="' . esc_url( $css_uri ) . '" as="style">';
-        }
-    }
-
-    foreach ( $fonts_files as $handle => $file ) {
-        $font_uri = vite_manifest_uri( $manifest, 'static/fonts/' . $handle . '/' . $file );
-        if ( $font_uri ) {
-            echo '<link rel="preload" href="' . esc_url( $font_uri ) . '" as="font" crossorigin="anonymous">';
-        }
-    }
-
-    // custom urls to preload go right after here
+/**
+ * Outputs the Vite dev-server client script tag when running in dev mode.
+ *
+ * @return void
+ */
+function starter_vite_client_head_hook() {
+	if ( VITE_DEV ) {
+		// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- Vite dev-server client cannot go through wp_enqueue_script.
+		echo '<script type="module" crossorigin src="' . esc_url( VITE_SERVER . '/@vite/client' ) . '"></script>';
+	}
 }
-add_action( 'wp_head', 'preload_files', 1 );
+add_action( 'wp_head', 'starter_vite_client_head_hook' );
 
-function cleaning_wordpress() {
-    // force all scripts to load in footer
-    remove_action('wp_head', 'wp_print_scripts');
-    remove_action('wp_head', 'wp_print_head_scripts', 9);
-    remove_action('wp_head', 'wp_enqueue_scripts', 1);
+/**
+ * Rewrites the script tag of tracked handles to use type="module".
+ *
+ * @param string $tag    Original script tag markup.
+ * @param string $handle Script handle being filtered.
+ * @param string $src    Script source URL.
+ * @return string Modified (or unmodified) script tag markup.
+ */
+function starter_vite_module_type_attribute( $tag, $handle, $src ) {
+	if ( in_array( $handle, starter_vite_module_handles(), true ) ) {
+		// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- Rewrites an already-enqueued tag to an ES module.
+		return '<script type="module" src="' . esc_url( $src ) . '" crossorigin></script>';
+	}
 
-    // removing all WP css files enqueued by default,
-    // except on singular views that render block content via the_content()
-    if ( ! custom_theme_is_block_content_view() ) {
-        wp_dequeue_style('wp-block-library');
-        wp_dequeue_style('wp-block-library-theme');
-        wp_dequeue_style('global-styles');
-        remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
-        remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
-    }
-    wp_dequeue_style('wc-block-style');
-    wp_dequeue_style('classic-theme-styles');
+	return $tag;
 }
-add_action('wp_enqueue_scripts', 'cleaning_wordpress', 100);
+add_filter( 'script_loader_tag', 'starter_vite_module_type_attribute', 10, 3 );
 
-function output_theme_json_preset_vars() {
-    $theme_json_path = get_template_directory() . '/theme.json';
-    if ( ! file_exists( $theme_json_path ) ) {
-        return;
-    }
+/**
+ * Registers a theme stylesheet handle resolved through the Vite manifest.
+ *
+ * @param string $handle   Style handle to register.
+ * @param string $filename Vite-relative scss path.
+ * @param array  $deps     Style dependency handles.
+ * @return string|false Registered style handle, or false when the asset could not be resolved.
+ */
+function starter_vite_register_style( $handle, $filename, $deps = array() ) {
+	$key = 'assets/src/scss/' . $filename;
+	$uri = VITE_DEV ? VITE_SERVER . '/' . $key : starter_vite_manifest_uri( starter_vite_manifest(), $key );
 
-    $data = json_decode( file_get_contents( $theme_json_path ), true );
-    if ( empty( $data['settings'] ) ) {
-        return;
-    }
+	if ( ! $uri ) {
+		return false;
+	}
 
-    $s     = $data['settings'];
-    $lines = [];
+	// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+	wp_register_style( $handle, $uri, $deps, null );
 
-    foreach ( $s['color']['palette'] ?? [] as $item ) {
-        $lines[] = '  --wp--preset--color--' . $item['slug'] . ': ' . $item['color'] . ';';
-    }
-
-    foreach ( $s['typography']['fontFamilies'] ?? [] as $item ) {
-        $lines[] = '  --wp--preset--font-family--' . $item['slug'] . ': ' . $item['fontFamily'] . ';';
-    }
-
-    foreach ( $s['typography']['fontSizes'] ?? [] as $item ) {
-        $lines[] = '  --wp--preset--font-size--' . $item['slug'] . ': ' . $item['size'] . ';';
-    }
-
-    if ( empty( $lines ) ) {
-        return;
-    }
-
-    $css = ':root {' . "\n" . implode( "\n", $lines ) . "\n}";
-
-    $utilities = [];
-    foreach ( $s['color']['palette'] ?? [] as $item ) {
-        $slug        = $item['slug'];
-        $var         = 'var(--wp--preset--color--' . $slug . ')';
-        $utilities[] = '.has-' . $slug . '-color { color: ' . $var . ' !important; }';
-        $utilities[] = '.has-' . $slug . '-background-color { background-color: ' . $var . ' !important; }';
-    }
-    foreach ( $s['typography']['fontSizes'] ?? [] as $item ) {
-        $slug        = $item['slug'];
-        $utilities[] = '.has-' . $slug . '-font-size { font-size: var(--wp--preset--font-size--' . $slug . ') !important; }';
-    }
-    foreach ( $s['typography']['fontFamilies'] ?? [] as $item ) {
-        $slug        = $item['slug'];
-        $utilities[] = '.has-' . $slug . '-font-family { font-family: var(--wp--preset--font-family--' . $slug . ') !important; }';
-    }
-
-    if ( ! empty( $utilities ) ) {
-        $css .= "\n" . implode( "\n", $utilities );
-    }
-
-    wp_add_inline_style( 'main', $css );
+	return $handle;
 }
-add_action( 'wp_enqueue_scripts', 'output_theme_json_preset_vars', 101 );
+
+/**
+ * Registers a theme script handle resolved through the Vite manifest.
+ *
+ * @param string $handle   Script handle to register.
+ * @param string $filename Vite-relative js path.
+ * @param array  $deps     Script dependency handles.
+ * @return string|false Registered script handle, or false when the asset could not be resolved.
+ */
+function starter_vite_register_script( $handle, $filename, $deps = array() ) {
+	$key = 'assets/src/js/' . $filename;
+	$uri = VITE_DEV ? VITE_SERVER . '/' . $key : starter_vite_manifest_uri( starter_vite_manifest(), $key );
+
+	if ( ! $uri ) {
+		return false;
+	}
+
+	// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content hash is in the file name.
+	wp_register_script( $handle, $uri, $deps, null, true );
+	starter_vite_module_handles( $handle );
+
+	return $handle;
+}
+
+/**
+ * Enqueues the Typekit stylesheet with the theme's script font.
+ *
+ * @return void
+ */
+function starter_enqueue_typekit() {
+	// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- external CDN URL, no local version to track.
+	wp_enqueue_style( 'adobe', 'https://use.typekit.net/jug2qva.css', array(), null );
+}
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_typekit' );
+
+/**
+ * Preloads the built main script and stylesheet (production build only).
+ *
+ * @return void
+ */
+function starter_vite_preload_files() {
+	if ( ! VITE_BUILD ) {
+		return;
+	}
+
+	$manifest = starter_vite_manifest();
+	if ( ! $manifest ) {
+		return;
+	}
+
+	$assets = starter_vite_asset_lists();
+
+	foreach ( $assets['js'] as $file ) {
+		$js_uri = starter_vite_manifest_uri( $manifest, 'assets/src/js/' . $file );
+		if ( $js_uri ) {
+			echo '<link rel="preload" href="' . esc_url( $js_uri ) . '" as="script">';
+		}
+	}
+
+	foreach ( $assets['scss'] as $file ) {
+		$css_uri = starter_vite_manifest_uri( $manifest, 'assets/src/scss/' . $file );
+		if ( $css_uri ) {
+			echo '<link rel="preload" href="' . esc_url( $css_uri ) . '" as="style">';
+		}
+	}
+}
+add_action( 'wp_head', 'starter_vite_preload_files', 1 );
+
+/**
+ * Forces scripts to the footer and removes default WordPress styles.
+ *
+ * Core block styles stay enabled on singular views that render block content via the_content().
+ *
+ * @return void
+ */
+function starter_cleanup_wordpress() {
+	// Force all scripts to load in the footer.
+	remove_action( 'wp_head', 'wp_print_scripts' );
+	remove_action( 'wp_head', 'wp_print_head_scripts', 9 );
+	remove_action( 'wp_head', 'wp_enqueue_scripts', 1 );
+
+	if ( ! starter_is_block_content_view() ) {
+		wp_dequeue_style( 'wp-block-library' );
+		wp_dequeue_style( 'wp-block-library-theme' );
+		wp_dequeue_style( 'global-styles' );
+		remove_action( 'wp_footer', 'wp_enqueue_global_styles', 1 );
+		remove_action( 'wp_body_open', 'wp_global_styles_render_svg_filters' );
+	}
+	wp_dequeue_style( 'wc-block-style' );
+	wp_dequeue_style( 'classic-theme-styles' );
+}
+add_action( 'wp_enqueue_scripts', 'starter_cleanup_wordpress', 100 );
+
+/**
+ * Emits theme.json presets as CSS custom properties and utility classes on the front end.
+ *
+ * Compensates for the dequeued global-styles stylesheet.
+ *
+ * @return void
+ */
+function starter_output_theme_json_preset_vars() {
+	$theme_json_path = WFB_THEME_PATH . '/theme.json';
+	if ( ! file_exists( $theme_json_path ) ) {
+		return;
+	}
+
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local theme file, not a remote request.
+	$data = json_decode( file_get_contents( $theme_json_path ), true );
+	if ( empty( $data['settings'] ) ) {
+		return;
+	}
+
+	$settings = $data['settings'];
+	$lines    = array();
+
+	foreach ( $settings['color']['palette'] ?? array() as $item ) {
+		$lines[] = '  --wp--preset--color--' . $item['slug'] . ': ' . $item['color'] . ';';
+	}
+
+	foreach ( $settings['typography']['fontFamilies'] ?? array() as $item ) {
+		$lines[] = '  --wp--preset--font-family--' . $item['slug'] . ': ' . $item['fontFamily'] . ';';
+	}
+
+	foreach ( $settings['typography']['fontSizes'] ?? array() as $item ) {
+		$lines[] = '  --wp--preset--font-size--' . $item['slug'] . ': ' . $item['size'] . ';';
+	}
+
+	if ( empty( $lines ) ) {
+		return;
+	}
+
+	$css = ':root {' . "\n" . implode( "\n", $lines ) . "\n}";
+
+	$utilities = array();
+	foreach ( $settings['color']['palette'] ?? array() as $item ) {
+		$slug        = $item['slug'];
+		$var         = 'var(--wp--preset--color--' . $slug . ')';
+		$utilities[] = '.has-' . $slug . '-color { color: ' . $var . ' !important; }';
+		$utilities[] = '.has-' . $slug . '-background-color { background-color: ' . $var . ' !important; }';
+	}
+	foreach ( $settings['typography']['fontSizes'] ?? array() as $item ) {
+		$slug        = $item['slug'];
+		$utilities[] = '.has-' . $slug . '-font-size { font-size: var(--wp--preset--font-size--' . $slug . ') !important; }';
+	}
+	foreach ( $settings['typography']['fontFamilies'] ?? array() as $item ) {
+		$slug        = $item['slug'];
+		$utilities[] = '.has-' . $slug . '-font-family { font-family: var(--wp--preset--font-family--' . $slug . ') !important; }';
+	}
+
+	if ( ! empty( $utilities ) ) {
+		$css .= "\n" . implode( "\n", $utilities );
+	}
+
+	wp_add_inline_style( 'main', $css );
+}
+add_action( 'wp_enqueue_scripts', 'starter_output_theme_json_preset_vars', 101 );

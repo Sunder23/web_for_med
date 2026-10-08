@@ -61,7 +61,7 @@
           <a href="<?php echo esc_url(home_url('/')); ?>" class="logo logo--sm">
             <?php echo wp_get_attachment_image($footer['logo'], 'full', '', ['class' => 'logo__img']); ?>
           </a>
-          <!-- <nav class="footer__nav" aria-label="<?php esc_attr_e('Footer navigation', 'textdomaintomodify'); ?>">
+          <!-- <nav class="footer__nav" aria-label="<?php esc_attr_e('Footer navigation', 'vite-starter'); ?>">
             <?php
             wp_nav_menu(
               [

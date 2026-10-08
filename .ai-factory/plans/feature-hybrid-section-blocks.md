@@ -63,7 +63,7 @@
 
 ### Phase 2 — Скелет темы (без изменения поведения на фронте)
 
-- [ ] **T3. `functions.php` и агрегаторы `configure/`.**
+- [x] **T3. `functions.php` и агрегаторы `configure/`.**
   - `functions.php` → константы `WFB_THEME_PATH/URI/VERSION` + массив `$starter_modules` + `require_once`, `admin.php` под `is_admin()` (как в референсе).
   - `configure/configure.php` разбить на `configure/theme-hooks/`: `register-menus.php`, `theme-support.php` (вместе с editor-styles, text domain `vite-starter`), `image-sizes.php`, `remove-wp-generator.php` (+ emoji, wp-embed), `allow-svg-uploads.php`, `disable-auto-update-emails.php`, `deprioritize-yoast-metabox.php`, `disable-autoparagraph-wrapping-cf7.php` (из `utilities.php`), `jquery-source.php` (см. решение про jQuery); агрегатор `configure/theme-hooks.php` с явным массивом.
   - `configure/cpt-taxonomy.php` → `configure/post-types.php` + `post-types/{services,directions,cases}.php`; `configure/taxonomies.php` (пустой массив) + `taxonomies/.gitkeep`.
@@ -73,13 +73,13 @@
   - Проверка: страницы (`/`, CPT, блог) отдают 200 и выглядят как baseline; в `debug.log` нет fatal/notice.
   - Логи: нет новых (рефакторинг).
 
-- [ ] **T4. ACF: local JSON и контентные блоки.**
+- [x] **T4. ACF: local JSON и контентные блоки.**
   - `acf-json/` → `configure/acf/acf-json/`; `configure/acf.php` — save + load point на новую папку (как в референсе).
   - `acf-blocks/info-block` → `configure/acf/acf-blocks/info-block/{block.json,render.php}`, стиль → `assets/src/scss/block-info-block.scss` (handle регистрируется через `starter_vite_register_style()`); `configure/blocks.php` → `configure/acf-blocks.php` (`glob()` по папкам блоков — единственное разрешённое исключение).
   - Проверка: `wp eval 'echo count( acf_get_field_groups() );'` даёт прежнее число групп, в админке нет «Sync available», блок `info-block` рендерится в записях блога.
   - Логи: `WARN [acf-blocks] style entry missing for <block>`, если стиль блока не найден в манифесте.
 
-- [ ] **T5. Vite-интеграция, analytics, optimize.**
+- [x] **T5. Vite-интеграция, analytics, optimize.**
   - `configure/js-css.php` — порт API референса: `starter_vite_manifest()`, `starter_vite_manifest_uri()`, `starter_vite_register_style()/register_script()`, `starter_vite_module_handles()`, `VITE_DEV` (через `wp_get_environment_type()`), `starter_vite_add_assets()`, editor canvas (`enqueue_block_assets` + `block_editor_settings_all` strip для `page`), preload, inline-переменные пресетов `theme.json`, cleanup core-стилей (через `starter_is_block_content_view()`), Typekit-шрифт.
   - `vite.config.js` — как в референсе: плоские entries `scss/` и `js/` + второй уровень `template-parts/blocks/`, алиасы, `postcss-pxtorem` на build (добавить в `package.json`). Записи `acf-blocks/*` убрать (стиль блока теперь `block-*.scss`).
   - `configure/analytics.php` (GTM по `analytics_enabled` / `analytics_gtm_id`) + вкладка «Google / GTM» в группе Options; `configure/optimize.php` с выключенными по умолчанию флагами.

@@ -15,7 +15,7 @@ $excerpt_map = array(
 	<section class="s-cpt-hero">
 		<div class="s-cpt-hero__wrap l-wrap">
 			<div class="s-cpt-hero__inner l-frame-x">
-				<?php custom_theme_breadcrumbs(); ?>
+				<?php get_template_part( 'partials/breadcrumbs' ); ?>
 				<h1 class="s-cpt-hero__title"><?php post_type_archive_title(); ?></h1>
 			</div>
 		</div>
@@ -42,13 +42,13 @@ $excerpt_map = array(
 									<p class="archive-card__text card-text"><?php echo esc_html( wp_trim_words( $excerpt, 32 ) ); ?></p>
 								<?php endif; ?>
 							</div>
-							<span class="archive-card__more tag c-tag"><?php esc_html_e( 'Детальніше', 'textdomaintomodify' ); ?> &rarr;</span>
+							<span class="archive-card__more tag c-tag"><?php esc_html_e( 'Детальніше', 'vite-starter' ); ?> &rarr;</span>
 						</a>
 					<?php endwhile; ?>
 				</div>
 				<?php the_posts_pagination(); ?>
 			<?php else : ?>
-				<p class="archive-empty l-frame-x"><?php esc_html_e( 'Записів поки немає.', 'textdomaintomodify' ); ?></p>
+				<p class="archive-empty l-frame-x"><?php esc_html_e( 'Записів поки немає.', 'vite-starter' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</section>

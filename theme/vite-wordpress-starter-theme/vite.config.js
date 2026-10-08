@@ -6,124 +6,166 @@
  *
  */
 
+import { existsSync, readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+import pxtorem from 'postcss-pxtorem';
 import { defineConfig } from 'vite';
-import { existsSync, readdirSync } from 'fs';
-import { resolve } from 'path';
 
-
+// Flat top-level files in `dir` become entries (main.scss/main.js and any
+// future top-level asset). `template-parts/blocks/` is scanned as one
+// additional flat level, mirroring the PHP `template-parts/blocks/` layout
+// one-for-one (e.g. `hero.php` <-> `template-parts/blocks/hero.scss`/`.js`)
+// without making the whole tree recursive.
+const collectFlatScssEntries = (dir, prefix, entries) => {
+	readdirSync(dir, { withFileTypes: true })
+		.filter(
+			(entry) =>
+				entry.isFile() &&
+				entry.name.endsWith('.scss') &&
+				!entry.name.startsWith('_'),
+		)
+		.forEach((entry) => {
+			const name = prefix + entry.name.replace(/\.scss$/, '');
+			entries[name] = resolve(dir, entry.name);
+		});
+};
 
 const scssEntries = () => {
-  const scssDir = resolve(__dirname, 'assets/src/scss');
-  return readdirSync(scssDir, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.scss') && !entry.name.startsWith('_'))
-    .reduce((entries, entry) => {
-      const name = entry.name.replace(/\.scss$/, '');
-      entries[name] = resolve(scssDir, entry.name);
-      return entries;
-    }, {});
+	const scssDir = resolve(__dirname, 'assets/src/scss');
+	const entries = {};
+
+	collectFlatScssEntries(scssDir, '', entries);
+
+	const blocksDir = resolve(scssDir, 'template-parts/blocks');
+	if (existsSync(blocksDir)) {
+		collectFlatScssEntries(blocksDir, 'template-parts/blocks/', entries);
+	}
+
+	return entries;
 };
 
-// ACF block styles: acf-blocks/<block>/<block>.scss compiled per block,
-// manifest key stays "acf-blocks/<block>/<name>.scss" for PHP lookup
-const acfBlockScssEntries = () => {
-  const blocksDir = resolve(__dirname, 'acf-blocks');
-  if (!existsSync(blocksDir)) {
-    return {};
-  }
-  return readdirSync(blocksDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .reduce((entries, dir) => {
-      for (const file of readdirSync(resolve(blocksDir, dir.name))) {
-        if (file.endsWith('.scss') && !file.startsWith('_')) {
-          const name = file.replace(/\.scss$/, '');
-          entries[`acf-blocks/${dir.name}/${name}`] = resolve(blocksDir, dir.name, file);
-        }
-      }
-      return entries;
-    }, {});
+const collectFlatJsEntries = (dir, prefix, entries) => {
+	readdirSync(dir, { withFileTypes: true })
+		.filter(
+			(entry) =>
+				entry.isFile() &&
+				entry.name.endsWith('.js') &&
+				!entry.name.startsWith('_'),
+		)
+		.forEach((entry) => {
+			const name = prefix + entry.name.replace(/\.js$/, '');
+			entries[`js/${name}`] = resolve(dir, entry.name);
+		});
 };
 
-export default defineConfig({
-  base: './',
+const jsEntries = () => {
+	const jsDir = resolve(__dirname, 'assets/src/js');
+	const entries = {};
 
-  plugins: [
-    {
-      handleHotUpdate({ file, server }) {
-        if (file.endsWith('.php')) {
-          server.ws.send({ type: 'full-reload', path: '*' });
-        }
-      },
-    },
-  ],
+	collectFlatJsEntries(jsDir, '', entries);
 
-  css: {
-    devSourcemap: true,
-  },
+	const blocksDir = resolve(jsDir, 'template-parts/blocks');
+	if (existsSync(blocksDir)) {
+		collectFlatJsEntries(blocksDir, 'template-parts/blocks/', entries);
+	}
 
-  build: {
-    // emit manifest so PHP can find the hashed files
-    manifest: true,
+	return entries;
+};
 
-    outDir: resolve(__dirname, 'assets/dist/'),
+export default defineConfig(({ command }) => ({
+	base: './',
 
-    // don't base64 images
-    assetsInlineLimit: 0,
+	plugins: [
+		{
+			handleHotUpdate({ file, server }) {
+				if (file.endsWith('.php')) {
+					server.ws.send({ type: 'full-reload', path: '*' });
+				}
+			},
+		},
+	],
 
-    rollupOptions: {
-      input: {
-        'js/main': resolve(`${__dirname}/assets/src/js/main.js`),
-        ...scssEntries(),
-        ...acfBlockScssEntries(),
-      },
-      output: {
-        entryFileNames: '[name]-[hash].js',
-        chunkFileNames: '[name]-[hash].js',
-        assetFileNames: (assetInfo) => {
-          const assetName = assetInfo.name || assetInfo.names?.[0] || '';
-          const extType = assetName.split('.');
+	css: {
+		devSourcemap: true,
+		postcss: {
+			plugins:
+				command === 'build'
+					? [
+							pxtorem({
+								rootValue: 16,
+								propList: ['*'],
+								unitPrecision: 5,
+								minPixelValue: 2,
+								exclude: /node_modules/i,
+							}),
+						]
+					: [],
+		},
+	},
 
-          // group fonts in a folder
-          if (
-            extType[1] === 'woff' ||
-            extType[1] === 'woff2' ||
-            extType[1] === 'ttf'
-          ) {
-            return 'fonts/[name]-[hash].[ext]';
-          }
+	build: {
+		// emit manifest so PHP can find the hashed files
+		manifest: true,
 
-          // group images in a folder
-          if (
-            extType[1] === 'gif' ||
-            extType[1] === 'jpg' ||
-            extType[1] === 'jpeg' ||
-            extType[1] === 'png'
-          ) {
-            return 'img/[name]-[hash].[ext]';
-          }
+		outDir: resolve(__dirname, 'assets/dist/'),
 
-          return '[ext]/[name]-[hash].[ext]';
-        },
-      },
-    },
-  },
+		// don't base64 images
+		assetsInlineLimit: 0,
 
-  server: {
-    // required to load scripts from custom host
-    cors: {
-      origin: '*',
-    },
+		rollupOptions: {
+			input: {
+				...jsEntries(),
+				...scssEntries(),
+			},
+			output: {
+				entryFileNames: '[name]-[hash].js',
+				chunkFileNames: '[name]-[hash].js',
+				assetFileNames: (assetInfo) => {
+					const assetName = assetInfo.name || assetInfo.names?.[0] || '';
+					const extType = assetName.split('.');
 
-    // We need a strict port to match on PHP side.
-    strictPort: true,
-    port: 5173,
-  },
+					// group fonts in a folder
+					if (
+						extType[1] === 'woff' ||
+						extType[1] === 'woff2' ||
+						extType[1] === 'ttf'
+					) {
+						return 'fonts/[name]-[hash].[ext]';
+					}
 
-  resolve: {
-    alias: {
-      '@src': resolve(__dirname, 'assets/src'),
-      '@js': resolve(__dirname, 'assets/src/js'),
-      '@scss': resolve(__dirname, 'assets/src/scss'),
-      '@': resolve(__dirname, 'static'),
-    },
-  },
-});
+					// group images in a folder
+					if (
+						extType[1] === 'gif' ||
+						extType[1] === 'jpg' ||
+						extType[1] === 'jpeg' ||
+						extType[1] === 'png'
+					) {
+						return 'img/[name]-[hash].[ext]';
+					}
+
+					return '[ext]/[name]-[hash].[ext]';
+				},
+			},
+		},
+	},
+
+	server: {
+		// required to load scripts from custom host
+		cors: {
+			origin: '*',
+		},
+
+		// We need a strict port to match on PHP side.
+		strictPort: true,
+		port: 5173,
+	},
+
+	resolve: {
+		alias: {
+			'@src': resolve(__dirname, 'assets/src'),
+			'@js': resolve(__dirname, 'assets/src/js'),
+			'@scss': resolve(__dirname, 'assets/src/scss'),
+			'@': resolve(__dirname, 'static'),
+		},
+	},
+}));
