@@ -35,3 +35,8 @@ import:
 # Usage: make migrate-front-page args="apply cleanup"
 migrate-front-page:
 	$(COMPOSE) run --rm wpcli wp eval-file /scripts/migrate-front-page-to-blocks.php $(args)
+
+# Random placeholder featured images for CPT + blog posts (temporary filler).
+# Usage: make placeholder-thumbs args="dry-run|force|reset"
+placeholder-thumbs:
+	$(COMPOSE) run --rm wpcli wp eval-file /scripts/assign-placeholder-thumbnails.php $(args)

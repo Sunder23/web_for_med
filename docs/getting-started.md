@@ -79,6 +79,19 @@ MSYS_NO_PATHCONV=1 docker compose -f docker/compose.yml run --rm wpcli wp eval-f
 
 `wp db export` from the `wpcli` container cannot connect to MySQL 8 (`caching_sha2_password`), so the backup step calls `mysqldump` inside the `db` container. Small 8-bit PNGs and noise textures can end up the same size or slightly larger as WebP.
 
+## Placeholder featured images
+
+Until the real covers are ready, `scripts/assign-placeholder-thumbnails.php` gives each published `services`, `directions`, `cases` and `post` entry a random featured image. It picks from three images in the media library (`2026/10/web_site_development.webp`, `2026/10/seo_medicine_web_site.webp`, `2026/05/hero_image.webp`), which it finds by file path. Posts that already have a thumbnail are skipped. Each placeholder is marked with the `_w4m_placeholder_thumb` postmeta, so `reset` removes only placeholders and keeps real covers.
+
+```bash
+make placeholder-thumbs args="dry-run"   # preview
+make placeholder-thumbs                  # assign to posts without a thumbnail
+make placeholder-thumbs args="force"     # also replace existing thumbnails
+make placeholder-thumbs args="reset"     # remove placeholders
+```
+
+Add `types=services,cases` to limit the post types.
+
 ## Verifying a refactor
 
 1. Take screenshots before (desktop 1440 / mobile 390) of `/`, `/services/`, one service, direction, case, `/blog/` and a blog post.
