@@ -10,8 +10,12 @@ export function initWhySection() {
 		return;
 	}
 
-	const triggers = Array.from(section.querySelectorAll('.why-reasons__trigger[data-reasons-target]'));
-	const screens = Array.from(section.querySelectorAll('.why-chat__screen[data-chat-screen]'));
+	const triggers = Array.from(
+		section.querySelectorAll('.why-reasons__trigger[data-reasons-target]'),
+	);
+	const screens = Array.from(
+		section.querySelectorAll('.why-chat__screen[data-chat-screen]'),
+	);
 
 	if (!triggers.length || !screens.length) {
 		logDebug('Why section skipped: triggers or screens missing', {
@@ -47,11 +51,15 @@ export function initWhySection() {
 
 	const setActiveScreen = (target, { animate = true } = {}) => {
 		const nextTarget = String(target);
-		const activeTrigger = section.querySelector('.why-reasons__trigger[aria-expanded="true"]');
+		const activeTrigger = section.querySelector(
+			'.why-reasons__trigger[aria-expanded="true"]',
+		);
 		const currentTarget = activeTrigger?.dataset.reasonsTarget ?? null;
 
 		if (currentTarget === nextTarget && animate) {
-			logDebug('Why section switch skipped: target already active', { target: nextTarget });
+			logDebug('Why section switch skipped: target already active', {
+				target: nextTarget,
+			});
 			return;
 		}
 
@@ -81,10 +89,14 @@ export function initWhySection() {
 			}
 		}
 
-		const nextScreen = screens.find((screen) => screen.dataset.chatScreen === nextTarget);
+		const nextScreen = screens.find(
+			(screen) => screen.dataset.chatScreen === nextTarget,
+		);
 
 		if (!nextScreen) {
-			logDebug('Why section switch failed: target screen not found', { target: nextTarget });
+			logDebug('Why section switch failed: target screen not found', {
+				target: nextTarget,
+			});
 			return;
 		}
 
@@ -94,7 +106,9 @@ export function initWhySection() {
 				message.classList.add('why-msg--visible');
 			}
 
-			logDebug('Why section initialized with default screen', { target: nextTarget });
+			logDebug('Why section initialized with default screen', {
+				target: nextTarget,
+			});
 			return;
 		}
 
@@ -112,9 +126,11 @@ export function initWhySection() {
 		});
 	}
 
-	const initialTarget = triggers.find((trigger) => trigger.getAttribute('aria-expanded') === 'true')?.dataset.reasonsTarget
-		?? triggers[0]?.dataset.reasonsTarget
-		?? '0';
+	const initialTarget =
+		triggers.find((trigger) => trigger.getAttribute('aria-expanded') === 'true')
+			?.dataset.reasonsTarget ??
+		triggers[0]?.dataset.reasonsTarget ??
+		'0';
 
 	setActiveScreen(initialTarget, { animate: false });
 	logDebug('Why section component ready', {

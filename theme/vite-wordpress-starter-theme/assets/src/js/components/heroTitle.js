@@ -5,7 +5,7 @@ function animateSubtitleAndButtons() {
 	const btnPrimary = document.querySelector('.hero__actions .btn--primary');
 	const btnSecondary = document.querySelector('.hero__actions .btn--secondary');
 
-	[subtitle, btnPrimary, btnSecondary].forEach(el => {
+	[subtitle, btnPrimary, btnSecondary].forEach((el) => {
 		if (el) el.classList.add('is-visible');
 	});
 }

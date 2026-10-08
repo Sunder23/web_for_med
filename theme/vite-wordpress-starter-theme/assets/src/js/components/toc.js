@@ -74,7 +74,9 @@ export function initToc() {
 		{ rootMargin: `-${HEADER_OFFSET}px 0px -60% 0px`, threshold: 0 },
 	);
 
-	targets.forEach(({ el }) => observer.observe(el));
+	targets.forEach(({ el }) => {
+		observer.observe(el);
+	});
 
 	// Click: scroll via Lenis when present (handles Cyrillic anchors that
 	// break querySelector-based handlers), fall back to native smooth scroll.

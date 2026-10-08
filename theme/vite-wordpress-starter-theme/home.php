@@ -1,4 +1,10 @@
 <?php
+/**
+ * Theme file.
+ *
+ * @package Vite_Starter
+ */
+
 get_header();
 
 $posts_page       = (int) get_option( 'page_for_posts' );
@@ -19,7 +25,10 @@ $posts_page_title = $posts_page ? get_the_title( $posts_page ) : 'Блог';
 		<div class="s-archive__wrap l-wrap">
 			<?php if ( have_posts() ) : ?>
 				<div class="archive-grid l-frame-x">
-					<?php while ( have_posts() ) : the_post(); ?>
+					<?php
+					while ( have_posts() ) :
+						the_post();
+						?>
 						<a class="archive-card info-card" href="<?php the_permalink(); ?>">
 							<div class="info-card__body">
 								<span class="archive-card__date tag c-tag"><?php echo esc_html( get_the_date() ); ?></span>
@@ -37,4 +46,5 @@ $posts_page_title = $posts_page ? get_the_title( $posts_page ) : 'Блог';
 		</div>
 	</section>
 </main>
-<?php get_footer();
+<?php
+get_footer();

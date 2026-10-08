@@ -2,6 +2,8 @@
 /**
  * Shared archive layout for the services / directions / cases CPTs:
  * simple hero + card grid over the main query.
+ *
+ * @package Vite_Starter
  */
 
 // Per-CPT source of the card excerpt: [ group field, sub field ].
@@ -28,13 +30,13 @@ $excerpt_map = array(
 					<?php
 					while ( have_posts() ) :
 						the_post();
-						$excerpt = '';
-						$map     = isset( $excerpt_map[ get_post_type() ] ) ? $excerpt_map[ get_post_type() ] : null;
-						if ( $map ) {
-							$group   = get_field( $map[0] );
-							$excerpt = ! empty( $group[ $map[1] ] ) ? $group[ $map[1] ] : '';
+						$excerpt        = '';
+						$excerpt_source = isset( $excerpt_map[ get_post_type() ] ) ? $excerpt_map[ get_post_type() ] : null;
+						if ( $excerpt_source ) {
+							$group   = get_field( $excerpt_source[0] );
+							$excerpt = ! empty( $group[ $excerpt_source[1] ] ) ? $group[ $excerpt_source[1] ] : '';
 						}
-					?>
+						?>
 						<a class="archive-card info-card" href="<?php the_permalink(); ?>">
 							<div class="info-card__body">
 								<h2 class="archive-card__title card-title"><?php the_title(); ?></h2>

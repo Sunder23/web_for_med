@@ -1,11 +1,12 @@
 <?php
-
 /**
  * Content + TOC two-column layout: block-editor content on the left,
  * sticky table of contents (auto-built from content headings) on the right.
  *
  * Used by all CPT singles and the blog single. Evolved from two-column-page.php.
  * Supplementary info cards live inside post content as acf/info-block blocks.
+ *
+ * @package Vite_Starter
  */
 
 $toc = starter_get_toc();
@@ -16,16 +17,16 @@ $toc = starter_get_toc();
 			<div class="s-two-col__content s-content-toc__content">
 				<div class="entry-content svc-prose"><?php the_content(); ?></div>
 			</div>
-			<?php if (!wp_is_mobile()) : ?>
+			<?php if ( ! wp_is_mobile() ) : ?>
 				<aside class="s-two-col__sidebar s-content-toc__sidebar">
 					<div class="s-content-toc__sticky">
-						<?php if (! empty($toc)) : ?>
-							<nav class="toc" data-toc aria-label="<?php esc_attr_e('Зміст сторінки', 'vite-starter'); ?>">
-								<h2 class="toc__title card-title"><?php esc_html_e('Зміст', 'vite-starter'); ?></h2>
+						<?php if ( ! empty( $toc ) ) : ?>
+							<nav class="toc" data-toc aria-label="<?php esc_attr_e( 'Зміст сторінки', 'vite-starter' ); ?>">
+								<h2 class="toc__title card-title"><?php esc_html_e( 'Зміст', 'vite-starter' ); ?></h2>
 								<ul class="toc__list">
-									<?php foreach ($toc as $heading) : ?>
-										<li class="toc__item toc__item--h<?php echo esc_attr((string) $heading['level']); ?>">
-											<a class="toc__link" href="#<?php echo esc_attr($heading['id']); ?>"><?php echo esc_html($heading['title']); ?></a>
+									<?php foreach ( $toc as $heading ) : ?>
+										<li class="toc__item toc__item--h<?php echo esc_attr( (string) $heading['level'] ); ?>">
+											<a class="toc__link" href="#<?php echo esc_attr( $heading['id'] ); ?>"><?php echo esc_html( $heading['title'] ); ?></a>
 										</li>
 									<?php endforeach; ?>
 								</ul>

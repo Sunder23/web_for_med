@@ -4,7 +4,9 @@ export function initFaqAccordion() {
 	const $ = window.jQuery;
 
 	if (!$) {
-		console.warn('[web_for_med] FAQ accordion skipped: jQuery is not available');
+		console.warn(
+			'[web_for_med] FAQ accordion skipped: jQuery is not available',
+		);
 		return;
 	}
 

@@ -4,7 +4,9 @@ export function initServicesAccordion() {
 	const $ = window.jQuery;
 
 	if (!$) {
-		console.warn('[web_for_med] Services accordion skipped: jQuery is not available');
+		console.warn(
+			'[web_for_med] Services accordion skipped: jQuery is not available',
+		);
 		return;
 	}
 
@@ -60,10 +62,15 @@ export function initServicesAccordion() {
 		if (!$glitchImage.length) return;
 		clearTimeout(glitchTimeout);
 		$glitchImage.addClass('glitch-image--glitching');
-		glitchTimeout = setTimeout(() => $glitchImage.removeClass('glitch-image--glitching'), 1800);
+		glitchTimeout = setTimeout(
+			() => $glitchImage.removeClass('glitch-image--glitching'),
+			1800,
+		);
 	};
 
-	const $initialActiveItem = $items.filter('.services-list__item--active').first().length
+	const $initialActiveItem = $items
+		.filter('.services-list__item--active')
+		.first().length
 		? $items.filter('.services-list__item--active').first()
 		: $items.first();
 

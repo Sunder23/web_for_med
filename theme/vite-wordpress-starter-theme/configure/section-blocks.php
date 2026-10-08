@@ -263,4 +263,4 @@ function starter_enqueue_section_block_assets() {
 		}
 	}
 }
-add_action( 'wp_enqueue_scripts', 'starter_enqueue_section_block_assets' );
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_section_block_assets', 110 );

@@ -28,7 +28,7 @@ $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] 
 				</div>
 			</div>
 
-			<h2 class="section-title" data-aos="fade-in" data-aos-duration="600"><?php echo esc_html($args['title']); ?></h2>
+			<h2 class="section-title" data-aos="fade-in" data-aos-duration="600"><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 
 	</div>
@@ -36,17 +36,17 @@ $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] 
 <section class="s-process s-process--bottom">
 	<div class="s-process__wrap l-wrap">
 		<div class="s-process__steps ">
-			<?php foreach ($items as $item) : ?>
+			<?php foreach ( $items as $item ) : ?>
 				<div class="process-step info-card">
-					<?php if (!empty($item['image'])): ?>
+					<?php if ( ! empty( $item['image'] ) ) : ?>
 						<div class="process-step--image">
-							<?php echo wp_get_attachment_image($item['image'], [200, 173], '', ['class' => 'process-step--image__item']); ?>
+							<?php echo wp_get_attachment_image( $item['image'], array( 200, 173 ), '', array( 'class' => 'process-step--image__item' ) ); ?>
 						</div>
 					<?php endif; ?>
 					<div class="process-step__top info-card__body">
-						<span class="tag c-tag"><?php echo esc_html($item['tag']); ?></span>
-						<h3 class="process-step__title card-title"><?php echo esc_html($item['title']); ?></h3>
-						<p class="process-step__text card-text"><?php echo esc_html($item['text']); ?></p>
+						<span class="tag c-tag"><?php echo esc_html( $item['tag'] ); ?></span>
+						<h3 class="process-step__title card-title"><?php echo esc_html( $item['title'] ); ?></h3>
+						<p class="process-step__text card-text"><?php echo esc_html( $item['text'] ); ?></p>
 					</div>
 				</div>
 			<?php endforeach; ?>

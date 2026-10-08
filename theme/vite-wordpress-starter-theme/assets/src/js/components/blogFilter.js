@@ -5,7 +5,9 @@ export function initBlogFilter() {
 	const $buttons = document.querySelectorAll('[data-blog-filter]');
 
 	if (!$grid || !$buttons.length) {
-		logDebug('Blog filter skipped: no [data-blog-grid]/[data-blog-filter] elements found');
+		logDebug(
+			'Blog filter skipped: no [data-blog-grid]/[data-blog-filter] elements found',
+		);
 		return;
 	}
 
@@ -15,13 +17,18 @@ export function initBlogFilter() {
 		$button.addEventListener('click', () => {
 			const category = $button.dataset.blogFilter;
 
-			$buttons.forEach(($btn) => $btn.classList.toggle('is-active', $btn === $button));
+			$buttons.forEach(($btn) => {
+				$btn.classList.toggle('is-active', $btn === $button);
+			});
 
 			let visibleCount = 0;
 
 			$cards.forEach(($card) => {
-				const cardCategories = ($card.dataset.category || '').split(' ').filter(Boolean);
-				const isVisible = category === 'all' || cardCategories.includes(category);
+				const cardCategories = ($card.dataset.category || '')
+					.split(' ')
+					.filter(Boolean);
+				const isVisible =
+					category === 'all' || cardCategories.includes(category);
 
 				$card.hidden = !isVisible;
 
@@ -30,9 +37,14 @@ export function initBlogFilter() {
 				}
 			});
 
-			console.debug(`[W4M blogFilter] filter=${category} visible=${visibleCount}`);
+			console.debug(
+				`[W4M blogFilter] filter=${category} visible=${visibleCount}`,
+			);
 		});
 	});
 
-	logDebug('Blog filter initialized', { buttons: $buttons.length, cards: $cards.length });
+	logDebug('Blog filter initialized', {
+		buttons: $buttons.length,
+		cards: $cards.length,
+	});
 }

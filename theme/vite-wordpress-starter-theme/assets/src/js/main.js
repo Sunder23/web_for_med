@@ -2,8 +2,13 @@ import { initActiveNav } from '@js/components/activeNav.js';
 import { initContactForm } from '@js/components/contactForm.js';
 import { initLightbox } from '@js/components/lightbox.js';
 import { initMobileNav } from '@js/components/mobileNav.js';
+import {
+	initAos,
+	initFooterCoverImageGlitch,
+	initFooterCoverText,
+	initFooterFormAOS,
+} from '@js/components/siteAnimations.js';
 import { initSmoothScroll } from '@js/components/smoothScroll.js';
-import { initAos, initFooterCoverText, initFooterFormAOS, initFooterCoverImageGlitch } from '@js/components/siteAnimations.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 	initAos();

@@ -1,28 +1,35 @@
 <?php
+/**
+ * Theme file.
+ *
+ * @package Vite_Starter
+ */
+
 get_header();
 ?>
 
-  <div id="primary" class="content-area">
-    <main id="main" class="site-main">
+	<div id="primary" class="content-area">
+	<main id="main" class="site-main">
 
-      <?php
-      while(have_posts()) : the_post();
-      ?>
+		<?php
+		while ( have_posts() ) :
+			the_post();
+			?>
 
-        <section>
-          <?php the_title('<h1>', '</h1>'); ?>
+		<section>
+			<?php the_title( '<h1>', '</h1>' ); ?>
 
-          <?php
-          the_content();
-          ?>
-        </section>
+			<?php
+			the_content();
+			?>
+		</section>
 
-      <?php
-      endwhile; // End of the loop.
-      ?>
+			<?php
+		endwhile; // End of the loop.
+		?>
 
-    </main><!-- #main -->
-  </div><!-- #primary -->
+	</main><!-- #main -->
+	</div><!-- #primary -->
 
 <?php
 get_footer();

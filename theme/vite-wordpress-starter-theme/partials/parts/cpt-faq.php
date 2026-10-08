@@ -5,13 +5,15 @@
  * assets/src/js/components/faqAccordion.js (data-faq).
  *
  * @param array $args {
- *     @type string $title Optional heading.
+ *     @type string $title      Optional heading.
  *     @type array  $items Rows of [question, answer].
  * }
+ *
+ * @package Vite_Starter
  */
 
-$title = ! empty( $args['title'] ) ? $args['title'] : '';
-$items = ! empty( $args['items'] ) ? $args['items'] : array();
+$part_title = ! empty( $args['title'] ) ? $args['title'] : '';
+$items      = ! empty( $args['items'] ) ? $args['items'] : array();
 
 if ( empty( $items ) ) {
 	return;
@@ -20,8 +22,8 @@ if ( empty( $items ) ) {
 <section class="s-svc s-svc--faq">
 	<div class="s-svc__wrap l-wrap">
 		<div class="s-svc__inner l-frame-x">
-			<?php if ( $title ) : ?>
-				<h2 class="s-svc__title section-title"><?php echo esc_html( $title ); ?></h2>
+			<?php if ( $part_title ) : ?>
+				<h2 class="s-svc__title section-title"><?php echo esc_html( $part_title ); ?></h2>
 			<?php endif; ?>
 			<div class="faq" data-faq>
 				<?php foreach ( $items as $key => $item ) : ?>

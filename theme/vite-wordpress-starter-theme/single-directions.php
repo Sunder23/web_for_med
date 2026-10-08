@@ -1,4 +1,10 @@
 <?php
+/**
+ * Theme file.
+ *
+ * @package Vite_Starter
+ */
+
 get_header();
 
 $hero = get_field( 'direction_hero' );
@@ -31,7 +37,10 @@ $cta  = get_field( 'direction_cta' );
 		</div>
 	</section>
 
-	<?php while ( have_posts() ) : the_post(); ?>
+	<?php
+	while ( have_posts() ) :
+		the_post();
+		?>
 		<?php get_template_part( 'partials/parts/content-with-toc' ); ?>
 	<?php endwhile; ?>
 
@@ -39,4 +48,5 @@ $cta  = get_field( 'direction_cta' );
 
 	<?php get_template_part( 'partials/parts/cpt-cta', null, (array) $cta ); ?>
 </main>
-<?php get_footer();
+<?php
+get_footer();

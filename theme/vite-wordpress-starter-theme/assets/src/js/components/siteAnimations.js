@@ -4,12 +4,18 @@ import 'aos/dist/aos.css';
 import { initTitleScramble } from '@js/components/titleScramble.js';
 
 function fixAosBtnHover() {
-	document.querySelectorAll('.btn[data-aos], .wpcf7-submit[data-aos]').forEach(el => {
-		el.addEventListener('transitionend', () => {
-			el.style.transition = 'background 0.3s ease-in-out';
-			el.style.transitionDelay = '0ms';
-		}, { once: true });
-	});
+	document
+		.querySelectorAll('.btn[data-aos], .wpcf7-submit[data-aos]')
+		.forEach((el) => {
+			el.addEventListener(
+				'transitionend',
+				() => {
+					el.style.transition = 'background 0.3s ease-in-out';
+					el.style.transitionDelay = '0ms';
+				},
+				{ once: true },
+			);
+		});
 }
 
 export function initAos() {
@@ -51,7 +57,7 @@ export function initFooterCoverText() {
 
 	const observer = new IntersectionObserver(
 		(entries, obs) => {
-			entries.forEach(entry => {
+			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					obs.disconnect();
 					initTitleScramble(el, 0.7);
@@ -68,8 +74,8 @@ export function initFooterCoverImageGlitch() {
 	if (!el) return;
 
 	const observer = new IntersectionObserver(
-		(entries, obs) => {
-			entries.forEach(entry => {
+		(entries) => {
+			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					observer.disconnect();
 

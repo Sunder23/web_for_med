@@ -6,7 +6,9 @@ const GROUP = 'post-content';
 const IMAGE_FILE_RE = /\.(avif|gif|jpe?g|png|svg|webp)(\?.*)?$/i;
 
 export function initLightbox() {
-	const images = document.querySelectorAll('.entry-content .wp-block-image img');
+	const images = document.querySelectorAll(
+		'.entry-content .wp-block-image img',
+	);
 
 	if (!images.length) {
 		logDebug('Lightbox skipped: no .entry-content images found');

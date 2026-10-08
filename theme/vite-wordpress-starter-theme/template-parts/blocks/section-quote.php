@@ -30,7 +30,7 @@ if ( empty( $args ) || ! is_array( $args ) ) {
 					<path d="M14 10C11.7944 10 10 11.7944 10 14C10 16.2056 11.7944 18 14 18C16.2056 18 18 16.2056 18 14C18 11.7944 16.2056 10 14 10ZM14 16.3099C12.7263 16.3099 11.6901 15.2737 11.6901 14C11.6901 12.7263 12.7263 11.6901 14 11.6901C15.2737 11.6901 16.3099 12.7263 16.3099 14C16.3099 15.2737 15.2737 16.3099 14 16.3099Z" fill="#092A4A" />
 				</g>
 			</svg>
-			<h2 class="s-quote__text" data-aos="fade-in" data-aos-duration="600"><?php echo wp_kses($args['text'], ['br' => ['class' => true]]); ?></h2>
+			<h2 class="s-quote__text" data-aos="fade-in" data-aos-duration="600"><?php echo wp_kses( $args['text'], array( 'br' => array( 'class' => true ) ) ); ?></h2>
 		</div>
 	</div>
 </section>

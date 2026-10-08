@@ -134,7 +134,7 @@
 
 ### Phase 4 — Документация и финальная проверка
 
-- [ ] **T13. Lint и сборка.**
+- [x] **T13. Lint и сборка.**
   - `composer install`, `composer lint`: исправить PHPCS-нарушения в новом и перенесённом коде, остаток в `phpstan-baseline.neon`; `npx biome check`; `npm run build`.
   - Финальное визуальное сравнение всех baseline-страниц (build + dev).
   - Логи: нет.

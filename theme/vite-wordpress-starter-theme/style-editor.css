@@ -9,7 +9,7 @@
 body {
 	background: #fbfcfd;
 	padding: 32px 24px;
-	font-family: 'Fixel Display', 'IBM Plex Sans', sans-serif;
+	font-family: "Fixel Display", "IBM Plex Sans", sans-serif;
 	font-size: 16px;
 	line-height: 1.6;
 	color: #3b3e41;
@@ -22,12 +22,12 @@ body {
 	margin-right: auto;
 }
 
-.wp-block[data-align='wide'],
+.wp-block[data-align="wide"],
 .wp-block.alignwide {
 	max-width: 1080px;
 }
 
-.wp-block[data-align='full'],
+.wp-block[data-align="full"],
 .wp-block.alignfull {
 	max-width: none;
 }

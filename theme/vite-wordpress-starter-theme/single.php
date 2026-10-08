@@ -1,9 +1,18 @@
 <?php
+/**
+ * Theme file.
+ *
+ * @package Vite_Starter
+ */
+
 get_header();
 ?>
 
 <main class="single-cpt single-post-page">
-	<?php while ( have_posts() ) : the_post(); ?>
+	<?php
+	while ( have_posts() ) :
+		the_post();
+		?>
 		<section class="s-cpt-hero">
 			<div class="s-cpt-hero__wrap l-wrap">
 				<div class="s-cpt-hero__inner l-frame-x">
@@ -17,4 +26,5 @@ get_header();
 		<?php get_template_part( 'partials/parts/content-with-toc' ); ?>
 	<?php endwhile; ?>
 </main>
-<?php get_footer();
+<?php
+get_footer();

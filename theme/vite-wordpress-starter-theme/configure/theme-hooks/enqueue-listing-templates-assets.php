@@ -40,7 +40,7 @@ function starter_enqueue_archive_assets() {
 
 	starter_enqueue_template_assets( 'starter-archive', 'archive.scss' );
 }
-add_action( 'wp_enqueue_scripts', 'starter_enqueue_archive_assets' );
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_archive_assets', 110 );
 
 /**
  * Enqueues assets for single services / directions / cases templates.
@@ -54,7 +54,7 @@ function starter_enqueue_single_cpt_assets() {
 
 	starter_enqueue_template_assets( 'starter-single-cpt', 'single-cpt.scss', 'single-cpt.js', array( 'jquery' ) );
 }
-add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_cpt_assets' );
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_cpt_assets', 110 );
 
 /**
  * Enqueues assets for the single blog post template.
@@ -68,4 +68,4 @@ function starter_enqueue_single_post_assets() {
 
 	starter_enqueue_template_assets( 'starter-single-post', 'single-post.scss', 'single-post.js' );
 }
-add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_post_assets' );
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_post_assets', 110 );

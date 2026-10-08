@@ -1,6 +1,10 @@
 export function initActiveNav() {
-	const sections = Array.from(document.querySelectorAll('section[id], footer[id]'));
-	const links = Array.from(document.querySelectorAll('.nav__link, .menu-item a'));
+	const sections = Array.from(
+		document.querySelectorAll('section[id], footer[id]'),
+	);
+	const links = Array.from(
+		document.querySelectorAll('.nav__link, .menu-item a'),
+	);
 
 	if (!sections.length || !links.length) {
 		return;
@@ -13,7 +17,10 @@ export function initActiveNav() {
 					const id = entry.target.getAttribute('id');
 
 					links.forEach((link) => {
-						link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
+						link.classList.toggle(
+							'is-active',
+							link.getAttribute('href') === `#${id}`,
+						);
 					});
 				}
 			});

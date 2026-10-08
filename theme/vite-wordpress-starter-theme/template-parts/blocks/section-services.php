@@ -28,26 +28,26 @@ $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] 
 					</g>
 				</g>
 			</svg>
-			<h2 class="section-title" data-aos="fade-in" data-aos-duration="600"><?php echo esc_html($args['title']); ?></h2>
+			<h2 class="section-title" data-aos="fade-in" data-aos-duration="600"><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 		<div class="s-services__body l-frame-x">
 			<div class="services-img glitch-image">
-				<?php echo wp_get_attachment_image($args['image'], 'full', '', ['class' => ' services-img__item ']); ?>
+				<?php echo wp_get_attachment_image( $args['image'], 'full', '', array( 'class' => ' services-img__item ' ) ); ?>
 			</div>
 			<ol class="services-list">
-				<?php foreach ($items as $key => $item) : ?>
+				<?php foreach ( $items as $key => $item ) : ?>
 					<li
-						class="services-list__item icon-list__item<?php echo $key === 0 ? ' services-list__item--active' : ''; ?>"
-						data-service-target="<?php echo esc_attr((string) $key); ?>"
-						style="--glitch-offset <?= $key * 12 ?>">
-						<?php echo wp_get_attachment_image($item['icon'], 'full', '', ['class' => 'services-list__icon icon-list__icon']); ?>
-						<?php if (! empty($item['text'])) : ?>
+						class="services-list__item icon-list__item<?php echo 0 === $key ? ' services-list__item--active' : ''; ?>"
+						data-service-target="<?php echo esc_attr( (string) $key ); ?>"
+						style="--glitch-offset <?php echo absint( $key * 12 ); ?>">
+						<?php echo wp_get_attachment_image( $item['icon'], 'full', '', array( 'class' => 'services-list__icon icon-list__icon' ) ); ?>
+						<?php if ( ! empty( $item['text'] ) ) : ?>
 							<div class="services-list__content">
-								<p class="services-list__title"> <span class="services-list__number"><?= $key + 1 ?>.</span> <?php echo esc_html($item['title']); ?></p>
-								<p class="services-list__desc"><?php echo esc_html($item['text']); ?></p>
+								<p class="services-list__title"> <span class="services-list__number"><?php echo absint( $key + 1 ); ?>.</span> <?php echo esc_html( $item['title'] ); ?></p>
+								<p class="services-list__desc"><?php echo esc_html( $item['text'] ); ?></p>
 							</div>
 						<?php else : ?>
-							<span><?php echo esc_html($item['title']); ?></span>
+							<span><?php echo esc_html( $item['title'] ); ?></span>
 						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
