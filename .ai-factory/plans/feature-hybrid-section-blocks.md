@@ -86,14 +86,14 @@
   - Проверка: `npm run build` без ошибок, в манифесте есть `main.js`/`main.scss`; dev (`npm run dev`) и prod (собранный `dist`) дают идентичную главную.
   - Логи: `WARN [vite] manifest entry missing: <key>` в `starter_vite_register_*` (один раз на ключ).
 
-- [ ] **T6. SCSS/JS — плоская структура и условные entries.**
+- [x] **T6. SCSS/JS — плоская структура и условные entries.**
   - SCSS: `abstracts/_variables.scss` → `_tokens.scss`; `base/_fonts`, `_base` (+ `_animations`) → корневые `_fonts.scss`, `_base.scss`; `mixins/_breakpoint.scss`; `layout/*` и `components/*` → плоский `components/` (`_header`, `_footer`, `_forms`, `_grid`, `_buttons`, `_tag`, `_section-title`, `_info-card`, `_icon-list`, `_modal`, `_breadcrumbs`); `vendors/_fancybox.scss`. Папки `abstracts/ base/ layout/ pages/` удалить.
   - Постраничные entries (без `_`): `single-cpt.scss` (`cpt-common` + `service` + `direction` + `case`), `single-post.scss`, `archive.scss` (архивы CPT + `home.php`). Подключение — `configure/theme-hooks/enqueue-listing-templates-assets.php` (одна функция на тип шаблона, как в референсе). `main.scss` — только глобальное (tokens, fonts, base, header, footer, общие компоненты). `_front-page.scss` пока подключён из `main.scss` (разбирается в Phase 3).
   - JS: `main.js` — только глобальное (`mobileNav`, `smoothScroll`, `activeNav`, `contactForm`, анимации футера, `lightbox`, если нужен везде); entries `single-cpt.js` (`faqAccordion`, `toc`), `archive.js` (`blogFilter`). Импорты только через `@js` / `@scss`.
   - Проверка: визуальное сравнение всех baseline-страниц (dev и build), на CPT/архивах грузятся только их entries (DevTools → Network).
   - Логи: нет.
 
-- [ ] **T7. Партиалы.**
+- [x] **T7. Партиалы.**
   - `header.php` → каркас + `partials/header/{header,logo}.php`; `template-parts/{cpt-cta,cpt-faq,archive-cpt,content-with-toc}.php` → `partials/parts/` (сохраняя контракт `$args`); обновить все `get_template_part()`.
   - Проверка: `grep` по старым путям пуст, страницы совпадают с baseline.
   - Логи: нет.

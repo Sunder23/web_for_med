@@ -14,6 +14,7 @@ $starter_theme_hooks = array(
 	'disable-auto-update-emails.php',
 	'deprioritize-yoast-metabox.php',
 	'disable-autoparagraph-wrapping-cf7.php',
+	'enqueue-listing-templates-assets.php',
 );
 
 foreach ( $starter_theme_hooks as $starter_theme_hook ) {

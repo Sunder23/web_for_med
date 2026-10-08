@@ -20,11 +20,11 @@ $cta  = get_field( 'case_cta' );
 	</section>
 
 	<?php while ( have_posts() ) : the_post(); ?>
-		<?php get_template_part( 'template-parts/content-with-toc' ); ?>
+		<?php get_template_part( 'partials/parts/content-with-toc' ); ?>
 	<?php endwhile; ?>
 
-	<?php get_template_part( 'template-parts/cpt-faq', null, (array) $faq ); ?>
+	<?php get_template_part( 'partials/parts/cpt-faq', null, (array) $faq ); ?>
 
-	<?php get_template_part( 'template-parts/cpt-cta', null, (array) $cta ); ?>
+	<?php get_template_part( 'partials/parts/cpt-cta', null, (array) $cta ); ?>
 </main>
 <?php get_footer();

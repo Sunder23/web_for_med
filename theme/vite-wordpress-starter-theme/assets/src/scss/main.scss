@@ -1,17 +1,13 @@
-// abstracts
-@use "abstracts/variables";
-
-// vendors
+// tokens, fonts, base
+@use "tokens";
+@use "fonts";
+@use "base";
+@use "animations";
 
 // vendors overrides
 @use "vendors/fancybox";
 
-// base
-@use "base/fonts";
-@use "base/base";
-@use "base/animations";
-
-// components
+// global components
 @use "components/buttons";
 @use "components/tag";
 @use "components/section-title";
@@ -19,20 +15,10 @@
 @use "components/icon-list";
 @use "components/modal";
 @use "components/breadcrumbs";
-@use "components/toc";
+@use "components/header";
+@use "components/footer";
+@use "components/forms";
+@use "components/grid";
 
-// layout
-@use "layout/header";
-@use "layout/footer";
-@use "layout/forms";
-@use "layout/grid";
-
-// pages
-@use "pages/front-page";
-@use "pages/page";
-@use "pages/cpt-common";
-@use "pages/service";
-@use "pages/direction";
-@use "pages/case";
-@use "pages/archive";
-@use "pages/single-post";
+// front page (split into section blocks in Phase 3)
+@use "front-page";

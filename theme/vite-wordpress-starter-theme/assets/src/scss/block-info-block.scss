@@ -1,6 +1,6 @@
 // acf/info-block — loaded on the frontend AND inside the editor iframe,
 // where main.scss is not enqueued. Keep fully self-contained: every var()
-// carries a fallback mirroring abstracts/_variables.scss brand values so
+// carries a fallback mirroring _tokens.scss brand values so
 // the editor preview matches the frontend.
 
 .info-block {

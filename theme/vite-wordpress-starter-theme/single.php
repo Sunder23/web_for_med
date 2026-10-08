@@ -14,7 +14,7 @@ get_header();
 			</div>
 		</section>
 
-		<?php get_template_part( 'template-parts/content-with-toc' ); ?>
+		<?php get_template_part( 'partials/parts/content-with-toc' ); ?>
 	<?php endwhile; ?>
 </main>
 <?php get_footer();
