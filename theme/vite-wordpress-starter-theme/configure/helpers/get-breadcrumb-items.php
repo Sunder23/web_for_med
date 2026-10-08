@@ -42,6 +42,18 @@ function starter_get_breadcrumb_items() {
 	} elseif ( is_home() ) {
 		$posts_page = (int) get_option( 'page_for_posts' );
 		$items[]    = array( 'label' => $posts_page ? get_the_title( $posts_page ) : __( 'Блог', 'vite-starter' ) );
+	} elseif ( is_archive() ) {
+		// Blog post archives (category, tag, date, author): Головна → Блог → archive.
+		$posts_page = (int) get_option( 'page_for_posts' );
+		$items[]    = array(
+			'label' => $posts_page ? get_the_title( $posts_page ) : __( 'Блог', 'vite-starter' ),
+			'url'   => $posts_page ? get_permalink( $posts_page ) : home_url( '/blog/' ),
+		);
+		$items[]    = array(
+			'label' => is_category() || is_tag() || is_tax() ? single_term_title( '', false ) : wp_strip_all_tags( get_the_archive_title() ),
+		);
+	} elseif ( is_404() ) {
+		$items[] = array( 'label' => __( 'Сторінку не знайдено', 'vite-starter' ) );
 	} elseif ( is_singular() ) {
 		$items[] = array( 'label' => get_the_title() );
 	} else {

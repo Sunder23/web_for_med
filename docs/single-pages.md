@@ -41,16 +41,26 @@ Empty fields are skipped. The FAQ heading falls back to "Часті запита
 
 - `components/_entry-content.scss` covers headings, paragraphs, square/numbered lists, links, quotes, tables, captions and core buttons. `style-editor.css` mirrors the same rules for the block editor.
 - Article editors (posts and CPTs) show an 800px column centred in the canvas. The page editor drops `style-editor.css`.
-- Image lightbox: core `core/image` lightbox (`theme.json` → `settings.blocks.core/image.lightbox`). It is on by default and can be turned off per image. Brand colours for the overlay and trigger are in `_entry-content.scss`.
+- Image lightbox: core `core/image` lightbox (`theme.json` → `settings.blocks.core/image.lightbox`). It is on by default and can be turned off per image. Brand colours for the overlay and trigger are in `_lightbox.scss`.
 
 ## Assets
 
 | Entry | Enqueued on | Includes |
 |-------|-------------|----------|
-| `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( services, directions, cases )` | article, entry-content, toc, faq, post-card, related-posts, cta-banner; `initToc`, `initFaqAccordion` |
+| `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( services, directions, cases )` | article, entry-content, lightbox, toc, faq-section, faq, post-card, related-posts, cta-banner; `initToc`, `initFaqAccordion` |
 | `single-post.scss` + `single-post.js` | `is_singular( 'post' )` | same, without FAQ; `initToc` |
 
 Both are enqueued from `configure/theme-hooks/enqueue-listing-templates-assets.php` (priority 110, style depends on `main`).
+
+## Blog listings and 404
+
+| Template | Layout | Styles |
+|----------|--------|--------|
+| `home.php` (posts page), `archive.php` (category, tag, date) | `partials/parts/blog-archive.php`: breadcrumbs, H1, term description, category chips (`category-nav.php`, shown with 2+ non-empty categories), `post-card` grid | `archive.scss` |
+| `archive-{services,directions,cases}.php` | `partials/parts/archive-cpt.php` | `archive.scss` |
+| `404.php` | Big "404", heading, home/blog buttons, list of services | `error-404.scss` (`starter_enqueue_404_assets`) |
+
+Breadcrumbs (`starter_get_breadcrumb_items()`): post archives show Головна → Блог → term; 404 shows Головна → Сторінку не знайдено.
 
 ## See Also
 

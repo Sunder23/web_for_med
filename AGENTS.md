@@ -38,7 +38,7 @@ wp-boilerplate/
 │   │   └── acf/{acf-json,acf-blocks,section-blocks}/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
 │   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/*
-│   ├── page.php, single*.php, archive-*.php, home.php, header.php, footer.php, 404.php
+│   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
 │   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, components/, template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)

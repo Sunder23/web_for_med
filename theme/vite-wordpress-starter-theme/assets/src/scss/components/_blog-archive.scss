@@ -1,0 +1,20 @@
+@use "../mixins/breakpoint" as *;
+
+// Blog home and post archives (partials/parts/blog-archive.php); hero and grid come from
+// _cpt-common / _archive, this file holds the blog-only parts.
+.blog-archive {
+    &__description {
+        max-width: 720px;
+        font-size: 17px;
+        line-height: 1.55;
+        color: var(--c-grey);
+
+        @include breakpoint(mobile) {
+            font-size: 18px;
+        }
+
+        > *:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

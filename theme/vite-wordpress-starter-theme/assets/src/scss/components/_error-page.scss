@@ -1,0 +1,169 @@
+@use "../mixins/breakpoint" as *;
+
+// 404 screen (404.php).
+.error-page {
+    &__section {
+        background: var(--c-bg);
+    }
+
+    &__frame {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+        padding: 24px 16px 56px;
+
+        @include breakpoint(mobile) {
+            padding: 40px 32px 80px;
+        }
+
+        @include breakpoint(tablet) {
+            grid-template-columns: minmax(0, 1fr) 380px;
+            grid-template-rows: auto 1fr;
+            column-gap: 64px;
+            row-gap: 48px;
+            padding: 48px 40px 120px;
+        }
+
+        @include breakpoint(laptop) {
+            column-gap: 120px;
+        }
+    }
+
+    // Breadcrumbs span the full width above both columns.
+    &__crumbs {
+        grid-column: 1 / -1;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+
+        @include breakpoint(mobile) {
+            gap: 20px;
+        }
+    }
+
+    &__code {
+        font-size: 96px;
+        font-weight: 600;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        color: var(--c-blue);
+
+        @include breakpoint(mobile) {
+            font-size: 160px;
+        }
+
+        @include breakpoint(tablet) {
+            font-size: 200px;
+        }
+    }
+
+    &__title {
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1.1;
+        color: var(--c-dark);
+
+        @include breakpoint(mobile) {
+            font-size: 40px;
+        }
+
+        @include breakpoint(tablet) {
+            font-size: 48px;
+        }
+    }
+
+    &__text {
+        max-width: 560px;
+        font-size: 17px;
+        line-height: 1.55;
+        color: var(--c-grey);
+
+        @include breakpoint(mobile) {
+            font-size: 18px;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+
+        @include breakpoint(mobile) {
+            gap: 16px;
+        }
+    }
+
+    &__links {
+        align-self: end;
+        border: var(--border);
+        background: var(--c-bg-light);
+    }
+
+    &__links-title {
+        padding: 20px;
+        border-bottom: var(--border);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        line-height: 1.25;
+        text-transform: uppercase;
+        color: var(--c-grey);
+
+        @include breakpoint(mobile) {
+            padding: 20px 24px;
+        }
+
+        a:hover {
+            color: var(--c-blue);
+        }
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__item + &__item {
+        border-top: var(--border);
+    }
+
+    &__link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.35;
+        color: var(--c-dark);
+        transition:
+            background 0.3s ease-in-out,
+            color 0.3s ease-in-out;
+
+        @include breakpoint(mobile) {
+            padding: 20px 24px;
+        }
+
+        &:hover {
+            background: var(--c-bg);
+            color: var(--c-blue);
+        }
+    }
+
+    &__link-arrow {
+        flex-shrink: 0;
+        color: var(--c-blue);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    &__link:hover &__link-arrow {
+        transform: translateX(4px);
+    }
+}

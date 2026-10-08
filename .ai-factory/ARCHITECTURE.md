@@ -32,7 +32,7 @@ wp-boilerplate/
     │       └── section-blocks/section-<slug>/   # page section blocks
     ├── template-parts/blocks/section-<slug>.php # section markup (blocks + direct reuse)
     ├── partials/                        # breadcrumbs, header/{header,logo}, parts/*
-    ├── page.php, single*.php, archive-*.php, home.php, header.php, footer.php, 404.php
+    ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
     └── assets/src/
         ├── js/        main.js, single-cpt.js, single-post.js, editor-link-guard.js, editor-section-blocks.js,
         │              components/, utils/, template-parts/blocks/section-<slug>.js
@@ -65,7 +65,7 @@ assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 - **Entries** (`vite.config.js`): every non-underscore `.scss` / `.js` in `assets/src/{scss,js}/` plus one flat level `template-parts/blocks/`. Manifest keys are `assets/src/{js,scss}/<path>`.
 - **Global** (`main.scss`, `main.js`): tokens, fonts, base, header/footer/forms/grid, shared components, smooth scroll, mobile nav, footer animations.
 - **Per template**: `archive.scss`, `single-cpt.scss/js`, `single-post.scss/js` (see `theme-hooks/enqueue-listing-templates-assets.php`).
-- **Article singles** (`single.php`, `single-{services,directions,cases}.php`): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_toc`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
+- **Article singles** (`single.php`, `single-{services,directions,cases}.php`): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_lightbox`, `_toc`, `_faq-section`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
 - **Per section block**: `section-{slug}.scss/js`, enqueued only when the block is on the page (`section-blocks.php`).
 - **JS-imported CSS** (vendors) is resolved through manifest `css` + `imports` (`starter_vite_entry_css_files()`).
 - **Modes**: `VITE_BUILD` (manifest exists) → hashed files; `VITE_DEV` (no manifest, local env) → `localhost:5173`.

@@ -69,3 +69,17 @@ function starter_enqueue_single_post_assets() {
 	starter_enqueue_template_assets( 'starter-single-post', 'single-post.scss', 'single-post.js' );
 }
 add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_post_assets', 110 );
+
+/**
+ * Enqueues assets for the 404 template.
+ *
+ * @return void
+ */
+function starter_enqueue_404_assets() {
+	if ( ! is_404() ) {
+		return;
+	}
+
+	starter_enqueue_template_assets( 'starter-error-404', 'error-404.scss' );
+}
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_404_assets', 110 );

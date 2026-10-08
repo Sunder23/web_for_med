@@ -1,4 +1,6 @@
-// CPT archives and the blog home.
+// CPT archives, the blog home and post archives (categories, tags, dates).
 @use "components/cpt-common";
 @use "components/post-card";
 @use "components/archive";
+@use "components/blog-archive";
+@use "components/category-nav";

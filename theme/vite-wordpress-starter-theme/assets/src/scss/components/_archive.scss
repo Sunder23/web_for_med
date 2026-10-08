@@ -1,3 +1,5 @@
+@use "../mixins/breakpoint" as *;
+
 // Shared archive layout for services / directions / cases: card grid.
 
 .s-archive {
@@ -24,6 +26,14 @@
     @media screen and (min-width: 769px) {
         &:nth-child(odd) {
             border-right: var(--border);
+        }
+    }
+
+    // A lone card in the last row spans both columns instead of leaving a gap.
+    @include breakpoint(mobile) {
+        &:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            border-right: 0;
         }
     }
 }
