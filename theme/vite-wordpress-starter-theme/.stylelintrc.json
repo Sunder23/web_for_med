@@ -9,7 +9,6 @@
 		"assets/src/scss/components/_cpt-common.scss",
 		"assets/src/scss/components/_service.scss",
 		"assets/src/scss/components/_single-post.scss",
-		"assets/src/scss/components/_toc.scss",
 		"assets/src/scss/components/_two-col.scss"
 	],
 	"rules": {

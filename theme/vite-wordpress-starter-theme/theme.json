@@ -190,6 +190,14 @@
 			"contentSize": "1024px",
 			"wideSize": "1080px"
 		},
-		"useRootPaddingAwareAlignments": false
+		"useRootPaddingAwareAlignments": false,
+		"blocks": {
+			"core/image": {
+				"lightbox": {
+					"enabled": true,
+					"allowEditing": true
+				}
+			}
+		}
 	}
 }

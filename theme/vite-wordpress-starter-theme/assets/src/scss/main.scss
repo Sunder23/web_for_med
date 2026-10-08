@@ -4,9 +4,6 @@
 @use "base";
 @use "animations";
 
-// vendors overrides
-@use "vendors/fancybox";
-
 // layout primitives (before components so blocks can override them)
 @use "components/grid";
 

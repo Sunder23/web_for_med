@@ -1,6 +1,17 @@
 import { logDebug } from '../utils/logDebug.js';
 
-const HEADER_OFFSET = 90; // sticky header height + breathing room
+// Heading counts as "current" once its top passes this share of the viewport.
+const ACTIVE_OFFSET_RATIO = 0.3;
+// Breathing room between the sticky header and a heading scrolled to via the TOC.
+const SCROLL_GAP = 24;
+
+const getHeaderOffset = () =>
+	(document.querySelector('.header')?.offsetHeight ?? 0) + SCROLL_GAP;
+
+const getTarget = (link) => {
+	const id = decodeURIComponent((link.getAttribute('href') || '').slice(1));
+	return id ? document.getElementById(id) : null;
+};
 
 export function initToc() {
 	const toc = document.querySelector('[data-toc]');
@@ -10,73 +21,87 @@ export function initToc() {
 		return;
 	}
 
-	const targets = Array.from(toc.querySelectorAll('.toc__link'))
+	const sections = Array.from(toc.querySelectorAll('.toc__link'))
 		.map((link) => {
-			const id = decodeURIComponent((link.getAttribute('href') || '').slice(1));
-			const el = id ? document.getElementById(id) : null;
+			const target = getTarget(link);
 
-			if (!el) {
-				console.warn('[web_for_med] TOC target heading not found:', id);
+			if (!target) {
+				logDebug('TOC target heading not found', {
+					href: link.getAttribute('href'),
+				});
 			}
 
-			return el ? { link, el } : null;
+			return target ? { link, target } : null;
 		})
 		.filter(Boolean);
 
-	if (!targets.length) {
-		console.warn('[web_for_med] TOC skipped: no matching heading targets');
+	if (!sections.length) {
+		logDebug('TOC skipped: no matching heading targets');
 		return;
 	}
 
-	const linkByEl = new Map(targets.map(({ link, el }) => [el, link]));
-	let activeLink = null;
+	const nav = toc.querySelector('.toc__nav');
+	const indicator = toc.querySelector('.toc__indicator');
+	const list = toc.querySelector('.toc__list');
 
-	const setActive = (link) => {
-		if (link === activeLink) return;
-		activeLink?.classList.remove('is-active');
-		link?.classList.add('is-active');
-		activeLink = link;
+	let activeLink = null;
+	let ticking = false;
+
+	// One shared frame slides to the active link instead of each link
+	// drawing its own border. Measured after the active class is applied:
+	// the bolder weight can rewrap the text and change the link height.
+	const positionIndicator = (link) => {
+		if (!indicator || !link) return;
+		indicator.style.transform = `translateY(${link.offsetTop}px)`;
+		indicator.style.height = `${link.offsetHeight}px`;
 	};
 
-	// Scrollspy: headings inside the activation band (below the sticky header,
-	// above the lower 60% of the viewport) win; when the band is empty, the
-	// nearest heading above it stays active.
-	const visible = new Set();
+	// On short viewports the sticky sidebar caps the list height and
+	// .toc__nav scrolls on its own — keep the active link visible there
+	// (scrollIntoView would move the window as well).
+	const revealInNav = (link) => {
+		if (!nav || !link || nav.scrollHeight <= nav.clientHeight) return;
+		const top = link.offsetTop;
+		const bottom = top + link.offsetHeight;
+		let next = null;
 
-	const updateActive = () => {
-		let current = targets.find(({ el }) => visible.has(el));
+		if (top < nav.scrollTop) next = top;
+		else if (bottom > nav.scrollTop + nav.clientHeight)
+			next = bottom - nav.clientHeight;
+		if (next === null) return;
 
-		if (!current) {
-			const line = window.innerHeight * 0.4;
-			for (const target of targets) {
-				if (target.el.getBoundingClientRect().top <= line) {
-					current = target;
-				} else {
-					break;
-				}
-			}
+		nav.scrollTo({ top: next, behavior: 'smooth' });
+	};
+
+	// Exactly one link stays active: the last heading scrolled past the
+	// offset line, so the highlight never vanishes inside a long section.
+	const update = () => {
+		ticking = false;
+		const offset = window.innerHeight * ACTIVE_OFFSET_RATIO;
+		let current = sections[0].link;
+
+		for (const { link, target } of sections) {
+			if (target.getBoundingClientRect().top - offset > 0) break;
+			current = link;
 		}
 
-		setActive(current ? linkByEl.get(current.el) : null);
+		if (current === activeLink) return;
+		activeLink?.classList.remove('is-active');
+		current.classList.add('is-active');
+		activeLink = current;
+		positionIndicator(current);
+		revealInNav(current);
 	};
 
-	const observer = new IntersectionObserver(
-		(entries) => {
-			for (const entry of entries) {
-				if (entry.isIntersecting) {
-					visible.add(entry.target);
-				} else {
-					visible.delete(entry.target);
-				}
-			}
-			updateActive();
-		},
-		{ rootMargin: `-${HEADER_OFFSET}px 0px -60% 0px`, threshold: 0 },
-	);
+	const requestUpdate = () => {
+		if (ticking) return;
+		ticking = true;
+		requestAnimationFrame(update);
+	};
 
-	targets.forEach(({ el }) => {
-		observer.observe(el);
-	});
+	window.addEventListener('scroll', requestUpdate, { passive: true });
+	window.addEventListener('resize', requestUpdate, { passive: true });
+	update();
 
 	// Click: scroll via Lenis when present (handles Cyrillic anchors that
 	// break querySelector-based handlers), fall back to native smooth scroll.
@@ -84,20 +109,34 @@ export function initToc() {
 		const link = event.target.closest('.toc__link');
 		if (!link) return;
 
-		const id = decodeURIComponent((link.getAttribute('href') || '').slice(1));
-		const el = document.getElementById(id);
-		if (!el) return;
+		const target = getTarget(link);
+		if (!target) return;
 
 		event.preventDefault();
 
 		if (window.lenis) {
-			window.lenis.scrollTo(el, { offset: -HEADER_OFFSET });
+			window.lenis.scrollTo(target, { offset: -getHeaderOffset() });
 		} else {
-			el.scrollIntoView({ behavior: 'smooth' });
+			target.scrollIntoView({ behavior: 'smooth' });
 		}
 
 		window.history.pushState(null, '', link.getAttribute('href'));
 	});
 
-	logDebug('TOC scrollspy initialized', { headings: targets.length });
+	if (nav && indicator) {
+		// Re-measure when link geometry changes without a new active link
+		// (text rewrap on resize, web fonts loading, breakpoint switch).
+		if ('ResizeObserver' in window && list) {
+			new ResizeObserver(() => positionIndicator(activeLink)).observe(list);
+		}
+
+		// Show the frame at its initial spot, then enable transitions two
+		// frames later so it does not slide in from the top on load.
+		nav.classList.add('toc__nav--ready');
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => nav.classList.add('toc__nav--animated')),
+		);
+	}
+
+	logDebug('TOC initialized', { headings: sections.length });
 }
