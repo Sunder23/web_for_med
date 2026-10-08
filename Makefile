@@ -30,3 +30,8 @@ import:
 	$(COMPOSE) run --rm wpcli wp eval-file /scripts/import/import-posts.php
 	$(COMPOSE) run --rm wpcli wp eval-file /scripts/import/setup-menu.php
 	$(COMPOSE) run --rm wpcli wp rewrite flush --hard
+
+# One-time front page -> section blocks migration (dry run by default).
+# Usage: make migrate-front-page args="apply cleanup"
+migrate-front-page:
+	$(COMPOSE) run --rm wpcli wp eval-file /scripts/migrate-front-page-to-blocks.php $(args)

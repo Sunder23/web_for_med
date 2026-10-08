@@ -1,13 +1,11 @@
   </div><!-- #content -->
 
   <?php
-  // The contact-form group lives on the static front page; read it from there
-  // explicitly so the footer form renders on every page, not only the front one.
-  $front_page_id = (int) get_option('page_on_front');
-  $contant       = $front_page_id ? get_field('front_page_contact', $front_page_id) : get_field('front_page_contact');
-  $has_contact   = !empty($contant['title']) || !empty($contant['text']) || !empty($contant['contact_form']);
-  if (!$has_contact && defined('WP_DEBUG') && WP_DEBUG) {
-    error_log('[FIX] footer.php: front_page_contact is empty (front page ID ' . $front_page_id . '), skipping footer form section');
+  // Footer contact form: ACF Options (Footer tab), so it renders on every page.
+  $contant     = starter_get_option('footer_contact');
+  $has_contact = !empty($contant['title']) || !empty($contant['text']) || !empty($contant['contact_form']);
+  if (!$has_contact) {
+    error_log('WARN [footer] footer_contact option is empty, skipping footer form section');
   }
   $footer = [
     'logo' => get_field('logo', 'options'),
