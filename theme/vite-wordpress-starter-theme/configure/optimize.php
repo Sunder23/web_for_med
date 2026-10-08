@@ -55,3 +55,25 @@ if ( STARTER_REMOVE_JQUERY_MIGRATE ) {
 		}
 	);
 }
+
+if ( ! defined( 'STARTER_CONVERT_UPLOADS_TO_WEBP' ) ) {
+	define( 'STARTER_CONVERT_UPLOADS_TO_WEBP', true );
+}
+
+if ( ! defined( 'STARTER_WEBP_UPLOAD_QUALITY' ) ) {
+	define( 'STARTER_WEBP_UPLOAD_QUALITY', 75 );
+}
+
+if ( STARTER_CONVERT_UPLOADS_TO_WEBP ) {
+	// Covers both uploads and sideloads: core applies this filter in _wp_handle_upload() for either action.
+	add_filter( 'wp_handle_upload', 'starter_convert_image_to_webp' );
+
+	add_filter(
+		'wp_editor_set_quality',
+		function ( $quality, $mime_type ) {
+			return 'image/webp' === $mime_type ? STARTER_WEBP_UPLOAD_QUALITY : $quality;
+		},
+		10,
+		2
+	);
+}
