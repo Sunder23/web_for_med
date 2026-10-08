@@ -21,7 +21,7 @@ A hybrid WordPress theme (pages from `acf/section-*` ACF blocks, CPT/blog/archiv
 - **CSS Preprocessor:** SCSS (Sass)
 - **Linters:** Biome.js (JS/JSON), Stylelint + stylelint-scss (SCSS), PHPCS + PHPStan (PHP)
 - **Package Manager:** npm (Node.js), Composer (PHP)
-- **Integrations:** Secure Custom Fields (ACF-compatible), Contact Form 7, Yoast SEO, bundled WP jQuery (no migrate), Fancybox v6 (@fancyapps/ui — content image lightbox)
+- **Integrations:** Secure Custom Fields (ACF-compatible), Contact Form 7, Yoast SEO, bundled WP jQuery (no migrate), core `core/image` lightbox (enabled in `theme.json`)
 
 ## Architecture Notes
 - Theme lives under `theme/vite-wordpress-starter-theme/` and can be deployed directly to `wp-content/themes/`

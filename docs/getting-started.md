@@ -42,7 +42,7 @@ The compose project is pinned to `name: web_for_med`, so the existing `web_for_m
 | `npm run lint:css` / `npm run format:css` | Stylelint check / check with fixes |
 | `npm run format` | Biome fixes + `format:css` |
 
-SCSS rules checked by Stylelint (`.stylelintrc.json`): mobile first only through `@include breakpoint(...)` (no raw width media queries), at most 3 nested selector levels, BEM class names without the old `s-`/`l-`/`c-`/`svc-`/`br-` prefixes. The legacy CPT/archive/blog partials are temporarily listed in `ignoreFiles`.
+SCSS rules checked by Stylelint (`.stylelintrc.json`): mobile first only through `@include breakpoint(...)` (no raw width media queries), at most 3 nested selector levels, BEM class names without the old `s-`/`l-`/`c-`/`svc-`/`br-` prefixes. The legacy archive partials (`_archive`, `_cpt-common`) are temporarily listed in `ignoreFiles`.
 
 On Windows (Git Bash) prefix raw `docker compose ... run wpcli wp eval-file /scripts/...` calls with `MSYS_NO_PATHCONV=1`.
 

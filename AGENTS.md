@@ -67,6 +67,7 @@ wp-boilerplate/
 | README | README.md | Project landing page |
 | Getting Started | docs/getting-started.md | Environment, commands, asset modes |
 | Page Sections | docs/page-sections.md | `acf/section-*` blocks and migration |
+| Single Pages | docs/single-pages.md | Article layout for CPT and blog singles |
 | AI Context | .ai-factory/DESCRIPTION.md | Project specification and tech stack |
 | Architecture | .ai-factory/ARCHITECTURE.md | Layers, module layout, asset pipeline |
 | Base Rules | .ai-factory/rules/base.md | Naming and coding conventions |

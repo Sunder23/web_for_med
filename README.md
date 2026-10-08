@@ -42,6 +42,7 @@ cd theme/vite-wordpress-starter-theme && npm install && composer install && npm 
 |-------|-------------|
 | [Getting Started](docs/getting-started.md) | Environment, commands, dev vs prod assets |
 | [Page Sections](docs/page-sections.md) | `acf/section-*` blocks, editor canvas, migration |
+| [Single Pages](docs/single-pages.md) | Article layout of CPT and blog singles, TOC, lightbox |
 
 ## License
 
