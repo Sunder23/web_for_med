@@ -59,8 +59,13 @@
     }
 
     // Primary hover is navy — invisible on the navy banner, so invert it.
+    // Labels come from ACF and can be long: wrap instead of overflowing on phones.
     &__button {
         flex-shrink: 0;
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.25;
 
         &:hover {
             background: var(--c-white);

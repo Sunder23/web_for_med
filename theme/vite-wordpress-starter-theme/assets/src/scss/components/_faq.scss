@@ -1,36 +1,9 @@
 @use "../mixins/breakpoint" as *;
 
-// FAQ under article singles (partials/parts/cpt-faq.php, components/faqAccordion.js).
-.faq-section {
-    background: var(--c-bg);
-    border-top: var(--border);
-
-    &__frame {
-        padding: 40px 16px 48px;
-
-        @include breakpoint(mobile) {
-            padding: 56px 32px 64px;
-        }
-
-        @include breakpoint(tablet) {
-            padding: 72px 40px 80px;
-        }
-    }
-
-    &__title {
-        margin-bottom: 24px;
-
-        @include breakpoint(mobile) {
-            margin-bottom: 32px;
-        }
-    }
-}
-
-// Same width as the article content column.
+// FAQ accordion (partials/parts/cpt-faq.php, components/faqAccordion.js).
 .faq {
     display: flex;
     flex-direction: column;
-    max-width: 885px;
     border-top: var(--border);
 
     &__item {

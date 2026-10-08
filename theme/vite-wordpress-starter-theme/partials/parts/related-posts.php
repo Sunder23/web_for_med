@@ -38,11 +38,31 @@ if ( ! $related->have_posts() ) {
 }
 
 $part_title = ! empty( $args['title'] ) ? $args['title'] : __( 'Схожі матеріали', 'vite-starter' );
+
+// "See all" link: the CPT archive, or the posts page for blog posts.
+if ( 'post' === $args['post_type'] ) {
+	$posts_page = (int) get_option( 'page_for_posts' );
+	$all_url    = $posts_page ? get_permalink( $posts_page ) : '';
+	$all_label  = __( 'Усі матеріали', 'vite-starter' );
+} else {
+	$all_url      = get_post_type_archive_link( $args['post_type'] );
+	$related_type = get_post_type_object( $args['post_type'] );
+	$all_label    = $related_type ? sprintf(
+		/* translators: %s: post type plural name, lowercase. */
+		__( 'Усі %s', 'vite-starter' ),
+		mb_strtolower( $related_type->labels->name )
+	) : '';
+}
 ?>
 <section class="related-posts">
 	<div class="container related-posts__container">
 		<div class="frame related-posts__frame">
-			<h2 class="related-posts__title section-title"><?php echo esc_html( $part_title ); ?></h2>
+			<div class="related-posts__head">
+				<h2 class="related-posts__title section-title"><?php echo esc_html( $part_title ); ?></h2>
+				<?php if ( $all_url && $all_label ) : ?>
+					<a class="related-posts__all" href="<?php echo esc_url( $all_url ); ?>"><?php echo esc_html( $all_label ); ?> <span aria-hidden="true">&rarr;</span></a>
+				<?php endif; ?>
+			</div>
 			<div class="related-posts__grid">
 				<?php
 				while ( $related->have_posts() ) :

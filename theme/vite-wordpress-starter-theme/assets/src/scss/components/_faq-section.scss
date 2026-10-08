@@ -1,0 +1,78 @@
+@use "../mixins/breakpoint" as *;
+
+// FAQ section under article singles (partials/parts/cpt-faq.php); the accordion itself is .faq.
+.faq-section {
+    background: var(--c-bg);
+    border-top: var(--border);
+
+    // Phones: heading, accordion, then the ask card. Tablet up: sticky heading +
+    // ask card on the left, accordion fills the rest of the frame.
+    &__frame {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        padding: 40px 16px 48px;
+
+        @include breakpoint(mobile) {
+            gap: 32px;
+            padding: 56px 32px 64px;
+        }
+
+        @include breakpoint(tablet) {
+            grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+            align-items: start;
+            column-gap: 64px;
+            padding: 72px 40px 80px;
+        }
+
+        @include breakpoint(laptop) {
+            column-gap: 100px;
+        }
+    }
+
+    // display: contents on phones lets the ask card drop below the accordion.
+    &__aside {
+        display: contents;
+
+        @include breakpoint(tablet) {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: sticky;
+            top: calc(var(--header-h) + 20px);
+        }
+    }
+
+    &__ask {
+        order: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 24px 20px;
+        border: var(--border);
+        border-radius: var(--radius);
+        background: var(--c-bg-light);
+
+        @include breakpoint(mobile) {
+            padding: 28px 24px;
+        }
+    }
+
+    &__ask-title {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.25;
+        color: var(--c-dark);
+    }
+
+    &__ask-text {
+        font-size: 15px;
+        line-height: 1.5;
+        color: var(--c-grey);
+    }
+
+    &__ask-button {
+        margin-top: 8px;
+    }
+}

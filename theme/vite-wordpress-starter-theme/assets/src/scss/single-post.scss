@@ -1,5 +1,6 @@
 // Single blog post template (partials/parts/article-layout.php).
 @use "components/entry-content";
+@use "components/lightbox";
 @use "components/toc";
 @use "components/article";
 @use "components/post-card";

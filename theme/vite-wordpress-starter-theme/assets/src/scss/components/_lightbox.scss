@@ -1,0 +1,16 @@
+// Core image lightbox (theme.json → settings.blocks.core/image.lightbox) in brand colours.
+.wp-lightbox-container .lightbox-trigger {
+    border-radius: var(--radius);
+    background-color: var(--c-blue);
+}
+
+// Core writes the scrim/close colours from global styles as inline styles.
+.wp-lightbox-overlay {
+    .scrim {
+        background-color: var(--c-bg) !important;
+    }
+
+    .close-button {
+        color: var(--c-dark) !important;
+    }
+}

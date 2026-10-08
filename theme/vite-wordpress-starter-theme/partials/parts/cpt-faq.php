@@ -21,8 +21,15 @@ if ( empty( $items ) ) {
 <section class="faq-section">
 	<div class="container faq-section__container">
 		<div class="frame faq-section__frame">
-			<h2 class="faq-section__title section-title"><?php echo esc_html( $part_title ); ?></h2>
-			<div class="faq" data-faq>
+			<div class="faq-section__aside">
+				<h2 class="faq-section__title section-title"><?php echo esc_html( $part_title ); ?></h2>
+				<div class="faq-section__ask">
+					<p class="faq-section__ask-title"><?php esc_html_e( 'Не знайшли відповідь?', 'vite-starter' ); ?></p>
+					<p class="faq-section__ask-text"><?php esc_html_e( 'Опишіть задачу вашого медзакладу — відповімо по суті й запропонуємо рішення.', 'vite-starter' ); ?></p>
+					<a class="button button--primary faq-section__ask-button" href="#contacts"><?php esc_html_e( 'Поставити запитання', 'vite-starter' ); ?></a>
+				</div>
+			</div>
+			<div class="faq faq-section__list" data-faq>
 				<?php foreach ( $items as $key => $item ) : ?>
 					<?php
 					if ( empty( $item['question'] ) ) {

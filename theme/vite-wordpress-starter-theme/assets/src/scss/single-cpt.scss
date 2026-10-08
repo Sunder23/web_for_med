@@ -1,7 +1,9 @@
 // Single services / directions / cases templates (partials/parts/article-layout.php).
 @use "components/entry-content";
+@use "components/lightbox";
 @use "components/toc";
 @use "components/article";
+@use "components/faq-section";
 @use "components/faq";
 @use "components/post-card";
 @use "components/related-posts";
