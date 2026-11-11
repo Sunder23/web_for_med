@@ -15,6 +15,8 @@ $starter_helpers = array(
 	'convert-image-to-webp.php',
 	'contact-link.php',
 	'get-case-archive-item.php',
+	'get-case-single-data.php',
+	'get-adjacent-posts.php',
 );
 
 foreach ( $starter_helpers as $starter_helper ) {

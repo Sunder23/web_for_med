@@ -8,7 +8,6 @@
  */
 
 $nav_post_type = get_post_type();
-$current_id    = get_the_ID();
 
 // Labels per type: [ previous, next ].
 $nav_labels = array(
@@ -19,43 +18,9 @@ $nav_labels = array(
 );
 $labels     = isset( $nav_labels[ $nav_post_type ] ) ? $nav_labels[ $nav_post_type ] : array( __( 'Попередній запис', 'vite-starter' ), __( 'Наступний запис', 'vite-starter' ) );
 
-/**
- * Oldest or newest published post of the type, other than the current one (loop-around target).
- *
- * @param string $post_type  Post type.
- * @param int    $exclude_id Current post ID.
- * @param string $order      ASC for the oldest, DESC for the newest.
- * @return WP_Post|null
- */
-$nav_edge_post = static function ( $post_type, $exclude_id, $order ) {
-	$found = get_posts(
-		array(
-			'post_type'      => $post_type,
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'orderby'        => 'date',
-			'order'          => $order,
-			'post__not_in'   => array( $exclude_id ),
-			'no_found_rows'  => true,
-		)
-	);
-	return $found ? $found[0] : null;
-};
-
-$prev_post = get_adjacent_post( false, '', true );
-$next_post = get_adjacent_post( false, '', false );
-
-if ( ! $prev_post instanceof WP_Post ) {
-	$prev_post = $nav_edge_post( $nav_post_type, $current_id, 'DESC' );
-}
-if ( ! $next_post instanceof WP_Post ) {
-	$next_post = $nav_edge_post( $nav_post_type, $current_id, 'ASC' );
-}
-
-// Two posts in total: both directions point at the same post, show it once.
-if ( $prev_post && $next_post && $prev_post->ID === $next_post->ID ) {
-	$prev_post = null;
-}
+$nav_adjacent = starter_get_adjacent_posts();
+$prev_post    = $nav_adjacent['prev'];
+$next_post    = $nav_adjacent['next'];
 
 $nav_items = array_filter(
 	array(
