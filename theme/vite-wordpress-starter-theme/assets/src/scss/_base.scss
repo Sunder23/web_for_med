@@ -70,7 +70,7 @@ section {
         margin-top: 0;
     }
 
-    &:not(.hero, .quote, .problems, .banner, .process--top)::after {
+    &:not(.hero, .quote, .problems, .banner, .process--top, .about-intro, .team)::after {
         content: '';
         width: 100%;
         height: var(--section-gap);
