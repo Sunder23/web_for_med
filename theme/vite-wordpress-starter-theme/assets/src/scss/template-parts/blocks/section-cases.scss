@@ -169,8 +169,27 @@
   display: flex;
   flex-direction: column;
 
+  // Link to the case.
   &__inner {
+    display: block;
     border-right: var(--border);
+    color: inherit;
+  }
+
+  // Case title: at most 3 lines so every header cell keeps the same height.
+  &__title {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    transition: color 0.3s ease-in-out;
+  }
+
+  &__inner:hover &__title {
+    color: var(--c-blue);
   }
 
   &__desc {
@@ -185,7 +204,7 @@
 
     @include breakpoint(mobile) {
       height: 170px;
-      padding: 48px 40px;
+      padding: 40px;
       font-size: 20px;
     }
   }
@@ -222,10 +241,22 @@
     line-height: 1.55;
     color: var(--c-grey);
     width: 100%;
+    // Room for exactly 6 lines, so cards with short and long texts are the same height.
+    min-height: calc(6lh + 36px);
 
     @include breakpoint(mobile) {
+      min-height: calc(6lh + 44px);
       padding: 22px 26px;
       font-size: 16px;
     }
+  }
+
+  // "Що зроблено" is limited to 200 characters in ACF; the clamp is a safety net.
+  &__text {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
   }
 }

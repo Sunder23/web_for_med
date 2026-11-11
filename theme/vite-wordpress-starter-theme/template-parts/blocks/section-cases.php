@@ -10,7 +10,42 @@
 if ( empty( $args ) || ! is_array( $args ) ) {
 	return;
 }
-$items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] : array();
+
+// Real cases: the ones picked in the block, or all published ones (newest first).
+$case_ids = ! empty( $args['cases'] ) && is_array( $args['cases'] ) ? array_map( 'absint', $args['cases'] ) : array();
+if ( ! $case_ids ) {
+	$case_ids = get_posts(
+		array(
+			'post_type'      => 'cases',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		)
+	);
+}
+
+// Card text: "Що зроблено" (case_done), falling back to the hero subtitle.
+$items = array();
+foreach ( $case_ids as $case_id ) {
+	if ( 'publish' !== get_post_status( $case_id ) ) {
+		continue;
+	}
+	$case_text = (string) get_field( 'case_done', $case_id );
+	if ( '' === trim( $case_text ) ) {
+		$case_hero = (array) get_field( 'case_hero', $case_id );
+		$case_text = isset( $case_hero['subtitle'] ) ? (string) $case_hero['subtitle'] : '';
+	}
+	$items[] = array(
+		'title' => get_the_title( $case_id ),
+		'url'   => get_permalink( $case_id ),
+		'text'  => $case_text,
+	);
+}
+
+if ( ! $items ) {
+	return;
+}
 ?>
 <section class="cases" id="cases">
 	<div class="cases__wrap container">
@@ -53,18 +88,20 @@ $items = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] 
 					}
 					?>
 					<div class="cases-slide swiper-slide">
-						<div class="cases-slide__inner">
+						<a class="cases-slide__inner" href="<?php echo esc_url( $item['url'] ); ?>">
 							<div class="cases-slide__desc">
-								<p><?php echo esc_html( $item['description'] ); ?></p>
+								<h3 class="cases-slide__title"><?php echo esc_html( $item['title'] ); ?></h3>
 							</div>
 							<div class="cases-slide__visual" style="
 							--case-bg-mobile: url('<?php echo esc_url( $image_url ); ?>');
 							--case-bg-position: <?php echo esc_attr( $position ); ?>; ">
-								<div class="cases-slide__card">
-									<p><?php echo esc_html( $item['result'] ); ?></p>
-								</div>
+								<?php if ( $item['text'] ) : ?>
+									<div class="cases-slide__card">
+										<p class="cases-slide__text"><?php echo esc_html( $item['text'] ); ?></p>
+									</div>
+								<?php endif; ?>
 							</div>
-						</div>
+						</a>
 					</div>
 				<?php endforeach; ?>
 			</div>

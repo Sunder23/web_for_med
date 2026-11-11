@@ -1,6 +1,6 @@
 <?php
 /**
- * Single blog post: shared article layout + related posts and CTA.
+ * Single blog post: shared article layout + prev/next navigation and related posts.
  *
  * @package Vite_Starter
  */
@@ -31,6 +31,8 @@ get_header();
 			)
 		);
 
+		get_template_part( 'partials/parts/post-nav' );
+
 		get_template_part(
 			'partials/parts/related-posts',
 			null,
@@ -48,18 +50,6 @@ get_header();
 			)
 		);
 
-		$header_button = starter_get_option( 'header_button' );
-
-		get_template_part(
-			'partials/parts/cpt-cta',
-			null,
-			array(
-				'title'        => __( 'Обговорімо ваш медзаклад', 'vite-starter' ),
-				'text'         => __( 'Розкажіть про задачі клініки — запропонуємо рішення для сайту, SEO чи реклами.', 'vite-starter' ),
-				'button_label' => __( 'Обговорити задачі', 'vite-starter' ),
-				'button_url'   => ! empty( $header_button['url'] ) ? $header_button['url'] : '#contacts',
-			)
-		);
 	endwhile;
 	?>
 </main>

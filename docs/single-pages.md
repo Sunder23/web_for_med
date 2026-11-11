@@ -14,21 +14,21 @@ Services, directions, cases and blog posts share one article layout. These templ
 | 4 | Sidebar: table of contents + quick-contact CTA | `partials/parts/toc.php` |
 | 5 | Post content in `.entry-content` | ″ (`the_content()`) |
 | 6 | FAQ accordion (CPT only) | `partials/parts/cpt-faq.php` |
-| 7 | "Схожі …" — 3 posts of the same type | `partials/parts/related-posts.php` + `post-card.php` |
-| 8 | Navy CTA banner | `partials/parts/cpt-cta.php` |
+| 7 | Previous / next post of the same type (loops at the ends) | `partials/parts/post-nav.php` |
+| 8 | "Схожі …" — 3 posts of the same type | `partials/parts/related-posts.php` + `post-card.php` |
 
 Layout: one column on phones (hero → image → blurbs → sidebar → content). From `tablet` (1024px) up there are two columns: content up to 885px and a 295px sticky sidebar. The sidebar is rendered once and positioned with grid areas. `wp_is_mobile()` is not used because it breaks page caching.
 
 ## Data per template
 
-| Template | `lead` | Other args | FAQ / CTA groups |
+| Template | `lead` | Other args | FAQ group |
 |----------|--------|------------|------------------|
-| `single-services.php` | `service_hero.subtitle` | `note` = `text`, `buttons`, `blurbs` | `service_faq` / `service_cta` |
-| `single-directions.php` | `direction_hero.description` | `blurbs` | `direction_faq` / `direction_cta` |
-| `single-cases.php` | `case_hero.subtitle` | — | `case_faq` / `case_cta` |
-| `single.php` | post excerpt (if set) | `meta` = first category tag + date `d.m.Y` | default CTA strings |
+| `single-services.php` | `service_hero.subtitle` | `note` = `text`, `buttons`, `blurbs` | `service_faq` |
+| `single-directions.php` | `direction_hero.description` | `blurbs` | `direction_faq` |
+| `single-cases.php` | `case_hero.subtitle` | — | `case_faq` |
+| `single.php` | post excerpt (if set) | `meta` = first category tag + date `d.m.Y` | — |
 
-Empty fields are skipped. The FAQ heading falls back to "Часті запитання". The related row shows nothing when there are no other posts. Blog posts are matched by first category, with the latest posts as a fallback.
+The `*_cta` ACF groups are no longer rendered: the footer form (`#contacts`) follows right after the related posts. Empty fields are skipped. The FAQ heading falls back to "Часті запитання". The related row shows nothing when there are no other posts. Blog posts are matched by first category, with the latest posts as a fallback.
 
 ## Table of contents
 
@@ -47,7 +47,7 @@ Empty fields are skipped. The FAQ heading falls back to "Часті запита
 
 | Entry | Enqueued on | Includes |
 |-------|-------------|----------|
-| `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( services, directions, cases )` | article, entry-content, lightbox, toc, faq-section, faq, post-card, related-posts, cta-banner; `initToc`, `initFaqAccordion` |
+| `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( services, directions, cases )` | article, entry-content, lightbox, toc, faq-section, faq, post-card, related-posts, post-nav; `initToc`, `initFaqAccordion` |
 | `single-post.scss` + `single-post.js` | `is_singular( 'post' )` | same, without FAQ; `initToc` |
 
 Both are enqueued from `configure/theme-hooks/enqueue-listing-templates-assets.php` (priority 110, style depends on `main`).

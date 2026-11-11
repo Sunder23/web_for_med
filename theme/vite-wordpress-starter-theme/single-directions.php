@@ -1,6 +1,6 @@
 <?php
 /**
- * Single direction: shared article layout + FAQ, related directions and CTA.
+ * Single direction: shared article layout + FAQ, prev/next navigation and related directions.
  *
  * @package Vite_Starter
  */
@@ -26,6 +26,8 @@ get_header();
 
 		get_template_part( 'partials/parts/cpt-faq', null, (array) get_field( 'direction_faq' ) );
 
+		get_template_part( 'partials/parts/post-nav' );
+
 		get_template_part(
 			'partials/parts/related-posts',
 			null,
@@ -36,7 +38,6 @@ get_header();
 			)
 		);
 
-		get_template_part( 'partials/parts/cpt-cta', null, (array) get_field( 'direction_cta' ) );
 	endwhile;
 	?>
 </main>

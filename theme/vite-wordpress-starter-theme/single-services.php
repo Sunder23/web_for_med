@@ -1,6 +1,6 @@
 <?php
 /**
- * Single service: shared article layout + FAQ, related services and CTA.
+ * Single service: shared article layout + FAQ, prev/next navigation and related services.
  *
  * @package Vite_Starter
  */
@@ -28,6 +28,8 @@ get_header();
 
 		get_template_part( 'partials/parts/cpt-faq', null, (array) get_field( 'service_faq' ) );
 
+		get_template_part( 'partials/parts/post-nav' );
+
 		get_template_part(
 			'partials/parts/related-posts',
 			null,
@@ -38,7 +40,6 @@ get_header();
 			)
 		);
 
-		get_template_part( 'partials/parts/cpt-cta', null, (array) get_field( 'service_cta' ) );
 	endwhile;
 	?>
 </main>

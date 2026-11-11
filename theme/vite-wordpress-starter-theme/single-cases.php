@@ -1,6 +1,6 @@
 <?php
 /**
- * Single case: shared article layout + FAQ, related cases and CTA.
+ * Single case: shared article layout + FAQ, prev/next navigation and related cases.
  *
  * @package Vite_Starter
  */
@@ -25,6 +25,8 @@ get_header();
 
 		get_template_part( 'partials/parts/cpt-faq', null, (array) get_field( 'case_faq' ) );
 
+		get_template_part( 'partials/parts/post-nav' );
+
 		get_template_part(
 			'partials/parts/related-posts',
 			null,
@@ -35,7 +37,6 @@ get_header();
 			)
 		);
 
-		get_template_part( 'partials/parts/cpt-cta', null, (array) get_field( 'case_cta' ) );
 	endwhile;
 	?>
 </main>

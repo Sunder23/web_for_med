@@ -6,6 +6,7 @@
  *     @type string $class     Optional extra classes (mix with the parent grid element).
  *     @type bool   $show_date Whether to print the publish date. Default false.
  *     @type string $title_tag Card title tag: h2 or h3. Default h3.
+ *     @type bool   $show_thumbnail Whether to print the featured image. Default true.
  * }
  *
  * @package Vite_Starter
@@ -22,6 +23,7 @@ $extra_class    = ! empty( $args['class'] ) ? ' ' . $args['class'] : '';
 $show_date      = ! empty( $args['show_date'] );
 $title_tag      = isset( $args['title_tag'] ) && 'h2' === $args['title_tag'] ? 'h2' : 'h3';
 $card_post_type = get_post_type();
+$show_thumbnail = ( ! isset( $args['show_thumbnail'] ) || (bool) $args['show_thumbnail'] ) && has_post_thumbnail();
 
 if ( isset( $excerpt_map[ $card_post_type ] ) ) {
 	$group   = get_field( $excerpt_map[ $card_post_type ][0] );
@@ -31,6 +33,20 @@ if ( isset( $excerpt_map[ $card_post_type ] ) ) {
 }
 ?>
 <a class="post-card<?php echo esc_attr( $extra_class ); ?>" href="<?php the_permalink(); ?>">
+	<?php if ( $show_thumbnail ) : ?>
+		<div class="post-card__image">
+			<?php
+			the_post_thumbnail(
+				'medium_large',
+				array(
+					'alt'     => '',
+					'loading' => 'lazy',
+					'sizes'   => '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw',
+				)
+			);
+			?>
+		</div>
+	<?php endif; ?>
 	<div class="post-card__body">
 		<?php if ( $show_date ) : ?>
 			<time class="post-card__date tag" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date( 'd.m.Y' ) ); ?></time>
