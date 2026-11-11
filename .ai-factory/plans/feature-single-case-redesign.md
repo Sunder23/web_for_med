@@ -106,7 +106,7 @@ Created: 2026-11-11
 - Chrome: 1920, 1440, 1024, 375 — сверить с `3061:891` / `3124:1383`: порядок блоков на мобиле, sticky-сайдбар до конца контента, счётчик меняется при скролле, prev/next с loop-around, кейс без деталей/картинки не ломает сетку.
 - `npm run lint`, `composer lint` — без новых ошибок.
 
-- [ ] **Task 9: Документация** (зависит от 8)
+- [x] **Task 9: Документация** (зависит от 8)
 - `docs/single-pages.md`: строка `single-cases.php` в таблице (новые поля `case_intro`, `case_details`, таксономии `case_deliverable` / `case_technology` / `case_status`; FAQ/CTA больше не выводятся), entry `single-case.scss/js` в таблице ассетов, `single-cpt` — только services/directions.
 - `AGENTS.md`: упомянуть `partials/parts/case-single.php`, `case-nav.php`, новые хелперы и `configure/taxonomies/` (больше не empty) в структуре.
 
