@@ -40,6 +40,21 @@
     text-align: center;
   }
 
+  // Optional ACF `title_mobile`: the short variant on phones only.
+  &__title-full {
+    display: none;
+
+    @include breakpoint(mobile) {
+      display: inline;
+    }
+  }
+
+  &__title-short {
+    @include breakpoint(mobile) {
+      display: none;
+    }
+  }
+
   // One column on phones, 2×2 on mobile/tablet portrait, 4 in a row from tablet.
   &__steps {
     display: grid;
@@ -120,6 +135,19 @@
 
     @include breakpoint(mobile) {
       gap: 12px;
+    }
+  }
+
+  // Mixed with .tag. Phones (Figma 3180:3662): 12px, no insets. From `mobile`
+  // (Figma 06) the caption frame has an 8px top inset, so the step title starts
+  // 37px below the caption.
+  &__tag {
+    align-self: flex-start;
+    font-size: 12px;
+
+    @include breakpoint(mobile) {
+      padding-top: 8px;
+      font-size: 13px;
     }
   }
 

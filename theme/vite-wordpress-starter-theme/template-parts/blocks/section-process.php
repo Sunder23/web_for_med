@@ -23,7 +23,14 @@ if ( ! $items ) {
 <section class="process process--top" id="process">
 	<div class="process__wrap container">
 		<div class="process__header frame">
-			<h2 class="section-title process__title" data-aos="fade-in" data-aos-duration="600"><?php echo esc_html( $args['title'] ?? '' ); ?></h2>
+			<h2 class="section-title process__title" data-aos="fade-in" data-aos-duration="600">
+				<?php if ( ! empty( $args['title_mobile'] ) ) : ?>
+					<span class="process__title-full"><?php echo esc_html( $args['title'] ?? '' ); ?></span>
+					<span class="process__title-short"><?php echo esc_html( $args['title_mobile'] ); ?></span>
+				<?php else : ?>
+					<?php echo esc_html( $args['title'] ?? '' ); ?>
+				<?php endif; ?>
+			</h2>
 		</div>
 	</div>
 </section>

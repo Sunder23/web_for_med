@@ -144,14 +144,24 @@
     }
   }
 
+  // Figma 04: collapsed 17px / 20px #2e2f30; the open item 16px / 18px #092a4a.
   &__title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 500;
     line-height: 1.2;
-    color: var(--c-dark-blue);
+    color: var(--c-dark);
 
     @include breakpoint(mobile) {
       font-size: 20px;
+    }
+  }
+
+  &__item--active &__title {
+    font-size: 16px;
+    color: var(--c-dark-blue);
+
+    @include breakpoint(mobile) {
+      font-size: 18px;
     }
   }
 

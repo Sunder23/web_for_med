@@ -1,3 +1,4 @@
+import { logDebug } from '@js/utils/logDebug.js';
 import gsap from 'gsap';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 import { SplitText } from 'gsap/SplitText';
@@ -9,25 +10,27 @@ gsap.registerPlugin(SplitText, ScrambleTextPlugin);
  *
  * @param {HTMLElement|null} el Element to animate.
  * @param {number} delay Timeline delay in seconds.
- * @returns {Promise<void>} Resolves when the animation completes.
+ * @returns {Promise<void>} Resolves when the animation completes (after fonts load).
  */
-export function initTitleScramble(el, delay = 0.2) {
-	return new Promise((resolve) => {
-		if (!el) {
-			resolve();
-			return;
-		}
+export async function initTitleScramble(el, delay = 0.2) {
+	if (!el) return;
 
+	// Split only after the heading font is in: measuring with the fallback
+	// font produced wrong word wraps (an orphaned «для» in the hero title).
+	if (document.fonts?.ready) {
+		await document.fonts.ready;
+	}
+	logDebug('[titleScramble] split', { fontsReady: true });
+
+	await new Promise((resolve) => {
+		// No `lines` split: words stay inline-blocks, so the browser keeps
+		// wrapping them naturally (also after resize).
 		const split = new SplitText(el, {
-			type: 'lines,words,chars',
-			linesClass: 'split-line',
+			type: 'words,chars',
 			wordsClass: 'split-word',
 			charsClass: 'split-char',
 		});
 
-		split.lines.forEach((line, i) => {
-			line.style.setProperty('--line-index', i);
-		});
 		split.words.forEach((word, i) => {
 			word.style.setProperty('--word-index', i);
 		});

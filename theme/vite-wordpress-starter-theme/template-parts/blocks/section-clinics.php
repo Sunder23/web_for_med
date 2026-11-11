@@ -25,7 +25,15 @@ if ( ! $items ) {
 				<div class="clinics__item">
 					<?php
 					if ( ! empty( $item['icon'] ) ) {
-						echo wp_get_attachment_image( (int) $item['icon'], 'full', false, array( 'class' => 'clinics__icon', 'alt' => '' ) );
+						echo wp_get_attachment_image(
+							(int) $item['icon'],
+							'full',
+							false,
+							array(
+								'class' => 'clinics__icon',
+								'alt'   => '',
+							)
+						);
 					}
 					?>
 					<span class="clinics__label"><?php echo esc_html( $item['title'] ?? '' ); ?></span>
@@ -36,7 +44,15 @@ if ( ! $items ) {
 			<div class="clinics__aside">
 				<?php
 				if ( ! empty( $args['aside_icon'] ) ) {
-					echo wp_get_attachment_image( (int) $args['aside_icon'], 'full', false, array( 'class' => 'clinics__aside-icon', 'alt' => '' ) );
+					echo wp_get_attachment_image(
+						(int) $args['aside_icon'],
+						'full',
+						false,
+						array(
+							'class' => 'clinics__aside-icon',
+							'alt'   => '',
+						)
+					);
 				}
 				?>
 				<p class="clinics__aside-text"><?php echo esc_html( $args['aside_text'] ?? '' ); ?></p>

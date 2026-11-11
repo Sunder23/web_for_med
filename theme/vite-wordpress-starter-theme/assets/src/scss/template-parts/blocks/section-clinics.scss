@@ -37,12 +37,14 @@
 
   // Phones: 64px rows, 16/8 padding (the 10px row inset is added to the
   // outer side of each column, Figma note 3178:3488 — "cells too flat").
+  // 14px (not 18) on the outer side gives the labels ~130px (128 in the
+  // mockup), so «центри та санаторії» (128.6px) stays on two lines.
   &__item {
     display: flex;
     align-items: center;
     gap: 6px;
     min-height: 64px;
-    padding: 16px 8px 16px 18px;
+    padding: 16px 8px 16px 14px;
     border-bottom: var(--border);
     font-size: 13px;
     font-weight: 500;
@@ -59,7 +61,7 @@
 
     // Two columns: divider before the second column.
     &:nth-child(2n) {
-      padding: 16px 18px 16px 8px;
+      padding: 16px 14px 16px 8px;
       border-left: var(--border);
 
       @include breakpoint(mobile) {

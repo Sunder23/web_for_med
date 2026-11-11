@@ -143,13 +143,14 @@ Created: 2026-11-11
 
 ### Phase 4: Контент и документация
 
-- [ ] **Task 13: WP-CLI миграция контента главной** (depends on 4, 6–12)
+- [x] **Task 13: WP-CLI миграция контента главной** (depends on 4, 6–12)
+  - _Сделано:_ `scripts/update-home-redesign.php` — по конвенции `scripts/*` dry run по умолчанию, запись аргументом `apply` (вместо `--dry-run`); CF7-часть делегирована `update-cf7-contact-form.php`; вложения помечаются `_starter_source = home-redesign/<file>` и переиспользуются при повторном запуске.
   - `scripts/update-home-redesign.php` (идемпотентный, `--dry-run`): обновить в блоках главной тексты трёх заголовков (п.2), подставить новые иконки (sideload из `static/images/home/` в медиатеку; если загрузка SVG не разрешена — шаблоны выводят иконки из темы по ключу, а скрипт только чистит старые поля), ссылки CTA → `#contact-form`; иконки clinics (`items_*_icon`, `aside_icon`) → `static/images/home/clinic-*.svg`; картинки hero — sideload 2x-версий из `scripts/data/home-redesign/hero-desktop-2x.png` (1260×760) и `hero-mobile-2x.png` (750×520) в `image` / `image_mobile` (сейчас 580×360 и 375×480 — причина размытия на mobile, заметка `3178:3487`); опция `header_button` → `#contact-form`; создать/обновить CF7-форму с новыми полями и записать шорткод в `footer_contact.contact_form`.
   - Логирование: `WP_CLI::log()` на каждый обновлённый блок/опцию, `WP_CLI::warning()` при отсутствии блока/вложения, итоговая сводка.
   - Запуск: `MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-home-redesign.php"`.
   - Files: `scripts/update-home-redesign.php`, при необходимости `configure/acf/acf-json/group_starter_section_*.json`.
 
-- [ ] **Task 14: Документация и линтеры** (depends on all)
+- [x] **Task 14: Документация и линтеры** (depends on all)
   - Обновить `docs/page-sections.md` (секции без иконок заголовков, новые иконки, spacing), `docs/getting-started.md`/`docs/single-pages.md` при изменении футера/форм, `AGENTS.md` и `.ai-factory/ARCHITECTURE.md` (contact drawer, smart header, шрифт заголовков, убрать упоминание sticky).
   - `npm run lint`, `composer lint`, `npm run build`; визуальная проверка главной и одной внутренней страницы на 1440/1024/375.
   - Files: `docs/*.md`, `AGENTS.md`, `.ai-factory/ARCHITECTURE.md`.

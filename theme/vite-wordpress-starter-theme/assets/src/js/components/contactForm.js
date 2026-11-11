@@ -84,7 +84,7 @@ function validateEmail(v) {
 	if (!v.includes('@')) return 'Email має містити символ @';
 	if (/[.,;:!?]$/.test(v)) return 'Приберіть зайвий символ у кінці email';
 	const domain = v.slice(v.indexOf('@') + 1);
-	if (!domain || !domain.includes('.')) return 'Вкажіть коректну email-адресу.';
+	if (!domain?.includes('.')) return 'Вкажіть коректну email-адресу.';
 	if (DOMAIN_TYPOS.has(domain.toLowerCase()))
 		return 'Перевірте написання домену email';
 	if (TEMP_DOMAINS.has(domain.toLowerCase()))
@@ -117,13 +117,20 @@ function validateTelegram(v) {
 }
 
 /**
- * Formats a phone as `+380 (67) 123 45 67`; a leading 0 is read as a Ukrainian
- * number. Other country codes are kept as `+<digits>` (max 15 digits, E.164).
+ * Formats a phone as `+380 (67) 123 45 67`. Without an explicit `+` the input is
+ * read as a Ukrainian number (`67…`, `067…`, `380…`), matching the field's
+ * `+380 (__) ___ __ __` mask. Other country codes need a leading `+` and are
+ * kept as `+<digits>` (max 15 digits, E.164).
  */
 function formatPhone(value) {
 	let digits = phoneDigits(value);
-	if (!digits) return '';
+	const explicitPlus = value.trim().startsWith('+');
+	if (!digits) return explicitPlus ? '+' : '';
 	if (digits.startsWith('0')) digits = `38${digits}`;
+	else if (!explicitPlus && !'380'.startsWith(digits.slice(0, 3))) {
+		digits = `380${digits}`;
+		logDebug('[contactForm] phone: local number, +380 prepended');
+	}
 	if (!digits.startsWith('380')) return `+${digits.slice(0, 15)}`;
 
 	const d = digits.slice(3, 12);

@@ -26,9 +26,12 @@ $starter_contact_text  = ! empty( $starter_contact['text'] ) ? $starter_contact[
 
 	<div class="contact-drawer__panel">
 		<div class="contact-drawer__head">
-			<button type="button" class="contact-drawer__close" data-contact-close aria-label="<?php esc_attr_e( 'Закрити форму', 'vite-starter' ); ?>">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-			</button>
+			<div class="contact-drawer__bar">
+				<p class="contact-drawer__eyebrow"><?php esc_html_e( 'Почнімо з розмови', 'vite-starter' ); ?></p>
+				<button type="button" class="contact-drawer__close" data-contact-close aria-label="<?php esc_attr_e( 'Закрити форму', 'vite-starter' ); ?>">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+				</button>
+			</div>
 			<p class="contact-drawer__title" id="contact-drawer-title"><?php echo esc_html( $starter_contact_title ); ?></p>
 			<?php if ( $starter_contact_text ) : ?>
 				<p class="contact-drawer__text"><?php echo esc_html( $starter_contact_text ); ?></p>

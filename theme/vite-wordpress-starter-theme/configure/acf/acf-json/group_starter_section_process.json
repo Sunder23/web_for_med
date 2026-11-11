@@ -23,6 +23,26 @@
             "rows": ""
         },
         {
+            "key": "field_starter_section_process_title_mobile",
+            "label": "Title (phones)",
+            "name": "title_mobile",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Optional shorter title shown below 766px (Figma mobile 3180:3662). Empty — the main title is used.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_starter_section_process_items",
             "label": "Items",
             "name": "items",
@@ -155,5 +175,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791464381
+    "modified": 1794412165
 }

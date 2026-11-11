@@ -30,6 +30,7 @@ $nav-mobile-bg: #F4F6F8;
     // Footer logo (Figma 3139:1682): 32px on desktop, 20px on phones.
     &--lg {
         padding: 0;
+        font-size: 20px;
 
         @include breakpoint(tablet) {
             font-size: 32px;
@@ -95,7 +96,7 @@ $nav-mobile-bg: #F4F6F8;
             display: inline-flex;
             padding: 10px 14px;
             font-size: 15px;
-            line-height: 1.2;
+            line-height: 21px; // Figma: auto line height → 41px tall button
             letter-spacing: 0.01em;
         }
     }

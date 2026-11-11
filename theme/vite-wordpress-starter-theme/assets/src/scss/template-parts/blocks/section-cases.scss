@@ -57,7 +57,7 @@
       font-size: 36px;
     }
 
-    @include breakpoint(desktop) {
+    @include breakpoint(laptop) {
       font-size: 40px;
     }
   }
@@ -232,7 +232,8 @@
     // From mobile up the shared .cases-slider__background shows through.
     @include breakpoint(mobile) {
       height: 380px;
-      padding: 20px 40px;
+      // Figma 05: the card is centred between an 80px top and 20px bottom inset.
+      padding: 80px 40px 20px;
       background: none;
     }
   }
@@ -243,18 +244,24 @@
     border-radius: var(--radius);
     padding: 18px;
     box-shadow: 0 6px 20px rgba(73, 80, 86, 0.3);
+    // Phones (Figma 3180:3648): a centred 290px card, Fixel Regular 14/20.
     font-size: 14px;
-    font-weight: 500;
-    line-height: 1.55;
+    font-weight: 400;
+    line-height: 20px;
     color: var(--c-grey);
     width: 100%;
+    max-width: 290px;
+    margin: 0 auto;
     // Room for exactly 6 lines, so cards with short and long texts are the same height.
     min-height: calc(6lh + 36px);
 
     @include breakpoint(mobile) {
       min-height: calc(6lh + 44px);
+      max-width: none;
       padding: 22px 26px;
       font-size: 16px;
+      font-weight: 500;
+      line-height: 1.55;
     }
   }
 

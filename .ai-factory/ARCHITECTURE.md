@@ -63,7 +63,7 @@ assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 
 ## Asset Pipeline
 - **Entries** (`vite.config.js`): every non-underscore `.scss` / `.js` in `assets/src/{scss,js}/` plus one flat level `template-parts/blocks/`. Manifest keys are `assets/src/{js,scss}/<path>`.
-- **Global** (`main.scss`, `main.js`): tokens, fonts, base, header/footer/forms/grid, shared components, smooth scroll, mobile nav, footer animations.
+- **Global** (`main.scss`, `main.js`): tokens (incl. `--font-heading` Grunt Grotesk, `--section-gap`), fonts, base, header/footer/forms/grid, shared components, smooth scroll, mobile nav, smart header (`smartHeader.js`: fixed header hidden on scroll down, shown on scroll up), contact drawer (`partials/parts/contact-drawer.php` + `_contact-drawer.scss` + `contactDrawer.js`, opened by `[data-contact-open]` / `#contact-form` links), footer animations.
 - **Per template**: `archive.scss`, `single-cpt.scss/js`, `single-post.scss/js` (see `theme-hooks/enqueue-listing-templates-assets.php`).
 - **Article singles** (`single.php`, `single-{services,directions,cases}.php`): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_lightbox`, `_toc`, `_faq-section`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
 - **Per section block**: `section-{slug}.scss/js`, enqueued only when the block is on the page (`section-blocks.php`).
@@ -77,7 +77,7 @@ assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 2. **functions.php is a composition root.**
 3. **Prefix**: functions `starter_*`, constants `WFB_*` / `VITE_*`, text domain `vite-starter`, block names `acf/section-*`.
 4. **Escape at output**; WARN-level `error_log( 'WARN [area] … ' )` only on failures.
-5. **Footer data lives in ACF Options** (`footer_contact`), never on a particular page.
+5. **Footer and contact data live in ACF Options** (`footer_contact` feeds the contact drawer), never on a particular page.
 
 ## Code Examples
 

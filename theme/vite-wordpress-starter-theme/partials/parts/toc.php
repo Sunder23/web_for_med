@@ -12,7 +12,7 @@
 
 $items = ! empty( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] : array();
 
-// Quick contact: the footer form (ACF Options) is the primary target; the header button is the fallback.
+// Quick contact: the contact drawer (form from ACF Options) is the primary target; the header button is the fallback.
 $contact       = starter_get_option( 'footer_contact' );
 $header_button = starter_get_option( 'header_button' );
 $mail          = starter_get_option( 'mail' );

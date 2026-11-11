@@ -69,10 +69,16 @@
     }
   }
 
-  // Mixed with .tag: 13px uppercase #218ed6.
+  // Mixed with .tag: 12px without insets on phones (Figma 3180:3578),
+  // 13px in an 8px-inset caption frame from `mobile` up.
   &__tag {
     align-self: flex-start;
-    padding: 8px 0;
+    font-size: 12px;
+
+    @include breakpoint(mobile) {
+      padding: 8px 0;
+      font-size: 13px;
+    }
   }
 
   &__body {
@@ -114,8 +120,9 @@
   border-bottom: var(--border);
 
   // Mixed with .container.
+  // Figma 3180:3594: 60/35 on phones (305px text column).
   &__inner {
-    padding: 60px 25px;
+    padding: 60px 35px;
 
     @include breakpoint(mobile) {
       padding: 70px calc(var(--pad-x) + 16px);

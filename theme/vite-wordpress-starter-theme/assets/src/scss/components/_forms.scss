@@ -121,10 +121,21 @@
     padding: 0;
     border: 0;
 
+    // The fieldset's flex gap already separates the legend from the chips (8px).
     legend {
         float: left;
         width: 100%;
-        margin-bottom: 8px;
+    }
+}
+
+// "Preferred contact": the channel chips and the contact field form one group
+// with a tighter gap — 12px of the form's 18px on phones (Figma 3155:2916),
+// 16px of 24px from `mobile` up (3155:2962).
+.form-channel + .form-field {
+    margin-top: -6px;
+
+    @include breakpoint(mobile) {
+        margin-top: -8px;
     }
 }
 

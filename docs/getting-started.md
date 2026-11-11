@@ -95,7 +95,7 @@ Add `types=services,cases` to limit the post types.
 ## Verifying a refactor
 
 1. Take screenshots before (desktop 1440 / mobile 390) of `/`, `/services/`, one service, direction, case, `/blog/` and a blog post.
-2. Rebuild and compare after. Heights must match exactly; remaining differences should be limited to animation phases (footer glitch cover, gears, text scramble).
+2. Rebuild and compare after. Heights must match exactly; remaining differences should be limited to animation phases (footer glitch cover on the front page, glitch images, text scramble).
 3. Check `wp-content/debug.log` for notices.
 
 ## See Also

@@ -33,11 +33,16 @@
         position: relative;
     }
 
+    // Phones: a 200px strip with a 20px caption (Figma 3180:3730).
     &__cover-image {
         background-image: var(--footer-cover-image);
         background-size: cover;
         background-position: center;
-        height: 454px;
+        height: 200px;
+
+        @include breakpoint(mobile) {
+            height: 454px;
+        }
     }
 
     &__cover-text {
@@ -46,7 +51,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         font-family: var(--f-heading);
-        font-size: 28px;
+        font-size: 20px;
         font-weight: 700;
         line-height: 1.01;
         color: #fff;
@@ -101,7 +106,9 @@
         padding: 24px 10px 12px;
 
         @include breakpoint(tablet) {
-            flex: 1 1 0;
+            // Three equal 427px columns (Figma 3139:1682). `flex: 1 1 0` would add
+            // each column's own (different) padding on top of an equal share.
+            flex: 0 0 calc(100% / 3);
             justify-content: flex-end;
             min-width: 0;
             padding: 48px 40px;
@@ -116,6 +123,7 @@
         @include breakpoint(tablet) {
             order: 0;
             gap: 28px;
+            padding-bottom: 48px;
             padding-left: 5px;
             border-right: var(--border);
         }
