@@ -1,10 +1,11 @@
 <?php
 /**
- * Cases archive (/cases/): utility bar + vertical case slider (Figma 3025:141, mobile 3166:3416).
+ * Cases archive (/cases/): utility bar + looped case slider (Figma 3025:141, mobile 3166:3416).
  *
  * Text panels (head: client + title, details: description + link) and covers are
- * rendered for every case; casesArchive.js switches the active one. Without JS
- * (no `is-enhanced` class) everything is shown as a plain list.
+ * rendered for every case; casesArchive.js runs Swiper on the covers (viewport =
+ * container, track = wrapper, cover = slide) and switches the active panels.
+ * Without JS the covers form a horizontal scroll-snap lane.
  *
  * @package Vite_Starter
  */
@@ -114,7 +115,7 @@ $starter_svg_kses  = array(
 
 				<?php if ( $starter_count > 1 ) : ?>
 					<div class="cases-archive__arrows">
-						<button type="button" class="cases-archive__arrow" data-cases-prev aria-controls="cases-archive-track" aria-label="<?php esc_attr_e( 'Попередній кейс', 'vite-starter' ); ?>" disabled>
+						<button type="button" class="cases-archive__arrow" data-cases-prev aria-controls="cases-archive-track" aria-label="<?php esc_attr_e( 'Попередній кейс', 'vite-starter' ); ?>">
 							<?php echo wp_kses( $starter_arrow_svg( 'prev' ), $starter_svg_kses ); ?>
 						</button>
 						<button type="button" class="cases-archive__arrow" data-cases-next aria-controls="cases-archive-track" aria-label="<?php esc_attr_e( 'Наступний кейс', 'vite-starter' ); ?>">

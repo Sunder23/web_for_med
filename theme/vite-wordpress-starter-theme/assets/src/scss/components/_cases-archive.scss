@@ -2,12 +2,13 @@
 
 // Cases archive (Figma 3025:141 desktop, 3166:3416 mobile).
 //
-// Base (mobile, no JS, low screens): normal page flow — title, horizontal
-// cover lane with scroll-snap, description, link.
-// Slider (`.is-enhanced` + `slider` mixin): the block fills the viewport under
-// the header, text on the left, a vertical cover track on the right with
-// PREV / NEXT fragments. Sizes are pure CSS (container units of `__wrap`);
-// casesArchive.js only sets `--cases-index` and toggles `is-active`.
+// Base (mobile, low screens): normal page flow — title, horizontal cover lane
+// (scroll-snap without JS, a horizontal Swiper with JS), description, link.
+// Slider (`.is-enhanced` + `slider` mixin): the page fits one screen — header,
+// bar, stage, a 40px gap and the footer. Text on the left, a looped vertical
+// Swiper on the right with PREV / NEXT fragments. Sizes are pure CSS
+// (container units of `__wrap`); casesArchive.js toggles `is-active`.
+// Swiper core CSS is not imported: the few rules it needs are below.
 // Keep the media query in sync with SLIDER_QUERY in components/casesArchive.js.
 
 $cover-w: 522;
@@ -22,16 +23,26 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
     }
 }
 
-// The scroll lock (Lenis `overflow: clip`) hides the scrollbar — keep its
-// gutter so the layout does not jump on lock / release. This stylesheet is
+// One screen: the footer is pinned to the bottom of the viewport and the
+// archive takes the height left between it and the header. This stylesheet is
 // loaded on /cases/ only.
-:root {
-    scrollbar-gutter: stable;
+.is-cases-archive {
+    @include slider {
+        .site {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100svh - var(--wp-admin--admin-bar--height, 0px));
+        }
+
+        .site-content {
+            display: flex;
+            flex: 1 0 auto;
+            flex-direction: column;
+        }
+    }
 }
 
 .cases-archive {
-    --header-offset-current: var(--header-offset, var(--header-h));
-
     // Visually hidden page heading; case titles are h2.
     &__title {
         position: absolute;
@@ -62,7 +73,7 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
         border-right: var(--border);
 
         @include breakpoint(tablet) {
-            height: 40px;
+            height: 39px; // 40 with the bar's bottom border
             padding: 0 35px;
         }
     }
@@ -244,7 +255,7 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
         margin-top: 18px;
 
         @include breakpoint(tablet) {
-            margin-top: 44px;
+            margin-top: 44px; // + panel gap 8 = 52 in the mockup
         }
     }
 
@@ -294,6 +305,31 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
         display: flex;
         gap: 10px;
         padding-right: var(--pad-x);
+    }
+
+    // Swiper (lane and slider): it positions the track with transforms.
+    &__viewport.swiper-initialized {
+        overflow: hidden;
+        scroll-snap-type: none;
+    }
+
+    &__viewport.swiper-horizontal {
+        touch-action: pan-y;
+    }
+
+    &__viewport.swiper-vertical {
+        touch-action: pan-x;
+    }
+
+    &__viewport.swiper-initialized &__track {
+        gap: 0;
+        padding: 0;
+        transition-property: transform;
+        transition-timing-function: $ease-track;
+    }
+
+    &__viewport.swiper-initialized &__cover {
+        flex-shrink: 0;
     }
 
     &__cover {
@@ -356,14 +392,9 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
 .cases-archive.is-enhanced {
     @include slider {
         display: flex;
+        flex: 1 0 auto;
         flex-direction: column;
-        height: calc(100svh - var(--header-offset-current) - var(--wp-admin--admin-bar--height, 0px));
         padding-bottom: 40px;
-        transition: height 0.3s ease;
-
-        @media (prefers-reduced-motion: reduce) {
-            transition: none;
-        }
     }
 
     .cases-archive__bar {
@@ -375,8 +406,13 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
     // Size container for the cover math below (cqw / cqh).
     .cases-archive__wrap {
         @include slider {
-            flex: 1 1 auto;
-            min-height: 0;
+            // Zero basis: with `auto` Chrome resolves cqh against the
+            // pre-flex (content) height, i.e. 0.
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+            border-bottom: var(--border);
             container-type: size;
         }
     }
@@ -398,8 +434,10 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
                 "heads arrows viewport"
                 "details arrows viewport"
                 ". arrows viewport";
+            flex: 1 1 auto;
             gap: 0;
-            height: 100%;
+            width: 100%;
+            min-height: 0;
             padding: 0;
             overflow: hidden;
         }
@@ -408,7 +446,7 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
     .cases-archive__heads,
     .cases-archive__details {
         @include slider {
-            padding: 0 clamp(24px, 5cqw, 70px) 0 35px;
+            padding: 0 clamp(24px, 4.4cqw, 84px) 0 35px;
         }
     }
 
@@ -432,19 +470,6 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
             flex-direction: column;
             gap: 4px;
         }
-
-        // Mouse / trackpad users scroll with the wheel; arrows stay reachable
-        // by keyboard (shown on focus) and on touch screens.
-        @include breakpoint(laptop) {
-            @media (hover: hover) and (pointer: fine) {
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-        }
-
-        &:focus-within {
-            opacity: 1;
-        }
     }
 
     .cases-archive__viewport {
@@ -461,15 +486,6 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
     .cases-archive__track {
         @include slider {
             flex-direction: column;
-            gap: var(--gap);
-            padding: 0;
-            transform: translateY(calc(var(--frag) + var(--gap) - var(--cases-index, 0) * (var(--cover-h) + var(--gap))));
-            transition: transform 0.75s $ease-track;
-            will-change: transform;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            transition: none;
         }
     }
 

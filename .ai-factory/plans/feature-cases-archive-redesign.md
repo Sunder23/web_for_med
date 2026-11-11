@@ -36,7 +36,14 @@ Created: 2026-11-11
 11. Когда все кейсы пролистаны, становится доступен футер.
 12. (Опционально, берём) Хедер через несколько секунд прячется, остаются utility bar и hero; возвращается при наведении на верх страницы или сильном скролле вверх.
 
-## Логика скролла (как на grndwrk.studio, зафиксировано здесь, т. к. сайт часто недоступен)
+## Пересмотр после Pixel Perfect (2026-11-11)
+Сверка экспорта `3025:141` (1920×979) с вёрсткой показала: макет — страница **в один экран** (хедер 57 + плашка 40 + stage 648 + полоса 40 + футер 194 = 979), футер виден сразу, а слайдер у дизайнера зациклен (`loop: true`, как `casesSlider.js` на главной). Решения пользователя:
+- Слайдер на **Swiper** (уже в проекте): `direction: 'vertical'`, `loop`, `centeredSlides`, `slidesPerView: 'auto'`, Mousewheel (на stage), Keyboard, Navigation; точки и счётчик свои, по `realIndex`. На мобайле тот же Swiper горизонтально (лента, следующий кавер выглядывает). Без JS — CSS-лента со scroll-snap.
+- Раскладка в один экран: `.site` — flex-колонка на высоту окна, футер прижат к низу, stage занимает остаток (`__wrap` `flex: 1 1 0`, `min-height: 420px`; на более низких экранах страница чуть докручивается). Блокировка/отпускание скролла и relock **убраны** (пункты 11 требований и раздел «Логика скролла» ниже больше не действуют).
+- Стрелки видимы на десктопе (в макете они есть).
+- **Task 7 (авто-скрытие хедера) отменена**: в один экран высоты хватает, хедер в макете виден.
+
+## Логика скролла (как на grndwrk.studio) — заменена Swiper, см. «Пересмотр»
 - Экран кейсов закреплён: обычная прокрутка страницы отключена (`window.lenis.stop()` + `preventDefault` на `wheel`/`touchmove`/клавишах), пока пользователь листает кейсы.
 - Один «жест» = один шаг. Колесо: дельты копятся, шаг срабатывает при пороге (~50px), дальше блокировка на время анимации (~700–800ms) + антидребезг для инерции тачпада (новый шаг только после паузы в потоке wheel-событий ~150ms или по окончании анимации, что позже).
 - Вниз: следующий кейс. Вверх: предыдущий.
@@ -64,7 +71,7 @@ Created: 2026-11-11
 ## Commit Plan
 - **Commit 1** (после задач 1–3): `feat(cases): archive fields, query order and content script`
 - **Commit 2** (после задач 4–5): `feat(cases): new cases archive markup and styles`
-- **Commit 3** (после задач 6–7): `feat(cases): vertical case slider with scroll lock and header auto-hide`
+- **Commit 3** (после задачи 6): `feat(cases): looped case slider on Swiper, one-screen layout`
 - **Commit 4** (после задач 8–9): `docs(cases): cases archive page`
 
 ## Tasks
@@ -127,7 +134,7 @@ Created: 2026-11-11
 
 ### Phase 3: Поведение
 
-- [x] **Task 6: Слайдер и блокировка скролла** (depends on 4, 5)
+- [x] **Task 6: Слайдер и блокировка скролла** (depends on 4, 5) — переделано на Swiper + loop + один экран, см. «Пересмотр»; пункты ниже — исходная версия
   - Entry `assets/src/js/cases-archive.js` → `initCasesArchive()` из `components/casesArchive.js` (не путать с существующим `casesSlider.js` главной).
   - Состояние: `index`, `count`, `mode` (`'desktop' | 'mobile' | 'static'`, через `matchMedia` на брейкпоинт `laptop` из `mixins/_breakpoint.scss` + проверка высоты stage ≥ минимума), `locked`, `animating`.
   - `goTo(i, source)`: clamp, `stage.style.setProperty('--cases-index', i)`, переключает `is-active`/`hidden`/`inert` у панелей и `aria-current` у точек, обновляет счётчик (`01`), `disabled` у стрелок на краях; ждёт `transitionend` трека (с таймаутом-страховкой) и снимает `animating`.
@@ -138,25 +145,25 @@ Created: 2026-11-11
   - Логирование (`logDebug`, префикс `[casesArchive]`): init (count, mode, есть ли Lenis), смена режима, каждый `goTo` (from, to, source: wheel/key/touch/arrow/dot/swipe), lock / release / relock с `scrollY`, игнорирование жеста (`animating`, порог не набран — только в debug-режиме, без спама на каждое wheel-событие), фолбэк, если `transitionend` не пришёл.
   - Files: `assets/src/js/cases-archive.js`, `assets/src/js/components/casesArchive.js`.
 
-- [ ] **Task 7: Авто-скрытие хедера на /cases/** (depends on 6)
+- [x] ~~**Task 7: Авто-скрытие хедера на /cases/**~~ — отменена пользователем 2026-11-11 (см. «Пересмотр»)
   - `components/smartHeader.js`: опциональный режим auto-hide, включается, если `body.is-cases-archive` и `matchMedia('(min-width: laptop) and (hover: hover) and (pointer: fine)')`. Поведение: через 2500ms после загрузки хедер прячется (`is-hidden`); показывается, когда курсор в верхних ~80px окна (`mousemove`/`mouseleave` у верхнего края), при фокусе внутри хедера, при открытом меню или контактной панели, и по «сильному скроллу вверх». Для этого `casesArchive.js` диспатчит `CustomEvent('cases:reveal-header')`, когда на первом кейсе или в верху страницы накоплен wheel вверх > ~300px за 500ms; smartHeader его слушает. Повторное скрытие через 1500ms после ухода курсора из зоны / снятия фокуса. Обычный режим smart header (скролл вниз/вверх) на остальных страницах не меняется.
   - smartHeader дополнительно ставит на `document.documentElement` класс `is-header-hidden` (или пишет `--header-offset`), чтобы `.cases-archive` расширял stage на высоту хедера: utility bar поднимается на место хедера. Учесть, что `.site` резервирует высоту хедера в `_base.scss`: для `is-cases-archive` отступ берётся из `--header-offset` с transition.
   - Логирование (`[smartHeader]`): включение auto-hide, причина показа (`pointer-top`, `focus`, `reveal-event`, `menu`) и скрытия (`idle-timeout`, `pointer-leave`).
   - Files: `assets/src/js/components/smartHeader.js`, `assets/src/js/components/casesArchive.js`, `assets/src/scss/components/_header.scss` и/или `_base.scss`, `assets/src/scss/components/_cases-archive.scss`.
-<!-- Commit checkpoint: tasks 6-7 -->
+<!-- Commit checkpoint: task 6 (7 cancelled) -->
 
 ### Phase 4: Проверка и документация
 
 - [ ] **Task 8: Визуальная сверка и линтеры** (depends on 3, 7)
   - `npm run build`, затем Chrome (Claude in Chrome): `localhost:8080/cases/` на 1920×979 (сравнить со скриншотом `3025:141`: ACTIVE 522×382, фрагменты по 120px или меньше, зазоры 16, симметрия), 1440×900, 1280×720, 1366×600, 1024×768 (стрелки видны), 375×812 (сравнить с `3166:3416`, свайп ленты).
-  - Сценарии: колесо мышью и тачпадом (нет двойных шагов от инерции), последний кейс → футер → обратно вверх → relock; клавиатура; ресайз через брейкпоинт; `prefers-reduced-motion`; авто-скрытие хедера и появление при наведении/скролле вверх; открытие контактной панели из хедера, пока страница заблокирована; ссылки «Читати кейс» и клики по каверам.
+  - Сценарии: колесо мышью и тачпадом (нет двойных шагов от инерции), зацикливание (с первого назад → последний); клавиатура; ресайз через брейкпоинт; `prefers-reduced-motion`; открытие контактной панели (колесо в ней не листает кейсы); ссылки «Читати кейс» и клики по каверам.
   - `npm run lint`, `composer lint` без новых ошибок.
   - Логирование: проверить, что в консоли нет спама от `logDebug` при прокрутке.
   - Files: правки по результатам в файлах задач 4–7.
 
 - [ ] **Task 9: Документация** (depends on 8, обязательный docs checkpoint через `/aif-docs`)
-  - `docs/cases-archive.md` (или раздел в `docs/single-pages.md`): данные (`case_archive`, фолбэки, порядок `menu_order`), скрипт контента, математика высот, логика скролла (копия раздела grndwrk из этого плана), авто-скрытие хедера, как добавить кейс.
-  - Обновить `AGENTS.md` (структура: `partials/parts/cases-archive.php`, `cases-archive.scss/js`, `components/casesArchive.js`, скрипт), `.ai-factory/ARCHITECTURE.md` (Asset Pipeline: per-template `cases-archive`; smartHeader auto-hide).
+  - `docs/cases-archive.md` (или раздел в `docs/single-pages.md`): данные (`case_archive`, фолбэки, порядок `menu_order`), скрипт контента, математика высот, Swiper-конфигурация и раскладка в один экран, как добавить кейс.
+  - Обновить `AGENTS.md` (структура: `partials/parts/cases-archive.php`, `cases-archive.scss/js`, `components/casesArchive.js`, скрипт), `.ai-factory/ARCHITECTURE.md` (Asset Pipeline: per-template `cases-archive` на Swiper).
   - Логирование: не требуется.
   - Files: `docs/cases-archive.md`, `AGENTS.md`, `.ai-factory/ARCHITECTURE.md`.
 <!-- Commit checkpoint: tasks 8-9 -->

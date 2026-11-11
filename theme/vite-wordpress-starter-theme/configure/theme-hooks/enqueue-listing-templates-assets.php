@@ -57,7 +57,7 @@ function starter_enqueue_cases_archive_assets() {
 add_action( 'wp_enqueue_scripts', 'starter_enqueue_cases_archive_assets', 110 );
 
 /**
- * Marks the cases archive on <body> (header auto-hide, page offsets).
+ * Marks the cases archive on <body> (one-screen layout: footer pinned to the viewport bottom).
  *
  * @param string[] $classes Body classes.
  * @return string[] Modified body classes.
