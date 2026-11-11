@@ -24,9 +24,9 @@ wp-boilerplate/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
 │   │   ├── post-types.php + post-types/       # services, directions, cases
-│   │   ├── taxonomies.php + taxonomies/       # (empty)
+│   │   ├── taxonomies.php + taxonomies/       # case_deliverable, case_technology, case_status
 │   │   ├── theme-hooks.php + theme-hooks/     # one hook concern per file
-│   │   ├── utilities.php + helpers/           # starter_get_* helpers
+│   │   ├── utilities.php + helpers/           # starter_get_* helpers (incl. case single data, adjacent posts)
 │   │   ├── shortcodes.php, ajax.php           # empty aggregators (+ folders)
 │   │   ├── js-css.php               # Vite integration + editor canvas assets
 │   │   ├── analytics.php            # GTM via ACF Options
@@ -37,9 +37,9 @@ wp-boilerplate/
 │   │   ├── toc.php, admin.php
 │   │   └── acf/{acf-json,acf-blocks,section-blocks}/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
-│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php)
+│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php, cases-archive.php, case-single.php, case-nav.php)
 │   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
-│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, components/ (smartHeader, contactDrawer, …), template-parts/blocks/
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, contactDrawer, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
 │   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons)
@@ -57,7 +57,7 @@ wp-boilerplate/
 | `theme/vite-wordpress-starter-theme/functions.php` | Theme bootstrap — defines `WFB_THEME_*`, requires modules |
 | `.../configure/js-css.php` | Vite integration (`VITE_BUILD` / `VITE_DEV`, manifest, register helpers) |
 | `.../configure/section-blocks.php` | Section slugs, rendering, conditional assets |
-| `.../configure/theme-hooks/enqueue-listing-templates-assets.php` | Per-template entries (archive, single-cpt, single-post) |
+| `.../configure/theme-hooks/enqueue-listing-templates-assets.php` | Per-template entries (archive, cases-archive, single-cpt, single-case, single-post) |
 | `.../vite.config.js` | Flat SCSS/JS entries + `template-parts/blocks/` level |
 | `.../assets/src/js/main.js`, `.../scss/main.scss` | Global entries |
 | `docker/compose.yml` | Dev environment |
@@ -68,7 +68,7 @@ wp-boilerplate/
 | README | README.md | Project landing page |
 | Getting Started | docs/getting-started.md | Environment, commands, asset modes |
 | Page Sections | docs/page-sections.md | `acf/section-*` blocks and migration |
-| Single Pages | docs/single-pages.md | Article layout for CPT and blog singles |
+| Single Pages | docs/single-pages.md | Article layout for CPT and blog singles, single case layout |
 | AI Context | .ai-factory/DESCRIPTION.md | Project specification and tech stack |
 | Architecture | .ai-factory/ARCHITECTURE.md | Layers, module layout, asset pipeline |
 | Base Rules | .ai-factory/rules/base.md | Naming and coding conventions |

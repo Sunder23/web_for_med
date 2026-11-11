@@ -61,7 +61,7 @@ if ( ! defined( 'STARTER_CONVERT_UPLOADS_TO_WEBP' ) ) {
 }
 
 if ( ! defined( 'STARTER_WEBP_UPLOAD_QUALITY' ) ) {
-	define( 'STARTER_WEBP_UPLOAD_QUALITY', 75 );
+	define( 'STARTER_WEBP_UPLOAD_QUALITY', 88 );
 }
 
 if ( STARTER_CONVERT_UPLOADS_TO_WEBP ) {

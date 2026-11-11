@@ -4,7 +4,7 @@
  *
  * Companion to the theme upload filter (configure/helpers/convert-image-to-webp.php), which
  * only handles new uploads. For every image/jpeg|image/png attachment this script:
- *   1. saves a WebP copy next to the original (quality STARTER_WEBP_UPLOAD_QUALITY, default 75);
+ *   1. saves a WebP copy next to the original (quality STARTER_WEBP_UPLOAD_QUALITY, default 88);
  *   2. points the attachment at it (_wp_attached_file, post_mime_type, guid) and regenerates sizes;
  *   3. rewrites old file URLs (full + every size) in post_content and postmeta of other posts;
  *   4. deletes the old original and its sizes — only after steps 2–3 succeeded.
@@ -42,7 +42,7 @@ foreach ( $w4m_cli_args as $w4m_arg ) {
 
 // Postmeta keys that describe the attachment itself or import provenance — never rewritten.
 $skip_meta_keys = array( '_wp_attached_file', '_wp_attachment_metadata', '_w4m_import_source' );
-$quality        = defined( 'STARTER_WEBP_UPLOAD_QUALITY' ) ? (int) STARTER_WEBP_UPLOAD_QUALITY : 75;
+$quality        = defined( 'STARTER_WEBP_UPLOAD_QUALITY' ) ? (int) STARTER_WEBP_UPLOAD_QUALITY : 88;
 
 if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ) ) {
 	WP_CLI::error( 'No available image editor (Imagick/GD) supports WebP.' );

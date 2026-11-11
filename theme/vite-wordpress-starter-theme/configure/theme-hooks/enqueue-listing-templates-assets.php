@@ -72,18 +72,32 @@ function starter_cases_archive_body_class( $classes ) {
 add_filter( 'body_class', 'starter_cases_archive_body_class' );
 
 /**
- * Enqueues assets for single services / directions / cases templates.
+ * Enqueues assets for single services / directions templates.
  *
  * @return void
  */
 function starter_enqueue_single_cpt_assets() {
-	if ( ! is_singular( array( 'services', 'directions', 'cases' ) ) ) {
+	if ( ! is_singular( array( 'services', 'directions' ) ) ) {
 		return;
 	}
 
 	starter_enqueue_template_assets( 'starter-single-cpt', 'single-cpt.scss', 'single-cpt.js', array( 'jquery' ) );
 }
 add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_cpt_assets', 110 );
+
+/**
+ * Enqueues assets for the single case template (layout, section counter).
+ *
+ * @return void
+ */
+function starter_enqueue_single_case_assets() {
+	if ( ! is_singular( 'cases' ) ) {
+		return;
+	}
+
+	starter_enqueue_template_assets( 'starter-single-case', 'single-case.scss', 'single-case.js' );
+}
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_single_case_assets', 110 );
 
 /**
  * Enqueues assets for the single blog post template.
