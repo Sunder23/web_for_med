@@ -12,11 +12,41 @@ $col-meta: 180px;
 $col-main: 880px;
 $figure-bg: rgb(80 111 115 / 4%);
 
+// --- Sticky offsets ---------------------------------------------------------------
+//
+// The utility bar sticks under the smart header while it is shown and slides up
+// to the viewport edge once the header hides (smartHeader.js toggles
+// `.header.is-hidden`). The details sidebar keeps its gap under the bar.
+// Same duration and easing as the header transform (components/_header.scss).
+
+.case-single {
+    --case-admin-bar: var(--wp-admin--admin-bar--height, 0px);
+    --case-bar-h: 36px;
+    --case-sticky-top: calc(var(--case-admin-bar) + var(--header-h));
+
+    @include breakpoint(tablet) {
+        --case-bar-h: 40px;
+    }
+}
+
+body:has(.header.is-hidden) .case-single {
+    --case-sticky-top: var(--case-admin-bar);
+}
+
 // --- Utility bar (same frame as .cases-archive__bar) -------------------------
 
 .case-single__bar {
+    position: sticky;
+    top: var(--case-sticky-top);
+    z-index: 100; // under the header (200), above the content
     padding: 0 var(--pad-x);
     border-bottom: var(--border);
+    background: var(--c-bg);
+    transition: top 0.3s ease;
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
 }
 
 .case-single__bar-inner {
@@ -141,7 +171,7 @@ $figure-bg: rgb(80 111 115 / 4%);
         line-height: 1.45;
     }
 
-    > * {
+    >* {
         margin: 0;
     }
 }
@@ -180,8 +210,13 @@ $figure-bg: rgb(80 111 115 / 4%);
 
     @include breakpoint(tablet) {
         position: sticky;
-        top: calc(var(--header-h) + 20px);
+        top: calc(var(--case-sticky-top) + var(--case-bar-h) + 20px);
         gap: 24px;
+        transition: top 0.3s ease;
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
     }
 }
 
@@ -238,19 +273,19 @@ $figure-bg: rgb(80 111 115 / 4%);
         line-height: 1.55;
     }
 
-    > p,
-    > ul,
-    > ol {
+    >p,
+    >ul,
+    >ol {
         margin-block: 14px;
     }
 
-    > h2 {
+    >h2 {
         margin-block: 30px 24px;
         font-family: var(--f-heading);
         font-size: 20px;
         font-weight: 700;
         line-height: 1.25;
-        scroll-margin-top: calc(var(--header-h) + 50px);
+        scroll-margin-top: calc(var(--header-h) + var(--case-bar-h) + 30px);
 
         @include breakpoint(tablet) {
             margin-block: 50px 28px;
@@ -259,7 +294,7 @@ $figure-bg: rgb(80 111 115 / 4%);
         }
     }
 
-    > h3 {
+    >h3 {
         margin-block: 24px 14px;
         font-family: var(--f-heading);
         font-weight: 700;
@@ -268,7 +303,7 @@ $figure-bg: rgb(80 111 115 / 4%);
 
     // Images, galleries, videos and embeds run edge to edge on mobile; a
     // captioned one sits on a light panel (Figma "Media placeholder").
-    > figure {
+    >figure {
         margin: 30px -10px;
 
         @include breakpoint(tablet) {
@@ -276,7 +311,7 @@ $figure-bg: rgb(80 111 115 / 4%);
         }
     }
 
-    > figure:has(> figcaption) {
+    >figure:has(> figcaption) {
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -291,7 +326,7 @@ $figure-bg: rgb(80 111 115 / 4%);
     // Gallery: one row of images with the same height (caseGalleries.js sets
     // --case-ratio from each image's proportions), the caption below.
     // `:not(#individual-image)` matches the specificity of the core rule.
-    > .wp-block-gallery {
+    >.wp-block-gallery {
         flex-flow: row wrap;
         gap: 8px;
         align-items: flex-start;
@@ -301,14 +336,14 @@ $figure-bg: rgb(80 111 115 / 4%);
         }
     }
 
-    > .wp-block-gallery > .wp-block-image:not(#individual-image) {
+    >.wp-block-gallery>.wp-block-image:not(#individual-image) {
         flex: var(--case-ratio, 1) 1 0;
         width: auto;
         min-width: 0;
         margin: 0;
     }
 
-    > .wp-block-gallery > .blocks-gallery-caption {
+    >.wp-block-gallery>.blocks-gallery-caption {
         flex-basis: 100%;
         text-align: left;
     }
@@ -321,7 +356,7 @@ $figure-bg: rgb(80 111 115 / 4%);
         border-radius: 0;
     }
 
-    > figure > figcaption {
+    >figure>figcaption {
         margin: 0;
         padding: 0 10px;
         font-size: 13px;
@@ -339,7 +374,7 @@ $figure-bg: rgb(80 111 115 / 4%);
         gap: 14px;
     }
 
-    ul > li {
+    ul>li {
         padding-left: 20px;
 
         &::before {
@@ -365,11 +400,6 @@ $figure-bg: rgb(80 111 115 / 4%);
     height: 48px; // 49 with the top border
     margin: 0 auto;
     padding: 0 10px;
-
-    @include breakpoint(mobile) {
-        border-left: var(--border);
-        border-right: var(--border);
-    }
 
     @include breakpoint(tablet) {
         height: 39px; // 40 with the top border
@@ -411,6 +441,7 @@ $figure-bg: rgb(80 111 115 / 4%);
     display: flex;
     width: 12px;
     height: 24px;
+    margin-top: -3px; // lifts the chevron 1.5px onto the cap-height middle of the labels
     transition: transform 0.3s ease-in-out;
 
     svg {
@@ -430,7 +461,7 @@ $figure-bg: rgb(80 111 115 / 4%);
 .case-nav__label {
     font-size: 13px;
     font-weight: 500;
-    line-height: 1.25;
+    line-height: 1;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--c-caption);
@@ -443,7 +474,7 @@ $figure-bg: rgb(80 111 115 / 4%);
     overflow: hidden;
     font-size: 14px;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1;
     text-overflow: ellipsis;
     white-space: nowrap;
     transition: color 0.3s ease-in-out;
