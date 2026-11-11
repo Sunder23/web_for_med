@@ -1,27 +1,28 @@
 @use "../../mixins/breakpoint" as *;
 
-// Problems + banner + solutions scroll as one block: the problems layer is
-// fixed under the header while the banner and solutions slide over it.
+// Problems + banner + solutions scroll as one block (Figma 3287:1416).
+// From tablet up the problems row sticks to the top of the viewport while the
+// banner and the solutions row slide over it; the wrapper ends with solutions,
+// so problems unpins exactly behind them. Phones keep a plain stacked flow.
+// The smart header hides on scroll down, hence `top: 0`.
 .problems-solutions {
   position: relative;
-  margin-top: 1px;
-
-  @include breakpoint(mobile) {
-    margin-top: 0;
-  }
 }
 
 /* ============================================================
    PROBLEMS (03_2)
    ============================================================ */
 .problems {
-  position: fixed;
-  top: var(--header-h);
-  left: 0;
-  right: 0;
   z-index: 1;
   background: var(--c-bg);
   border-bottom: var(--border);
+
+  @include breakpoint(tablet) {
+    @media (min-height: 600px) {
+      position: sticky;
+      top: 0;
+    }
+  }
 
   // Mixed with .container.
   &__wrap {
@@ -45,62 +46,66 @@
 // Mixed with .info-card.
 .problem-card {
   justify-content: space-between;
-  min-height: auto;
-  padding: 35px 25px;
   gap: 16px;
+  padding: 35px 25px;
   border-left: 0;
-  border-right: 0;
   border-bottom: var(--border);
 
-  @include breakpoint(tablet) {
-    height: calc(100vh - 66px);
-    min-height: 574px;
-    padding: 48px 40px;
-    gap: normal;
+  @include breakpoint(mobile) {
     border-left: var(--border);
+  }
+
+  @include breakpoint(tablet) {
+    height: 420px;
+    padding: 48px 40px;
     border-bottom: 0;
   }
 
   &:last-child {
-    border-right: var(--border);
-    border-bottom: none;
+    border-bottom: 0;
+
+    @include breakpoint(mobile) {
+      border-right: var(--border);
+    }
   }
 
-  // Mixed with .tag; the ::after spacer pushes the card body down on desktop.
+  // Mixed with .tag: 12px without insets on phones (Figma 3180:3578),
+  // 13px in an 8px-inset caption frame from `mobile` up.
   &__tag {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    align-self: flex-start;
+    font-size: 12px;
 
-    @include breakpoint(tablet) {
-      &::after {
-        content: '';
-        height: calc(90vh - 350px);
-        width: 100%;
-      }
+    @include breakpoint(mobile) {
+      padding: 8px 0;
+      font-size: 13px;
     }
   }
 
   &__body {
-    gap: 16px;
-    margin-bottom: auto;
+    gap: 6px;
+
+    @include breakpoint(mobile) {
+      gap: 16px;
+    }
   }
 
-  // Mixed with .card-title.
+  // Mixed with .card-title (20/1.2).
   &__title {
     font-size: 17px;
 
     @include breakpoint(mobile) {
       font-size: 20px;
     }
+  }
 
-    @include breakpoint(tablet) {
-      min-height: 75px;
-    }
+  // Mixed with .card-text (16/1.55 Medium; Regular 16/22 on phones).
+  &__text {
+    font-weight: 400;
+    line-height: 1.375;
 
-    @include breakpoint(laptop) {
-      min-height: auto;
+    @include breakpoint(mobile) {
+      font-weight: 500;
+      line-height: 1.55;
     }
   }
 }
@@ -110,34 +115,32 @@
    ============================================================ */
 .banner {
   position: relative;
-  top: auto;
   z-index: 6;
-  background: var(--c-navy);
+  background: var(--c-banner);
   border-bottom: var(--border);
 
   // Mixed with .container.
+  // Figma 3180:3594: 60/35 on phones (305px text column).
   &__inner {
-    display: flex;
-    align-items: center;
-    min-height: auto;
     padding: 60px 35px;
 
     @include breakpoint(mobile) {
-      padding: 70px var(--pad-x);
+      padding: 70px calc(var(--pad-x) + 16px);
     }
 
     @include breakpoint(tablet) {
-      min-height: 318px;
-      padding: 90px 86px;
+      padding: 90px calc(var(--pad-x) + 40px);
     }
   }
 
+  // Stays in Fixel SemiBold per the layout (not the heading font).
   &__text {
+    max-width: 849px;
+    font-family: var(--f-main);
     font-size: 20px;
     font-weight: 600;
     line-height: 1.15;
     color: var(--c-white);
-    max-width: 849px;
 
     @include breakpoint(small) {
       font-size: 24px;
@@ -154,16 +157,13 @@
 }
 
 /* ============================================================
-   SOLUTIONS (03_4)
+   SOLUTIONS (03_4) — no background fill since the redesign (п.3);
+   the page colour keeps the layer opaque over the sticky problems.
    ============================================================ */
 .solutions {
-  background: var(--c-bg-light);
+  position: relative;
   z-index: 3;
-
-  @include breakpoint(tablet) {
-    position: sticky;
-    bottom: -90px;
-  }
+  background: var(--c-bg);
 
   // Mixed with .container.
   &__wrap {
@@ -177,72 +177,81 @@
   &__inner {
     display: flex;
     flex-direction: column;
-    height: auto;
 
     @include breakpoint(tablet) {
       flex-direction: row;
-      height: 100vh;
     }
   }
 }
 
 // Mixed with .info-card.
 .solution-card {
-  justify-content: flex-end;
-  min-height: auto;
-  border-right: var(--border);
+  gap: 24px;
+  padding: 35px 25px;
+  border-left: 0;
   border-bottom: var(--border);
 
+  @include breakpoint(mobile) {
+    border-left: var(--border);
+  }
+
   @include breakpoint(tablet) {
-    min-height: 580px;
-    border-right: 0;
+    gap: 37px;
+    height: 420px;
+    padding: 48px 40px;
     border-bottom: 0;
   }
 
   &:last-child {
-    border-right: var(--border);
-    border-bottom: none;
+    border-bottom: 0;
+
+    @include breakpoint(mobile) {
+      border-right: var(--border);
+    }
   }
 
+  // Icon area fills the card so the text sits at the bottom (Figma "Image Area").
   &__media {
-    margin-bottom: 16px;
-    max-width: 200px;
+    display: flex;
+    align-items: flex-start;
 
-    @include breakpoint(mobile) {
-      margin-bottom: 37px;
+    @include breakpoint(tablet) {
+      flex: 1 0 0;
     }
   }
 
-  &__image {
-    width: 110px;
-    height: 110px;
-    object-fit: cover;
-    transition: scale 0.3s ease-in-out;
-
-    @include breakpoint(mobile) {
-      width: auto;
-      height: auto;
-    }
-  }
-
-  &:hover &__image {
-    scale: 1.03;
+  // 50px stroke icons on every breakpoint (п.13); width follows the SVG
+  // (magnet / funnel 50, yarn 120).
+  &__icon {
+    width: auto;
+    height: 50px;
   }
 
   &__body {
-    gap: 16px;
+    gap: 6px;
 
-    @include breakpoint(tablet) {
-      min-height: 140px;
+    @include breakpoint(mobile) {
+      gap: 16px;
     }
   }
 
-  // Mixed with .card-title.
+  // Mixed with .card-title (20/1.2).
   &__title {
-    font-size: 18px;
+    font-size: 17px;
 
     @include breakpoint(mobile) {
       font-size: 20px;
+    }
+  }
+
+  // Mixed with .card-text (16/1.55 Medium; Regular 16/22 on phones).
+  &__text {
+    font-weight: 400;
+    line-height: 1.375;
+
+    @include breakpoint(mobile) {
+      font-weight: 500;
+      line-height: 1.55;
     }
   }
 }

@@ -2,7 +2,7 @@
 /**
  * Theme file.
  *
- * Section: why.
+ * Section: why (Figma desktop 3061:1707, mobile 3025:389).
  *
  * @package Vite_Starter
  */
@@ -10,10 +10,15 @@
 if ( empty( $args ) || ! is_array( $args ) ) {
 	return;
 }
-?>
-<?php
-$why_items = $args['items'];
-if ( is_array( $why_items ) ) :
+
+$why_items = isset( $args['items'] ) && is_array( $args['items'] ) ? array_values( $args['items'] ) : array();
+
+if ( ! $why_items ) {
+	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional WARN-level diagnostic (minimal logging policy).
+	error_log( 'WARN [section-why] items are empty' );
+}
+
+if ( $why_items ) :
 	?>
 	<section class="why">
 		<div class="why__wrap container">
@@ -50,7 +55,7 @@ if ( is_array( $why_items ) ) :
 				</div>
 				<div class="why-reasons">
 					<div class="why-reasons__header">
-						<h2 class="why-reasons__title section-title"><?php echo esc_html( $args['title'] ); ?></h2>
+						<h2 class="why-reasons__title section-title"><?php echo esc_html( $args['title'] ?? '' ); ?></h2>
 					</div>
 					<ul class="why-reasons__list">
 						<?php
@@ -66,8 +71,18 @@ if ( is_array( $why_items ) ) :
 									data-reasons-target="<?php echo esc_attr( (string) $key ); ?>"
 									aria-controls="<?php echo esc_attr( $screen_id ); ?>"
 									aria-expanded="<?php echo 0 === $key ? 'true' : 'false'; ?>">
-									<?php echo wp_get_attachment_image( $why_item['reasons']['icon'], 'full', '', array( 'class' => 'why-reasons__icon icon-list__icon' ) ); ?>
-									<span class="why-reasons__label"><?php echo esc_html( $why_item['reasons']['text'] ); ?></span>
+									<?php
+									echo wp_get_attachment_image(
+										(int) ( $why_item['reasons']['icon'] ?? 0 ),
+										'full',
+										false,
+										array(
+											'class' => 'why-reasons__icon icon-list__icon',
+											'alt'   => '',
+										)
+									);
+									?>
+									<span class="why-reasons__label"><?php echo esc_html( $why_item['reasons']['text'] ?? '' ); ?></span>
 								</button>
 							</li>
 						<?php endforeach; ?>

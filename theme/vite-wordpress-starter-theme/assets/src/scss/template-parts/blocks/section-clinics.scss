@@ -1,7 +1,7 @@
 @use "../../mixins/breakpoint" as *;
 
 /* ============================================================
-   CLINICS (02)
+   CLINICS (02) — Figma desktop 3061:1458, mobile 3180:3534
    ============================================================ */
 .clinics {
   border-top: var(--border);
@@ -10,16 +10,7 @@
   position: relative;
   z-index: 10;
 
-  // Phone divider; from the mobile breakpoint the global section divider (_base.scss) takes over.
-  &::after {
-    content: '';
-    width: 100%;
-    height: 50px;
-    background-color: var(--c-bg);
-    border-top: var(--border);
-  }
-
-  // Mixed with .container.
+  // Mixed with .container: edge-to-edge on phones.
   &__wrap {
     display: flex;
     flex-direction: column;
@@ -31,7 +22,8 @@
     }
   }
 
-  // Mixed with .frame. Two columns up to the tablet breakpoint, three above.
+  // Mixed with .frame. Two columns up to the tablet breakpoint, three above
+  // (975 of 1350px next to the aside).
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -43,42 +35,55 @@
     }
   }
 
+  // Phones: 64px rows, 16/8 padding (the 10px row inset is added to the
+  // outer side of each column, Figma note 3178:3488 — "cells too flat").
+  // 14px (not 18) on the outer side gives the labels ~130px (128 in the
+  // mockup), so «центри та санаторії» (128.6px) stays on two lines.
   &__item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px;
-    border-right: var(--border);
+    gap: 6px;
+    min-height: 64px;
+    padding: 16px 8px 16px 14px;
     border-bottom: var(--border);
     font-size: 13px;
     font-weight: 500;
-    color: var(--c-dark);
-    line-height: 1.05;
+    line-height: 1.2;
+    color: var(--c-grey);
 
     @include breakpoint(mobile) {
+      gap: 8px;
+      min-height: 94px;
       padding: 30px 32px;
       font-size: 16px;
+      line-height: 1.05;
     }
 
-    // Two columns: no right border on the second column, no bottom border on the last row.
+    // Two columns: divider before the second column.
     &:nth-child(2n) {
-      border-right: none;
+      padding: 16px 14px 16px 8px;
+      border-left: var(--border);
+
+      @include breakpoint(mobile) {
+        padding: 30px 32px;
+      }
     }
 
-    &:nth-child(5),
-    &:last-child {
+    // Last row of two: no bottom border (the aside / section border closes it).
+    &:nth-last-child(-n+2) {
       border-bottom: none;
     }
 
-    // Three columns: no right border on the third column, bottom border on the first row only.
+    // Three columns: dividers before the 2nd and 3rd columns, bottom border
+    // on the first row only.
     @include breakpoint(tablet) {
       &:nth-child(n) {
-        border-right: var(--border);
+        border-left: var(--border);
         border-bottom: var(--border);
       }
 
-      &:nth-child(3n) {
-        border-right: none;
+      &:nth-child(3n+1) {
+        border-left: none;
       }
 
       &:nth-child(n+4) {
@@ -94,20 +99,26 @@
     object-fit: contain;
   }
 
-  &__aside {
+  &__label {
     flex: 1;
+    min-width: 0;
+  }
+
+  // Phones: full-width last row (25px inset, 32/8 padding); from `mobile`:
+  // the right column with the icon on top and the text at the bottom.
+  &__aside {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
-    padding: 32px;
+    padding: 32px 33px;
     border-top: var(--border);
 
-    @include breakpoint(tablet) {
+    @include breakpoint(mobile) {
+      flex: 1;
       flex-direction: column;
-      align-items: normal;
-      gap: normal;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
       padding: 26px 32px;
       border-top: none;
       border-right: var(--border);
@@ -117,9 +128,10 @@
   &__aside-icon {
     width: 28px;
     height: 28px;
+    flex-shrink: 0;
     object-fit: contain;
 
-    @include breakpoint(tablet) {
+    @include breakpoint(mobile) {
       width: 40px;
       height: 40px;
     }
@@ -128,11 +140,12 @@
   &__aside-text {
     font-size: 17px;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.27;
     color: var(--c-blue);
 
-    @include breakpoint(tablet) {
+    @include breakpoint(mobile) {
       font-size: 20px;
+      line-height: 1.2;
     }
   }
 }

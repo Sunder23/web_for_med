@@ -34,27 +34,36 @@ Single CPT, blog and archive templates (`single*.php`, `home.php`, `archive-*.ph
 
 - `starter_vite_enqueue_editor_canvas_assets()` (`configure/js-css.php`) loads, for the **page** editor only, `main.scss`, every section stylesheet (with `starter-editor-main` as dependency — the front-end `main` handle does not exist in the editor), `editor-section-blocks.scss` and `editor-section-blocks.js`; `editor-link-guard.js` is loaded for every post type so links and form submits in block previews cannot navigate the canvas away.
 - `starter_strip_admin_styles_from_page_canvas()` (filter `block_editor_settings_all`) removes wp-admin stylesheets and the article editor stylesheet from the page canvas so previews match the front end. It leaves one empty `theme` style entry: with none left, the editor falls back to core default editor styles (system font, 18px body).
-- Section JS (AOS, reveal animations, accordions) does not run in the editor. `editor-section-blocks.scss` resets `[data-aos]` and other pre-reveal hidden states (`.hero__title`, `.why-msg`, …) to their final visible state — add new ones there. Scroll-effect layers (`fixed` / `sticky`: `.s-problems`, `.s-solutions`, `.services-img`, `.why-chat`) are put back in flow there too, otherwise they cover neighbouring blocks and their fields cannot be selected.
+- Section JS (AOS, reveal animations, accordions) does not run in the editor. `editor-section-blocks.scss` resets `[data-aos]` and other pre-reveal hidden states (`.hero__title`, `.hero__button`, `.why-message`) to their final visible state — add new ones there. Scroll-effect layers (`fixed` / `sticky`, currently `.problems`) are put back in flow there too, otherwise they cover neighbouring blocks and their fields cannot be selected.
 - Carousels are the exception: `editor-section-blocks.js` (re)initialises them in the canvas whenever ACF re-renders a preview and destroys detached instances. To add a slider section, make its init accept a root element and register it in the `CAROUSELS` list.
 
 ## Current sections (front page)
 
 | Slug | Contents | Script |
 |------|----------|--------|
-| `home-hero` | Hero with glitch image | `heroTitle` (title scramble) |
-| `clinics` | Clinics grid + aside | — |
-| `quote` | Quote with animated gears | — |
-| `problems-solutions` | Problems cards + banner text + solutions (shared scroll wrapper) | — |
-| `services` | Services list with image | accordion + glitch image |
-| `cases` | Cases slider (Swiper) | `casesSlider` |
-| `process` | Process header + steps (anchor `#process`) | — |
-| `why` | Chat + reasons | `whySection` |
+| `home-hero` | Hero with glitch image (`image` desktop, `image_mobile` below `mobile`, falls back to `image`); primary CTA opens the contact drawer | `heroTitle` (title scramble) |
+| `clinics` | Clinics grid 3×2 + aside (2 columns on phones, aside full width) | — |
+| `quote` | Centred quote text | — |
+| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (shared scroll wrapper, `.problems` sticky from `tablet`) | — |
+| `services` | Centred title, services accordion with image (image is not sticky on phones) | accordion + glitch image |
+| `cases` | Cases slider (Swiper, dot pagination on phones) | `casesSlider` |
+| `process` | Process title + steps with 50px icons (anchor `#process`); optional `title_mobile` replaces the title below 766px | — |
+| `why` | Chat + reasons (title inside the reasons column) | `whySection` |
 
 Anchors `#about`, `#services`, `#cases`, `#process` are part of the markup; the menu and `activeNav` rely on them.
 
-## Footer contact form
+### Design rules (November 2026 redesign)
 
-The footer form is not a section: it comes from the ACF Options field group `footer_contact` (Footer tab: `title`, `text`, `contact_form`) via `starter_get_option()`, so it renders on every page. Analytics (GTM) is configured on the "Google / GTM" tab of the same options page.
+- Section titles (`h1`, `h2`, `.section-title`) use **Grunt Grotesk Bold** via `--font-heading` (`static/fonts/GruntGrotesk-Bold.woff2`); body text stays Fixel Display. The problems/solutions banner text is Fixel SemiBold.
+- Section titles have no decorative icons (the quote gears, services galaxy and process pulse icons were removed).
+- Vertical rhythm: `--section-gap` (50px on phones, 70px from `tablet`) is the band between sections, drawn by `section:not(...)::after` in `_base.scss` together with the grid lines.
+- Icons in clinics / solutions / services / process / why are SVGs from `static/images/home/*.svg`, attached to the sections' ACF image fields (solution and process icons are 50px on every breakpoint). Upload new icons to the media library rather than pointing at theme files, so editors can swap them.
+
+## Contact drawer and footer
+
+The contact form is not a section and is no longer part of the footer. `partials/parts/contact-drawer.php` (rendered once from `footer.php`) shows the CF7 form from the ACF Options group `footer_contact` (Footer tab: `contact_form`; `title` / `text` override the drawer heading when filled) in an off-canvas panel: from the left on desktop, a bottom sheet on phones. `contactDrawer.js` opens it on any `[data-contact-open]` element or link ending in `#contact-form` (header CTA, mobile menu CTA, hero primary link, footer button, TOC and FAQ CTAs) and on page load when the URL hash is `#contact-form`; it closes on the close button, overlay or Esc, traps focus and pauses Lenis. If `contact_form` is empty the drawer is not rendered and `WARN [contact-drawer] footer_contact.contact_form is empty` is logged.
+
+The footer is a three-column strip (logo + menu, "Заповнити форму" button, socials + e-mail). The "Далі буде…" cover illustration is rendered on the front page only. Analytics (GTM) is configured on the "Google / GTM" tab of the same options page.
 
 ## Adding a section
 
@@ -76,6 +85,15 @@ make migrate-front-page args="apply cleanup" # additionally delete front_page_* 
 ```
 
 Pages that already contain `acf/section-*` are skipped (re-running is safe). A non-empty old `post_content` is backed up to `_starter_pre_blocks_content`. Take a `mysqldump` first. The script needs the removed `group_57587b53.json` (restore it from git history to re-run).
+
+### Redesign content update (November 2026)
+
+`scripts/update-home-redesign.php` moves the front page to the redesign content: new quote / services / why titles, icons from `static/images/home/` (sideloaded once and tagged with the `_starter_source` meta `home-redesign/<file>`, reused on re-runs), 2x hero images from `scripts/data/home-redesign/`, the hero primary link and the `header_button` option pointing to `#contact-form`. It then runs `update-cf7-contact-form.php` for the drawer form markup. Values that already match are skipped, so re-running is safe.
+
+```bash
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-home-redesign.php"        # dry run
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-home-redesign.php apply"  # upload media + write
+```
 
 ## See Also
 

@@ -19,7 +19,7 @@ wp-boilerplate/
 ├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
 ├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts)
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/)
 ├── theme/vite-wordpress-starter-theme/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
@@ -30,18 +30,19 @@ wp-boilerplate/
 │   │   ├── shortcodes.php, ajax.php           # empty aggregators (+ folders)
 │   │   ├── js-css.php               # Vite integration + editor canvas assets
 │   │   ├── analytics.php            # GTM via ACF Options
-│   │   ├── optimize.php             # Optional front-end trims (flags)
+│   │   ├── optimize.php             # Optional front-end trims + WebP upload conversion (flags)
 │   │   ├── acf.php                  # Local JSON save/load point
 │   │   ├── acf-blocks.php           # Content blocks (configure/acf/acf-blocks/*)
 │   │   ├── section-blocks.php       # Page section engine (configure/acf/section-blocks/*)
 │   │   ├── toc.php, admin.php
 │   │   └── acf/{acf-json,acf-blocks,section-blocks}/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
-│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/*
+│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php)
 │   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
-│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, components/, template-parts/blocks/
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, components/ (smartHeader, contactDrawer, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
+│   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons)
 │   ├── vite.config.js, package.json, biome.json, .stylelintrc.json
 │   └── composer.json, phpcs.xml.dist, phpstan.neon, phpstan-baseline.neon, phpstan-bootstrap.php
 ├── docs/                            # getting-started.md, page-sections.md

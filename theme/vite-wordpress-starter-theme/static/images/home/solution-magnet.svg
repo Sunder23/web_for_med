@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
+<svg x="-1" y="2" width="30" height="45.75" viewBox="0 0 30 45.75" overflow="visible">
+<g id="Group 9">
+<path id="Outer signal arc" d="M1 7C9.33481 -1 20.1064 -1 29 7" stroke-width="2" stroke-linecap="round" stroke="#092A4A"/>
+<path id="Middle signal arc" d="M4 11C10.336 4.41969 19.1712 4.24753 26 11" stroke-width="2" stroke-linecap="round" stroke="#092A4A"/>
+<path id="Inner signal arc" d="M7 15C11.7655 11 17.8892 11 23 15" stroke-width="2" stroke-linecap="round" stroke="#092A4A"/>
+<path id="Magnet &#226;&#128;&#148; outline and center division" d="M10.2097 21H4V33.8571C4 40 8.93226 45 15 45V38.7857C15 38.7857 12.8355 38.6786 11.5226 37.4286C10.2097 36.1786 10.2097 33.8571 10.2097 33.8571V21Z" fill="#092A4A"/>
+<path id="Magnet &#226;&#128;&#148; outline and center division_2" d="M15 45C21.0677 45 26 40 26 33.8571V21H19.9677V33.8571C19.9677 40.4286 10.2097 40.4286 10.2097 33.8571V21H4V33.8571C4 40 8.93226 45 15 45ZM15 45V38.7857" stroke-width="1.5" stroke="#092A4A"/>
+</g>
+</svg>
+</svg>

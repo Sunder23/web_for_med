@@ -59,7 +59,8 @@ $show_thumbnail = ! isset( $args['show_thumbnail'] ) || (bool) $args['show_thumb
 									continue;
 								}
 								?>
-								<a href="<?php echo esc_url( ! empty( $button['url'] ) ? $button['url'] : '#contacts' ); ?>" class="button <?php echo 0 === $index ? 'button--primary' : 'button--secondary'; ?>"><?php echo esc_html( $button['label'] ); ?></a>
+								<?php $starter_button_url = ! empty( $button['url'] ) ? $button['url'] : '#contact-form'; ?>
+								<a href="<?php echo esc_url( $starter_button_url ); ?>" class="button <?php echo 0 === $index ? 'button--primary' : 'button--secondary'; ?>"<?php echo starter_contact_trigger_attr( $starter_button_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed attribute literal. ?>><?php echo esc_html( $button['label'] ); ?></a>
 							<?php endforeach; ?>
 						</div>
 					<?php endif; ?>

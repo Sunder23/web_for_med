@@ -112,8 +112,6 @@ $spacers : (0: 0,
 
     /* Font families */
     --font-display: 'Barlow Condensed', 'Roboto Condensed', sans-serif;
-    --font-heading: 'Roboto Condensed', sans-serif;
-    --font-body: 'IBM Plex Sans', sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
     --font-icons: 'Font Awesome 6 Free', 'Font Awesome 5 Free', sans-serif;
 
@@ -212,11 +210,21 @@ $spacers : (0: 0,
     --color-brand-bg-light: #f8f8f8;
     --color-brand-border: #dbdbdb;
     --color-brand-secondary: #d8dde0;
+    --color-brand-btn-secondary: #f4f3f2;
+    --color-brand-card-hover: #edf6f8;
+    --color-brand-icon: #aebbc4;
+    --color-brand-caption: #73777b;
+    --color-brand-blue-hover: #e3effb;
+    --color-brand-error: #b43b3b;
+    --color-brand-error-bg: #fcf2f1;
+    --color-brand-overlay: rgba(9, 42, 74, 0.44);
     --font-main: 'Fixel Display', sans-serif;
+    --font-heading: 'Grunt Grotesk', var(--font-main);
     --font-logo: var(--font-main);
     --radius-sm: 4px;
     --border-default: 1px solid var(--color-brand-border);
     --header-h: 46px;
+    --section-gap: 50px;
     --page-w: 1440px;
     --pad-x: 16px;
 
@@ -231,8 +239,18 @@ $spacers : (0: 0,
     --c-bg: var(--color-brand-bg);
     --c-bg-light: var(--color-brand-bg-light);
     --c-border: var(--color-brand-border);
-    --c-secondary: var(--color-brand-secondary);
+    --c-secondary: var(--color-brand-btn-secondary);
+    --c-card-hover: var(--color-brand-card-hover);
+    --c-icon: var(--color-brand-icon);
+    --c-tag: var(--color-brand-blue-light);
+    --c-banner: var(--color-brand-navy);
+    --c-caption: var(--color-brand-caption);
+    --c-blue-hover: var(--color-brand-blue-hover);
+    --c-error: var(--color-brand-error);
+    --c-error-bg: var(--color-brand-error-bg);
+    --c-overlay: var(--color-brand-overlay);
     --f-main: var(--font-main);
+    --f-heading: var(--font-heading);
     --f-logo: var(--font-logo);
     --radius: var(--radius-sm);
     --border: var(--border-default);
@@ -241,12 +259,13 @@ $spacers : (0: 0,
 @include breakpoint(mobile) {
     :root {
         --pad-x: 24px;
+        --header-h: 57px;
     }
 }
 
 @include breakpoint(tablet) {
     :root {
         --pad-x: 45px;
-        --header-h: 66px;
+        --section-gap: 70px;
     }
 }

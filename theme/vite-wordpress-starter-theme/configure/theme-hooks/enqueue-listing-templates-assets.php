@@ -34,13 +34,42 @@ function starter_enqueue_template_assets( $handle, $style, $script = null, array
  * @return void
  */
 function starter_enqueue_archive_assets() {
-	if ( ! is_archive() && ! is_home() ) {
+	if ( ( ! is_archive() && ! is_home() ) || is_post_type_archive( 'cases' ) ) {
 		return;
 	}
 
 	starter_enqueue_template_assets( 'starter-archive', 'archive.scss' );
 }
 add_action( 'wp_enqueue_scripts', 'starter_enqueue_archive_assets', 110 );
+
+/**
+ * Enqueues assets for the cases archive (/cases/, vertical case slider).
+ *
+ * @return void
+ */
+function starter_enqueue_cases_archive_assets() {
+	if ( ! is_post_type_archive( 'cases' ) ) {
+		return;
+	}
+
+	starter_enqueue_template_assets( 'starter-cases-archive', 'cases-archive.scss', 'cases-archive.js' );
+}
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_cases_archive_assets', 110 );
+
+/**
+ * Marks the cases archive on <body> (one-screen layout: footer pinned to the viewport bottom).
+ *
+ * @param string[] $classes Body classes.
+ * @return string[] Modified body classes.
+ */
+function starter_cases_archive_body_class( $classes ) {
+	if ( is_post_type_archive( 'cases' ) ) {
+		$classes[] = 'is-cases-archive';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'starter_cases_archive_body_class' );
 
 /**
  * Enqueues assets for single services / directions / cases templates.

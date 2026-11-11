@@ -3,6 +3,206 @@
     "title": "Case Page",
     "fields": [
         {
+            "key": "field_c7d41e10",
+            "label": "Інтро",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_c7d41e11",
+            "label": "Інтро",
+            "name": "case_intro",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_c7d41e12",
+                    "label": "Клієнт",
+                    "name": "client",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Коротка назва клієнта для мітки /*FILE*/. Якщо порожньо — заголовок запису.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_c7d41e20",
+                    "label": "Текст інтро",
+                    "name": "text",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "Абзаци під заголовком кейсу. Якщо порожньо — береться Hero → Subtitle.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "basic",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_c7d41e21",
+                    "label": "Зображення інтро",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Якщо порожньо — береться мініатюра запису.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "id",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
+                }
+            ]
+        },
+        {
+            "key": "field_c7d41e30",
+            "label": "Деталі проєкту",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_c7d41e31",
+            "label": "Деталі проєкту",
+            "name": "case_details",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Deliverables, Technology і Status задаються таксономіями в боковій панелі.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_c7d41e32",
+                    "label": "Тривалість",
+                    "name": "duration",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "2 months",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_c7d41e33",
+                    "label": "Посилання на сайт",
+                    "name": "live_url",
+                    "aria-label": "",
+                    "type": "url",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "https://"
+                },
+                {
+                    "key": "field_c7d41e34",
+                    "label": "Текст посилання",
+                    "name": "live_label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Якщо порожньо — «View Website».",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "View Website",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
             "key": "field_88d2f92b",
             "label": "Hero",
             "name": "",
@@ -26,7 +226,7 @@
             "name": "case_hero",
             "aria-label": "",
             "type": "group",
-            "instructions": "",
+            "instructions": "Використовується як опис в архіві кейсів і як інтро кейсу, якщо відповідні поля порожні.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -273,6 +473,149 @@
                     "append": ""
                 }
             ]
+        },
+        {
+            "key": "field_c4e1a7d2",
+            "label": "Анонс",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_7b3f90e5",
+            "label": "Що зроблено",
+            "name": "case_done",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Коротко: що зробили і який результат. Виводиться на головній у блоці кейсів. До 200 символів.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": 200,
+            "allow_in_bindings": 0,
+            "rows": 4,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_a3c1e7b0",
+            "label": "Архів",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_a3c1e7b1",
+            "label": "Архів",
+            "name": "case_archive",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Картка кейсу на сторінці /cases/. Порожні поля беруться з заголовка, Hero → Subtitle і мініатюри.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_a3c1e7b2",
+                    "label": "Заголовок для сторінки кейсів",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "rows": 3,
+                    "placeholder": "",
+                    "new_lines": ""
+                },
+                {
+                    "key": "field_a3c1e7b3",
+                    "label": "Опис",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "rows": 4,
+                    "placeholder": "",
+                    "new_lines": ""
+                },
+                {
+                    "key": "field_a3c1e7b4",
+                    "label": "Обкладинка",
+                    "name": "cover",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "522×382, буде обрізано по 522/382.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "id",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
+                }
+            ]
         }
     ],
     "location": [
@@ -293,5 +636,5 @@
     "active": true,
     "description": "Fields for the cases CPT single pages.",
     "show_in_rest": 0,
-    "modified": 1783860864
+    "modified": 1794419419
 }

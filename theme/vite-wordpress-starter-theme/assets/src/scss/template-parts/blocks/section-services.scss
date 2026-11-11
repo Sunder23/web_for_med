@@ -1,12 +1,12 @@
 @use "../../mixins/breakpoint" as *;
 
 /* ============================================================
-   SERVICES (04)
+   SERVICES (04) — Figma desktop 3061:1551, mobile 3025:314
    ============================================================ */
 .services {
-  border-top: var(--border);
   position: relative;
   z-index: 10;
+  border-top: var(--border);
   background: var(--c-bg);
 
   // Mixed with .container: edge-to-edge on phones.
@@ -21,55 +21,56 @@
   // Mixed with .frame.
   &__header {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
     width: calc(100% - calc(var(--pad-x) * 2));
     margin: 0 auto;
-    padding: 50px 20px;
+    padding: 32px 10px;
     border-bottom: var(--border);
 
     @include breakpoint(mobile) {
       width: auto;
       margin: 0;
-      padding: 80px 40px 76px;
+      padding: 60px 40px;
+    }
+
+    @include breakpoint(tablet) {
+      padding: 80px 40px;
     }
   }
 
-  // Mixed with .section-title.
+  // Mixed with .section-title (Grunt Grotesk, 40px from desktop).
   &__title {
     max-width: 990px;
-    text-align: left;
+    text-align: center;
 
-    @include breakpoint(mobile) {
-      text-align: center;
+    @include breakpoint(tablet) {
+      line-height: 1.15;
     }
   }
 
   // Mixed with .frame.
   &__body {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    justify-content: flex-start;
+    grid-template-columns: minmax(0, 1fr);
 
     @include breakpoint(tablet) {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: minmax(0, 666fr) minmax(0, 684fr);
     }
   }
 
-  // Mixed with .glitch-image: sticks under the header while the list scrolls on small screens.
+  // Mixed with .glitch-image. Stays in flow on every screen: the former
+  // sticky behaviour on phones made the photo "stick" over the list (п.10).
   &__image {
-    position: sticky;
-    top: var(--header-h);
-    flex: none;
-    width: 100%;
-    min-height: 300px;
+    position: relative;
+    height: 212px;
     overflow: hidden;
 
+    @include breakpoint(mobile) {
+      height: 360px;
+    }
+
     @include breakpoint(tablet) {
-      position: relative;
-      top: auto;
-      width: auto;
+      height: auto;
       min-height: 500px;
     }
   }
@@ -83,40 +84,8 @@
   }
 }
 
-// Animated "galaxy" icon above the services title.
-.galaxy-icon {
-  max-width: 50px;
-
-  &__body {
-    transform: rotateY(-30deg) rotateX(60deg);
-    color: #092A4A;
-  }
-
-  &__rotor {
-    animation: galaxy-orbit 3s linear infinite;
-  }
-
-  &__core {
-    stroke-width: 3;
-    stroke: currentcolor;
-    fill: none;
-  }
-
-  &__limb {
-    fill: currentcolor;
-  }
-}
-
-@keyframes galaxy-orbit {
-  to {
-    transform: rotate(-1turn);
-  }
-}
-
 .services-list {
-  flex: 1;
   border-top: var(--border);
-  list-style: none;
 
   @include breakpoint(tablet) {
     border-top: none;
@@ -125,8 +94,8 @@
 
   // Mixed with .icon-list__item.
   &__item {
-    padding: 24px 22px;
     gap: 14px;
+    padding: 24px 25px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
 
@@ -136,46 +105,75 @@
     }
 
     @include breakpoint(tablet) {
-      padding: 47px 50px;
+      min-height: 120px;
+      padding: 48px 52px;
     }
 
-    &:hover {
-      background: var(--color-brand-bg-light);
+    &:hover,
+    &:focus-visible {
+      background: var(--c-bg-light);
     }
 
-    &--active {
-      background: #EDF6F8;
+    &--active,
+    &--active:hover {
       align-items: flex-start;
+      background: var(--c-card-hover);
     }
   }
 
   &__item--active > &__content {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 4px;
+
+    @include breakpoint(mobile) {
+      gap: 10px;
+    }
   }
 
-  // Mixed with .icon-list__icon.
+  // Mixed with .icon-list__icon: 20px on phones, 22px from mobile up.
   &__icon {
-    width: 26px;
+    width: 20px;
+    height: 22px;
     object-fit: contain;
+    object-position: center;
+
+    @include breakpoint(mobile) {
+      width: 22px;
+      height: 24px;
+    }
   }
 
+  // Figma 04: collapsed 17px / 20px #2e2f30; the open item 16px / 18px #092a4a.
   &__title {
     font-size: 17px;
     font-weight: 500;
-    color: var(--c-dark-blue);
     line-height: 1.2;
+    color: var(--c-dark);
 
     @include breakpoint(mobile) {
       font-size: 20px;
     }
   }
 
+  &__item--active &__title {
+    font-size: 16px;
+    color: var(--c-dark-blue);
+
+    @include breakpoint(mobile) {
+      font-size: 18px;
+    }
+  }
+
   &__desc {
+    max-width: 521px;
     font-size: 16px;
     font-weight: 500;
-    line-height: 1.55;
+    line-height: 1.4;
     color: var(--c-grey);
+
+    @include breakpoint(mobile) {
+      line-height: 1.55;
+    }
   }
 }

@@ -55,3 +55,40 @@ if ( STARTER_REMOVE_JQUERY_MIGRATE ) {
 		}
 	);
 }
+
+if ( ! defined( 'STARTER_CONVERT_UPLOADS_TO_WEBP' ) ) {
+	define( 'STARTER_CONVERT_UPLOADS_TO_WEBP', true );
+}
+
+if ( ! defined( 'STARTER_WEBP_UPLOAD_QUALITY' ) ) {
+	define( 'STARTER_WEBP_UPLOAD_QUALITY', 75 );
+}
+
+if ( STARTER_CONVERT_UPLOADS_TO_WEBP ) {
+	// Covers both uploads and sideloads: core applies this filter in _wp_handle_upload() for either action.
+	add_filter( 'wp_handle_upload', 'starter_convert_image_to_webp' );
+
+	// GD fallback: palette PNGs must become truecolor before imagewebp(), see class-starter-image-editor-gd.php.
+	add_filter(
+		'wp_image_editors',
+		function ( $editors ) {
+			$gd_index = array_search( 'WP_Image_Editor_GD', $editors, true );
+			if ( false === $gd_index || ! class_exists( 'WP_Image_Editor_GD' ) ) {
+				return $editors;
+			}
+			require_once WFB_THEME_PATH . '/configure/helpers/class-starter-image-editor-gd.php';
+			$editors[ $gd_index ] = 'Starter_Image_Editor_GD';
+
+			return $editors;
+		}
+	);
+
+	add_filter(
+		'wp_editor_set_quality',
+		function ( $quality, $mime_type ) {
+			return 'image/webp' === $mime_type ? STARTER_WEBP_UPLOAD_QUALITY : $quality;
+		},
+		10,
+		2
+	);
+}

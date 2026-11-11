@@ -1,21 +1,16 @@
 @use "../../mixins/breakpoint" as *;
 
 /* ============================================================
-   PROCESS (06)
+   PROCESS (06) — Figma desktop 3061:1660, mobile 3025:365
    ============================================================ */
 .process {
-  border-top: var(--border);
-  border-bottom: var(--border);
   position: relative;
   z-index: 10;
+  border-top: var(--border);
   background: var(--c-bg);
 
-  &--top,
-  &--bottom {
-    border-bottom: none;
-  }
-
-  // Steps wrapper (mixed with .container): edge-to-edge on phones.
+  // Header wrapper (mixed with .container) keeps the gutter on phones;
+  // the steps wrapper goes edge-to-edge there.
   &--bottom &__wrap {
     padding: 0;
 
@@ -24,83 +19,139 @@
     }
   }
 
+  // Mixed with .frame.
   &__header {
-    padding: 50px 10px;
+    display: flex;
+    justify-content: center;
+    padding: 32px 10px;
 
     @include breakpoint(mobile) {
+      padding: 60px 40px;
+    }
+
+    @include breakpoint(tablet) {
       padding: 90px 40px;
     }
   }
 
-  // Mixed with .section-title.
+  // Mixed with .section-title (Grunt Grotesk, 40px from desktop).
   &__title {
-    max-width: 860px;
+    max-width: 990px;
     text-align: center;
-    margin: 20px auto 0;
   }
 
+  // Optional ACF `title_mobile`: the short variant on phones only.
+  &__title-full {
+    display: none;
+
+    @include breakpoint(mobile) {
+      display: inline;
+    }
+  }
+
+  &__title-short {
+    @include breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  // One column on phones, 2×2 on mobile/tablet portrait, 4 in a row from tablet.
   &__steps {
     display: grid;
-    grid-template-columns: 1fr;
-    min-height: auto;
+    grid-template-columns: minmax(0, 1fr);
+
+    @include breakpoint(mobile) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
     @include breakpoint(tablet) {
-      grid-template-columns: repeat(2, minmax(270px, 1fr));
-      min-height: 270px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 }
 
-// Mixed with .info-card. One column with full borders up to the tablet
-// breakpoint; a 2×2 grid with inner borders only from there.
+// Mixed with .info-card (left border + 48/40 padding from mobile up).
 .process-step {
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 24px;
   padding: 35px 25px;
-  border-right: var(--border);
+  border-left: 0;
   border-bottom: var(--border);
 
   @include breakpoint(mobile) {
-    grid-template-columns: 200px 1fr;
     gap: 20px;
     padding: 48px 40px;
-  }
-
-  &:last-child {
-    border-bottom: none;
-
-    @include breakpoint(mobile) {
-      border-bottom: var(--border);
-    }
+    border-left: var(--border);
   }
 
   @include breakpoint(tablet) {
-    &:nth-child(n) {
-      border-right: 0;
-      border-bottom: 0;
+    border-bottom: 0;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  // 2×2 grid: right frame line on the even column, bottom line on row 1.
+  @include breakpoint(mobile) {
+    &:nth-child(even),
+    &:last-child {
+      border-right: var(--border);
     }
 
     &:nth-child(-n+2) {
       border-bottom: var(--border);
     }
+  }
 
-    &:nth-child(even),
+  @include breakpoint(tablet) {
+    &:nth-child(-n+2) {
+      border-bottom: 0;
+    }
+
+    &:nth-child(even) {
+      border-right: 0;
+    }
+
     &:last-child {
       border-right: var(--border);
     }
   }
 
-  &__top {
-    gap: 16px;
+  &__media {
+    display: flex;
+    align-items: center;
+    height: 50px;
+  }
+
+  // 50px stroke icons on every breakpoint (п.13); width follows the SVG.
+  &__icon {
+    width: auto;
+    max-width: 100%;
+    height: 50px;
+  }
+
+  &__body {
+    gap: 6px;
 
     @include breakpoint(mobile) {
-      gap: 10px;
+      gap: 12px;
     }
   }
 
-  // Mixed with .card-title.
+  // Mixed with .tag. Phones (Figma 3180:3662): 12px, no insets. From `mobile`
+  // (Figma 06) the caption frame has an 8px top inset, so the step title starts
+  // 37px below the caption.
+  &__tag {
+    align-self: flex-start;
+    font-size: 12px;
+
+    @include breakpoint(mobile) {
+      padding-top: 8px;
+      font-size: 13px;
+    }
+  }
+
+  // Mixed with .card-title (20/1.2).
   &__title {
     font-size: 17px;
 
@@ -109,15 +160,16 @@
     }
   }
 
-  &__image {
-    width: 110px;
-    height: 110px;
-    object-fit: cover;
-    transition: scale 0.3s ease-in-out;
+  // Mixed with .card-text (16/1.55).
+  &__text {
+    margin-top: 10px;
+    font-weight: 400;
+    line-height: 1.375;
 
     @include breakpoint(mobile) {
-      width: auto;
-      height: auto;
+      margin-top: 0;
+      font-weight: 500;
+      line-height: 1.55;
     }
   }
 }

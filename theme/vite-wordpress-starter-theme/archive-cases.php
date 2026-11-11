@@ -6,5 +6,5 @@
  */
 
 get_header();
-get_template_part( 'partials/parts/archive-cpt' );
+get_template_part( 'partials/parts/cases-archive' );
 get_footer();

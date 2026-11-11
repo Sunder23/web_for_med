@@ -32,7 +32,7 @@ function starter_register_cases_cpt() {
 			'show_in_rest'  => true,
 			'menu_icon'     => 'dashicons-portfolio',
 			'menu_position' => 22,
-			'supports'      => array( 'title', 'editor', 'thumbnail' ),
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
 			'rewrite'       => array(
 				'slug'       => 'cases',
 				'with_front' => false,

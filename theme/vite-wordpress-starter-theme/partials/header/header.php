@@ -32,7 +32,7 @@ $starter_header = array(
 			</nav>
 
 			<?php if ( ! empty( $starter_header['header_button'] ) ) : ?>
-			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="button button--primary button--sm header__cta">
+			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="button button--primary button--sm header__cta" data-contact-open>
 				<?php echo esc_html( $starter_header['header_button']['title'] ); ?>
 			</a>
 			<?php endif; ?>
@@ -83,7 +83,7 @@ $starter_header = array(
 
 		<?php if ( ! empty( $starter_header['header_button'] ) ) : ?>
 			<div class="nav__cta-row">
-			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="button button--primary nav__cta-button">
+			<a href="<?php echo esc_url( $starter_header['header_button']['url'] ); ?>" class="button button--primary nav__cta-button" data-contact-open>
 				<?php echo esc_html( $starter_header['header_button']['title'] ); ?>
 			</a>
 			</div>

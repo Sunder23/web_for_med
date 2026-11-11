@@ -30,7 +30,7 @@
 
     &:not(:last-child)::after {
         content: "\2192"; // →
-        color: var(--c-secondary);
+        color: var(--color-brand-secondary);
     }
 }
 

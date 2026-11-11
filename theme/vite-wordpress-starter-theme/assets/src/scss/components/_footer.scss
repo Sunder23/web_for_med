@@ -14,72 +14,6 @@
         }
     }
 
-    &__form-section {
-        background: var(--c-bg-light);
-        border-top: var(--border);
-        border-bottom: var(--border);
-        margin-top: -1px;
-
-        @include breakpoint(mobile) {
-            margin-top: 0;
-        }
-    }
-
-    &__form-wrap {
-        max-width: var(--page-w);
-        margin: 0 auto;
-        padding: 60px 20px;
-        border-left: var(--border);
-        border-right: var(--border);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-
-        @include breakpoint(mobile) {
-            padding: 90px var(--pad-x);
-        }
-    }
-
-    &__form-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        text-align: center;
-        max-width: 628px;
-
-        @include breakpoint(mobile) {
-            gap: 16px;
-        }
-    }
-
-    &__form-title {
-        font-size: 26px;
-        font-weight: 600;
-        line-height: 1.01;
-        color: var(--c-dark);
-
-        @include breakpoint(mobile) {
-            font-size: 36px;
-        }
-
-        @include breakpoint(tablet) {
-            font-size: 48px;
-        }
-    }
-
-    &__form-subtitle {
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 1.5;
-        color: var(--c-grey);
-
-        @include breakpoint(mobile) {
-            font-size: 20px;
-        }
-    }
-
     &__cover {
         border-bottom: var(--border);
         height: auto;
@@ -99,11 +33,16 @@
         position: relative;
     }
 
+    // Phones: a 200px strip with a 20px caption (Figma 3180:3730).
     &__cover-image {
         background-image: var(--footer-cover-image);
         background-size: cover;
         background-position: center;
-        height: 454px;
+        height: 200px;
+
+        @include breakpoint(mobile) {
+            height: 454px;
+        }
     }
 
     &__cover-text {
@@ -111,10 +50,11 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 28px;
-        font-weight: 600;
+        font-family: var(--f-heading);
+        font-size: 20px;
+        font-weight: 700;
         line-height: 1.01;
-        color: var(--c-white);
+        color: #fff;
         opacity: 0;
         white-space: nowrap;
         z-index: 1;
@@ -134,7 +74,10 @@
         }
     }
 
+    // ── Bar: brand + menu / form CTA / socials + email (Figma 3139:1682).
+    // Phones and tablets stack the columns: CTA, contacts, then brand (3129:1582).
     &__bar {
+        border-top: var(--border);
         border-bottom: var(--border);
     }
 
@@ -145,124 +88,167 @@
     }
 
     &__bar-inner {
-        height: auto;
         display: flex;
         flex-direction: column;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        justify-content: space-between;
         border-left: var(--border);
         border-right: var(--border);
-        padding: 12px 10px;
+
+        @include breakpoint(tablet) {
+            flex-direction: row;
+            padding: 0 35px;
+        }
+    }
+
+    &__col {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 10px 12px;
+
+        @include breakpoint(tablet) {
+            // Three equal 427px columns (Figma 3139:1682). `flex: 1 1 0` would add
+            // each column's own (different) padding on top of an equal share.
+            flex: 0 0 calc(100% / 3);
+            justify-content: flex-end;
+            min-width: 0;
+            padding: 48px 40px;
+        }
+    }
+
+    &__col--brand {
+        order: 3;
         gap: 16px;
+        padding-bottom: 24px;
+
+        @include breakpoint(tablet) {
+            order: 0;
+            gap: 28px;
+            padding-bottom: 48px;
+            padding-left: 5px;
+            border-right: var(--border);
+        }
+    }
+
+    &__col--cta {
+        order: 1;
+        gap: 8px;
+
+        @include breakpoint(tablet) {
+            order: 0;
+            gap: 16px;
+            border-right: var(--border);
+        }
+    }
+
+    &__col--contacts {
+        order: 2;
+        flex-direction: column-reverse;
+        gap: 16px;
+        padding-top: 12px;
+        padding-bottom: 24px;
+
+        @include breakpoint(tablet) {
+            order: 0;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 28px;
+            padding-top: 48px;
+            padding-right: 5px;
+            padding-bottom: 48px;
+        }
+    }
+
+    &__cta-label {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--c-grey);
+    }
+
+    &__cta {
+        min-height: 48px;
+        padding: 0 20px;
+        font-size: 16px;
+
+        @include breakpoint(tablet) {
+            min-height: 52px;
+            padding: 0 24px;
+            font-size: 18px;
+        }
+    }
+
+    &__menu {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        line-height: normal;
 
         @include breakpoint(mobile) {
             flex-direction: row;
-            align-items: center;
-            padding: 20px 24px;
-        }
-
-        @include breakpoint(tablet) {
-            height: 84px;
-            flex-wrap: nowrap;
-            padding: 0 40px;
-            gap: 32px;
-        }
-    }
-
-    &__logo {
-        display: none;
-
-        @include breakpoint(mobile) {
-            display: block;
-        }
-    }
-
-    &__nav,
-    &__menu {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 16px;
-
-        @include breakpoint(mobile) {
-            flex-wrap: nowrap;
-            gap: 40px;
+            flex-wrap: wrap;
+            gap: 12px 30px;
         }
     }
 
     &__link {
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 400;
+        letter-spacing: 0.05em;
         color: var(--c-grey);
         white-space: nowrap;
         transition: color 0.2s;
 
-        &:hover {
+        &:hover,
+        &.is-active {
             color: var(--c-blue);
         }
     }
 
-    &__contacts {
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        width: 100%;
-        flex-shrink: 0;
-
-        @include breakpoint(mobile) {
-            flex-direction: row;
-            justify-content: normal;
-            gap: 20px;
-            width: auto;
-        }
-    }
-
     &__email {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
+        line-height: 24px;
         color: var(--c-blue);
+        text-decoration: underline;
+        text-underline-offset: 3px;
         white-space: nowrap;
         transition: opacity 0.2s;
 
-        @include breakpoint(mobile) {
-            font-size: 18px;
+        @include breakpoint(tablet) {
+            font-size: 22px;
+            line-height: normal;
         }
 
-        &:hover {
+        &:hover,
+        &:focus {
+            color: var(--c-blue);
+            text-decoration: underline;
             opacity: 0.75;
         }
     }
 
     &__socials {
         display: flex;
-        gap: 12px;
-
-        @include breakpoint(mobile) {
-            gap: 10px;
-        }
+        gap: 16px;
     }
 
     &__social {
-        width: 34px;
-        height: 34px;
-        object-fit: contain;
+        display: block;
+        transition: opacity 0.2s;
 
-        @include breakpoint(mobile) {
-            width: auto;
-            height: 28px;
+        &:hover {
+            opacity: 0.75;
         }
     }
 
     &__social-icon {
-        width: 34px;
-        height: 34px;
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
 
-        @include breakpoint(mobile) {
-            width: auto;
-            height: auto;
+        @include breakpoint(tablet) {
+            width: 40px;
+            height: 40px;
         }
     }
 }

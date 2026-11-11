@@ -12,6 +12,11 @@ $starter_helpers = array(
 	'get-option.php',
 	'is-block-content-view.php',
 	'get-breadcrumb-items.php',
+	'convert-image-to-webp.php',
+	'contact-link.php',
+	'get-case-archive-item.php',
+	'get-case-single-data.php',
+	'get-adjacent-posts.php',
 );
 
 foreach ( $starter_helpers as $starter_helper ) {

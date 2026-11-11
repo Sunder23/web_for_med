@@ -1,0 +1,550 @@
+@use "../mixins/breakpoint" as *;
+
+// Cases archive (Figma 3025:141 desktop, 3166:3416 mobile).
+//
+// Base (mobile, low screens): normal page flow — title, horizontal cover lane
+// (scroll-snap without JS, a horizontal Swiper with JS), description, link.
+// Slider (`.is-enhanced` + `slider` mixin): the block fills the screen under
+// the header (bar, stage, a 40px gap); after one full pass through the cases
+// the footer slides up and the block shrinks to the mockup layout (header,
+// bar, stage, gap, footer in one screen). See the page-level rules below. Text on the left, a looped
+// vertical Swiper on the right with PREV / NEXT fragments. Sizes are pure CSS
+// (container units of `__wrap`); casesArchive.js toggles `is-active`.
+// Swiper core CSS is not imported: the few rules it needs are below.
+// Keep the media query in sync with SLIDER_QUERY in components/casesArchive.js.
+
+$cover-w: 522;
+$cover-h: 382;
+$ease-track: cubic-bezier(0.65, 0, 0.35, 1);
+$ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
+
+@mixin slider {
+    @include breakpoint(tablet) {
+        @media (min-height: 520px) {
+            @content;
+        }
+    }
+}
+
+// One screen: the archive takes the height between the header and the bottom
+// of the viewport. Until one full pass through the cases the footer is out of
+// the flow (fixed, below the viewport edge), so the archive gets the whole
+// screen; then it slides up while the archive shrinks by its height
+// (casesArchive.js animates `.site-content` padding-bottom, then puts the
+// footer back into the flow). This stylesheet is loaded on /cases/ only.
+.is-cases-archive {
+    @include slider {
+        .site {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100svh - var(--wp-admin--admin-bar--height, 0px));
+        }
+
+        .site-content {
+            display: flex;
+            flex: 1 0 auto;
+            flex-direction: column;
+            transition: padding-bottom 0.8s $ease-footer;
+        }
+
+        .footer {
+            transition: transform 0.8s $ease-footer;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .site-content,
+            .footer {
+                transition: none;
+            }
+        }
+    }
+}
+
+.is-cases-archive.is-footer-hidden,
+.is-cases-archive.is-footer-entering {
+    @include slider {
+        .footer {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    }
+}
+
+.is-cases-archive.is-footer-hidden {
+    @include slider {
+        .footer {
+            transform: translateY(100%);
+        }
+    }
+}
+
+.cases-archive {
+    // Visually hidden page heading; case titles are h2.
+    &__title {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    // --- Utility bar -------------------------------------------------------
+
+    &__bar {
+        padding: 0 var(--pad-x);
+        border-bottom: var(--border);
+    }
+
+    &__bar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        max-width: calc(var(--page-w) - 2 * var(--pad-x));
+        height: 28px;
+        margin: 0 auto;
+        padding: 0 10px;
+        border-left: var(--border);
+        border-right: var(--border);
+
+        @include breakpoint(tablet) {
+            height: 39px; // 40 with the bar's bottom border
+            padding: 0 35px;
+        }
+    }
+
+    &__label {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--c-blue-light);
+        white-space: nowrap;
+    }
+
+    &__status {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+
+        @include breakpoint(tablet) {
+            gap: 24px;
+        }
+    }
+
+    &__counter {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--c-caption);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__counter-mode {
+        display: none;
+
+        @include breakpoint(tablet) {
+            display: inline;
+        }
+    }
+
+    &__dots {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        @include breakpoint(tablet) {
+            gap: 10px;
+        }
+    }
+
+    &__dot {
+        flex: none;
+        width: 6px;
+        height: 6px;
+        padding: 0;
+        border: 1px solid var(--c-caption);
+        background: var(--c-bg);
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+
+        @include breakpoint(tablet) {
+            width: 10px;
+            height: 10px;
+        }
+
+        &:hover {
+            border-color: var(--c-blue);
+        }
+
+        &.is-active {
+            border-color: var(--c-blue);
+            background: var(--c-blue);
+        }
+    }
+
+    // --- Stage -------------------------------------------------------------
+
+    &__wrap {
+        padding: 0 var(--pad-x);
+    }
+
+    &__stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "heads"
+            "viewport"
+            "details";
+        gap: 22px;
+        max-width: calc(var(--page-w) - 2 * var(--pad-x));
+        margin: 0 auto;
+        padding: 28px 0 40px 10px;
+
+        @include breakpoint(tablet) {
+            border-left: var(--border);
+            border-right: var(--border);
+            padding: 48px 35px 70px;
+        }
+
+        &--empty {
+            display: block;
+        }
+    }
+
+    &__empty {
+        font-size: 18px;
+        color: var(--c-grey);
+    }
+
+    &__heads,
+    &__details {
+        display: grid;
+        gap: 40px;
+        padding-right: 10px;
+    }
+
+    &__heads {
+        grid-area: heads;
+    }
+
+    &__details {
+        grid-area: details;
+    }
+
+    &__panel {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: 0;
+
+        @include breakpoint(tablet) {
+            gap: 8px;
+        }
+    }
+
+    &__caption {
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.36;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--c-caption);
+
+        @include breakpoint(tablet) {
+            font-size: 14px;
+            line-height: 1.25;
+            letter-spacing: 0.1em;
+        }
+    }
+
+    &__case-title {
+        font-size: 26px;
+        line-height: 1.05;
+        color: var(--c-dark);
+        overflow-wrap: break-word;
+
+        @include breakpoint(tablet) {
+            font-size: clamp(28px, 1.5vw + 12px, 40px);
+            line-height: 1.15;
+        }
+    }
+
+    &__description {
+        font-size: 16px;
+        line-height: 1.55;
+        color: var(--c-grey);
+
+        @include breakpoint(tablet) {
+            font-weight: 500;
+        }
+    }
+
+    &__link {
+        margin-top: 18px;
+
+        @include breakpoint(tablet) {
+            margin-top: 44px; // + panel gap 8 = 52 in the mockup
+        }
+    }
+
+    &__arrows {
+        display: none;
+    }
+
+    &__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 41px;
+        height: 36px;
+        padding: 0;
+        border: none;
+        background: none;
+        color: var(--c-blue);
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--c-blue);
+            outline-offset: -2px;
+        }
+    }
+
+    // Mobile: horizontal lane, the next cover peeks in from the right edge.
+    &__viewport {
+        grid-area: viewport;
+        margin-right: calc(-1 * var(--pad-x));
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__track {
+        display: flex;
+        gap: 10px;
+        padding-right: var(--pad-x);
+    }
+
+    // Swiper (lane and slider): it positions the track with transforms.
+    &__viewport.swiper-initialized {
+        overflow: hidden;
+        scroll-snap-type: none;
+    }
+
+    &__viewport.swiper-horizontal {
+        touch-action: pan-y;
+    }
+
+    &__viewport.swiper-vertical {
+        touch-action: pan-x;
+    }
+
+    &__viewport.swiper-initialized &__track {
+        gap: 0;
+        padding: 0;
+        transition-property: transform;
+        transition-timing-function: $ease-track;
+    }
+
+    &__viewport.swiper-initialized &__cover {
+        flex-shrink: 0;
+    }
+
+    &__cover {
+        display: block;
+        flex: 0 0 clamp(236px, 68%, 440px);
+        aspect-ratio: #{$cover-w} / #{$cover-h};
+        overflow: hidden;
+        scroll-snap-align: start;
+        background: var(--c-secondary);
+
+        &:focus-visible {
+            outline: 2px solid var(--c-blue);
+            outline-offset: -2px;
+        }
+    }
+
+    &__image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        &--placeholder {
+            background: linear-gradient(135deg, var(--c-banner), var(--c-dark-blue));
+        }
+    }
+}
+
+// --- Enhanced (JS ready): one active text panel ------------------------------
+
+.cases-archive.is-enhanced {
+    .cases-archive__heads,
+    .cases-archive__details {
+        gap: 0;
+    }
+
+    // All panels share one grid cell, so switching never changes the height.
+    // Sequential: the outgoing text only fades (0.5s, no movement), then the
+    // incoming one fades in and rises; it settles ~1.6s after the switch.
+    .cases-archive__panel {
+        grid-area: 1 / 1;
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none !important;
+        }
+    }
+
+    // Leaving: fade out, then drop to the start position unseen.
+    .cases-archive__panel:not(.is-active) {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(12px);
+        transition:
+            opacity 0.5s ease,
+            transform 0s linear 0.5s,
+            visibility 0s linear 0.5s;
+    }
+
+    // Entering: wait for the old text to fade, then come in.
+    .cases-archive__panel.is-active {
+        transition:
+            opacity 1s ease 0.4s,
+            transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
+            visibility 0s linear 0s;
+    }
+}
+
+// --- Slider (tablet+ and tall enough) ----------------------------------------
+
+.cases-archive.is-enhanced {
+    @include slider {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+        padding-bottom: 40px;
+    }
+
+    .cases-archive__bar {
+        @include slider {
+            flex: none;
+        }
+    }
+
+    // Size container for the cover math below (cqw / cqh).
+    .cases-archive__wrap {
+        @include slider {
+            // Zero basis: with `auto` Chrome resolves cqh against the
+            // pre-flex (content) height, i.e. 0.
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+            border-bottom: var(--border);
+            container-type: size;
+        }
+    }
+
+    .cases-archive__stage {
+        @include slider {
+            --gap: 16px;
+            --frag-max: 120px;
+            --frag-min: 24px;
+            --stage-w: min(100cqw, calc(var(--page-w) - 2 * var(--pad-x)));
+            --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((100cqh - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
+            --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
+            --frag: clamp(var(--frag-min), calc((100cqh - var(--cover-h) - 2 * var(--gap)) / 2), var(--frag-max));
+
+            grid-template-columns: minmax(0, 1fr) 41px calc(var(--cover-w) + 35px);
+            grid-template-rows: 1fr auto auto 1fr;
+            grid-template-areas:
+                ". arrows viewport"
+                "heads arrows viewport"
+                "details arrows viewport"
+                ". arrows viewport";
+            flex: 1 1 auto;
+            gap: 0;
+            width: 100%;
+            min-height: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    }
+
+    .cases-archive__heads,
+    .cases-archive__details {
+        @include slider {
+            padding: 0 clamp(24px, 4.4cqw, 84px) 0 35px;
+        }
+    }
+
+    .cases-archive__heads {
+        @include slider {
+            padding-top: 48px;
+        }
+    }
+
+    .cases-archive__details {
+        @include slider {
+            padding-top: 36px;
+        }
+    }
+
+    .cases-archive__arrows {
+        @include slider {
+            grid-area: arrows;
+            align-self: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+    }
+
+    .cases-archive__viewport {
+        @include slider {
+            align-self: center;
+            width: var(--cover-w);
+            height: calc(var(--cover-h) + 2 * (var(--frag) + var(--gap)));
+            margin: 0;
+            // Covers beyond PREV / NEXT stay visible up to the stage edges
+            // (the stage clips them), so a tall screen has no empty bands.
+            overflow: visible;
+            scroll-snap-type: none;
+        }
+    }
+
+    .cases-archive__track {
+        @include slider {
+            flex-direction: column;
+        }
+    }
+
+    .cases-archive__cover {
+        @include slider {
+            flex: none;
+            width: var(--cover-w);
+            height: var(--cover-h);
+            aspect-ratio: auto;
+        }
+    }
+}

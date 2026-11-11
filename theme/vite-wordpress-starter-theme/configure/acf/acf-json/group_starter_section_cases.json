@@ -23,12 +23,12 @@
             "append": ""
         },
         {
-            "key": "field_starter_section_cases_items",
-            "label": "Items",
-            "name": "items",
+            "key": "field_starter_section_cases_posts",
+            "label": "Кейси",
+            "name": "cases",
             "aria-label": "",
-            "type": "repeater",
-            "instructions": "",
+            "type": "relationship",
+            "instructions": "Порожньо — усі опубліковані кейси, нові першими. У слайді: назва кейсу і поле «Що зроблено» (вкладка «Анонс» кейсу).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -36,57 +36,23 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "block",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add Row",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_starter_section_cases_items_description",
-                    "label": "Description",
-                    "name": "description",
-                    "aria-label": "",
-                    "type": "textarea",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "new_lines": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "rows": "",
-                    "parent_repeater": "field_5f1c336f"
-                },
-                {
-                    "key": "field_starter_section_cases_items_result",
-                    "label": "Result",
-                    "name": "result",
-                    "aria-label": "",
-                    "type": "textarea",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "new_lines": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "rows": "",
-                    "parent_repeater": "field_5f1c336f"
-                }
-            ]
+            "post_type": [
+                "cases"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "elements": "",
+            "bidirectional": 0,
+            "bidirectional_target": []
         },
         {
             "key": "field_starter_section_cases_bg_image",
@@ -120,7 +86,7 @@
             {
                 "param": "block",
                 "operator": "==",
-                "value": "acf\/section-cases"
+                "value": "acf/section-cases"
             }
         ]
     ],
@@ -133,5 +99,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791464381
+    "modified": 1791476913
 }

@@ -21,7 +21,7 @@ parameters:
 		-
 			message: '#^If condition is always true\.$#'
 			identifier: if.alwaysTrue
-			count: 1
+			count: 2
 			path: configure/optimize.php
 
 		-
@@ -29,9 +29,3 @@ parameters:
 			identifier: foreach.emptyArray
 			count: 1
 			path: configure/shortcodes.php
-
-		-
-			message: '#^Empty array passed to foreach\.$#'
-			identifier: foreach.emptyArray
-			count: 1
-			path: configure/taxonomies.php

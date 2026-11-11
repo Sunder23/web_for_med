@@ -28,14 +28,6 @@
             border-right: var(--border);
         }
     }
-
-    // A lone card in the last row spans both columns instead of leaving a gap.
-    @include breakpoint(mobile) {
-        &:last-child:nth-child(odd) {
-            grid-column: 1 / -1;
-            border-right: 0;
-        }
-    }
 }
 
 .archive-empty {

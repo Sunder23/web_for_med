@@ -21,3 +21,12 @@
       font-style: normal;
       font-display: swap;
   }
+
+  // Headings. No U+02BC (ʼ) glyph — that character falls back to Fixel Display.
+  @font-face {
+      font-family: "Grunt Grotesk";
+      src: url("@/fonts/GruntGrotesk-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+  }

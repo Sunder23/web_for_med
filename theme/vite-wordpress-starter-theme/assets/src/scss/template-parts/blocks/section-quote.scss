@@ -1,43 +1,37 @@
 @use "../../mixins/breakpoint" as *;
 
 /* ============================================================
-   QUOTE (03_1)
+   QUOTE (03_1) — Figma desktop 3061:1493, mobile 3180:3567
    ============================================================ */
 .quote {
-  margin: 0px 0 100vh;
-  border-bottom: var(--border);
   position: relative;
-  z-index: 10;
+  z-index: 2;
+  border-top: var(--border);
+  border-bottom: var(--border);
   background-color: var(--c-bg);
 
   &__inner {
-    padding: 50px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    padding: 60px 10px;
     text-align: center;
 
     @include breakpoint(mobile) {
-      padding: 90px 40px;
-      gap: 30px;
+      padding: 80px 40px;
+    }
+
+    @include breakpoint(laptop) {
+      padding: 80px 151px;
     }
   }
 
-  &__gears {
-    height: 30px;
-
-    @include breakpoint(mobile) {
-      height: 38px;
-    }
-  }
-
+  // h2 → Grunt Grotesk Bold (see _base.scss).
   &__text {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1.15;
-    color: var(--c-dark);
     max-width: 990px;
+    font-size: 20px;
+    line-height: 1.25;
+    color: var(--c-dark);
 
     @include breakpoint(small) {
       font-size: 24px;
@@ -45,52 +39,12 @@
 
     @include breakpoint(mobile) {
       font-size: 32px;
+      line-height: 1.15;
     }
 
     @include breakpoint(tablet) {
       font-size: 40px;
     }
-  }
-}
-
-.quote__gear {
-  transform-box: view-box;
-  transform-origin: center;
-  will-change: transform;
-
-  &--1 {
-    transform-origin: 14px 14px;
-    animation: gear-spin-cw 10s linear infinite;
-  }
-
-  &--2 {
-    transform-origin: 51px 15px;
-    animation: gear-spin-ccw 7s linear infinite;
-  }
-
-  &--3 {
-    transform-origin: 33.5px 27.5px;
-    animation: gear-spin-ccw 8.5s linear infinite;
-  }
-}
-
-@keyframes gear-spin-cw {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes gear-spin-ccw {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(-360deg);
   }
 }
 
