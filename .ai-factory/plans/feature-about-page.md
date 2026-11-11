@@ -79,7 +79,7 @@ Created: 2026-11-11
   - Files: `section-team.php`, `section-team.scss`, `section-team.js`, `components/teamHoverLabel.js`, `section-blocks/section-team/*`, `group_starter_section_team.json`, `configure/section-blocks.php`.
 <!-- Commit checkpoint: tasks 1-3 -->
 
-- [ ] **Task 4: Секция `owner-cta` + кнопка `button--outline`**
+- [x] **Task 4: Секция `owner-cta` + кнопка `button--outline`**
   - Поля (`group_starter_section_owner_cta.json`): `image` (ID), `text` (textarea, цитата), `subtext` (text), repeater `buttons` → `link` (ACF link: url/title/target), `style` (select `primary|outline`, default `primary`). Пустые `text` и `buttons` → WARN `[section-owner-cta] text is empty` и return; кнопка без url/title — пропуск с WARN.
   - `template-parts/blocks/section-owner-cta.php`: `<section class="owner-cta"><div class="owner-cta__wrap container"><div class="owner-cta__inner frame">` → `__person` (`__image`, `__body` с `__text` / `__subtext`) + `__actions` (`<a class="button button--{style} owner-cta__button">`, внешним ссылкам `target="_blank" rel="noopener"`).
   - `section-owner-cta.scss`: по спецификации; на `laptop` — ряд `space-between / flex-end`, на `tablet` — person сверху, кнопки снизу в ряд; mobile — колонка, кнопки на всю ширину. Локально `--section-gap: 40px` (полоса перед футером 40px, `3241:4234`).
@@ -88,7 +88,7 @@ Created: 2026-11-11
   - Логирование: PHP WARN как описано.
   - Files: `section-owner-cta.php`, `section-owner-cta.scss`, `components/_buttons.scss`, `section-blocks/section-owner-cta/*`, `group_starter_section_owner_cta.json`, `configure/section-blocks.php`.
 
-- [ ] **Task 5: Ритм страницы и редактор** (depends on 2–4)
+- [x] **Task 5: Ритм страницы и редактор** (depends on 2–4)
   - `_base.scss`: добавить `.about-intro, .team` в исключения `section:not(.hero, .quote, …)::after` — между секциями только линия, без полосы. Проверить, что линии рельса (`.frame` border-left/right) непрерывны от хедера до футера, а горизонтальные линии не двоятся (`margin-top: -1px` на mobile).
   - `editor-section-blocks.scss`: плашка `.team__label` в редакторе скрыта; секции корректно выглядят в canvas (стили подключаются автоматически через `starter_vite_enqueue_editor_canvas_assets`).
   - Проверить в браузере `http://localhost:8080/about/` на 1440 / 1024 / 375 против `3241:4188` и `3255:874` (Claude in Chrome); hover-плашка на desktop, отсутствие на mobile-эмуляции touch.
@@ -98,7 +98,7 @@ Created: 2026-11-11
 
 ### Phase 2: Контент и документация
 
-- [ ] **Task 6: WP-CLI скрипт наполнения страницы** (depends on 1–4)
+- [x] **Task 6: WP-CLI скрипт наполнения страницы** (depends on 1–4)
   - `scripts/update-about-page.php` по образцу `update-home-redesign.php`: dry run по умолчанию, `apply` — запись; ищет страницу по slug `about` (не по ID); sideload файлов из `scripts/data/about/` один раз с метой `_starter_source = about/<file>` (повторный запуск переиспользует вложения); alt-тексты (имена участников, «Команда web4med — No Future Now»).
   - Собирает `post_content` из трёх блоков `acf/section-about-intro`, `acf/section-team`, `acf/section-owner-cta` с данными (`acf_register_block` формат `<!-- wp:acf/section-… {"name":…,"data":{…}} /-->`, ключи полей через `_field` ↔ `field_starter_section_*`), тексты — из макета (5 абзацев, 4 участника с ролями и плашками, цитата Валерия, подпись, кнопки с заглушками `https://t.me/` и `https://wa.me/`).
   - Если в странице уже есть `acf/section-*` блоки — не перезаписывать без аргумента `force`; непустой старый контент — бэкап в мету `_starter_pre_blocks_content`.
