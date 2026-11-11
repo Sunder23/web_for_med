@@ -92,7 +92,7 @@ Created: 2026-11-11
 
 ### Phase 2: Разметка и стили
 
-- [ ] **Task 4: Шаблон и подключение ассетов** (depends on 1, 2)
+- [x] **Task 4: Шаблон и подключение ассетов** (depends on 1, 2)
   - `archive-cases.php` → `get_template_part( 'partials/parts/cases-archive' )`.
   - Новый `partials/parts/cases-archive.php`, блок `.cases-archive` (BEM, без префиксов):
     - `__bar`: `/*CASE ARCHIVE*/`, `__counter` («Режим перегляду: <span data-cases-current>01</span>/NN», на мобайле только `01/NN`), `__dots` (кнопки-индикаторы с `aria-label` «Кейс N», `aria-current` у активного).
@@ -107,7 +107,7 @@ Created: 2026-11-11
   - Логирование: не требуется (WARN только из хелпера).
   - Files: `archive-cases.php`, `partials/parts/cases-archive.php`, `configure/theme-hooks/enqueue-listing-templates-assets.php`, (опц.) `configure/theme-hooks.php`.
 
-- [ ] **Task 5: Стили страницы** (depends on 4)
+- [x] **Task 5: Стили страницы** (depends on 4)
   - Entry `assets/src/scss/cases-archive.scss` → `@use "components/cases-archive"`; партиал `components/_cases-archive.scss`. Mobile first, только `@include breakpoint(...)`, вложенность ≤ 3, Stylelint чистый.
   - **Мобайл (база):** обычный поток. Bar 40px с границами сетки; текст; горизонтальная лента `__viewport` со `scroll-snap-type: x mandatory`, кавер ~ `calc(100% - 64px)` с `aspect-ratio: 522/382`, gap 16px, следующий выглядывает справа; затем описание и кнопка (порядок как в `3166:3416`, перестановка через `order`/grid-areas).
   - **Десктоп (`laptop`+):** `.cases-archive` занимает `height: calc(100svh - var(--header-offset))`, где `--header-offset` = высота хедера (0, когда хедер скрыт, см. Task 7; переход `transition` на `height`/`padding`), плюс `padding-bottom: 40px` (отступ до футера из макета). Сетка: контейнер 1350 с линиями как в хедере; колонки `minmax(0, 752px) 41px 557px` (или пропорционально на 1280–1440). `__stage` с `container-type: size`.
@@ -127,7 +127,7 @@ Created: 2026-11-11
 
 ### Phase 3: Поведение
 
-- [ ] **Task 6: Слайдер и блокировка скролла** (depends on 4, 5)
+- [x] **Task 6: Слайдер и блокировка скролла** (depends on 4, 5)
   - Entry `assets/src/js/cases-archive.js` → `initCasesArchive()` из `components/casesArchive.js` (не путать с существующим `casesSlider.js` главной).
   - Состояние: `index`, `count`, `mode` (`'desktop' | 'mobile' | 'static'`, через `matchMedia` на брейкпоинт `laptop` из `mixins/_breakpoint.scss` + проверка высоты stage ≥ минимума), `locked`, `animating`.
   - `goTo(i, source)`: clamp, `stage.style.setProperty('--cases-index', i)`, переключает `is-active`/`hidden`/`inert` у панелей и `aria-current` у точек, обновляет счётчик (`01`), `disabled` у стрелок на краях; ждёт `transitionend` трека (с таймаутом-страховкой) и снимает `animating`.

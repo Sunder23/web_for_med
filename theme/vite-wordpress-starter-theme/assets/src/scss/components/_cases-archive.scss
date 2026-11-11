@@ -1,0 +1,484 @@
+@use "../mixins/breakpoint" as *;
+
+// Cases archive (Figma 3025:141 desktop, 3166:3416 mobile).
+//
+// Base (mobile, no JS, low screens): normal page flow — title, horizontal
+// cover lane with scroll-snap, description, link.
+// Slider (`.is-enhanced` + `slider` mixin): the block fills the viewport under
+// the header, text on the left, a vertical cover track on the right with
+// PREV / NEXT fragments. Sizes are pure CSS (container units of `__wrap`);
+// casesArchive.js only sets `--cases-index` and toggles `is-active`.
+// Keep the media query in sync with SLIDER_QUERY in components/casesArchive.js.
+
+$cover-w: 522;
+$cover-h: 382;
+$ease-track: cubic-bezier(0.65, 0, 0.35, 1);
+
+@mixin slider {
+    @include breakpoint(tablet) {
+        @media (min-height: 520px) {
+            @content;
+        }
+    }
+}
+
+// The scroll lock (Lenis `overflow: clip`) hides the scrollbar — keep its
+// gutter so the layout does not jump on lock / release. This stylesheet is
+// loaded on /cases/ only.
+:root {
+    scrollbar-gutter: stable;
+}
+
+.cases-archive {
+    --header-offset-current: var(--header-offset, var(--header-h));
+
+    // Visually hidden page heading; case titles are h2.
+    &__title {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    // --- Utility bar -------------------------------------------------------
+
+    &__bar {
+        padding: 0 var(--pad-x);
+        border-bottom: var(--border);
+    }
+
+    &__bar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        max-width: calc(var(--page-w) - 2 * var(--pad-x));
+        height: 28px;
+        margin: 0 auto;
+        padding: 0 10px;
+        border-left: var(--border);
+        border-right: var(--border);
+
+        @include breakpoint(tablet) {
+            height: 40px;
+            padding: 0 35px;
+        }
+    }
+
+    &__label {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--c-blue-light);
+        white-space: nowrap;
+    }
+
+    &__status {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+
+        @include breakpoint(tablet) {
+            gap: 24px;
+        }
+    }
+
+    &__counter {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--c-caption);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__counter-mode {
+        display: none;
+
+        @include breakpoint(tablet) {
+            display: inline;
+        }
+    }
+
+    &__dots {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        @include breakpoint(tablet) {
+            gap: 10px;
+        }
+    }
+
+    &__dot {
+        flex: none;
+        width: 6px;
+        height: 6px;
+        padding: 0;
+        border: 1px solid var(--c-caption);
+        background: var(--c-bg);
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+
+        @include breakpoint(tablet) {
+            width: 10px;
+            height: 10px;
+        }
+
+        &:hover {
+            border-color: var(--c-blue);
+        }
+
+        &.is-active {
+            border-color: var(--c-blue);
+            background: var(--c-blue);
+        }
+    }
+
+    // --- Stage -------------------------------------------------------------
+
+    &__wrap {
+        padding: 0 var(--pad-x);
+    }
+
+    &__stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "heads"
+            "viewport"
+            "details";
+        gap: 22px;
+        max-width: calc(var(--page-w) - 2 * var(--pad-x));
+        margin: 0 auto;
+        padding: 28px 0 40px 10px;
+
+        @include breakpoint(tablet) {
+            border-left: var(--border);
+            border-right: var(--border);
+            padding: 48px 35px 70px;
+        }
+
+        &--empty {
+            display: block;
+        }
+    }
+
+    &__empty {
+        font-size: 18px;
+        color: var(--c-grey);
+    }
+
+    &__heads,
+    &__details {
+        display: grid;
+        gap: 40px;
+        padding-right: 10px;
+    }
+
+    &__heads {
+        grid-area: heads;
+    }
+
+    &__details {
+        grid-area: details;
+    }
+
+    &__panel {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: 0;
+
+        @include breakpoint(tablet) {
+            gap: 8px;
+        }
+    }
+
+    &__caption {
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.36;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--c-caption);
+
+        @include breakpoint(tablet) {
+            font-size: 14px;
+            line-height: 1.25;
+            letter-spacing: 0.1em;
+        }
+    }
+
+    &__case-title {
+        font-size: 26px;
+        line-height: 1.05;
+        color: var(--c-dark);
+        overflow-wrap: break-word;
+
+        @include breakpoint(tablet) {
+            font-size: clamp(28px, 1.5vw + 12px, 40px);
+            line-height: 1.15;
+        }
+    }
+
+    &__description {
+        font-size: 16px;
+        line-height: 1.55;
+        color: var(--c-grey);
+
+        @include breakpoint(tablet) {
+            font-weight: 500;
+        }
+    }
+
+    &__link {
+        margin-top: 18px;
+
+        @include breakpoint(tablet) {
+            margin-top: 44px;
+        }
+    }
+
+    &__arrows {
+        display: none;
+    }
+
+    &__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 41px;
+        height: 36px;
+        padding: 0;
+        border: none;
+        background: none;
+        color: var(--c-blue);
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--c-blue);
+            outline-offset: -2px;
+        }
+    }
+
+    // Mobile: horizontal lane, the next cover peeks in from the right edge.
+    &__viewport {
+        grid-area: viewport;
+        margin-right: calc(-1 * var(--pad-x));
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__track {
+        display: flex;
+        gap: 10px;
+        padding-right: var(--pad-x);
+    }
+
+    &__cover {
+        display: block;
+        flex: 0 0 clamp(236px, 68%, 440px);
+        aspect-ratio: #{$cover-w} / #{$cover-h};
+        overflow: hidden;
+        scroll-snap-align: start;
+        background: var(--c-secondary);
+
+        &:focus-visible {
+            outline: 2px solid var(--c-blue);
+            outline-offset: -2px;
+        }
+    }
+
+    &__image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        &--placeholder {
+            background: linear-gradient(135deg, var(--c-banner), var(--c-dark-blue));
+        }
+    }
+}
+
+// --- Enhanced (JS ready): one active text panel ------------------------------
+
+.cases-archive.is-enhanced {
+    .cases-archive__heads,
+    .cases-archive__details {
+        gap: 0;
+    }
+
+    // All panels share one grid cell, so switching never changes the height.
+    .cases-archive__panel {
+        grid-area: 1 / 1;
+        transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+
+    .cases-archive__panel:not(.is-active) {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    .cases-archive__panel.is-active {
+        transition-delay: 0s;
+    }
+}
+
+// --- Slider (tablet+ and tall enough) ----------------------------------------
+
+.cases-archive.is-enhanced {
+    @include slider {
+        display: flex;
+        flex-direction: column;
+        height: calc(100svh - var(--header-offset-current) - var(--wp-admin--admin-bar--height, 0px));
+        padding-bottom: 40px;
+        transition: height 0.3s ease;
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+
+    .cases-archive__bar {
+        @include slider {
+            flex: none;
+        }
+    }
+
+    // Size container for the cover math below (cqw / cqh).
+    .cases-archive__wrap {
+        @include slider {
+            flex: 1 1 auto;
+            min-height: 0;
+            container-type: size;
+        }
+    }
+
+    .cases-archive__stage {
+        @include slider {
+            --gap: 16px;
+            --frag-max: 120px;
+            --frag-min: 24px;
+            --stage-w: min(100cqw, calc(var(--page-w) - 2 * var(--pad-x)));
+            --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((100cqh - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
+            --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
+            --frag: clamp(var(--frag-min), calc((100cqh - var(--cover-h) - 2 * var(--gap)) / 2), var(--frag-max));
+
+            grid-template-columns: minmax(0, 1fr) 41px calc(var(--cover-w) + 35px);
+            grid-template-rows: 1fr auto auto 1fr;
+            grid-template-areas:
+                ". arrows viewport"
+                "heads arrows viewport"
+                "details arrows viewport"
+                ". arrows viewport";
+            gap: 0;
+            height: 100%;
+            padding: 0;
+            overflow: hidden;
+        }
+    }
+
+    .cases-archive__heads,
+    .cases-archive__details {
+        @include slider {
+            padding: 0 clamp(24px, 5cqw, 70px) 0 35px;
+        }
+    }
+
+    .cases-archive__heads {
+        @include slider {
+            padding-top: 48px;
+        }
+    }
+
+    .cases-archive__details {
+        @include slider {
+            padding-top: 36px;
+        }
+    }
+
+    .cases-archive__arrows {
+        @include slider {
+            grid-area: arrows;
+            align-self: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        // Mouse / trackpad users scroll with the wheel; arrows stay reachable
+        // by keyboard (shown on focus) and on touch screens.
+        @include breakpoint(laptop) {
+            @media (hover: hover) and (pointer: fine) {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+        }
+
+        &:focus-within {
+            opacity: 1;
+        }
+    }
+
+    .cases-archive__viewport {
+        @include slider {
+            align-self: center;
+            width: var(--cover-w);
+            height: calc(var(--cover-h) + 2 * (var(--frag) + var(--gap)));
+            margin: 0;
+            overflow: hidden;
+            scroll-snap-type: none;
+        }
+    }
+
+    .cases-archive__track {
+        @include slider {
+            flex-direction: column;
+            gap: var(--gap);
+            padding: 0;
+            transform: translateY(calc(var(--frag) + var(--gap) - var(--cases-index, 0) * (var(--cover-h) + var(--gap))));
+            transition: transform 0.75s $ease-track;
+            will-change: transform;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+
+    .cases-archive__cover {
+        @include slider {
+            flex: none;
+            width: var(--cover-w);
+            height: var(--cover-h);
+            aspect-ratio: auto;
+        }
+    }
+}
