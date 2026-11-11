@@ -6,3 +6,21 @@ ref
 backups/
 screens/
 .playwright-mcp/
+
+# Legacy theme copies (pre-refactor structure, not loaded by the theme)
+/theme/vite-wordpress-starter-theme/acf-blocks/
+/theme/vite-wordpress-starter-theme/acf-json/
+/theme/vite-wordpress-starter-theme/configure/blocks.php
+/theme/vite-wordpress-starter-theme/configure/configure.php
+/theme/vite-wordpress-starter-theme/configure/cpt-taxonomy.php
+/theme/vite-wordpress-starter-theme/template-parts/archive-cpt.php
+/theme/vite-wordpress-starter-theme/template-parts/content-with-toc.php
+/theme/vite-wordpress-starter-theme/template-parts/cpt-cta.php
+/theme/vite-wordpress-starter-theme/template-parts/cpt-faq.php
+/theme/vite-wordpress-starter-theme/assets/src/js/components/heroAnimations.js
+/theme/vite-wordpress-starter-theme/assets/src/js/components/lightbox.js
+/theme/vite-wordpress-starter-theme/assets/src/scss/abstracts/
+/theme/vite-wordpress-starter-theme/assets/src/scss/base/
+/theme/vite-wordpress-starter-theme/assets/src/scss/layout/
+/theme/vite-wordpress-starter-theme/assets/src/scss/pages/
+/theme/vite-wordpress-starter-theme/assets/src/scss/vendors/
