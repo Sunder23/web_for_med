@@ -26,6 +26,15 @@ $nav-mobile-bg: #F4F6F8;
     &:focus {
         color: var(--c-dark-blue);
     }
+
+    // Footer logo (Figma 3139:1682): 32px on desktop, 20px on phones.
+    &--lg {
+        padding: 0;
+
+        @include breakpoint(tablet) {
+            font-size: 32px;
+        }
+    }
 }
 
 // Smart header: fixed, hidden while scrolling down, shown on scroll up

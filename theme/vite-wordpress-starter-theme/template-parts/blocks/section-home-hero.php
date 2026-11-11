@@ -20,7 +20,7 @@ if ( empty( $args ) || ! is_array( $args ) ) {
 					<p class="hero__subtitle" data-aos="fade-up" data-aos-duration="400" data-aos-delay="800"><?php echo esc_html( $args['subtitle'] ); ?></p>
 				</div>
 				<div class="hero__actions">
-					<a href="<?php echo esc_url( ( $args['primary_link'] )['url'] ?? '#' ); ?>" class="button button--primary hero__button" data-aos="fade" data-aos-duration="350" data-aos-delay="1050"><?php echo esc_html( ( $args['primary_link'] )['title'] ?? '' ); ?></a>
+					<a href="<?php echo esc_url( ( $args['primary_link'] )['url'] ?? '#' ); ?>" class="button button--primary hero__button"<?php echo starter_contact_trigger_attr( ( $args['primary_link'] )['url'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed attribute literal. ?> data-aos="fade" data-aos-duration="350" data-aos-delay="1050"><?php echo esc_html( ( $args['primary_link'] )['title'] ?? '' ); ?></a>
 					<a href="<?php echo esc_url( ( $args['secondary_link'] )['url'] ?? '#' ); ?>" class="button button--secondary hero__button hero__button--secondary" data-aos="fade" data-aos-duration="350" data-aos-delay="1250"><?php echo esc_html( ( $args['secondary_link'] )['title'] ?? '' ); ?></a>
 				</div>
 			</div>

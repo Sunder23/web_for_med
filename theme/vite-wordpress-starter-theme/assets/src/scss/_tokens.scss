@@ -213,6 +213,11 @@ $spacers : (0: 0,
     --color-brand-btn-secondary: #f4f3f2;
     --color-brand-card-hover: #edf6f8;
     --color-brand-icon: #aebbc4;
+    --color-brand-caption: #73777b;
+    --color-brand-blue-hover: #e3effb;
+    --color-brand-error: #b43b3b;
+    --color-brand-error-bg: #fcf2f1;
+    --color-brand-overlay: rgba(9, 42, 74, 0.44);
     --font-main: 'Fixel Display', sans-serif;
     --font-heading: 'Grunt Grotesk', var(--font-main);
     --font-logo: var(--font-main);
@@ -239,6 +244,11 @@ $spacers : (0: 0,
     --c-icon: var(--color-brand-icon);
     --c-tag: var(--color-brand-blue-light);
     --c-banner: var(--color-brand-navy);
+    --c-caption: var(--color-brand-caption);
+    --c-blue-hover: var(--color-brand-blue-hover);
+    --c-error: var(--color-brand-error);
+    --c-error-bg: var(--color-brand-error-bg);
+    --c-overlay: var(--color-brand-overlay);
     --f-main: var(--font-main);
     --f-heading: var(--font-heading);
     --f-logo: var(--font-logo);

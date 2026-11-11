@@ -1,0 +1,254 @@
+@use "../mixins/breakpoint" as *;
+
+// Off-canvas contact drawer — partials/parts/contact-drawer.php, contactDrawer.js.
+// Phones: bottom sheet (Figma 3155:2916). From the mobile breakpoint: full-height
+// panel on the left, 45% of the viewport (3155:2962). Only the body scrolls;
+// the close button and title stay pinned.
+
+.contact-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    visibility: hidden;
+    transition: visibility 0s 0.4s;
+
+    @include breakpoint(mobile) {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    &.is-open {
+        visibility: visible;
+        transition: visibility 0s 0s;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: var(--c-overlay);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    &.is-open &__overlay {
+        opacity: 1;
+    }
+
+    &__panel {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-height: calc(100dvh - var(--header-h));
+        background: #fff;
+        border-radius: 12px 12px 0 0;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+        @include breakpoint(mobile) {
+            width: max(45%, 560px);
+            max-width: 100%;
+            height: 100%;
+            max-height: none;
+            border-radius: 0;
+            transform: translateX(-100%);
+        }
+    }
+
+    &.is-open &__panel {
+        transform: none;
+    }
+
+    &__head {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        gap: 12px;
+        padding: 24px 24px 20px;
+
+        @include breakpoint(mobile) {
+            gap: 24px;
+            padding: 40px 56px 32px;
+        }
+    }
+
+    &__close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: flex-end;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        border: 0;
+        border-radius: var(--radius);
+        background: none;
+        color: var(--c-dark-blue);
+        transition: background-color 0.2s;
+
+        &:hover {
+            background: var(--c-blue-hover);
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px var(--c-blue);
+        }
+
+        @include breakpoint(mobile) {
+            width: 44px;
+            height: 44px;
+            margin: -11px -11px 0 0;
+        }
+    }
+
+    &__title {
+        font-family: var(--f-heading);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.1;
+        color: var(--c-dark);
+
+        @include breakpoint(mobile) {
+            font-size: 40px;
+        }
+    }
+
+    &__text {
+        font-size: 15px;
+        line-height: 1.45;
+        color: var(--c-grey);
+    }
+
+    &__body {
+        flex: 1;
+        min-height: 0;
+        padding: 0 24px 24px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: var(--c-caption) transparent;
+
+        @include breakpoint(mobile) {
+            padding: 0 56px 40px;
+        }
+    }
+
+    // Submission error (Figma 3155:2644) — the entered data stays in the form.
+    &__alert {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 18px;
+        padding: 14px;
+        border-radius: var(--radius);
+        background: var(--c-error-bg);
+
+        &[hidden] {
+            display: none;
+        }
+
+        @include breakpoint(mobile) {
+            margin-bottom: 24px;
+        }
+    }
+
+    &__alert-icon {
+        flex-shrink: 0;
+        color: var(--c-error);
+    }
+
+    &__alert-title {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.3;
+        color: var(--c-error);
+    }
+
+    &__alert-text {
+        margin-top: 4px;
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--c-grey);
+    }
+
+    // Success replaces the form (Figma 3155:2624 / 3155:2691).
+    &__success {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    &__success-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius);
+        background: var(--c-blue-hover);
+        color: var(--c-blue);
+    }
+
+    &__success-title {
+        font-family: var(--f-heading);
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.1;
+        color: var(--c-dark);
+
+        @include breakpoint(mobile) {
+            font-size: 40px;
+        }
+    }
+
+    &__success-text {
+        font-size: 16px;
+        line-height: 1.45;
+        color: var(--c-grey);
+
+        @include breakpoint(mobile) {
+            font-size: 18px;
+        }
+    }
+
+    &__success-button {
+        width: 100%;
+        height: 52px;
+        font-size: 16px;
+    }
+
+    // Success state: hide the form heading, center the confirmation on desktop.
+    &.is-success &__title,
+    &.is-success &__text {
+        display: none;
+    }
+
+    &.is-success &__body {
+        @include breakpoint(mobile) {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 140px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &,
+        &__overlay,
+        &__panel {
+            transition: none;
+        }
+    }
+}
+
+// Page under the open drawer does not scroll (Lenis is stopped in JS as well).
+body.is-drawer-open {
+    overflow: hidden;
+}

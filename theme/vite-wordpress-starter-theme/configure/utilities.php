@@ -13,6 +13,7 @@ $starter_helpers = array(
 	'is-block-content-view.php',
 	'get-breadcrumb-items.php',
 	'convert-image-to-webp.php',
+	'contact-link.php',
 );
 
 foreach ( $starter_helpers as $starter_helper ) {

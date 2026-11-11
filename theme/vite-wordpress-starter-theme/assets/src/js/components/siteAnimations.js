@@ -26,31 +26,6 @@ export function initAos() {
 	fixAosBtnHover();
 }
 
-export function initFooterFormAOS() {
-	const form = document.querySelector('.contact-form');
-	if (!form) return;
-
-	const fields = form.querySelectorAll('.form-field');
-	const btn = form.querySelector('.button--submit');
-
-	fields.forEach((field, i) => {
-		field.setAttribute('data-aos', 'fade-up-sm');
-		field.setAttribute('data-aos-duration', '400');
-		field.setAttribute('data-aos-delay', String(300 + i * 100));
-		field.setAttribute('data-aos-anchor', '#contacts');
-	});
-
-	if (btn) {
-		const btnDelay = 300 + fields.length * 100;
-		btn.setAttribute('data-aos', 'fade-up-scale');
-		btn.setAttribute('data-aos-duration', '400');
-		btn.setAttribute('data-aos-delay', String(btnDelay));
-		btn.setAttribute('data-aos-anchor', '#contacts');
-	}
-
-	AOS.refreshHard();
-}
-
 export function initFooterCoverText() {
 	const el = document.querySelector('.footer__cover-text');
 	if (!el) return;

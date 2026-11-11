@@ -74,7 +74,7 @@ Created: 2026-11-11
 
 ### Phase 2: Контактная панель и футер
 
-- [ ] **Task 4: Off-canvas панель с формой (п.8)** (depends on 1)
+- [x] **Task 4: Off-canvas панель с формой (п.8)** (depends on 1)
   - Разметка: новый `partials/parts/contact-drawer.php` — `<div class="contact-drawer" id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby=… hidden>` + `.contact-drawer__overlay`, `__panel`, `__close`, `__title` («Обговорити задачі»), форма CF7 из `starter_get_option('footer_contact')['contact_form']`. Подключить один раз в `footer.php` (глобально). Если опция пустая — не выводить и `error_log( 'WARN [contact-drawer] footer_contact.contact_form is empty' )`.
   - Стили `components/_contact-drawer.scss` (подключить в `main.scss` вместо пустого `_modal.scss`): desktop — панель слева, ширина ≈640px (по `3155:2962`), белый фон, overlay `#2e2f30` ~50%; mobile — bottom sheet снизу, max-height ~85vh, скролл внутри. Сторона — модификатор `contact-drawer--left` / `--right`.
   - Поля по макету: Ім'я*, «Як з вами зв'язатися?*» — чипы Телефон/Email/Telegram/WhatsApp (radio, `is-active` с галочкой), поле контакта меняет label/placeholder/маску по выбору (`+380 (__) ___ __ __` для телефона), «Що хотіли б обговорити? · необов'язково» textarea, «Відправити» full width, «* Обов'язкові поля». Состояния loading / success / retry — `3155:2617`.
@@ -84,7 +84,7 @@ Created: 2026-11-11
   - Логирование: `logDebug('[contactDrawer] open', { trigger })`, `close`, `cf7 event`, `method change`; PHP — WARN при пустой опции.
   - Files: `partials/parts/contact-drawer.php`, `footer.php`, `components/_contact-drawer.scss`, `components/_forms.scss`, `main.scss`, `js/components/contactDrawer.js`, `js/components/contactForm.js`, `js/main.js`.
 
-- [ ] **Task 5: Новый футер (п.5, 6, 7)** (depends on 4)
+- [x] **Task 5: Новый футер (п.5, 6, 7)** (depends on 4)
   - Разметка по инстансу `3139:1682` (mobile `3180:3732`): 3 колонки внутри контейнера с линиями — (1) лого Grunt 32px + меню Fixel 14px gap 30px (включить footer-меню, сейчас закомментировано); (2) «Обговорити ваш запит» 15px + кнопка «Заповнити форму» (`data-contact-open`, 52px); (3) соцсети 96×40 + email Fixel SemiBold 22px `#1261a0` underline. Padding колонок 48px/40px.
   - `.footer__cover` («Далі буде…», Grunt 48px, белый, высота 454) — только при `is_front_page()` (п.6).
   - `.footer__form-section` удалить из `footer.php` полностью, на всех страницах (п.7). Вместе с ней убрать `initFooterFormAOS` из `siteAnimations.js` и стили `&__form-section`, `&__form-wrap`, `&__form-title` из `_footer.scss`. Опция `footer_contact` остаётся: её `contact_form` использует панель (Task 4), а `title`/`text` — заголовок панели, если заполнены.

@@ -23,7 +23,7 @@ if ( ! $has_form ) {
 	error_log( 'WARN [toc] footer_contact option is empty, TOC CTA falls back to header_button' );
 }
 
-$cta_url = $has_form ? '#contacts' : ( ! empty( $header_button['url'] ) ? $header_button['url'] : '' );
+$cta_url = $has_form ? '#contact-form' : ( ! empty( $header_button['url'] ) ? $header_button['url'] : '' );
 ?>
 <div class="toc"<?php echo $items ? ' data-toc' : ''; ?>>
 	<?php if ( $items ) : ?>
@@ -44,7 +44,7 @@ $cta_url = $has_form ? '#contacts' : ( ! empty( $header_button['url'] ) ? $heade
 		<div class="toc__cta">
 			<p class="toc__cta-label"><?php esc_html_e( 'Потрібен сайт або реклама для медзакладу?', 'vite-starter' ); ?></p>
 			<?php if ( $cta_url ) : ?>
-				<a class="button button--primary toc__cta-button" href="<?php echo esc_url( $cta_url ); ?>"><?php esc_html_e( 'Обговорити задачі', 'vite-starter' ); ?></a>
+				<a class="button button--primary toc__cta-button" href="<?php echo esc_url( $cta_url ); ?>"<?php echo starter_contact_trigger_attr( $cta_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed attribute literal. ?>><?php esc_html_e( 'Обговорити задачі', 'vite-starter' ); ?></a>
 			<?php endif; ?>
 			<?php if ( ! empty( $mail['url'] ) ) : ?>
 				<a class="toc__cta-mail" href="<?php echo esc_url( $mail['url'] ); ?>"><?php echo esc_html( ! empty( $mail['title'] ) ? $mail['title'] : str_replace( 'mailto:', '', $mail['url'] ) ); ?></a>

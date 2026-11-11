@@ -57,7 +57,7 @@ foreach ( array_keys( $archive_leads ) as $archive_type ) {
 							</ul>
 						</nav>
 					<?php endif; ?>
-					<a class="button button--primary s-cpt-hero__button" href="#contacts"><?php esc_html_e( 'Обговорити задачі', 'vite-starter' ); ?></a>
+					<a class="button button--primary s-cpt-hero__button" href="#contact-form" data-contact-open><?php esc_html_e( 'Обговорити задачі', 'vite-starter' ); ?></a>
 				</div>
 			</div>
 		</div>

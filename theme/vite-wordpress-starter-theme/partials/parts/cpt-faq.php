@@ -26,7 +26,7 @@ if ( empty( $items ) ) {
 				<div class="faq-section__ask">
 					<p class="faq-section__ask-title"><?php esc_html_e( 'Не знайшли відповідь?', 'vite-starter' ); ?></p>
 					<p class="faq-section__ask-text"><?php esc_html_e( 'Опишіть задачу вашого медзакладу — відповімо по суті й запропонуємо рішення.', 'vite-starter' ); ?></p>
-					<a class="button button--primary faq-section__ask-button" href="#contacts"><?php esc_html_e( 'Поставити запитання', 'vite-starter' ); ?></a>
+					<a class="button button--primary faq-section__ask-button" href="#contact-form" data-contact-open><?php esc_html_e( 'Поставити запитання', 'vite-starter' ); ?></a>
 				</div>
 			</div>
 			<div class="faq faq-section__list" data-faq>

@@ -13,7 +13,9 @@
 function starter_register_menus() {
 	register_nav_menus(
 		array(
-			'menu-main' => __( 'Main menu', 'vite-starter' ),
+			'menu-main'   => __( 'Main menu', 'vite-starter' ),
+			// Optional; footer.php falls back to the top level of menu-main.
+			'menu-footer' => __( 'Footer menu', 'vite-starter' ),
 		)
 	);
 }
