@@ -2,7 +2,7 @@
 /**
  * Theme file.
  *
- * Section: cases.
+ * Section: cases (Figma desktop 3061:1592, mobile 3025:351).
  *
  * @package Vite_Starter
  */
@@ -52,12 +52,12 @@ if ( ! $items ) {
 		<div class="cases__header frame">
 			<h2 class="section-title cases__title"><?php echo esc_html( $args['title'] ); ?></h2>
 			<div class="cases__nav">
-				<button class="cases__button" id="casePrev" aria-label="<?php esc_attr_e( 'Стрілка вліво', 'vite-starter' ); ?>">
+				<button type="button" class="cases__button" id="casePrev" aria-label="<?php esc_attr_e( 'Стрілка вліво', 'vite-starter' ); ?>">
 					<svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M13.6757 16.5L23 6.91667L20.1622 4L8 16.5L20.1622 29L23 26.0833L13.6757 16.5Z" fill="#AEBBC4" />
 					</svg>
 				</button>
-				<button class="cases__button" id="caseNext" aria-label="<?php esc_attr_e( 'Стрілка вправо', 'vite-starter' ); ?>">
+				<button type="button" class="cases__button" id="caseNext" aria-label="<?php esc_attr_e( 'Стрілка вправо', 'vite-starter' ); ?>">
 					<svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M17.3243 16.5L8 6.91667L10.8378 4L23 16.5L10.8378 29L8 26.0833L17.3243 16.5Z" fill="#AEBBC4" />
 					</svg>

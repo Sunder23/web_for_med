@@ -86,6 +86,11 @@ export function initServicesAccordion() {
 			const isMobile = window.matchMedia('(max-width: 765px)').matches;
 			const isAlreadyActive = $item.hasClass('services-list__item--active');
 
+			logDebug('[services] accordion toggle', {
+				index: $items.index($item),
+				close: isMobile && isAlreadyActive,
+			});
+
 			if (isMobile && isAlreadyActive) {
 				closeItem($item);
 			} else {

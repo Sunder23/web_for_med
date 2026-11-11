@@ -122,19 +122,19 @@ Created: 2026-11-11
   - Files: `static/images/home/*.svg`.
 <!-- Commit checkpoint: tasks 6-9 -->
 
-- [ ] **Task 10: Services (04) (п.2, 11)** (depends on 1, 2)
+- [x] **Task 10: Services (04) (п.2, 11)** (depends on 1, 2)
   - Заголовок «За кожною послугою стоїть розуміння того, як працює клініка зсередини» по центру, Grunt 40/1.15; убрать `.galaxy-icon` (п.11, заметка `3178:3495`).
   - Фото 666×683 слева, список 684: пункты 120px, padding 48/52, иконка ~22px + gap 20, раскрытый пункт — фон `#edf6f8`, текст 16/1.55.
   - Mobile (заметка `3178:3490`): высота изображения 212px, **убрать эффект «залипания» картинки** при скролле списка (sticky/JS в `section-services.js` / glitchImage — отключить на mobile).
   - Логирование: `logDebug('[services] accordion toggle', { index })` в существующем JS при необходимости.
   - Files: `section-services.php/.scss/.js`.
 
-- [ ] **Task 11: Cases (05) и Process (06) (п.11, 13)** (depends on 1, 2, 9)
+- [x] **Task 11: Cases (05) и Process (06) (п.11, 13)** (depends on 1, 2, 9)
   - Cases: заголовок Grunt 40, padding 80/33; стрелки 31×33; слайды 450×551 (текст 171 + обложка 380). Заметка `3178:3489` — отступы ячеек на mobile; mobile-пагинация точками 8px. Контент — позже (Open question 3).
   - Process: убрать `.pulse-icon` (п.11, заметка `3178:3493`); заголовок «Починаємо проєкт із визначення актуальних задач клініки, а не з дизайну» (mobile — «…задач клініки»); шаги 337.5, padding 48/40, новые иконки шагов 50px (п.13, на mobile того же размера) вместо ACF-картинок 200×173; caption `/*step N*/` 13px `#218ed6`, заголовок 20, текст 16.
   - Files: `section-cases.php/.scss`, `section-process.php/.scss`.
 
-- [ ] **Task 12: Why (07) (п.2)** (depends on 1, 2)
+- [x] **Task 12: Why (07) (п.2)** (depends on 1, 2)
   - Заголовок «Чому з нами співпрацюють роками» Grunt 40 внутри правой колонки (item 188px, padding 48/52); пункты 120–144px с иконками 26px; чат слева 666×718.
   - Mobile (заметка `3178:3494`): убрать задержку появления блока с отзывами при скролле (`section-why.js` / AOS delay).
   - Логирование: `logDebug('[why] reveal')` если меняется логика JS.

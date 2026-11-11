@@ -237,10 +237,17 @@ $glitch-offset-top: var(--glitch-offset, 10);
     overflow: hidden;
     position: relative;
 
-    &:hover,
+    // Hover glitch only on real pointers: on touch screens :hover sticks after
+    // a tap and the image keeps glitching while the list is scrolled.
+    @media (hover: hover) {
+        &:hover {
+            cursor: pointer;
+            @include imgGlitch("example-three", 10, 666, 687, 0, 0);
+        }
+    }
+
     &.glitch-image--glitching {
-        cursor: pointer;
-        @include imgGlitch("example-three", 10, 666, 687, 0, 0);
+        @include imgGlitch("example-three-click", 10, 666, 687, 0, 0);
     }
 }
 
@@ -273,113 +280,3 @@ $glitch-offset-top: var(--glitch-offset, 10);
     opacity: 1;
     transform: translateY(0) scale(1);
 }
-
-
-// Pulsing dot (process section header).
-.pulse-icon {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &__core {
-        position: relative;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: #0472C5;
-        z-index: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    &__rings {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        z-index: 1;
-        transform: translate(-50%, -50%);
-    }
-
-    &__circle {
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        animation: grow-circles 4s linear infinite both;
-    }
-
-    &__circle--inner {
-        width: 24px;
-        height: 24px;
-        background: rgba(4, 114, 197, 0.50);
-    }
-
-    &__circle--outer {
-        width: 32px;
-        height: 32px;
-        background: rgba(4, 114, 197, 0.30);
-    }
-
-    &__pulse {
-        position: absolute;
-        animation: pulse-wave 4s linear infinite both;
-        border-radius: 50%;
-    }
-
-    &__pulse--1 {
-        border: solid 2px rgba(4, 114, 197, 0.25);
-        width: 38px;
-        height: 38px;
-    }
-
-    &__pulse--2 {
-        border: solid 2px rgba(4, 114, 197, 0.35);
-        width: 44px;
-        height: 44px;
-    }
-
-    &__pulse--3 {
-        border: solid 2px rgba(4, 114, 197, 0.45);
-        width: 50px;
-        height: 50px;
-    }
-}
-
-@keyframes pulse-wave {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(0.5);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.0);
-    }
-}
-
-@keyframes grow-circles {
-    0% {
-        opacity: 0.85;
-        transform: translate(-50%, -50%) scale(1.0);
-    }
-
-    15% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.05);
-    }
-
-    30% {
-        opacity: 0.85;
-        transform: translate(-50%, -50%) scale(1.0);
-    }
-
-}
-
