@@ -1,9 +1,11 @@
 <?php
 /**
  * Set up the main navigation menu and blog page. Idempotent — run via:
- *   wp eval-file /scripts/import/setup-menu.php
+ *   wp eval-file /scripts/import/setup-menu.php [rebuild]
  *
- * Structure: Головна / Послуги▾ (4 service pages) / Напрямки роботи / Кейси / Блог.
+ * Structure: Послуги▾ (4 service pages) / Напрямки / Кейси / Блог / Контакти (#contacts anchor
+ * to the footer form, present on every page).
+ * `rebuild` deletes the current "Main Menu" items first and seeds them again.
  * Also creates the «Блог» page, assigns it as page_for_posts, and enables
  * pretty permalinks when the structure is unset (required for the EN slugs
  * /services/, /directions/, /cases/, /blog/).
@@ -17,6 +19,7 @@ require_once __DIR__ . '/lib/common.php';
 
 $w4m_errors  = array();
 $w4m_actions = array();
+$w4m_rebuild = in_array( 'rebuild', isset( $args ) ? (array) $args : array(), true );
 
 // --- Pretty permalinks ------------------------------------------------------
 
@@ -106,19 +109,17 @@ function w4m_import_add_menu_item( $menu_id, array $args, array &$errors ) {
 if ( $w4m_menu_id ) {
 	$w4m_existing_items = wp_get_nav_menu_items( $w4m_menu_id );
 
+	if ( $w4m_rebuild && ! empty( $w4m_existing_items ) ) {
+		foreach ( $w4m_existing_items as $w4m_item ) {
+			wp_delete_post( $w4m_item->ID, true );
+		}
+		$w4m_actions[]      = 'rebuild: ' . count( $w4m_existing_items ) . ' old item(s) deleted';
+		$w4m_existing_items = array();
+	}
+
 	if ( ! empty( $w4m_existing_items ) ) {
 		$w4m_actions[] = 'menu already has ' . count( $w4m_existing_items ) . ' item(s), items left untouched';
 	} else {
-		w4m_import_add_menu_item(
-			$w4m_menu_id,
-			array(
-				'menu-item-title' => 'Головна',
-				'menu-item-url'   => home_url( '/' ),
-				'menu-item-type'  => 'custom',
-			),
-			$w4m_errors
-		);
-
 		$w4m_services_item = w4m_import_add_menu_item(
 			$w4m_menu_id,
 			array(
@@ -160,7 +161,7 @@ if ( $w4m_menu_id ) {
 		w4m_import_add_menu_item(
 			$w4m_menu_id,
 			array(
-				'menu-item-title' => 'Напрямки роботи',
+				'menu-item-title' => 'Напрямки',
 				'menu-item-url'   => home_url( '/directions/' ),
 				'menu-item-type'  => 'custom',
 			),
@@ -189,6 +190,17 @@ if ( $w4m_menu_id ) {
 				$w4m_errors
 			);
 		}
+
+		// Anchor to the footer contact form (#contacts), same as before.
+		w4m_import_add_menu_item(
+			$w4m_menu_id,
+			array(
+				'menu-item-title' => 'Контакти',
+				'menu-item-url'   => '#contacts',
+				'menu-item-type'  => 'custom',
+			),
+			$w4m_errors
+		);
 
 		$w4m_actions[] = 'menu items created';
 	}
