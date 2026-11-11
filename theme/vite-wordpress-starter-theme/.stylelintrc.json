@@ -3,7 +3,6 @@
 	"plugins": ["stylelint-scss"],
 	"ignoreFiles": [
 		"assets/dist/**",
-		"assets/src/scss/vendors/**",
 		"assets/src/scss/components/_archive.scss",
 		"assets/src/scss/components/_cpt-common.scss"
 	],

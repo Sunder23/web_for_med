@@ -59,6 +59,19 @@ Anchors `#about`, `#services`, `#cases`, `#process` are part of the markup; the 
 - Vertical rhythm: `--section-gap` (50px on phones, 70px from `tablet`) is the band between sections, drawn by `section:not(...)::after` in `_base.scss` together with the grid lines.
 - Icons in clinics / solutions / services / process / why are SVGs from `static/images/home/*.svg`, attached to the sections' ACF image fields (solution and process icons are 50px on every breakpoint). Upload new icons to the media library rather than pointing at theme files, so editors can swap them.
 
+## About page sections
+
+The "Про нас" page (`/about/`, Figma desktop `3241:4188`, mobile `3255:874`) is built from three blocks, in this order:
+
+| Slug | Contents | Script |
+|------|----------|--------|
+| `about-intro` | Intro text (`text`, textarea → paragraphs) + image with caption. The image comes first in the DOM (LCP, on top on phones); from `tablet` the text column moves to the left. The page title is printed as a visually hidden `<h1 class="screen-reader-text">`. The "NO FUTURE NOW*" lettering is part of the image itself. | — |
+| `team` | Repeater `members` (`photo`, `name`, `role`, `label`): 2 columns on phones, 4 from `tablet`. `label` is a decorative plate (`aria-hidden`) that follows the cursor 12px right / 26px down of the pointer. | `teamHoverLabel` (only on `(hover: hover) and (pointer: fine)` from `tablet`; the label is hidden on touch and in the editor) |
+| `owner-cta` | Owner's illustration, quote (`text`, line breaks kept), signature (`subtext`) and repeater `buttons` (`link` + `style`: `primary` \| `outline`). Links to other domains open in a new tab. Rows without URL or title are skipped with a `WARN`. | — |
+
+- Rhythm: these sections are joined by a single `var(--border)` line, with no `--section-gap` strip between them (`.about-intro` and `.team` are in the `section:not(...)::after` exclusions in `_base.scss`). `owner-cta` sets `--section-gap: 40px` locally, which gives the 40px strip before the footer.
+- `.button--outline` (`components/_buttons.scss`): white button with a 1px blue outline drawn as an inset `box-shadow`, so it is as tall as `.button--primary`; on hover it turns blue like primary.
+
 ## Contact drawer and footer
 
 The contact form is not a section and is no longer part of the footer. `partials/parts/contact-drawer.php` (rendered once from `footer.php`) shows the CF7 form from the ACF Options group `footer_contact` (Footer tab: `contact_form`; `title` / `text` override the drawer heading when filled) in an off-canvas panel: from the left on desktop, a bottom sheet on phones. `contactDrawer.js` opens it on any `[data-contact-open]` element or link ending in `#contact-form` (header CTA, mobile menu CTA, hero primary link, footer button, TOC and FAQ CTAs) and on page load when the URL hash is `#contact-form`; it closes on the close button, overlay or Esc, traps focus and pauses Lenis. If `contact_form` is empty the drawer is not rendered and `WARN [contact-drawer] footer_contact.contact_form is empty` is logged.
@@ -93,6 +106,18 @@ Pages that already contain `acf/section-*` are skipped (re-running is safe). A n
 ```bash
 MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-home-redesign.php"        # dry run
 MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-home-redesign.php apply"  # upload media + write
+```
+
+### About page content (November 2026)
+
+`scripts/update-about-page.php` fills the page with slug `about` with the `about-intro`, `team` and `owner-cta` blocks and the texts from the design. Media from `scripts/data/about/` (hero image with the lettering, four team photos, the "Optimism" illustration, all 2x) is sideloaded once with alt texts and tagged `_starter_source` = `about/<file>`, so re-runs reuse the attachments. A page that already has `acf/section-*` blocks is left alone unless `force` is passed; non-empty old content is backed up to `_starter_pre_blocks_content`. The script also reports menu items named "Про нас" that do not point to the page (it does not change menus).
+
+The Telegram / WhatsApp buttons are created with placeholder URLs (`https://t.me/`, `https://wa.me/`); replace them in the page editor.
+
+```bash
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php"              # dry run
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php apply"        # upload media + write
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php apply force"  # overwrite existing blocks
 ```
 
 ## See Also

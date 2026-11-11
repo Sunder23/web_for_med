@@ -1,0 +1,121 @@
+@use "../../mixins/breakpoint" as *;
+
+/* ============================================================
+   OWNER CTA — Figma desktop 3241:4222, mobile 3255:920
+   Phones: illustration, quote, full-width buttons in a column.
+   Tablet: person on top, buttons in a row below.
+   Laptop: person on the left, buttons on the right (bottom-aligned).
+   The strip before the footer is 40px (Figma 3241:4234).
+   ============================================================ */
+.owner-cta {
+  --section-gap: 40px;
+
+  border-top: var(--border);
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 40px 10px;
+
+    @include breakpoint(mobile) {
+      padding: 40px 24px;
+    }
+
+    @include breakpoint(tablet) {
+      padding: 48px 35px;
+    }
+
+    @include breakpoint(laptop) {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+    }
+  }
+
+  &__person {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @include breakpoint(mobile) {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 16px;
+    }
+  }
+
+  &__image {
+    flex-shrink: 0;
+    width: 100%;
+    height: 153px;
+    object-fit: contain;
+    border: var(--border);
+
+    @include breakpoint(mobile) {
+      width: 177px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+
+    @include breakpoint(mobile) {
+      justify-content: space-between;
+      max-width: 545px;
+      min-height: 153px;
+    }
+  }
+
+  &__text {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--c-dark);
+
+    @include breakpoint(mobile) {
+      font-size: 20px;
+    }
+  }
+
+  &__subtext {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--c-grey);
+
+    @include breakpoint(mobile) {
+      font-weight: 500;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @include breakpoint(mobile) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    @include breakpoint(laptop) {
+      flex-shrink: 0;
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__button {
+    width: 100%;
+
+    @include breakpoint(mobile) {
+      width: auto;
+    }
+  }
+}

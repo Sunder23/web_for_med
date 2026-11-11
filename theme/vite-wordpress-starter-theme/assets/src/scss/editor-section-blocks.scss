@@ -30,6 +30,11 @@
 		inset: auto;
 		z-index: auto;
 	}
+
+	// Cursor-following labels need teamHoverLabel.js, which is front-end only.
+	.team__label {
+		display: none;
+	}
 }
 
 // Core's default editor styles for classic themes cap every `.wp-block` at

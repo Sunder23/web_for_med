@@ -1,0 +1,82 @@
+@use "../../mixins/breakpoint" as *;
+
+/* ============================================================
+   ABOUT INTRO — Figma desktop 3241:4190, mobile 3255:883
+   Phones: image + caption on top, text below. From the tablet
+   breakpoint: text column on the left, image on the right.
+   ============================================================ */
+.about-intro {
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 40px 10px;
+
+    @include breakpoint(mobile) {
+      padding: 40px 24px;
+    }
+
+    @include breakpoint(tablet) {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 40px;
+      padding: 32px 35px;
+    }
+
+    @include breakpoint(laptop) {
+      gap: 100px;
+    }
+  }
+
+  &__media {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+
+    @include breakpoint(tablet) {
+      flex: 1 1 0;
+      order: 2;
+      min-width: 0;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 802 / 810;
+    object-fit: cover;
+    background-color: #071a3c;
+  }
+
+  &__caption {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--c-dark-blue);
+    text-align: center;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--c-grey);
+
+    @include breakpoint(tablet) {
+      flex: 0 0 40%;
+      order: 1;
+      gap: 10px;
+      max-width: 378px;
+      padding-right: 0;
+    }
+
+    @include breakpoint(laptop) {
+      flex-basis: 378px;
+      padding-right: 50px;
+    }
+  }
+}

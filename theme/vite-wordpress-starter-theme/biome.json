@@ -19,7 +19,7 @@
 	},
 	"formatter": {
 		"indentWidth": 2,
-		"lineEnding": "auto"
+		"lineEnding": "lf"
 	},
 	"javascript": {
 		"formatter": {
