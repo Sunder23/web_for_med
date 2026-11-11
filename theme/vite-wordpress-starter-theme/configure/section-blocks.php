@@ -28,6 +28,9 @@ function starter_get_section_slugs() {
 		'cases',
 		'process',
 		'why',
+		'about-intro',
+		'team',
+		'owner-cta',
 	);
 }
 

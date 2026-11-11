@@ -1,0 +1,117 @@
+@use "../../mixins/breakpoint" as *;
+
+/* ============================================================
+   TEAM — Figma desktop 3241:4199, mobile 3255:896,
+   hover labels 3241:4277 (desktop, fine pointer only).
+   ============================================================ */
+.team {
+  border-top: var(--border);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 12px;
+    padding: 40px 10px;
+
+    @include breakpoint(mobile) {
+      padding: 40px 24px;
+    }
+
+    @include breakpoint(tablet) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+      padding: 48px 35px;
+    }
+  }
+
+  &__member {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    @include breakpoint(tablet) {
+      gap: 20px;
+      padding-bottom: 24px;
+    }
+  }
+
+  &__photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 305 / 400;
+    object-fit: cover;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    @include breakpoint(tablet) {
+      gap: 12px;
+    }
+  }
+
+  // h2 is Grunt Grotesk globally (_base.scss): the name stays in Fixel.
+  &__name {
+    font-family: var(--f-main);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--c-dark);
+
+    @include breakpoint(tablet) {
+      font-size: 20px;
+      line-height: 1.05;
+    }
+  }
+
+  &__role {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--c-grey);
+
+    @include breakpoint(tablet) {
+      font-size: 14px;
+      line-height: 1.24;
+    }
+  }
+
+  // Follows the cursor (teamHoverLabel.js sets --x / --y). Hidden on touch.
+  &__label {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    padding: 10px;
+    border-radius: 2px;
+    background-color: var(--c-dark-blue);
+    color: var(--c-white);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.48px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(var(--x, 0), var(--y, 0), 0);
+    transition: opacity 0.2s ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      @include breakpoint(tablet) {
+        display: block;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  &__member.is-hovered &__label {
+    opacity: 1;
+  }
+}

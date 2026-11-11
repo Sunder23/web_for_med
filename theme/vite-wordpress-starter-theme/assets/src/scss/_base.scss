@@ -79,6 +79,20 @@ section {
     }
 }
 
+// Visually hidden, still read by screen readers (WordPress core class name).
+.screen-reader-text {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    border: 0;
+    white-space: nowrap;
+    word-wrap: normal !important;
+}
+
 button {
     cursor: pointer;
     font-family: var(--f-main);
