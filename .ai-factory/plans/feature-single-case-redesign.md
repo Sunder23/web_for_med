@@ -1,6 +1,6 @@
 # Implementation Plan: Новая страница кейса (single-cases.php, Figma)
 
-Branch: feature/cases-archive-redesign (новая ветка не создаётся — продолжаем поверх незакоммиченного архива кейсов; slug плана: feature-single-case-redesign)
+Branch: feature/single-case-redesign (Tasks 1–4 сделаны в `feature/cases-archive-redesign`, слитой в main 2026-11-11; Tasks 5–9 — в этой ветке)
 Created: 2026-11-11
 
 ## Settings
@@ -79,7 +79,7 @@ Created: 2026-11-11
 
 ### Phase 3 — Стили и скрипт
 
-- [ ] **Task 5: Стили `single-case.scss`** (зависит от 4)
+- [x] **Task 5: Стили `single-case.scss`** (зависит от 4)
 - Новый entry `assets/src/scss/single-case.scss`: `@use` `components/entry-content`, `components/lightbox` (если изображения контента открываются лайтбоксом — проверить, кто инициализирует lightbox), новый `components/case-single`.
 - Новый `assets/src/scss/components/_case-single.scss` (mobile first, `@include breakpoint(tablet)`, BEM, вложенность ≤ 3):
   - bar: 36px mobile / 40px desktop, border-bottom #dbdbdb, label/counter по `3061:893`; ширина/паддинги как у `.cases-archive__bar` (сверить, при полном совпадении — вынести общие правила не нужно, допускается повтор 5–10 строк).
@@ -89,12 +89,12 @@ Created: 2026-11-11
   - nav-полоса по `3061:1100`: 40px, border-top, две половины с gap 40, на mobile — только `PREV`/`NEXT` без названий (`3124:1545`).
 - Логирование: не применимо.
 
-- [ ] **Task 6: Скрипт `single-case.js` со scroll-spy** (зависит от 4)
+- [x] **Task 6: Скрипт `single-case.js` со scroll-spy** (зависит от 4)
 - Новый `assets/src/js/components/caseSectionCounter.js`: находит `[data-case-section-current]`, секции = `.case-single__intro` + `.case-single__content h2`; IntersectionObserver (rootMargin с учётом высоты хедера/bar, например `-30% 0px -60% 0px`) → текущий индекс, формат `01`; total пересчитать из DOM и при расхождении с PHP — обновить и `logDebug`. Без счётчика/секций — ранний выход.
 - Новый entry `assets/src/js/single-case.js`: `DOMContentLoaded` → `initCaseSectionCounter()` (+ lightbox, если нужен по результату Task 5).
 - Логирование через `logDebug`: `case counter: init {total}`, `case counter: section {n}`, `case counter: total mismatch {php, dom}`, `case counter: no sections, skipped`.
 
-- [ ] **Task 7: Подключение ассетов** (зависит от 5, 6)
+- [x] **Task 7: Подключение ассетов** (зависит от 5, 6)
 - `configure/theme-hooks/enqueue-listing-templates-assets.php`: из `starter_enqueue_single_cpt_assets` убрать `cases`; новая `starter_enqueue_single_case_assets()` (`is_singular( 'cases' )` → `starter_enqueue_template_assets( 'starter-single-case', 'single-case.scss', 'single-case.js' )`), приоритет 110.
 - Проверить `npm run build`: в манифесте появились `single-case` и `js/single-case`.
 - Логирование: не требуется.
