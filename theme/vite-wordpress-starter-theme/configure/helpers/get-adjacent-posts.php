@@ -26,7 +26,7 @@ function starter_get_edge_post( $post_type, $exclude_id, $order ) {
 		)
 	);
 
-	return $found && $found[0] instanceof WP_Post ? $found[0] : null;
+	return $found ? $found[0] : null;
 }
 
 /**

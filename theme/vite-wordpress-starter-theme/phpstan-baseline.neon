@@ -29,9 +29,3 @@ parameters:
 			identifier: foreach.emptyArray
 			count: 1
 			path: configure/shortcodes.php
-
-		-
-			message: '#^Empty array passed to foreach\.$#'
-			identifier: foreach.emptyArray
-			count: 1
-			path: configure/taxonomies.php
