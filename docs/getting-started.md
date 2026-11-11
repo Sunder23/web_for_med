@@ -61,7 +61,7 @@ The flags in `configure/optimize.php` can be overridden in `wp-config.php`:
 | Constant | Default | Purpose |
 |----------|---------|---------|
 | `STARTER_CONVERT_UPLOADS_TO_WEBP` | `true` | Turns upload conversion on or off |
-| `STARTER_WEBP_UPLOAD_QUALITY` | `75` | WebP quality, also used for generated sizes |
+| `STARTER_WEBP_UPLOAD_QUALITY` | `88` | WebP quality, also used for generated sizes |
 
 If Imagick has no WebP support, WordPress falls back to GD. GD cannot write palette (8-bit) PNGs to WebP, so the theme uses `Starter_Image_Editor_GD` (`configure/helpers/class-starter-image-editor-gd.php`) in its place, which converts those images to truecolor first. The `wordpress:cli` image has no Imagick WebP support, so CLI runs always use this GD path.
 
