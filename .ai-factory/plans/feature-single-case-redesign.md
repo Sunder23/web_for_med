@@ -101,7 +101,7 @@ Created: 2026-11-11
 
 ### Phase 4 — Проверка и документация
 
-- [ ] **Task 8: Контент Promedi и визуальная сверка** (зависит от 7)
+- [x] **Task 8: Контент Promedi и визуальная сверка** (зависит от 7)
 - Создать термины из макета (`make wp cmd="term create case_technology WordPress"` и т. д.: Deliverables — UX/UI Design, Web Development, Content Architecture; Technology — WordPress, Gutenberg, ACF; Status — Completed) и назначить Promedi; в админке заполнить `case_intro` и `case_details` (Duration «2 months», ссылка на сайт); убрать дублирующиеся с интро первые абзацы из `post_content`, если они там есть.
 - Chrome: 1920, 1440, 1024, 375 — сверить с `3061:891` / `3124:1383`: порядок блоков на мобиле, sticky-сайдбар до конца контента, счётчик меняется при скролле, prev/next с loop-around, кейс без деталей/картинки не ломает сетку.
 - `npm run lint`, `composer lint` — без новых ошибок.
