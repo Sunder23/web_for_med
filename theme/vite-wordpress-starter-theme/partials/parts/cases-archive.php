@@ -46,7 +46,8 @@ $starter_svg_kses  = array(
 );
 ?>
 <main class="cases-archive" data-cases-archive data-count="<?php echo esc_attr( (string) $starter_count ); ?>">
-	<script>document.currentScript.parentElement.classList.add('is-enhanced');</script>
+	<?php // Before the first paint: no flash of the unenhanced layout or of the footer (it waits for one full pass, see casesArchive.js). ?>
+	<script>document.currentScript.parentElement.classList.add('is-enhanced');<?php echo $starter_count > 1 ? "document.body.classList.add('is-footer-hidden');" : ''; ?></script>
 	<h1 class="cases-archive__title"><?php post_type_archive_title(); ?></h1>
 
 	<div class="cases-archive__bar">

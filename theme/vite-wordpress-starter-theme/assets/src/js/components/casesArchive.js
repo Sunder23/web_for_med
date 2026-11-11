@@ -4,17 +4,25 @@ import { Keyboard, Mousewheel, Navigation } from 'swiper/modules';
 
 /*
  * Cases archive (/cases/): looped case slider on Swiper (Figma 3025:141,
- * mobile 3166:3416). The page fits one screen (footer visible), so the
- * slider never has to hand the scroll back to the page.
+ * mobile 3166:3416).
  *
  * Modes (recreated on SLIDER_QUERY change):
- * - `slider`: vertical, the active cover centred with PREV / NEXT fragments;
- *   wheel over the stage, arrow keys, arrows and dots switch cases.
+ * - `slider`: vertical, the active cover centred with PREV / NEXT fragments.
+ *   First the block fills the screen under the header; the footer is out of
+ *   the flow, below the viewport edge (`body.is-footer-hidden`). The wheel
+ *   and the arrow keys switch cases; the slider loops, so the footer comes in
+ *   after one full pass: once every case has been shown, the next downward
+ *   gesture slides it up while the block shrinks by its height, as in the
+ *   mockup ("release"; on screens too low to fit, the page also scrolls on).
+ *   It stays visible. A new gesture at the top hands the wheel back to
+ *   the slider and the pass restarts. Scrolling the page or tabbing into the
+ *   footer reveals it as well.
  * - `lane` (phones, low screens): horizontal, the next cover peeks in.
  * - `static`: a single case, no Swiper.
  *
  * Swiper moves the covers; text panels, dots and the counter follow
- * `realIndex`. Sizes live in CSS (_cases-archive.scss).
+ * `realIndex`. Sizes live in CSS (_cases-archive.scss). Lenis is off on this
+ * page (smoothScroll.js): Swiper owns the wheel over the stage.
  */
 
 // Keep in sync with the `slider` mixin in scss/components/_cases-archive.scss.
@@ -27,6 +35,24 @@ const GAP_LANE = 10;
 const SPEED = 750;
 // Loop needs a slide on each side of the active one plus one to move.
 const LOOP_MIN = 3;
+// A pause in the wheel stream longer than this starts a new gesture
+// (trackpad inertia keeps firing events — they belong to the same gesture).
+const WHEEL_IDLE_MS = 150;
+// Footer slide-up is 0.8s (_cases-archive.scss); fallback if transitionend is lost.
+const FOOTER_FALLBACK_MS = 1000;
+
+const KEYS_DOWN = ['ArrowDown', 'PageDown', 'End', ' '];
+const KEYS_UP = ['ArrowUp', 'PageUp', 'Home'];
+
+const isOverlayOpen = () =>
+	document.body.classList.contains('is-drawer-open') ||
+	document.querySelector('.nav.is-open') !== null;
+
+const isTypingTarget = (el) =>
+	el instanceof HTMLElement &&
+	(el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+
+const atTop = () => window.scrollY <= 1;
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -54,6 +80,12 @@ export function initCasesArchive() {
 	let swiper = null;
 	let mode = 'static';
 	let index = 0;
+
+	// One full pass before the footer (slider mode only).
+	const visited = new Set([0]);
+	let released = false;
+	let lastWheelAt = 0;
+	let lastChangeAt = 0;
 
 	const render = () => {
 		panels.forEach((panel) => {
@@ -92,6 +124,9 @@ export function initCasesArchive() {
 		index = instance.realIndex ?? 0;
 		if (from === index) return;
 
+		lastChangeAt = performance.now();
+		visited.add(index);
+
 		render();
 		logDebug('[casesArchive] slide', { from, to: index, mode });
 	};
@@ -124,12 +159,159 @@ export function initCasesArchive() {
 			spaceBetween: GAP_SLIDER,
 			// Mouse users switch with the wheel; dragging would fight link clicks.
 			simulateTouch: false,
+			// The whole page: the block fills the screen; casesArchive gates the
+			// events (onWheelGate) so the page can scroll on to the footer.
 			mousewheel: {
-				eventsTarget: '[data-cases-stage]',
+				eventsTarget: 'body',
 				thresholdDelta: 30,
 				releaseOnEdges: false,
 			},
 		};
+	};
+
+	// --- One pass, then the footer (slider mode) ------------------------------
+
+	const footer = document.querySelector('.footer');
+	let footerShown = false;
+
+	const content = document.querySelector('.site-content');
+
+	// The footer is fixed below the viewport while hidden. Slide it up and, in
+	// step, shrink the archive by its height (padding-bottom on .site-content);
+	// at the end put it back into the flow — same position, no jump.
+	const showFooter = (reason) => {
+		if (footerShown) return;
+		footerShown = true;
+
+		const { body } = document;
+		const animate =
+			mode === 'slider' && footer && content && !reducedMq.matches;
+
+		if (!animate) {
+			body.classList.remove('is-footer-hidden');
+			logDebug('[casesArchive] footer shown', { reason, animate });
+			return;
+		}
+
+		let timer = 0;
+		const settle = () => {
+			window.clearTimeout(timer);
+			footer.removeEventListener('transitionend', onEnd);
+			content.style.transition = 'none';
+			body.classList.remove('is-footer-entering');
+			content.style.paddingBottom = '';
+			void content.offsetHeight; // apply without the transition
+			content.style.transition = '';
+			logDebug('[casesArchive] footer settled');
+		};
+		const onEnd = (e) => {
+			if (e.target === footer && e.propertyName === 'transform') settle();
+		};
+
+		footer.addEventListener('transitionend', onEnd);
+		timer = window.setTimeout(settle, FOOTER_FALLBACK_MS);
+		body.classList.add('is-footer-entering');
+		body.classList.remove('is-footer-hidden');
+		content.style.paddingBottom = `${footer.offsetHeight}px`;
+		logDebug('[casesArchive] footer shown', { reason, animate });
+	};
+
+	const release = (reason) => {
+		released = true;
+		showFooter(reason);
+		logDebug('[casesArchive] release to page', {
+			reason,
+			visited: visited.size,
+		});
+	};
+
+	// After the footer is in, a page that fits the screen has nowhere to go:
+	// the slider simply keeps looping.
+	const passDone = () =>
+		visited.size >= count &&
+		(!footerShown ||
+			document.documentElement.scrollHeight > window.innerHeight + 1);
+
+	const onPageScroll = () => {
+		if (!atTop()) showFooter('page scroll');
+	};
+	const onFooterFocus = () => showFooter('focus');
+
+	const rearm = (reason) => {
+		released = false;
+		visited.clear();
+		visited.add(index);
+		logDebug('[casesArchive] rearm slider', { reason, index });
+	};
+
+	// Runs before Swiper (window, capture). `stopPropagation` keeps the event
+	// from Swiper and leaves the native scroll; `preventDefault` swallows it.
+	const onWheelGate = (e) => {
+		const now = performance.now();
+		const newGesture = now - lastWheelAt > WHEEL_IDLE_MS;
+		lastWheelAt = now;
+
+		if (isOverlayOpen() || e.ctrlKey) {
+			e.stopPropagation();
+			return;
+		}
+
+		if (released || !atTop()) {
+			if (released && atTop() && newGesture) {
+				rearm('wheel at page top');
+				e.preventDefault();
+				return;
+			}
+			e.stopPropagation();
+			return;
+		}
+
+		if (e.deltaY > 0 && passDone()) {
+			e.stopPropagation();
+			// Inertia of the gesture that brought the last case: swallow it.
+			if (!newGesture || now - lastChangeAt < SPEED) {
+				e.preventDefault();
+				return;
+			}
+			release('wheel after a full pass');
+			return;
+		}
+
+		// The slider takes it. Swiper listens on <body>, which Chrome makes
+		// passive, so its own preventDefault is ignored: stop the page here.
+		e.preventDefault();
+	};
+
+	const onKeyGate = (e) => {
+		if (isOverlayOpen() || isTypingTarget(e.target)) return;
+		if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+		const down = KEYS_DOWN.includes(e.key);
+		const up = KEYS_UP.includes(e.key);
+		if (!down && !up) return;
+
+		if (released || !atTop()) {
+			if (released && atTop() && up) {
+				rearm('key at page top');
+				return;
+			}
+			e.stopPropagation();
+			return;
+		}
+
+		if (down && passDone()) {
+			e.stopPropagation();
+			release('key after a full pass');
+		}
+	};
+
+	const bindGates = (on) => {
+		const method = on ? 'addEventListener' : 'removeEventListener';
+		window[method]('wheel', onWheelGate, { capture: true, passive: false });
+		window[method]('keydown', onKeyGate, { capture: true });
+		window[method]('scroll', onPageScroll, { passive: true });
+		footer?.[method]('focusin', onFooterFocus);
+		document.body.classList.toggle('is-footer-hidden', on && !footerShown);
 	};
 
 	const destroy = () => {
@@ -143,14 +325,15 @@ export function initCasesArchive() {
 
 		const from = mode;
 		destroy();
+		if (from === 'slider') bindGates(false);
 		mode = next;
-
-		// The page scrolls only on low screens; the wheel over the stage belongs
-		// to the slider there, not to Lenis.
-		stage.toggleAttribute('data-lenis-prevent-wheel', mode === 'slider');
 
 		if (mode !== 'static') {
 			swiper = new Swiper(viewport, options(mode === 'slider'));
+		}
+		if (mode === 'slider') {
+			released = !atTop();
+			bindGates(true);
 		}
 
 		render();

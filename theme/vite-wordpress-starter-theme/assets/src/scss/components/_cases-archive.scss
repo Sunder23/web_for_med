@@ -4,9 +4,11 @@
 //
 // Base (mobile, low screens): normal page flow — title, horizontal cover lane
 // (scroll-snap without JS, a horizontal Swiper with JS), description, link.
-// Slider (`.is-enhanced` + `slider` mixin): the page fits one screen — header,
-// bar, stage, a 40px gap and the footer. Text on the left, a looped vertical
-// Swiper on the right with PREV / NEXT fragments. Sizes are pure CSS
+// Slider (`.is-enhanced` + `slider` mixin): the block fills the screen under
+// the header (bar, stage, a 40px gap); after one full pass through the cases
+// the footer slides up and the block shrinks to the mockup layout (header,
+// bar, stage, gap, footer in one screen). See the page-level rules below. Text on the left, a looped
+// vertical Swiper on the right with PREV / NEXT fragments. Sizes are pure CSS
 // (container units of `__wrap`); casesArchive.js toggles `is-active`.
 // Swiper core CSS is not imported: the few rules it needs are below.
 // Keep the media query in sync with SLIDER_QUERY in components/casesArchive.js.
@@ -14,6 +16,7 @@
 $cover-w: 522;
 $cover-h: 382;
 $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
+$ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 
 @mixin slider {
     @include breakpoint(tablet) {
@@ -23,9 +26,12 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
     }
 }
 
-// One screen: the footer is pinned to the bottom of the viewport and the
-// archive takes the height left between it and the header. This stylesheet is
-// loaded on /cases/ only.
+// One screen: the archive takes the height between the header and the bottom
+// of the viewport. Until one full pass through the cases the footer is out of
+// the flow (fixed, below the viewport edge), so the archive gets the whole
+// screen; then it slides up while the archive shrinks by its height
+// (casesArchive.js animates `.site-content` padding-bottom, then puts the
+// footer back into the flow). This stylesheet is loaded on /cases/ only.
 .is-cases-archive {
     @include slider {
         .site {
@@ -38,6 +44,38 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
             display: flex;
             flex: 1 0 auto;
             flex-direction: column;
+            transition: padding-bottom 0.8s $ease-footer;
+        }
+
+        .footer {
+            transition: transform 0.8s $ease-footer;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .site-content,
+            .footer {
+                transition: none;
+            }
+        }
+    }
+}
+
+.is-cases-archive.is-footer-hidden,
+.is-cases-archive.is-footer-entering {
+    @include slider {
+        .footer {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    }
+}
+
+.is-cases-archive.is-footer-hidden {
+    @include slider {
+        .footer {
+            transform: translateY(100%);
         }
     }
 }
@@ -367,23 +405,33 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     // All panels share one grid cell, so switching never changes the height.
+    // Sequential: the outgoing text only fades (0.5s, no movement), then the
+    // incoming one fades in and rises; it settles ~1.6s after the switch.
     .cases-archive__panel {
         grid-area: 1 / 1;
-        transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
 
         @media (prefers-reduced-motion: reduce) {
-            transition: none;
+            transition: none !important;
         }
     }
 
+    // Leaving: fade out, then drop to the start position unseen.
     .cases-archive__panel:not(.is-active) {
         visibility: hidden;
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(12px);
+        transition:
+            opacity 0.5s ease,
+            transform 0s linear 0.5s,
+            visibility 0s linear 0.5s;
     }
 
+    // Entering: wait for the old text to fade, then come in.
     .cases-archive__panel.is-active {
-        transition-delay: 0s;
+        transition:
+            opacity 1s ease 0.4s,
+            transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
+            visibility 0s linear 0s;
     }
 }
 
@@ -478,7 +526,9 @@ $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
             width: var(--cover-w);
             height: calc(var(--cover-h) + 2 * (var(--frag) + var(--gap)));
             margin: 0;
-            overflow: hidden;
+            // Covers beyond PREV / NEXT stay visible up to the stage edges
+            // (the stage clips them), so a tall screen has no empty bands.
+            overflow: visible;
             scroll-snap-type: none;
         }
     }
