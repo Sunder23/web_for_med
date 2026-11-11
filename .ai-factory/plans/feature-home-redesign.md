@@ -95,19 +95,20 @@ Created: 2026-11-11
 
 ### Phase 3: Секции главной (каждая — по своему desktop-фрейму и mobile `3025:225`)
 
-- [ ] **Task 6: Hero** (depends on 1, 3)
+- [x] **Task 6: Hero** (depends on 1, 3)
   - `section-home-hero.php/.scss`: контейнер padding 50px 35px 0 (desktop), gap 100px, контент 550px; заголовок Grunt 40/1.01 `#2e2f30`, подзаголовок Fixel 500 20/1.5; кнопки 18px padding 18/24, gap 24px; изображение 630×380.
   - Mobile (`3180:3523` + заметка `3178:3487`): высота изображения 260px; размытое изображение — выводить `image_mobile` в нужном размере (srcset / не растягивать маленький файл), кнопки full width 50px.
   - Primary CTA — триггер панели (`data-contact-open`).
   - Логирование: только PHP WARN при отсутствии обязательных `$args` (по шаблону секций).
   - Files: `template-parts/blocks/section-home-hero.php`, `scss/template-parts/blocks/section-home-hero.scss`.
 
-- [ ] **Task 7: Clinics (02)** (depends on 1)
+- [x] **Task 7: Clinics (02)** (depends on 1)
+  - _Уточнение:_ заметка «приховай цю іконку» (`3287:1424`, y=1117) указывает на иконку-шестерёнки секции quote, а не clinics → выполняется в Task 8. Иконки clinics в desktop-макете тёмные `#092a4a` (в старом mobile-фрейме — `#aebbc4`); SVG скачаны в `static/images/home/clinic-*.svg`, замена вложений ACF — в Task 13.
   - Сетка 3×2 (325×94) + aside 375 справа; ячейки padding 30/32, gap 8; иконки 28px; текст Fixel 500 16/1.05; aside — иконка-пазл 40px + текст 20px `#1261a0`.
   - Mobile (`3180:3534`, заметки `3178:3488`, `3287:1424`): 2 колонки по 177.5, последний ряд — aside на всю ширину с иконкой 28px; исправить «приплюснутые» отступы ячеек; скрыть отмеченную иконку.
   - Files: `section-clinics.php/.scss`.
 
-- [ ] **Task 8: Quote (03_1) + Problems/Banner/Solutions (03_2–03_4) (п.2, 3, 11, 13, 14)** (depends on 1, 2, 3)
+- [x] **Task 8: Quote (03_1) + Problems/Banner/Solutions (03_2–03_4) (п.2, 3, 11, 13, 14)** (depends on 1, 2, 3)
   - Quote: убрать inline SVG `.quote__gears` (п.11); текст «Цифрові процеси мають працювати в унісон з медичним бізнесом» Grunt 40/1.15 по центру, ширина 990, padding 80px 151px.
   - Problems: карточки 450×420, padding 48/40, `justify-content: space-between`; тег `/*problem*/` Fixel 600 13px uppercase `#218ed6`; заголовок 20/1.2, текст 16/1.55.
   - Banner: фон `#144166`, текст Fixel 600 40/1.15 `#f8f9f9`, ширина 849, padding 90/40.
@@ -116,7 +117,7 @@ Created: 2026-11-11
   - Mobile (`3180:3567`–`3180:3596`): тексты/отступы по фрейму.
   - Files: `section-quote.php/.scss`, `section-problems-solutions.php/.scss`, `editor-section-blocks.scss` (если меняются слои), иконки → `static/images/home/`.
 
-- [ ] **Task 9: Загрузка ассетов из Figma** (параллельно 7–8, до 11)
+- [x] **Task 9: Загрузка ассетов из Figma** (параллельно 7–8, до 11)
   - Скачать через `get_design_context` SVG иконок clinics (6 + пазл), solutions (3), process (4), services (5), why (4), social icons футера; положить в `static/images/home/` с kebab-case именами. Не использовать временные URL Figma.
   - Files: `static/images/home/*.svg`.
 <!-- Commit checkpoint: tasks 6-9 -->
@@ -143,7 +144,7 @@ Created: 2026-11-11
 ### Phase 4: Контент и документация
 
 - [ ] **Task 13: WP-CLI миграция контента главной** (depends on 4, 6–12)
-  - `scripts/update-home-redesign.php` (идемпотентный, `--dry-run`): обновить в блоках главной тексты трёх заголовков (п.2), подставить новые иконки (sideload из `static/images/home/` в медиатеку; если загрузка SVG не разрешена — шаблоны выводят иконки из темы по ключу, а скрипт только чистит старые поля), ссылки CTA → `#contact-form`; опция `header_button` → `#contact-form`; создать/обновить CF7-форму с новыми полями и записать шорткод в `footer_contact.contact_form`.
+  - `scripts/update-home-redesign.php` (идемпотентный, `--dry-run`): обновить в блоках главной тексты трёх заголовков (п.2), подставить новые иконки (sideload из `static/images/home/` в медиатеку; если загрузка SVG не разрешена — шаблоны выводят иконки из темы по ключу, а скрипт только чистит старые поля), ссылки CTA → `#contact-form`; иконки clinics (`items_*_icon`, `aside_icon`) → `static/images/home/clinic-*.svg`; картинки hero — sideload 2x-версий из `scripts/data/home-redesign/hero-desktop-2x.png` (1260×760) и `hero-mobile-2x.png` (750×520) в `image` / `image_mobile` (сейчас 580×360 и 375×480 — причина размытия на mobile, заметка `3178:3487`); опция `header_button` → `#contact-form`; создать/обновить CF7-форму с новыми полями и записать шорткод в `footer_contact.contact_form`.
   - Логирование: `WP_CLI::log()` на каждый обновлённый блок/опцию, `WP_CLI::warning()` при отсутствии блока/вложения, итоговая сводка.
   - Запуск: `MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-home-redesign.php"`.
   - Files: `scripts/update-home-redesign.php`, при необходимости `configure/acf/acf-json/group_starter_section_*.json`.

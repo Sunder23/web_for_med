@@ -24,15 +24,9 @@
 
 	// Scroll effects (fixed / sticky layers) overlap neighbouring sections in
 	// the canvas and make their fields unreachable: lay everything out in flow.
-	// .problems: fixed under the header; .solutions: sticky (tablet breakpoint up);
-	// .services__image (below tablet) and .why-chat (below mobile): sticky in the
-	// Tablet / Mobile previews.
-	.quote {
-		margin: 0;
-	}
-
+	// .problems: sticky (tablet breakpoint up); .services__image (below tablet)
+	// and .why-chat (below mobile): sticky in the Tablet / Mobile previews.
 	.problems,
-	.solutions,
 	.services__image,
 	.why-chat {
 		position: relative;

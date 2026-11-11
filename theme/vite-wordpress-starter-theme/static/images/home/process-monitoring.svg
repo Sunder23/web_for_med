@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
+<svg x="-0.248" y="2.251" width="48.5" height="45.2955" viewBox="0 0 48.5 45.2955" overflow="visible">
+<g id="Panel">
+<path id="Vector" d="M5.02273 9.29545H10.8977C12.5 3.95455 17.8409 0.75 24.25 0.75C30.6591 0.75 36 3.95455 37.6023 9.29545H43.4773C45.8273 9.29545 47.75 11.2182 47.75 13.5682V40.2727C47.75 42.6227 45.8273 44.5455 43.4773 44.5455H5.02273C2.67273 44.5455 0.75 42.6227 0.75 40.2727V13.5682C0.75 11.2182 2.67273 9.29545 5.02273 9.29545Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#092A4A"/>
+</g>
+</svg>
+<svg x="7.23" y="28.95" width="33.5455" height="6.84091" viewBox="0 0 33.5455 6.84091" overflow="visible">
+<g id="Active">
+<path id="Vector" d="M0.75 3.42007H21.0455M25.3182 3.42007H32.7955" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#092A4A"/>
+<path id="Vector_2" d="M23.7159 0.75H22.6478C22.0578 0.75 21.5796 1.22824 21.5796 1.81818V5.02273C21.5796 5.61267 22.0578 6.09091 22.6478 6.09091H23.7159C24.3059 6.09091 24.7841 5.61267 24.7841 5.02273V1.81818C24.7841 1.22824 24.3059 0.75 23.7159 0.75Z" fill="#1261A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#1261A0"/>
+</g>
+</svg>
+<svg x="7.23" y="36.97" width="33.5455" height="6.84091" viewBox="0 0 33.5455 6.84091" overflow="visible">
+<g id="Neutral">
+<path id="Vector" d="M0.75 3.4205H7.15909M10.3636 3.4205H32.7955" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#092A4A"/>
+<path id="Vector_2" d="M8.22733 0.75H9.29551C9.88545 0.75 10.3637 1.22824 10.3637 1.81818V5.02273C10.3637 5.61267 9.88545 6.09091 9.29551 6.09091H8.22733C7.63739 6.09091 7.15915 5.61267 7.15915 5.02273V1.81818C7.15915 1.22824 7.63739 0.75 8.22733 0.75Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#092A4A"/>
+</g>
+</svg>
+<svg x="14.166" y="5.99" width="19.6591" height="19.6591" viewBox="0 0 19.6591 19.6591" overflow="visible">
+<g id="Performance-indicator">
+<path id="Vector" d="M18.9091 9.82955C18.9091 14.844 14.844 18.9091 9.82955 18.9091C4.81505 18.9091 0.75 14.844 0.75 9.82955C0.75 4.81505 4.81505 0.75 9.82955 0.75C14.844 0.75 18.9091 4.81505 18.9091 9.82955Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#092A4A"/>
+<path id="Vector_2" d="M3.42046 10.8978C3.0466 8.1205 4.54206 5.45004 7.1591 4.38186C8.9216 3.63413 10.8977 3.68754 12.5 4.48868" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#092A4A"/>
+<path id="Vector_3" d="M9.82964 11.4319L15.1706 6.09099" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#1261A0"/>
+<path id="Vector_4" d="M9.82956 12.3933C10.3605 12.3933 10.7909 11.9628 10.7909 11.4319C10.7909 10.901 10.3605 10.4705 9.82956 10.4705C9.29861 10.4705 8.8682 10.901 8.8682 11.4319C8.8682 11.9628 9.29861 12.3933 9.82956 12.3933Z" fill="#1261A0"/>
+</g>
+</svg>
+</svg>
