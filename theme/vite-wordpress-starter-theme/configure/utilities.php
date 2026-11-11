@@ -14,6 +14,7 @@ $starter_helpers = array(
 	'get-breadcrumb-items.php',
 	'convert-image-to-webp.php',
 	'contact-link.php',
+	'get-case-archive-item.php',
 );
 
 foreach ( $starter_helpers as $starter_helper ) {
