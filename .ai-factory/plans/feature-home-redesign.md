@@ -47,7 +47,7 @@ Created: 2026-11-11
 
 ### Phase 1: Глобальные токены, шрифт, хедер
 
-- [ ] **Task 1: Шрифт заголовков и токены (п.1, 4, 10)**
+- [x] **Task 1: Шрифт заголовков и токены (п.1, 4, 10)**
   - Конвертировать `GruntGrotesk-Bold.otf` (корень репо) в woff2: `pip install fonttools brotli`, затем `python -c "from fontTools.ttLib import TTFont; f=TTFont('GruntGrotesk-Bold.otf'); f.flavor='woff2'; f.save('theme/vite-wordpress-starter-theme/static/fonts/GruntGrotesk-Bold.woff2')"`. Проверить, что в шрифте есть кириллица и украинские буквы (і, ї, є, ґ, ’); если какой-то нет, сообщить заказчику. После конвертации убрать `.otf` из корня (не коммитить исходник в корень).
   - `assets/src/scss/_fonts.scss`: `@font-face` Grunt Grotesk 700 из `@/fonts/GruntGrotesk-Bold.woff2` (`font-display: swap`); добавить `<link rel="preload">` для шрифта, если так уже сделано для Fixel.
   - `assets/src/scss/_tokens.scss`: `--font-heading: 'Grunt Grotesk', var(--font-main), sans-serif`; `--c-secondary: #f4f3f2`; `--c-card-hover: #edf6f8`; `--c-icon: #aebbc4`; `--c-tag: #218ed6`; `--c-banner: #144166`. Удалить мёртвые токены `--font-heading` (Roboto Condensed) / `--font-body` (IBM Plex), чтобы не было конфликта имён.
@@ -56,14 +56,14 @@ Created: 2026-11-11
   - Логирование: не требуется (только CSS и разовая конвертация).
   - Files: `_fonts.scss`, `_tokens.scss`, `_base.scss`, `components/_buttons.scss`, `static/fonts/GruntGrotesk-Bold.woff2`.
 
-- [ ] **Task 2: Расстояние между секциями (п.12)**
+- [x] **Task 2: Расстояние между секциями (п.12)**
   - Ввести `--section-gap` (mobile — по фрейму `3025:225`, ≈50px; desktop 70px) в `_tokens.scss`.
   - `_base.scss:48-67`: заменить 90px-полосу `section:not(...)::after` на `--section-gap` (сохранить border-top линии сетки, как в макете).
   - Учесть mobile-заметку «додати відстань між секціями» (`3178:3491`).
   - Сверить итоговые Y-позиции секций с макетом 1440 (557, 815, 2295, 3300, 4127, 4858, 5646).
   - Files: `_tokens.scss`, `_base.scss`, при необходимости `template-parts/blocks/section-*.scss` с хардкодом отступов.
 
-- [ ] **Task 3: Хедер — новый вид + smart header (п.9, 15)**
+- [x] **Task 3: Хедер — новый вид + smart header (п.9, 15)**
   - Разметка/стили по `3287:1415` (инстанс `2963:4`): высота 57px desktop, контейнер 1350 с боковыми линиями, padding 8px 35px; лого Grunt 20px `#092a4a`; меню Fixel 14px, letter-spacing .7px, gap 40px; CTA «Форма зв'язку» `button--primary button--sm` 15px, padding 10/14. Mobile — `3180:3733` (46px, burger 34×26).
   - `_header.scss:30`: убрать `position: sticky`; новая модель — `position: fixed` + `padding-top` на `body`/`.site` = `--header-h`, состояния `.is-hidden` (translateY(-100%)) и `.is-scrolled`, `transition: transform .3s`; `prefers-reduced-motion` — без анимации.
   - Новый `assets/src/js/components/smartHeader.js` (подключить в `main.js`): слушает `window.lenis.on('scroll')` (fallback — `scroll` с rAF), порог 8px, у верха страницы всегда показан, не прятать при открытом мобильном меню (`.nav.is-open`) и открытой контакт-панели (`body.is-drawer-open`).

@@ -162,7 +162,7 @@
 
   @include breakpoint(tablet) {
     position: sticky;
-    bottom: -90px;
+    bottom: calc(-1 * var(--section-gap));
   }
 
   // Mixed with .container.

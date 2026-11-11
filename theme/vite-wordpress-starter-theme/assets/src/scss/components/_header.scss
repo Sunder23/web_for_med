@@ -4,40 +4,49 @@
 // background and the grid pattern color tied to this single value.
 $nav-mobile-bg: #F4F6F8;
 
+// Text logo (Figma 2953:17 / 3180:3736): Grunt Grotesk, tracking -3%.
 .logo {
-    font-family: var(--f-logo);
-    font-size: 22px;
+    display: inline-block;
+    padding: 4px 0;
+    font-family: var(--f-heading);
+    font-size: 18px;
     font-weight: 700;
+    line-height: 1;
     color: var(--c-dark-blue);
     letter-spacing: -0.03em;
     text-transform: lowercase;
     white-space: nowrap;
     flex-shrink: 0;
 
-    &--sm {
-        font-size: 18px;
+    @include breakpoint(tablet) {
+        font-size: 20px;
     }
 
-    &__image {
-        width: 116px;
-
-        @include breakpoint(mobile) {
-            width: auto;
-        }
+    &:hover,
+    &:focus {
+        color: var(--c-dark-blue);
     }
 }
 
+// Smart header: fixed, hidden while scrolling down, shown on scroll up
+// (smartHeader.js toggles .is-hidden). `.site` reserves its height in _base.scss.
 .header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: var(--wp-admin--admin-bar--height, 0px);
+    left: 0;
+    right: 0;
     z-index: 200;
     background: var(--c-bg);
     border-bottom: var(--border);
     height: var(--header-h);
+    transition: transform 0.3s ease, background-color 0.3s ease;
 
-    @include breakpoint(mobile) {
-        height: auto;
-        min-height: var(--header-h);
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+
+    &.is-hidden {
+        transform: translateY(-100%);
     }
 
     &:has(+ .nav.is-open) {
@@ -64,16 +73,21 @@ $nav-mobile-bg: #F4F6F8;
         @include breakpoint(tablet) {
             justify-content: normal;
             gap: 32px;
-            padding: 12px 35px;
+            padding: 8px 35px;
         }
     }
 
+    // Figma 2953:23: 15px Medium, 10/14 padding.
     &__cta {
         display: none;
         flex-shrink: 0;
 
         @include breakpoint(mobile) {
             display: inline-flex;
+            padding: 10px 14px;
+            font-size: 15px;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
         }
     }
 }
@@ -88,9 +102,11 @@ $nav-mobile-bg: #F4F6F8;
     flex-wrap: wrap;
 }
 
+// Desktop bar link (Figma 2953:18): Fixel Regular 14px, tracking 0.7px.
 .nav__link {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
     color: var(--c-grey);
     white-space: nowrap;
     transition: color 0.2s;
@@ -120,6 +136,7 @@ $nav-mobile-bg: #F4F6F8;
 
     .nav__menu {
         gap: 24px;
+        flex-wrap: nowrap;
 
         @include breakpoint(tablet) {
             gap: 40px;
@@ -251,6 +268,7 @@ $nav-mobile-bg: #F4F6F8;
     .nav__link {
         font-size: 24px;
         font-weight: 500;
+        letter-spacing: normal;
         display: block;
         color: var(--c-grey);
         white-space: normal;
@@ -487,17 +505,19 @@ $nav-mobile-bg: #F4F6F8;
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
-    padding: 2px;
+    padding: 5px;
     background: none;
     border: none;
     flex-shrink: 0;
     cursor: pointer;
     width: 34px;
+    height: 26px;
 
     @include breakpoint(mobile) {
         display: none;
     }
 
+    // Figma 3180:3737: three equal 24px lines.
     &__line {
         display: block;
         height: 2px;
@@ -505,14 +525,6 @@ $nav-mobile-bg: #F4F6F8;
         border-radius: 2px;
         width: 24px;
         transition: transform 0.3s, opacity 0.3s, width 0.3s;
-
-        &:nth-child(2) {
-            margin-left: 4px;
-        }
-
-        &:nth-child(3) {
-            margin-left: 7px;
-        }
     }
 
     &.is-open {
@@ -520,8 +532,6 @@ $nav-mobile-bg: #F4F6F8;
     }
 
     &.is-open &__line {
-        margin-left: 0;
-
         &:nth-child(1) {
             width: 24px;
             transform: translateY(7px) rotate(45deg);

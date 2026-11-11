@@ -25,6 +25,20 @@ body {
     overflow-x: hidden;
 }
 
+// Headings use Grunt Grotesk (one Bold face). Text blocks that must stay in
+// Fixel (e.g. the 03 banner) set `font-family: var(--f-main)` themselves.
+h1,
+h2,
+.section-title {
+    font-family: var(--f-heading);
+    font-weight: 700;
+}
+
+// The header is fixed (smart header) — reserve its height above the content.
+.site {
+    padding-top: var(--header-h);
+}
+
 img {
     display: block;
     max-width: 100%;
@@ -43,8 +57,9 @@ ol {
     list-style: none;
 }
 
-// Sections overlap their top border on mobile; from the mobile breakpoint up
-// every section except the full-bleed ones closes with a 90px divider strip.
+// Sections overlap their top border on mobile. Every section except the
+// full-bleed / joined ones closes with a `--section-gap` divider strip
+// (50px on phones, 70px from tablet — Figma 3025:225 / 3061:1443).
 section {
     position: relative;
     display: flex;
@@ -56,13 +71,11 @@ section {
     }
 
     &:not(.hero, .quote, .banner, .process--top)::after {
-        @include breakpoint(mobile) {
-            content: '';
-            width: 100%;
-            height: 90px;
-            background-color: var(--c-bg);
-            border-top: var(--border);
-        }
+        content: '';
+        width: 100%;
+        height: var(--section-gap);
+        background-color: var(--c-bg);
+        border-top: var(--border);
     }
 }
 
