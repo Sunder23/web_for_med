@@ -1,47 +1,26 @@
 # Research
 
-Updated: 2026-08-03 23:15
+Updated: 2026-10-08 18:38
 Status: active
 
 ## Active Summary (input for /aif-plan)
 
 <!-- aif:active-summary:start -->
-Topic: Port ref design (`ref/html_ready_pages/`) onto CPT single/archive templates — services, directions, cases, blog post
-Goal: Make single-services.php, single-directions.php, single-cases.php, single.php (and confirm archive-*.php) visually match the 5 bundled reference mockups. Existing post content must be reorganized (not just restyled) into new structured ACF fields.
-
-Reference source format:
-- `ref/html_ready_pages/*.html` are Dyad/Zed bundler exports — real markup is JSON-encoded inside `<script type="__bundler/template">`, and a React design-system bundle (components: ArchiveCard, CaseMetric, InfoCard, NumberedItem, ServiceCard, Button, SectionTitle, Tag, FaqAccordion, IconListItem, Breadcrumbs, Pagination) lives gzip+base64 inside `<script type="__bundler/manifest">`.
-- Decode recipe (Node): regex-extract the `__bundler/template` script body, `JSON.parse()` it → real HTML. For manifest resources: base64-decode `entry.data`, gzip-inflate if `entry.compressed`. Small design-system JS resource is the one referenced via plain (non-babel) `<script src>` (~14KB after decompression); large ones (~35KB/300KB/880KB) are React/ReactDOM/Babel-standalone, skip those.
-- Design tokens (`--color-brand-*`, `--font-main: 'Fixel Display'`, `--border-default`, spacing scale) are ALREADY copied 1:1 into `assets/src/scss/abstracts/_variables.scss`.
-- Mapping: 01-service.html→single-services.php, 02-direction.html→single-directions.php, 03-case.html→single-cases.php, 04-blog-list.html→home.php (blog listing, already done — not in original file list), 05-blog-post.html→single.php.
-
-Current state per template (verified via code read + live DB query + live screenshot, docker containers `web_for_med-wordpress-1`/`web_for_med-db-1`, DB `wordpress_wfmed`/`wordpress_wfmed`):
-
-1. **single-services.php** — PHP/SCSS already implements BOTH a rich "linear" layout (matches 01-service.html: audience cards, triggers checklist, numbered included/process steps, stage cards, examples grid, formats pricing tiers, FAQ accordion) AND a plain "two-column" fallback (content-section prose + sidebar bullets). Gap is 100% DATA, not code: queried `wp_postmeta` for all 4 published services posts — none have `service_layout=linear` or populated `service_audience`/`service_triggers`/`service_included`/`service_stages`/`service_strategy`/`service_examples`/`service_formats`. All are on the old `service_sections` (generic title+wysiwyg repeater) shape; one explicitly has `service_layout=two-column`. This is why the live page (screens/localhost_8080_services_analytics_.png) renders the plain fallback instead of the target design (screens/..._01-service.html.png).
-
-2. **single-directions.php** — structurally close to 02-direction.html (2-col grid: content 2fr + sticky sidebar 1fr) but: (a) ref's left column has 3 distinct structured blocks — numbered-steps list, a 2-col InfoCard grid (with tag), another numbered-steps list — while current ACF `direction_sections` (group_41eea81b.json) is a flat repeater of {title, wysiwyg} rendered as generic prose; (b) ref sidebar uses IconListItem (checkmark rows, sticky `position:sticky; top:90px`), current sidebar (`direction_sidebar_who`/`direction_sidebar_needs`) renders plain `<li>` bullets, not sticky. All 7 published directions posts confirmed on the old flat `direction_sections` shape (queried DB).
-
-3. **single-cases.php** — structurally close to 03-case.html (facts as 4-col stat grid, results as CaseMetric 4-col grid — these already match well) but ref splits the narrative into "Виклик" (single prose block, italic-style challenge statement) + "Хід роботи" (numbered ordered-list of process steps), while current `case_sections` is a flat generic title+wysiwyg repeater with no numbered-list treatment. All 4 published cases posts confirmed on old flat shape.
-
-4. **single.php** (blog post, target 05-blog-post.html) — biggest gap. Ref is a narrow single-column article (max-width 820px centered, NO sidebar): Breadcrumbs → Tag(category)+date row → H1 → bold lead paragraph → H2 sections (some on `--surface-alt` grey bg) → navy CTA section (matches existing `template-parts/cpt-cta.php` pattern). Current single.php instead renders `template-parts/content-with-toc.php`, a WIDE 2-column layout with a sticky TOC sidebar (`custom_theme_get_toc()`, `_toc.scss`) — wrong shape entirely, not a styling tweak. `content-with-toc.php` is used ONLY by single.php now (grep-confirmed) — safe to delete entirely once single.php is rebuilt.
-
-5. **archive-cases.php / archive-directions.php / archive-services.php / home.php** — all share `template-parts/archive-cpt.php`, already using an ArchiveCard-style hover-card grid (2-col, title+excerpt+"Детальніше →") matching 04-blog-list.html's pattern (home.php already has category filter pills + this pattern, done in a prior session). Live-screenshotted `http://localhost:8080/cases/` via chrome devtools MCP — visually confirmed matching. No changes needed here.
-
-Decisions (confirmed with user):
-- Content strategy: AI restructures the EXISTING text of all 15 published posts (4 services + 7 directions + 4 cases) into the new structured field shapes, preserving meaning/facts — not asking the user to manually re-enter everything, and not just building empty schema.
-- Extend ACF schema for directions and cases to get services-level flexibility: directions needs typed sections (prose vs numbered-steps vs card-grid) analogous to service_audience/triggers/stages; cases needs the sections repeater split into a dedicated Challenge field + a numbered-Process field (mirroring "Виклик"/"Хід роботи").
-- Blog post comments count ("6 коментарів" in ref) — drop entirely, not wiring real WP comments.
-- `content-with-toc.php` + `custom_theme_get_toc()` + `_toc.scss` — delete as dead code once single.php no longer uses them (nothing else references TOC).
-- Archives (archive-cases/directions/services.php + home.php) — confirmed sufficient as-is, out of scope for the upcoming plan.
-
-Open questions: none blocking — ready to plan. Still to decide during /aif-plan: exact new ACF field names/shapes for directions (typed sections) and cases (Challenge/Process split); whether services' existing `service_layout` field should just be forced to always resolve to "linear" going forward (dropping two-column) or kept as an option.
-
-Success signals:
-- All published services/directions/cases posts render the rich card/grid design matching their ref mockup with no visible fallback-to-plain-prose sections.
-- single.php matches 05-blog-post.html's narrow single-column layout with tag+date meta, no comment count, no TOC sidebar.
-- `content-with-toc.php`, `custom_theme_get_toc()`, TOC SCSS removed with no remaining references.
-
-Next step: /aif-plan full "Port ref/html_ready_pages design onto single-services/directions/cases/single.php: extend ACF schema for directions+cases, AI-restructure existing post content into new structured fields, rebuild single.php as narrow blog-article layout, remove dead TOC code"
+Topic: ChatGPT prompts for cover images (featured images) of posts, services, directions, cases
+Goal: Generate a consistent series of 17 cover images in the web4med hero style (`screens/image copy 3.png`) via ChatGPT image generation, then attach them as Featured Image per post ID.
+Constraints:
+- Style: blue monochrome (#0A1F44 / #13407F / #1F5FA8 + cyan glow #7FD3FF), semi-realistic painterly illustration, holographic dashboards, NO text/logos/numbers.
+- Format 3:2 (1536x1024), negative space on the left third (theme has no `add_image_size` / fixed `aspect-ratio` — cards may crop).
+- Sensitive topics (addiction: 273, 285): no substances, no people in distress.
+- Real brands in cases (Lviv Medical Center, Compliment): no logos; better to composite a real site screenshot into the mockup later.
+Decisions:
+- One master style prompt + one short "Scene:" prompt per post (full texts in Session 2026-10-08 18:38).
+- Visual language per type: services = specialist + service-specific hologram; directions = clinic interior of that profile + digital layer; cases = device mockups with abstract site; posts = conceptual metaphor.
+- Workflow: new ChatGPT chat → send master prompt → one Scene per message → name files by post ID (264.png…) → if style drifts send "Keep exactly the same style…"; after ~8–10 images start a new chat with master prompt + one good image as style reference.
+Open questions: final card crop ratio (3:2 vs 16:9); whether to replace AI case covers with real site screenshots.
+Success signals: 17 covers in one consistent style, no text artifacts, uploaded as Featured Images to the matching post IDs.
+Next step: generate images in ChatGPT; optionally a WP-CLI script in `scripts/` to attach `{ID}.png` as featured images.
+(Previous summary — ref/html_ready_pages port onto single templates — was implemented and merged in 1bfc42c; details remain in Session 2026-08-03 23:15.)
 <!-- aif:active-summary:end -->
 
 ## Sessions
@@ -87,4 +66,69 @@ Links (paths):
 - theme/vite-wordpress-starter-theme/acf-json/group_9033ee91.json (Service Page), group_41eea81b.json (Direction Page), group_6ba8f99a.json (Case Page)
 - theme/vite-wordpress-starter-theme/assets/src/scss/pages/_service.scss, _cpt-common.scss, _archive.scss, _single-post.scss
 - screens/localhost_8080_services_analytics_.png (current live render), screens/..._01-service.html.png (target)
+### 2026-10-08 18:38 — Cover image prompts for ChatGPT
+
+What changed:
+- Pulled published titles from DB (`wp_posts`, need `--default-character-set=utf8mb4` for Cyrillic): 3 posts, 4 services, 7 directions, 3 cases.
+- Read style from hero screenshot `screens/image copy 3.png` (blue monochrome, glowing holographic dashboards, operator at monitors).
+- Wrote master style prompt + 17 scene prompts; agreed workflow for feeding them to ChatGPT.
+
+Key notes:
+
+**Master prompt (send once, first message):**
+```
+You are generating a consistent series of cover images for a Ukrainian digital-marketing agency
+that builds websites, SEO, Google Ads and analytics for private medical clinics (brand "web4med").
+
+STYLE — apply to EVERY image in this chat:
+- Semi-realistic digital illustration with a soft painterly finish, cinematic, calm, professional.
+- Strict blue monochrome palette: deep navy #0A1F44, cobalt #13407F, royal blue #1F5FA8,
+  highlights in light sky-blue/cyan #7FD3FF with a soft glow. No warm colors, no red, no green.
+- Recurring motif: glowing holographic UI panels, line charts trending up, thin connecting lines
+  with light dots, subtle geometric grid / window frames in the background.
+- Evening or dim interior lighting, light coming mostly from screens and holograms.
+- Clean composition, one clear focal point, generous negative space on the left third
+  (covers may be cropped for cards).
+- Landscape 3:2 format (1536x1024).
+- People: adults, seen from behind or in three-quarter view, faces not in focus, no patients
+  in distress.
+- ABSOLUTELY NO readable text, letters, numbers, logos, watermarks or brand marks anywhere —
+  UI elements must be abstract shapes, bars and icons only.
+- No blood, syringes, pills close-ups, surgical gore or anything frightening.
+
+Confirm you understand, then wait for my scene descriptions. For each one, generate one image.
+```
+
+**Scenes (one per message):**
+
+services
+- 264 Розробка сайтів для медичних закладів та приватних практик — `Scene: a web designer at a wide desk assembling a clinic website — floating holographic wireframe blocks (header, cards, booking form shapes) snapping together in mid-air in front of large monitors, a soft glowing cursor path connecting the blocks.`
+- 265 SEO для медичних сайтів та клінік — `Scene: a specialist in front of a giant translucent search-results-like panel made of abstract bars; one bar glows brighter and rises to the top, a magnifying-glass hologram and an upward line chart beside it, network nodes linking to a small glowing medical cross icon.`
+- 266 Контекстна реклама для медичних закладів (Google Ads) — `Scene: a marketer controlling a holographic campaign dashboard — abstract ad cards fanning out, a glowing target/bullseye icon, funnels of light particles flowing from the cards into a single clinic building silhouette. Dynamic, focused mood.`
+- 267 Аналітика та моніторинг: бачити не трафік, а пацієнтів — `Scene: a dark control room with a big holographic dashboard; anonymous crowd of tiny light dots (traffic) filters through a glowing funnel and turns into a few distinct human silhouettes walking toward a clinic door. Metaphor: from traffic to real patients.`
+
+directions
+- 268 Приватні кабінети: лікар, масаж, остеопатія — `Scene: a cozy small private practice room with a massage/treatment table and a desk, warm-but-blue dim light; a compact floating holographic panel shows an online booking calendar shape and a phone icon with a gentle notification glow. Intimate, personal, trustworthy.`
+- 269 Реабілітаційні центри та санаторії — `Scene: a calm rehabilitation hall with large windows overlooking pine trees at dusk, parallel bars and a lounge area; translucent holographic cards float near the window showing abstract room cards and a heart/trust icon. Serene, spacious, hopeful.`
+- 270 Багатопрофільні клініки: фокус замість хаосу — `Scene: a modern multi-department clinic lobby; many scattered small holographic icons (tooth, heart, eye, bone, brain) on one side are being organized by light lines into a neat, structured grid on the other side. Metaphor: chaos to order.`
+- 271 Репродуктологія — `Scene: a quiet, refined reproductive-medicine consultation room; a delicate glowing hologram of a stylized cell/embryo shape made of light dots floats above the desk, surrounded by soft analytics curves. Tender, careful, high-trust mood, nothing clinical or graphic.`
+- 272 Естетична медицина: утримувати клієнтів надовго — `Scene: an elegant aesthetic-medicine studio with a cosmetology chair, mirror and soft rim-lighting; a looping circular holographic ring of light around the scene with small returning-client icons along it. Metaphor: loyalty and retention. Premium, minimal.`
+- 273 Центри лікування залежностей — `Scene: a calm, welcoming counseling room at dawn, two empty armchairs facing each other, first sunlight (still in blue tones) entering through a window; a discreet holographic panel with a gently rising line and a shield/privacy icon. Mood: confidentiality, support, hope. No substances, no bottles, no distressed people.`
+- 274 Стоматологія: сайт + реклама + аналітика — `Scene: a modern dental cabinet with a dental chair and overhead lamp; three linked holographic panels float above it — website layout, ad card with target icon, analytics chart — connected by glowing lines into one system, a stylized tooth icon at the center.`
+
+cases
+- 275 Клініка репродуктивної медицини: переробка сайту на WordPress — `Scene: a large monitor and laptop on a desk showing an abstract, clean clinic website (blocks and soft imagery shapes, no text); behind them a holographic "before/after" transition — messy fragmented panels on the left morphing into an orderly layout on the right, an upward growth chart for inquiries.`
+- 276 Редизайн головної Lviv Medical Center — `Scene: a laptop showing an abstract redesigned homepage hero (big image block, buttons as shapes), placed on a desk with a softly blurred view of an old European city at dusk through the window (Lviv-like rooftops and spires, generic, no recognizable landmarks text). Holographic layout grid floating above the screen. No logos.`
+- 277 Compliment: редизайн сайту естетичного центру — `Scene: a tablet and smartphone on a marble surface in an aesthetic clinic, both showing an abstract elegant website layout; soft holographic color-swatch circles (only blue shades) and layout blocks float around them. Premium, airy, refined. No logos or brand names.`
+
+posts
+- 278 SEO без ілюзій: позиції ≠ прибуток — `Scene: conceptual — a tall glowing podium/ranking ladder with a bright "number one" shape at the top, but its light reflection on the floor reveals a nearly empty wallet/coin stack shape; next to it a smaller ladder leads to a real clinic door with people. Metaphor: rankings are not revenue.`
+- 283 Соцмережі й месенджери є. Навіщо лікарю сайт — `Scene: a doctor in a white coat seen from behind, holding a smartphone with floating abstract chat bubbles and social-like cards drifting away; in front of them a solid, glowing website "house" made of layout blocks stands on a stable foundation. Metaphor: rented space vs own home.`
+- 285 Особливість просування закладів лікування залежностей — `Scene: conceptual — a winding path of light across a dark landscape leading to a softly lit building on a hill; along the path, discreet holographic signposts (shield, lock, heart icons). Mood: careful, ethical, confidential promotion. No people in distress, no substances.`
+
+**Style drift fix:** `Keep exactly the same style, palette and rendering as the first image. No text.`
+
+Links (paths):
+- screens/image copy 3.png (style reference — hero)
+- wp_posts (post / services / directions / cases, post_status=publish)
 <!-- aif:sessions:end -->
