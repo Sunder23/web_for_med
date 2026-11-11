@@ -107,7 +107,7 @@ Created: 2026-11-11
   - Запуск: `MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php"` → затем `… apply`.
   - Files: `scripts/update-about-page.php`, `scripts/data/about/*`, при необходимости цель `update-about` в `Makefile`.
 
-- [ ] **Task 7: Документация** (depends on 1–6)
+- [x] **Task 7: Документация** (depends on 1–6)
   - `docs/page-sections.md`: таблица секций — новый подраздел «About page» (`about-intro`, `team` + `teamHoverLabel`, `owner-cta`), правило ритма (без полосы между ними, 40px перед футером), `button--outline`, раздел про `scripts/update-about-page.php`.
   - `AGENTS.md`: `scripts/` — добавить `update-about-page.php (+ data/about/)`; `assets/src/js/components/` — `teamHoverLabel`.
   - Через `/aif-docs` (docs checkpoint).

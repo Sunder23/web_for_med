@@ -19,7 +19,7 @@ wp-boilerplate/
 ├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
 ├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/)
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/)
 ├── theme/vite-wordpress-starter-theme/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
@@ -39,7 +39,7 @@ wp-boilerplate/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
 │   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php, cases-archive.php, case-single.php, case-nav.php)
 │   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
-│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, contactDrawer, …), template-parts/blocks/
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, contactDrawer, teamHoverLabel, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
 │   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons)
@@ -67,7 +67,7 @@ wp-boilerplate/
 |----------|------|-------------|
 | README | README.md | Project landing page |
 | Getting Started | docs/getting-started.md | Environment, commands, asset modes |
-| Page Sections | docs/page-sections.md | `acf/section-*` blocks and migration |
+| Page Sections | docs/page-sections.md | `acf/section-*` blocks (front and about pages) and content scripts |
 | Single Pages | docs/single-pages.md | Article layout for CPT and blog singles, single case layout |
 | AI Context | .ai-factory/DESCRIPTION.md | Project specification and tech stack |
 | Architecture | .ai-factory/ARCHITECTURE.md | Layers, module layout, asset pipeline |
