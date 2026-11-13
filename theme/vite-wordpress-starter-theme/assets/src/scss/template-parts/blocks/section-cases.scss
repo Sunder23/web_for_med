@@ -178,7 +178,8 @@
   display: flex;
   flex-direction: column;
 
-  // Link to the case.
+  // Link to the case (`<a>`), or a plain `<div>` while case links are off
+  // in Theme Options → Cases.
   &__inner {
     display: block;
     border-right: var(--border);
@@ -197,7 +198,7 @@
     transition: color 0.3s ease-in-out;
   }
 
-  &__inner:hover &__title {
+  &__inner[href]:hover &__title {
     color: var(--c-blue);
   }
 

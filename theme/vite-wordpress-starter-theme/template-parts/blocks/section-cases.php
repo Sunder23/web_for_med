@@ -25,6 +25,9 @@ if ( ! $case_ids ) {
 	);
 }
 
+// Cards link to the case only when Theme Options → Cases → "Посилання на кейси" is on.
+$cases_linked = (bool) starter_get_option( 'cases_links_enabled' );
+
 // Card text: "Що зроблено" (case_done), falling back to the hero subtitle.
 $items = array();
 foreach ( $case_ids as $case_id ) {
@@ -38,7 +41,7 @@ foreach ( $case_ids as $case_id ) {
 	}
 	$items[] = array(
 		'title' => get_the_title( $case_id ),
-		'url'   => get_permalink( $case_id ),
+		'url'   => $cases_linked ? (string) get_permalink( $case_id ) : '',
 		'text'  => $case_text,
 	);
 }
@@ -88,7 +91,11 @@ if ( ! $items ) {
 					}
 					?>
 					<div class="cases-slide swiper-slide">
-						<a class="cases-slide__inner" href="<?php echo esc_url( $item['url'] ); ?>">
+						<?php if ( $cases_linked ) : ?>
+							<a class="cases-slide__inner" href="<?php echo esc_url( $item['url'] ); ?>">
+						<?php else : ?>
+							<div class="cases-slide__inner">
+						<?php endif; ?>
 							<div class="cases-slide__desc">
 								<h3 class="cases-slide__title"><?php echo esc_html( $item['title'] ); ?></h3>
 							</div>
@@ -101,7 +108,11 @@ if ( ! $items ) {
 									</div>
 								<?php endif; ?>
 							</div>
-						</a>
+						<?php if ( $cases_linked ) : ?>
+							</a>
+						<?php else : ?>
+							</div>
+						<?php endif; ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
