@@ -1,12 +1,27 @@
 @use "../../mixins/breakpoint" as *;
 
 // Problems + banner + solutions scroll as one block (Figma 3287:1416).
-// From tablet up the problems row sticks to the top of the viewport while the
-// banner and the solutions row slide over it; the wrapper ends with solutions,
-// so problems unpins exactly behind them. Phones keep a plain stacked flow.
+// "Curtain" reveal from tablet up (viewport ≥ 600px tall), as before 7303610:
+// the screen-tall problems row is pulled up under the quote (negative margin)
+// and pinned at the top, so the scrolling quote uncovers it in place. The
+// banner starts one screen lower (spacer on __inner), then banner and
+// solutions slide over the pinned row; the wrapper ends with solutions, so
+// problems unpins exactly behind them. Sections above (hero, clinics, quote)
+// are opaque and stacked higher, hiding the row until the quote leaves.
+// Phones and short viewports keep a plain stacked flow.
 // The smart header hides on scroll down, hence `top: 0`.
 .problems-solutions {
+  --problems-h: max(574px, 100svh);
+
   position: relative;
+
+  &__inner {
+    @include breakpoint(tablet) {
+      @media (min-height: 600px) {
+        margin-top: var(--problems-h);
+      }
+    }
+  }
 }
 
 /* ============================================================
@@ -21,6 +36,7 @@
     @media (min-height: 600px) {
       position: sticky;
       top: 0;
+      margin-top: calc(-1 * var(--problems-h));
     }
   }
 
@@ -33,12 +49,22 @@
     }
   }
 
+  // From tablet up the cards share one row grid (tag / title / text) via
+  // subgrid, so titles and texts line up whatever the text length.
   &__inner {
     display: flex;
     flex-direction: column;
 
     @include breakpoint(tablet) {
-      flex-direction: row;
+      display: grid;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+      grid-template-rows: 1fr auto auto;
+      height: 420px;
+
+      @media (min-height: 600px) {
+        height: var(--problems-h);
+      }
     }
   }
 }
@@ -56,7 +82,10 @@
   }
 
   @include breakpoint(tablet) {
-    height: 420px;
+    display: grid;
+    grid-row: 1 / -1;
+    grid-template-rows: subgrid;
+    gap: 0;
     padding: 48px 40px;
     border-bottom: 0;
   }
@@ -76,8 +105,17 @@
     font-size: 12px;
 
     @include breakpoint(mobile) {
-      padding: 8px 0;
+      padding: 4px 0;
       font-size: 13px;
+    }
+
+    // Sits at the bottom of the 1fr row, above the title (like the
+    // solution icons).
+    @include breakpoint(tablet) {
+      grid-row: 1;
+      align-self: end;
+      justify-self: start;
+      margin-bottom: 138px;
     }
   }
 
@@ -87,6 +125,11 @@
     @include breakpoint(mobile) {
       gap: 16px;
     }
+
+    // Title and text become subgrid items of the card.
+    @include breakpoint(tablet) {
+      display: contents;
+    }
   }
 
   // Mixed with .card-title (20/1.2).
@@ -95,6 +138,10 @@
 
     @include breakpoint(mobile) {
       font-size: 20px;
+    }
+
+    @include breakpoint(tablet) {
+      grid-row: 2;
     }
   }
 
@@ -106,6 +153,11 @@
     @include breakpoint(mobile) {
       font-weight: 500;
       line-height: 1.55;
+    }
+
+    @include breakpoint(tablet) {
+      grid-row: 3;
+      margin-top: 16px;
     }
   }
 }
@@ -159,11 +211,23 @@
 /* ============================================================
    SOLUTIONS (03_4) — no background fill since the redesign (п.3);
    the page colour keeps the layer opaque over the sticky problems.
+   From tablet up the row is viewport-tall again (580px floor), fully
+   covering the pinned problems row.
    ============================================================ */
+// Sticks to the bottom (as before 7303610): the screen-tall row rides up
+// hidden behind the banner, stops once it fills the viewport, and the banner
+// slides off it. `bottom` skips the section-gap spacer (section::after).
 .solutions {
   position: relative;
   z-index: 3;
   background: var(--c-bg);
+
+  @include breakpoint(tablet) {
+    @media (min-height: 600px) {
+      position: sticky;
+      bottom: calc(-1 * var(--section-gap));
+    }
+  }
 
   // Mixed with .container.
   &__wrap {
@@ -174,12 +238,18 @@
     }
   }
 
+  // Same subgrid rows as problems: icon (fills) / title / text.
   &__inner {
     display: flex;
     flex-direction: column;
 
     @include breakpoint(tablet) {
-      flex-direction: row;
+      display: grid;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+      grid-template-rows: 1fr auto auto;
+      min-height: max(580px, 100vh);
+      min-height: max(580px, 100svh);
     }
   }
 }
@@ -196,8 +266,10 @@
   }
 
   @include breakpoint(tablet) {
-    gap: 37px;
-    height: 420px;
+    display: grid;
+    grid-row: 1 / -1;
+    grid-template-rows: subgrid;
+    gap: 0;
     padding: 48px 40px;
     border-bottom: 0;
   }
@@ -210,13 +282,16 @@
     }
   }
 
-  // Icon area fills the card so the text sits at the bottom (Figma "Image Area").
+  // Icon sits at the bottom of the 1fr row, right above the title, so the
+  // whole card content hugs the bottom (as before 7303610).
   &__media {
     display: flex;
     align-items: flex-start;
 
     @include breakpoint(tablet) {
-      flex: 1 0 0;
+      grid-row: 1;
+      align-self: end;
+      margin-bottom: 138px;
     }
   }
 
@@ -233,6 +308,11 @@
     @include breakpoint(mobile) {
       gap: 16px;
     }
+
+    // Title and text become subgrid items of the card.
+    @include breakpoint(tablet) {
+      display: contents;
+    }
   }
 
   // Mixed with .card-title (20/1.2).
@@ -241,6 +321,10 @@
 
     @include breakpoint(mobile) {
       font-size: 20px;
+    }
+
+    @include breakpoint(tablet) {
+      grid-row: 2;
     }
   }
 
@@ -252,6 +336,11 @@
     @include breakpoint(mobile) {
       font-weight: 500;
       line-height: 1.55;
+    }
+
+    @include breakpoint(tablet) {
+      grid-row: 3;
+      margin-top: 16px;
     }
   }
 }

@@ -24,11 +24,17 @@
 
 	// Scroll effects (fixed / sticky layers) overlap neighbouring sections in
 	// the canvas and make their fields unreachable: lay everything out in flow.
-	// .problems: sticky from the tablet breakpoint up.
+	// .problems: sticky from the tablet breakpoint up, pulled under the quote
+	// with a negative margin and followed by a one-screen spacer (curtain).
 	.problems {
 		position: relative;
 		inset: auto;
 		z-index: auto;
+		margin-top: 0;
+	}
+
+	.problems-solutions__inner {
+		margin-top: 0;
 	}
 
 	// Cursor-following labels need teamHoverLabel.js, which is front-end only.
