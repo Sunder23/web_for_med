@@ -44,12 +44,19 @@ services:
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
       WORDPRESS_DEBUG: 1
+      # CF_TURNSTILE_* are Cloudflare's public test keys (always pass) for Simple
+      # Cloudflare Turnstile — local only: constants are never stored in the DB, so a
+      # migrated dump doesn't carry test keys to production, where the real keys are
+      # entered in the plugin settings (docs/getting-started.md). The wpcli service
+      # doesn't get them, so the plugin sleeps in WP-CLI.
       WORDPRESS_CONFIG_EXTRA: |
         define('WP_ENVIRONMENT_TYPE', 'local');
         define('WP_DEBUG_LOG', true);
         define('WP_DEBUG_DISPLAY', false);
         define('SCRIPT_DEBUG', true);
         define('DISALLOW_FILE_EDIT', true);
+        define('CF_TURNSTILE_SITE_KEY', '1x00000000000000000000AA');
+        define('CF_TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA');
         define('WP_HOME', 'http://localhost:${WP_PORT}');
         define('WP_SITEURL', 'http://localhost:${WP_PORT}');
     volumes:
@@ -92,6 +99,10 @@ services:
       - ../scripts:/scripts
       - ../ref/images:/import-images:ro
     environment:
+      # WORDPRESS_CONFIG_EXTRA (defined on the wordpress service) is not set here,
+      # so without this wp_get_environment_type() is 'production' in WP-CLI; core
+      # reads this env var directly.
+      WP_ENVIRONMENT_TYPE: local
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}

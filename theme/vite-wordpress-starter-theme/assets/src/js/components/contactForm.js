@@ -253,6 +253,33 @@ function addRetryNote(form) {
 	note.after(retryNote);
 }
 
+// Simple Cloudflare Turnstile reports a failed or missing token as an invalid
+// `cf-turnstile` field, which has no input of its own, and CF7's response output
+// is hidden — so the message goes above the submit button. The plugin refreshes
+// the token by itself after every submit.
+const CAPTCHA_FIELD = 'cf-turnstile';
+const CAPTCHA_MESSAGE =
+	'Підтвердіть, що ви не робот, і надішліть форму ще раз.';
+
+function setCaptchaError(form, visible) {
+	const submit = form.querySelector('.contact-form__submit');
+	let errorEl = submit?.querySelector('.contact-form__error');
+	if (!visible) {
+		if (errorEl) errorEl.hidden = true;
+		return;
+	}
+	if (!submit) return;
+	if (!errorEl) {
+		errorEl = document.createElement('p');
+		errorEl.className = 'contact-form__error';
+		errorEl.setAttribute('role', 'alert');
+		submit.querySelector('.contact-form__button')?.before(errorEl);
+	}
+	errorEl.textContent = CAPTCHA_MESSAGE;
+	errorEl.hidden = false;
+	logDebug('[contactForm] captcha rejected');
+}
+
 function initForm(form) {
 	const nameInput = form.querySelector('[name="your-name"]');
 	const contactInput = form.querySelector('[name="your-contact"]');
@@ -352,14 +379,19 @@ function initForm(form) {
 
 	const wrap = form.closest('.wpcf7');
 
-	wrap?.addEventListener('wpcf7beforesubmit', () =>
-		setSubmitState(form, 'loading'),
-	);
+	wrap?.addEventListener('wpcf7beforesubmit', () => {
+		setCaptchaError(form, false);
+		setSubmitState(form, 'loading');
+	});
 
 	wrap?.addEventListener('wpcf7invalid', (e) => {
 		setSubmitState(form, 'idle');
 		const invalid = e.detail?.apiResponse?.invalid_fields ?? [];
 		invalid.forEach(({ field: name }) => {
+			if (name === CAPTCHA_FIELD) {
+				setCaptchaError(form, true);
+				return;
+			}
 			const input = form.querySelector(`[name="${name}"]`);
 			if (!input || !runValidation(input)) return;
 			// Our validator passed but the server did not — show a generic message.

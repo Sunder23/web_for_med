@@ -92,6 +92,33 @@ make placeholder-thumbs args="reset"     # remove placeholders
 
 Add `types=services,cases` to limit the post types.
 
+## Form anti-spam: Cloudflare Turnstile
+
+The Simple Cloudflare Turnstile plugin protects the login, registration, password reset and comment forms and every Contact Form 7 form. Turn it on with the seed script:
+
+```bash
+docker compose -f docker/compose.yml run --rm wpcli wp plugin install simple-cloudflare-turnstile --activate
+MSYS_NO_PATHCONV=1 docker compose -f docker/compose.yml run --rm wpcli wp eval-file /scripts/seed-turnstile.php
+```
+
+Then open **Settings → Cloudflare Turnstile**, complete the widget and click **TEST RESPONSE**. Until the test passes, the plugin adds no widget to any form (`wp option get cfturnstile_tested` → `yes`).
+
+- Locally the keys are Cloudflare's public test keys (they always pass), set as `CF_TURNSTILE_*` constants in `WORDPRESS_CONFIG_EXTRA` (`docker/compose.yml`). They are not stored in the database, so a dump doesn't carry them to production. The `wpcli` service doesn't get them, so the plugin stays inactive in WP-CLI.
+- The seed sets **Appearance Mode: Interaction Only**: the widget stays invisible, and Cloudflare shows a checkbox only to visitors it finds suspicious. In the CF7 form the plugin puts its wrapper and a `<br/>` before the submit button. `.contact-form__submit` in `_forms.scss` removes the extra gaps and takes the invisible wrapper out of the flow.
+- A failed check comes back as an invalid `cf-turnstile` field (`wpcf7invalid`). `contactForm.js` shows "Підтвердіть, що ви не робот…" above the button. The plugin refreshes the token after every submit.
+- Don't turn on "Disable submit button until verified": `setSubmitState()` in `contactForm.js` resets the button's `disabled` and would override it. The token is still verified on the server.
+
+### On production
+
+1. **Create a widget in Cloudflare:** [dash.cloudflare.com](https://dash.cloudflare.com/?to=/:account/turnstile) → Turnstile → Add widget. Set **Hostname** to the domain (add `www.` too if the site opens there), **Widget Mode** to **Managed** and Pre-clearance to No. The domain doesn't have to be on Cloudflare. Copy the **Site Key** and **Secret Key**.
+2. **Install the plugin** if it's missing: Plugins → Add New → "Simple Cloudflare Turnstile", or `wp plugin install simple-cloudflare-turnstile --activate`.
+3. **Enter the keys** in Settings → Cloudflare Turnstile and save. Don't define `CF_TURNSTILE_*` in `wp-config.php` (the constants lock the fields), and never use the `1x000…` test keys: they accept any token.
+4. **Turn on the forms** if the database didn't come from local, where they are already on. Use the same settings page (WordPress: Login, Register, Reset Password, Comments; Contact Form 7: Enable on all CF7 Forms; Appearance Mode: Interaction Only), or run `wp eval-file scripts/seed-turnstile.php` from a copy of the repository.
+5. **Pass the key test (required):** complete the widget on the settings page → **TEST RESPONSE** → "Success". Repeat it after changing the keys. `cfturnstile_tested = yes` in a migrated database proves nothing.
+6. **Check in a private window:** the widget is on `wp-login.php` and in the contact drawer, and a test request arrives by email.
+
+**Locked out of the admin** (wrong keys, Cloudflare outage; the plugin's failsafe mode is off on purpose): run `wp plugin deactivate simple-cloudflare-turnstile`, or without WP-CLI rename `wp-content/plugins/simple-cloudflare-turnstile` over FTP. MCP and application passwords aren't checked by Turnstile, so they keep working. After you log in, re-enable the plugin and repeat step 5.
+
 ## Verifying a refactor
 
 1. Take screenshots before (desktop 1440 / mobile 390) of `/`, `/services/`, one service, direction, case, `/blog/` and a blog post.

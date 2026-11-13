@@ -90,7 +90,8 @@
 }
 
 // Error text injected by contactForm.js
-.form-field__error {
+.form-field__error,
+.contact-form__error {
     font-size: 13px;
     line-height: 1.35;
     color: var(--c-error);
@@ -208,6 +209,23 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    // Simple Cloudflare Turnstile (cfturnstile_cf7_all) puts its wrapper and a bare
+    // <br/> before the submit button; in this flex column each one adds a gap.
+    > br {
+        display: none;
+    }
+
+    > .cf7-cf-turnstile {
+        margin-bottom: 0 !important; // plugin's inline -15px
+
+        // "Interaction Only": the widget is invisible until Cloudflare needs a click.
+        // The plugin's interaction-label.js keeps this spacer at display:none while
+        // the widget has no height — take the wrapper out of the flow then.
+        &:has(.cfturnstile-widget-spacer-interaction[style*="none"]) {
+            position: absolute;
+        }
+    }
 }
 
 .contact-form__button {

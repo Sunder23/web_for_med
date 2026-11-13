@@ -7,7 +7,7 @@ A hybrid WordPress theme (Vite + SCSS frontend) with a plugin scaffold and a Doc
 
 ## Tech Stack
 - **Language:** PHP 8.2+, JavaScript (ES modules)
-- **CMS:** WordPress (Secure Custom Fields as ACF replacement, Contact Form 7, Yoast SEO)
+- **CMS:** WordPress (Secure Custom Fields as ACF replacement, Contact Form 7, Simple Cloudflare Turnstile, Yoast SEO)
 - **Frontend Build:** Vite 8, SCSS (Sass), `postcss-pxtorem` on build
 - **Linters:** Biome.js (JS/JSON), Stylelint + stylelint-scss (SCSS), PHPCS (WordPress standard) + PHPStan level 5
 - **Package Manager:** npm (frontend), Composer (PHP tooling)
@@ -19,7 +19,7 @@ wp-boilerplate/
 ├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
 ├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-main-menu.php (short menu Про нас / Кейси / Контакти → menu-main + menu-footer)
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-main-menu.php (short menu Про нас / Кейси / Контакти → menu-main + menu-footer), seed-turnstile.php (Simple Cloudflare Turnstile on login/register/reset/comments + all CF7 forms, Interaction Only; keys: `CF_TURNSTILE_*` test constants in compose locally, plugin settings on production)
 ├── theme/vite-wordpress-starter-theme/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
