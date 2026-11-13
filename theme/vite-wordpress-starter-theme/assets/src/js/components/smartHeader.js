@@ -18,23 +18,43 @@ export function initSmartHeader() {
 	}
 
 	let lastY = window.scrollY;
-	let hidden = false;
+	let skipLogged = false;
 
 	const isLocked = () =>
 		document.querySelector('.nav.is-open') !== null ||
 		document.body.classList.contains('is-drawer-open');
 
+	// headerAutoHide.js owns the header while `body.is-header-auto` is set.
+	const isYielded = () => {
+		const yielded = document.body.classList.contains('is-header-auto');
+
+		if (yielded && !skipLogged) {
+			skipLogged = true;
+			logDebug('[smartHeader] skipped: header-auto');
+		} else if (!yielded) {
+			skipLogged = false;
+		}
+
+		return yielded;
+	};
+
 	const setHidden = (value, y) => {
-		if (value === hidden) {
+		// Compare with the class, not a local flag: headerAutoHide.js may have
+		// changed it while it owned the header.
+		if (value === header.classList.contains('is-hidden')) {
 			return;
 		}
 
-		hidden = value;
 		header.classList.toggle('is-hidden', value);
-		logDebug('[smartHeader] state', { hidden, y });
+		logDebug('[smartHeader] state', { hidden: value, y });
 	};
 
 	const update = (y) => {
+		if (isYielded()) {
+			lastY = y;
+			return;
+		}
+
 		if (y <= header.offsetHeight || isLocked()) {
 			setHidden(false, y);
 			lastY = y;
@@ -73,7 +93,9 @@ export function initSmartHeader() {
 		);
 	}
 
-	header.addEventListener('focusin', () => setHidden(false, window.scrollY));
+	header.addEventListener('focusin', () => {
+		if (!isYielded()) setHidden(false, window.scrollY);
+	});
 
 	logDebug('[smartHeader] init', { lenis: Boolean(window.lenis) });
 }

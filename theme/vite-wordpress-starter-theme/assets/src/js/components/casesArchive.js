@@ -1,3 +1,4 @@
+import { initHeaderAutoHide } from '@js/components/headerAutoHide.js';
 import { logDebug } from '@js/utils/logDebug.js';
 import Swiper from 'swiper';
 import { Keyboard, Mousewheel, Navigation } from 'swiper/modules';
@@ -16,7 +17,8 @@ import { Keyboard, Mousewheel, Navigation } from 'swiper/modules';
  *   mockup ("release"; on screens too low to fit, the page also scrolls on).
  *   It stays visible. A new gesture at the top hands the wheel back to
  *   the slider and the pass restarts. Scrolling the page or tabbing into the
- *   footer reveals it as well.
+ *   footer reveals it as well. With a mouse, the header slides up ~2s after
+ *   load and comes back over the bar from the top edge (headerAutoHide.js).
  * - `lane` (phones, low screens): horizontal, the next cover peeks in.
  * - `static`: a single case, no Swiper.
  *
@@ -78,6 +80,7 @@ export function initCasesArchive() {
 	const reducedMq = window.matchMedia(REDUCED_MOTION_QUERY);
 
 	let swiper = null;
+	let headerAuto = null;
 	let mode = 'static';
 	let index = 0;
 
@@ -325,7 +328,11 @@ export function initCasesArchive() {
 
 		const from = mode;
 		destroy();
-		if (from === 'slider') bindGates(false);
+		if (from === 'slider') {
+			headerAuto?.destroy();
+			headerAuto = null;
+			bindGates(false);
+		}
 		mode = next;
 
 		if (mode !== 'static') {
@@ -334,6 +341,8 @@ export function initCasesArchive() {
 		if (mode === 'slider') {
 			released = !atTop();
 			bindGates(true);
+			// The stage grows by the header height: re-measure the covers.
+			headerAuto = initHeaderAutoHide({ onCollapse: () => swiper?.update() });
 		}
 
 		render();
@@ -341,6 +350,7 @@ export function initCasesArchive() {
 			from,
 			to: mode,
 			loop: swiper?.params.loop,
+			headerAuto: Boolean(headerAuto),
 		});
 	};
 

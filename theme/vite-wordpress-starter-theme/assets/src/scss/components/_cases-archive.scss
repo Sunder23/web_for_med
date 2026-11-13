@@ -7,7 +7,8 @@
 // Slider (`.is-enhanced` + `slider` mixin): the block fills the screen under
 // the header (bar, stage, a 40px gap); after one full pass through the cases
 // the footer slides up and the block shrinks to the mockup layout (header,
-// bar, stage, gap, footer in one screen). See the page-level rules below. Text on the left, a looped
+// bar, stage, gap, footer in one screen); ~2s after load the header slides up
+// and the archive grows by its height (headerAutoHide.js). See the page-level rules below. Text on the left, a looped
 // vertical Swiper on the right with PREV / NEXT fragments. Sizes are pure CSS
 // (container units of `__wrap`); casesArchive.js toggles `is-active`.
 // Swiper core CSS is not imported: the few rules it needs are below.
@@ -38,6 +39,7 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             display: flex;
             flex-direction: column;
             min-height: calc(100svh - var(--wp-admin--admin-bar--height, 0px));
+            transition: padding-top 0.3s ease; // in step with the .header slide
         }
 
         .site-content {
@@ -52,10 +54,21 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         @media (prefers-reduced-motion: reduce) {
+            .site,
             .site-content,
             .footer {
                 transition: none;
             }
+        }
+    }
+}
+
+// The header has slid up (headerAutoHide.js): the archive takes its place.
+// When the header comes back it overlays the bar; the padding stays off.
+.is-cases-archive.is-header-collapsed {
+    @include slider {
+        .site {
+            padding-top: 0;
         }
     }
 }

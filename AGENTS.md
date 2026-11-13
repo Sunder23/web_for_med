@@ -39,7 +39,7 @@ wp-boilerplate/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
 │   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php, cases-archive.php, case-single.php, case-nav.php)
 │   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
-│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, contactDrawer, teamHoverLabel, …), template-parts/blocks/
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, headerAutoHide (cases archive slider), contactDrawer, teamHoverLabel, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
 │   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons)
