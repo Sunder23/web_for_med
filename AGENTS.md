@@ -19,13 +19,13 @@ wp-boilerplate/
 ├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
 ├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case)
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-main-menu.php (short menu Про нас / Кейси / Контакти → menu-main + menu-footer)
 ├── theme/vite-wordpress-starter-theme/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
 │   │   ├── post-types.php + post-types/       # services, directions, cases
 │   │   ├── taxonomies.php + taxonomies/       # case_deliverable, case_technology, case_status
-│   │   ├── theme-hooks.php + theme-hooks/     # one hook concern per file (incl. register-block-styles.php: chapter / lead / stack-mobile)
+│   │   ├── theme-hooks.php + theme-hooks/     # one hook concern per file (incl. register-block-styles.php: chapter / lead / stack-mobile; nav-menu-anchor-links.php: `#contacts` → drawer, `#section` → `/#section` off the front page)
 │   │   ├── utilities.php + helpers/           # starter_get_* helpers (incl. case single data, adjacent posts)
 │   │   ├── shortcodes.php, ajax.php           # empty aggregators (+ folders)
 │   │   ├── js-css.php               # Vite integration + editor canvas assets
