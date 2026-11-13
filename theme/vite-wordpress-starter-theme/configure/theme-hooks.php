@@ -17,6 +17,7 @@ $starter_theme_hooks = array(
 	'disable-autoparagraph-wrapping-cf7.php',
 	'enqueue-listing-templates-assets.php',
 	'cases-archive-query.php',
+	'register-block-styles.php',
 );
 
 foreach ( $starter_theme_hooks as $starter_theme_hook ) {

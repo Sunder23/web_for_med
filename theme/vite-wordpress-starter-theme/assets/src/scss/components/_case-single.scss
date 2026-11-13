@@ -104,7 +104,7 @@ body:has(.header.is-hidden) .case-single {
         "meta"
         "content";
     grid-template-columns: minmax(0, 1fr);
-    padding: 40px 10px 30px;
+    padding: 40px 10px;
     // Mixed with .frame: side lines from the `mobile` breakpoint up.
     border-left: 0;
     border-right: 0;
@@ -185,10 +185,13 @@ body:has(.header.is-hidden) .case-single {
     }
 }
 
+// Cover crop 74:49 as in the design (345×228 mobile, 880×583 desktop).
 .case-single__img {
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 74 / 49;
+    object-fit: cover;
 }
 
 // --- Project details ------------------------------------------------------------
@@ -224,6 +227,15 @@ body:has(.header.is-hidden) .case-single {
     display: flex;
     flex-direction: column;
     gap: 6px;
+
+    // Hidden in the mobile design (Figma 3124:1416), shown in the desktop sidebar.
+    &--status {
+        display: none;
+
+        @include breakpoint(tablet) {
+            display: flex;
+        }
+    }
 }
 
 .case-single__detail-label {
@@ -294,11 +306,55 @@ body:has(.header.is-hidden) .case-single {
         }
     }
 
+    // Chapter heading (block style "chapter", Figma 3124:1478 / 3061:1020).
+    >h2.is-style-chapter {
+        font-size: 24px;
+        line-height: 1.25;
+
+        @include breakpoint(tablet) {
+            font-size: 38px;
+            line-height: 1.18;
+        }
+    }
+
     >h3 {
-        margin-block: 24px 14px;
+        margin-block: 24px;
         font-family: var(--f-heading);
         font-weight: 700;
         line-height: 1.25;
+
+        @include breakpoint(tablet) {
+            margin-block: 24px 14px;
+        }
+    }
+
+    // Conclusion paragraph (block style "lead", Figma 3124:1474 / 3082:1920).
+    >p.is-style-lead {
+        margin-block: 30px;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.2778; // 23px
+
+        @include breakpoint(tablet) {
+            margin-block: 40px;
+            font-size: 20px;
+            line-height: 1.55;
+        }
+    }
+
+    // Visibility helpers set via "Additional CSS class" (e.g. a phone-only screenshot).
+    >.case-single__mobile-only {
+        @include breakpoint(tablet) {
+            display: none;
+        }
+    }
+
+    >.case-single__desktop-only {
+        display: none;
+
+        @include breakpoint(tablet) {
+            display: block;
+        }
     }
 
     // Images, galleries, videos and embeds run edge to edge on mobile; a
@@ -348,6 +404,39 @@ body:has(.header.is-hidden) .case-single {
         text-align: left;
     }
 
+    // Block style "stack-mobile": images one under another on phones
+    // (Figma 3124:1452), the usual row from `tablet`.
+    >.wp-block-gallery.is-style-stack-mobile {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 4px;
+
+        @include breakpoint(tablet) {
+            flex-flow: row wrap;
+            align-items: flex-start;
+            gap: 8px 20px;
+        }
+    }
+
+    >.wp-block-gallery.is-style-stack-mobile>.wp-block-image:not(#individual-image) {
+        flex: none;
+        width: 100%;
+
+        @include breakpoint(tablet) {
+            flex: var(--case-ratio, 1) 1 0;
+            width: auto;
+        }
+    }
+
+    >.wp-block-gallery.is-style-stack-mobile>.blocks-gallery-caption {
+        margin-top: 4px; // 8 from the images with the 4px gap
+
+        @include breakpoint(tablet) {
+            margin-top: 0;
+        }
+    }
+
     figure img,
     figure video {
         display: block;
@@ -356,7 +445,9 @@ body:has(.header.is-hidden) .case-single {
         border-radius: 0;
     }
 
-    >figure>figcaption {
+    // `.wp-element-caption` outweighs `.entry-content .wp-element-caption`.
+    >figure>figcaption,
+    >figure>.wp-element-caption {
         margin: 0;
         padding: 0 10px;
         font-size: 13px;
@@ -367,6 +458,18 @@ body:has(.header.is-hidden) .case-single {
 
         @include breakpoint(tablet) {
             padding: 0;
+        }
+
+        // Technical note on its own line (Figma 3124:1490).
+        em {
+            display: block;
+            margin-top: 4px;
+            font-style: normal;
+            color: var(--c-caption);
+        }
+
+        br:has(+ em) {
+            display: none;
         }
     }
 
@@ -449,6 +552,23 @@ body:has(.header.is-hidden) .case-single {
         height: 100%;
     }
 
+    // The chevron sits 2px inside its 12px box: pull it onto the text edge on phones.
+    .case-nav__link--prev & {
+        margin-left: -2px;
+
+        @include breakpoint(tablet) {
+            margin-left: 0;
+        }
+    }
+
+    .case-nav__link--next & {
+        margin-right: -2px;
+
+        @include breakpoint(tablet) {
+            margin-right: 0;
+        }
+    }
+
     .case-nav__link--prev:hover & {
         transform: translateX(-3px);
     }
@@ -459,12 +579,16 @@ body:has(.header.is-hidden) .case-single {
 }
 
 .case-nav__label {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--c-caption);
+
+    @include breakpoint(tablet) {
+        font-size: 13px;
+    }
 }
 
 // Titles are hidden on phones (Figma 3124:1545).

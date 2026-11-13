@@ -61,7 +61,7 @@ $case_total = (int) $case_data['sections_total'];
 			<aside class="case-single__meta" aria-label="<?php esc_attr_e( 'Деталі проєкту', 'vite-starter' ); ?>">
 				<dl class="case-single__details">
 					<?php foreach ( $case_data['details'] as $case_detail ) : ?>
-						<div class="case-single__detail">
+						<div class="case-single__detail case-single__detail--<?php echo esc_attr( sanitize_html_class( $case_detail['key'] ) ); ?>">
 							<dt class="case-single__detail-label"><?php echo esc_html( $case_detail['label'] ); ?></dt>
 							<dd class="case-single__detail-value">
 								<?php if ( '' !== $case_detail['url'] ) : ?>

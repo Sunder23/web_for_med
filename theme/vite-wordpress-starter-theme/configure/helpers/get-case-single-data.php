@@ -84,21 +84,23 @@ function starter_get_case_single_data( $post ) {
 	$live_url   = trim( (string) starter_get_array_value( $details, 'live_url', '' ) );
 	$live_label = trim( (string) starter_get_array_value( $details, 'live_label', '' ) );
 
-	// Sidebar order as in the design; empty rows are dropped below.
+	// Sidebar order as in the design; empty rows are dropped below. The key becomes a
+	// BEM modifier (the status row is hidden on phones, Figma 3124:1416).
 	$rows = array(
-		array( __( 'Deliverables', 'vite-starter' ), implode( ', ', starter_get_case_term_names( $post, 'case_deliverable' ) ), '' ),
-		array( __( 'Technology', 'vite-starter' ), implode( ', ', starter_get_case_term_names( $post, 'case_technology' ) ), '' ),
-		array( __( 'Duration', 'vite-starter' ), trim( (string) starter_get_array_value( $details, 'duration', '' ) ), '' ),
-		array( __( 'Status', 'vite-starter' ), $statuses ? $statuses[0] : '', '' ),
-		array( __( 'Live Project', 'vite-starter' ), $live_url ? ( $live_label ? $live_label : __( 'View Website', 'vite-starter' ) ) : '', $live_url ),
+		'deliverables' => array( __( 'Deliverables', 'vite-starter' ), implode( ', ', starter_get_case_term_names( $post, 'case_deliverable' ) ), '' ),
+		'technology'   => array( __( 'Technology', 'vite-starter' ), implode( ', ', starter_get_case_term_names( $post, 'case_technology' ) ), '' ),
+		'duration'     => array( __( 'Duration', 'vite-starter' ), trim( (string) starter_get_array_value( $details, 'duration', '' ) ), '' ),
+		'status'       => array( __( 'Status', 'vite-starter' ), $statuses ? $statuses[0] : '', '' ),
+		'live'         => array( __( 'Live Project', 'vite-starter' ), $live_url ? ( $live_label ? $live_label : __( 'View Website', 'vite-starter' ) ) : '', $live_url ),
 	);
 
 	$details_rows = array();
-	foreach ( $rows as $row ) {
+	foreach ( $rows as $row_key => $row ) {
 		if ( '' === $row[1] ) {
 			continue;
 		}
 		$details_rows[] = array(
+			'key'   => $row_key,
 			'label' => $row[0],
 			'value' => $row[1],
 			'url'   => $row[2],
