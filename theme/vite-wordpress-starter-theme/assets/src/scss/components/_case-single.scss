@@ -367,6 +367,11 @@ body:has(.header.is-hidden) .case-single {
         }
     }
 
+    // A narrower centred image (e.g. the phone 404 screenshot, Figma 3124:1544).
+    >.wp-block-image.aligncenter {
+        margin-inline: auto;
+    }
+
     >figure:has(> figcaption) {
         display: flex;
         flex-direction: column;
