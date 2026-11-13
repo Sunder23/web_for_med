@@ -239,6 +239,18 @@ export function setSubmitState(form, state) {
 	if (!button || !label) return;
 	label.textContent = BUTTON_LABELS[state] ?? BUTTON_LABELS.idle;
 	button.disabled = state === 'loading';
+	logDebug('[contactForm] submit state', { state });
+}
+
+// Figma 3155:2757: under the pinned retry button phones read "Введені дані
+// збережено" instead of the required-fields note. CSS shows it in `.is-failed`.
+function addRetryNote(form) {
+	const note = form.querySelector('.contact-form__note');
+	if (!note || form.querySelector('.contact-form__note--retry')) return;
+	const retryNote = document.createElement('p');
+	retryNote.className = 'contact-form__note contact-form__note--retry';
+	retryNote.textContent = 'Введені дані збережено';
+	note.after(retryNote);
 }
 
 function initForm(form) {
@@ -251,6 +263,8 @@ function initForm(form) {
 	const values = new Map();
 
 	let channel = CHANNELS.Телефон;
+
+	addRetryNote(form);
 
 	const applyChannel = (key, { restore = true } = {}) => {
 		const next = CHANNELS[key];

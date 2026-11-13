@@ -18,7 +18,7 @@ if ( empty( $starter_contact['contact_form'] ) ) {
 	return;
 }
 
-$starter_contact_title = ! empty( $starter_contact['title'] ) ? $starter_contact['title'] : __( 'Обговорити задачі', 'vite-starter' );
+$starter_contact_title = ! empty( $starter_contact['title'] ) ? $starter_contact['title'] : __( 'Обговорити ваш проєкт', 'vite-starter' );
 $starter_contact_text  = ! empty( $starter_contact['text'] ) ? $starter_contact['text'] : '';
 ?>
 <div class="contact-drawer" id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-drawer-title" inert>
@@ -26,13 +26,18 @@ $starter_contact_text  = ! empty( $starter_contact['text'] ) ? $starter_contact[
 
 	<div class="contact-drawer__panel">
 		<div class="contact-drawer__head">
+			<?php
+			// One row: heading + close (Figma 3155:2640 / 3155:2730). In the success state
+			// phones show "Дякуємо!" here (3155:2694), wider screens the eyebrow (3155:2626).
+			?>
 			<div class="contact-drawer__bar">
 				<p class="contact-drawer__eyebrow"><?php esc_html_e( 'Почнімо з розмови', 'vite-starter' ); ?></p>
+				<p class="contact-drawer__title" id="contact-drawer-title"><?php echo esc_html( $starter_contact_title ); ?></p>
+				<p class="contact-drawer__title contact-drawer__title--success" id="contact-drawer-success-title"><?php esc_html_e( 'Дякуємо!', 'vite-starter' ); ?></p>
 				<button type="button" class="contact-drawer__close" data-contact-close aria-label="<?php esc_attr_e( 'Закрити форму', 'vite-starter' ); ?>">
 					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
 				</button>
 			</div>
-			<p class="contact-drawer__title" id="contact-drawer-title"><?php echo esc_html( $starter_contact_title ); ?></p>
 			<?php if ( $starter_contact_text ) : ?>
 				<p class="contact-drawer__text"><?php echo esc_html( $starter_contact_text ); ?></p>
 			<?php endif; ?>

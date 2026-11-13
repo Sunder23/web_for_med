@@ -245,6 +245,11 @@
     color: var(--c-caption);
 }
 
+// Injected by contactForm.js; shown only in the drawer's failed state on phones.
+.contact-form__note--retry {
+    display: none;
+}
+
 // CF7 sets `.submitting` on the form during the request (Figma 3155:2760):
 // fields are dimmed and locked, the button shows a spinner.
 .wpcf7-form.submitting {

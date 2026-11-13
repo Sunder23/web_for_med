@@ -28,10 +28,24 @@ export function initContactDrawer() {
 
 	const isOpen = () => drawer.classList.contains('is-open');
 
+	// The dialog is named by the visible heading: the form title, or "Дякуємо!" on success.
+	const setLabelledBy = (id) => {
+		drawer.setAttribute('aria-labelledby', id);
+		logDebug('[contactDrawer] success layout', { labelledby: id });
+	};
+
+	// Submission error: alert above the form, retry bar pinned on phones (.is-failed).
+	const setFailed = (on) => {
+		if (alert) alert.hidden = !on;
+		drawer.classList.toggle('is-failed', on);
+		logDebug('[contactDrawer] failed state', { on });
+	};
+
 	const resetSuccess = () => {
 		drawer.classList.remove('is-success');
 		if (success) success.hidden = true;
 		if (formWrap) formWrap.hidden = false;
+		setLabelledBy('contact-drawer-title');
 	};
 
 	const focusables = () =>
@@ -137,12 +151,12 @@ export function initContactDrawer() {
 	});
 
 	if (cf7) {
-		cf7.addEventListener('wpcf7beforesubmit', () => {
-			if (alert) alert.hidden = true;
-		});
+		cf7.addEventListener('wpcf7beforesubmit', () => setFailed(false));
 
 		cf7.addEventListener('wpcf7mailsent', () => {
+			setFailed(false);
 			drawer.classList.add('is-success');
+			setLabelledBy('contact-drawer-success-title');
 			if (formWrap) formWrap.hidden = true;
 			if (success) success.hidden = false;
 			body?.scrollTo(0, 0);
@@ -152,7 +166,7 @@ export function initContactDrawer() {
 
 		['wpcf7mailfailed', 'wpcf7spam'].forEach((type) => {
 			cf7.addEventListener(type, () => {
-				if (alert) alert.hidden = false;
+				setFailed(true);
 				body?.scrollTo(0, 0);
 				logDebug('[contactDrawer] cf7 event', { type });
 			});
