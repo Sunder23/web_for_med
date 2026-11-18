@@ -17,6 +17,8 @@
 
 $cover-w: 522;
 $cover-h: 382;
+// Below this the slider stage stops shrinking (the page scrolls instead).
+$stage-min-h: 320px;
 $ease-track: cubic-bezier(0.65, 0, 0.35, 1);
 $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -452,7 +454,7 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             flex: 1 1 0;
             display: flex;
             flex-direction: column;
-            min-height: 420px;
+            min-height: $stage-min-h;
             border-bottom: var(--border);
             container-type: size;
         }
@@ -468,7 +470,14 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             // from the live stage height, so they keep their size while the
             // footer slides in and the header slides away (the stage only
             // moves them). --cases-footer-h is measured by casesArchive.js.
-            --stage-ref-h: max(420px, calc(100svh - var(--wp-admin--admin-bar--height, 0px) - var(--header-h) - 80px - var(--cases-footer-h, 200px)));
+            // With a mouse the header slides away for good (headerAutoHide.js),
+            // so its height is not taken off (same media query as there).
+            --stage-ref-header: var(--header-h);
+            --stage-ref-h: max(#{$stage-min-h}, calc(100svh - var(--wp-admin--admin-bar--height, 0px) - var(--stage-ref-header) - 80px - var(--cases-footer-h, 200px)));
+
+            @media (hover: hover) and (pointer: fine) {
+                --stage-ref-header: 0px;
+            }
             --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((var(--stage-ref-h) - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
             --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
 
