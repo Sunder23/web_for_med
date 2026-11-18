@@ -5,11 +5,12 @@
 // Base (mobile, low screens): normal page flow — title, horizontal cover lane
 // (scroll-snap without JS, a horizontal Swiper with JS), description, link.
 // Slider (`.is-enhanced` + `slider` mixin): the block fills the screen under
-// the header (bar, stage, a 40px gap); after one full pass through the cases
-// the footer slides up and the block shrinks to the mockup layout (header,
-// bar, stage, gap, footer in one screen); ~2s after load the header slides up
-// and the archive grows by its height (headerAutoHide.js). See the page-level rules below. Text on the left, a looped
-// vertical Swiper on the right with PREV / NEXT fragments. Sizes are pure CSS
+// the header (bar, stage, a 40px gap); at the last case the footer slides up
+// and the block shrinks to the mockup layout (header, bar, stage, gap, footer
+// in one screen), on the way back up it slides down again; ~2s after load the
+// header slides up and the archive grows by its height (headerAutoHide.js).
+// See the page-level rules below. Text on the left, a looped vertical Swiper
+// on the right with PREV / NEXT fragments. Sizes are pure CSS
 // (container units of `__wrap`); casesArchive.js toggles `is-active`.
 // Swiper core CSS is not imported: the few rules it needs are below.
 // Keep the media query in sync with SLIDER_QUERY in components/casesArchive.js.
@@ -28,11 +29,11 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // One screen: the archive takes the height between the header and the bottom
-// of the viewport. Until one full pass through the cases the footer is out of
-// the flow (fixed, below the viewport edge), so the archive gets the whole
-// screen; then it slides up while the archive shrinks by its height
-// (casesArchive.js animates `.site-content` padding-bottom, then puts the
-// footer back into the flow). This stylesheet is loaded on /cases/ only.
+// of the viewport. Until the last case the footer is out of the flow (fixed,
+// below the viewport edge), so the archive gets the whole screen; then it
+// slides up while the archive shrinks by its height, and back down on the way
+// up (casesArchive.js animates `.site-content` padding-bottom with the footer
+// fixed — `is-footer-moving` — and puts it back into the flow once it is in). This stylesheet is loaded on /cases/ only.
 .is-cases-archive {
     @include slider {
         .site {
@@ -74,7 +75,7 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .is-cases-archive.is-footer-hidden,
-.is-cases-archive.is-footer-entering {
+.is-cases-archive.is-footer-moving {
     @include slider {
         .footer {
             position: fixed;
@@ -310,34 +311,6 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         }
     }
 
-    &__arrows {
-        display: none;
-    }
-
-    &__arrow {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 41px;
-        height: 36px;
-        padding: 0;
-        border: none;
-        background: none;
-        color: var(--c-blue);
-        cursor: pointer;
-        transition: opacity 0.3s ease;
-
-        &:disabled {
-            opacity: 0.3;
-            cursor: default;
-        }
-
-        &:focus-visible {
-            outline: 2px solid var(--c-blue);
-            outline-offset: -2px;
-        }
-    }
-
     // Mobile: horizontal lane, the next cover peeks in from the right edge.
     &__viewport {
         grid-area: viewport;
@@ -488,13 +461,13 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
             --frag: clamp(var(--frag-min), calc((100cqh - var(--cover-h) - 2 * var(--gap)) / 2), var(--frag-max));
 
-            grid-template-columns: minmax(0, 1fr) 41px calc(var(--cover-w) + 35px);
+            grid-template-columns: minmax(0, 1fr) calc(var(--cover-w) + 35px);
             grid-template-rows: 1fr auto auto 1fr;
             grid-template-areas:
-                ". arrows viewport"
-                "heads arrows viewport"
-                "details arrows viewport"
-                ". arrows viewport";
+                ". viewport"
+                "heads viewport"
+                "details viewport"
+                ". viewport";
             flex: 1 1 auto;
             gap: 0;
             width: 100%;
@@ -520,16 +493,6 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
     .cases-archive__details {
         @include slider {
             padding-top: 36px;
-        }
-    }
-
-    .cases-archive__arrows {
-        @include slider {
-            grid-area: arrows;
-            align-self: center;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
     }
 

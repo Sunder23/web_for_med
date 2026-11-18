@@ -22,31 +22,9 @@ wp_reset_postdata();
 
 $starter_count     = count( $starter_cases );
 $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
-$starter_static    = get_template_directory() . '/static/images/cases/';
-$starter_arrow_svg = static function ( $name ) use ( $starter_static ) {
-	$file = $starter_static . 'arrow-' . $name . '.svg';
-	return file_exists( $file ) ? (string) file_get_contents( $file ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local theme SVG.
-};
-$starter_svg_kses  = array(
-	'svg'  => array(
-		'width'       => true,
-		'height'      => true,
-		'viewbox'     => true,
-		'fill'        => true,
-		'xmlns'       => true,
-		'aria-hidden' => true,
-		'focusable'   => true,
-	),
-	'g'    => array( 'id' => true ),
-	'path' => array(
-		'id'   => true,
-		'd'    => true,
-		'fill' => true,
-	),
-);
 ?>
 <main class="cases-archive" data-cases-archive data-count="<?php echo esc_attr( (string) $starter_count ); ?>">
-	<?php // Before the first paint: no flash of the unenhanced layout or of the footer (it waits for one full pass, see casesArchive.js). ?>
+	<?php // Before the first paint: no flash of the unenhanced layout or of the footer (it comes in at the last case, see casesArchive.js). ?>
 	<script>document.currentScript.parentElement.classList.add('is-enhanced');<?php echo $starter_count > 1 ? "document.body.classList.add('is-footer-hidden');" : ''; ?></script>
 	<h1 class="cases-archive__title"><?php post_type_archive_title(); ?></h1>
 
@@ -113,17 +91,6 @@ $starter_svg_kses  = array(
 						</div>
 					<?php endforeach; ?>
 				</div>
-
-				<?php if ( $starter_count > 1 ) : ?>
-					<div class="cases-archive__arrows">
-						<button type="button" class="cases-archive__arrow" data-cases-prev aria-controls="cases-archive-track" aria-label="<?php esc_attr_e( 'Попередній кейс', 'vite-starter' ); ?>">
-							<?php echo wp_kses( $starter_arrow_svg( 'prev' ), $starter_svg_kses ); ?>
-						</button>
-						<button type="button" class="cases-archive__arrow" data-cases-next aria-controls="cases-archive-track" aria-label="<?php esc_attr_e( 'Наступний кейс', 'vite-starter' ); ?>">
-							<?php echo wp_kses( $starter_arrow_svg( 'next' ), $starter_svg_kses ); ?>
-						</button>
-					</div>
-				<?php endif; ?>
 
 				<div class="cases-archive__viewport" data-cases-viewport>
 					<div class="cases-archive__track" id="cases-archive-track" data-cases-track>
