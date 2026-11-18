@@ -13,12 +13,15 @@
   &__inner {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     padding: 60px 10px;
-    text-align: center;
+    text-align: left;
 
+    // Left-aligned on phones, centred from `mobile`.
     @include breakpoint(mobile) {
+      align-items: center;
       padding: 80px 40px;
+      text-align: center;
     }
 
     @include breakpoint(laptop) {

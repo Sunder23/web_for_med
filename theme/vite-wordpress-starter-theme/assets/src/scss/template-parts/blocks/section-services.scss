@@ -19,15 +19,16 @@
   }
 
   // Mixed with .frame.
+  // Title is left-aligned on phones, centred from `mobile`.
   &__header {
     display: flex;
-    justify-content: center;
     width: calc(100% - calc(var(--pad-x) * 2));
     margin: 0 auto;
     padding: 32px 10px;
     border-bottom: var(--border);
 
     @include breakpoint(mobile) {
+      justify-content: center;
       width: auto;
       margin: 0;
       padding: 60px 40px;
@@ -41,7 +42,11 @@
   // Mixed with .section-title (Grunt Grotesk, 40px from desktop).
   &__title {
     max-width: 990px;
-    text-align: center;
+    text-align: left;
+
+    @include breakpoint(mobile) {
+      text-align: center;
+    }
 
     @include breakpoint(tablet) {
       line-height: 1.15;

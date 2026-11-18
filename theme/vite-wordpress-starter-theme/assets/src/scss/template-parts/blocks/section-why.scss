@@ -222,11 +222,6 @@
   // Mixed with .section-title (Grunt Grotesk, 40px from desktop).
   &__title {
     max-width: 586px;
-    text-align: center;
-
-    @include breakpoint(mobile) {
-      text-align: left;
-    }
   }
 
   &__list {
