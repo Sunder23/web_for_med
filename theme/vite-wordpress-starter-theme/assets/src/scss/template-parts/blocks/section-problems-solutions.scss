@@ -1,44 +1,15 @@
 @use "../../mixins/breakpoint" as *;
 
-// Problems + banner + solutions scroll as one block (Figma 3287:1416).
-// "Curtain" reveal from tablet up (viewport ≥ 600px tall), as before 7303610:
-// the screen-tall problems row is pulled up under the quote (negative margin)
-// and pinned at the top, so the scrolling quote uncovers it in place. The
-// banner starts one screen lower (spacer on __inner), then banner and
-// solutions slide over the pinned row; the wrapper ends with solutions, so
-// problems unpins exactly behind them. Sections above (hero, clinics, quote)
-// are opaque and stacked higher, hiding the row until the quote leaves.
-// Phones and short viewports keep a plain stacked flow.
-// The smart header hides on scroll down, hence `top: 0`.
-.problems-solutions {
-  --problems-h: max(574px, 100svh);
-
-  position: relative;
-
-  &__inner {
-    @include breakpoint(tablet) {
-      @media (min-height: 600px) {
-        margin-top: var(--problems-h);
-      }
-    }
-  }
-}
+// Problems + banner + solutions (Figma 3287:1416: 03_2 / 03_3 / 03_4).
+// Plain static flow on every screen: from tablet up the problems and
+// solutions rows are 420px tall (min-height, so long texts still fit).
 
 /* ============================================================
    PROBLEMS (03_2)
    ============================================================ */
 .problems {
-  z-index: 1;
   background: var(--c-bg);
   border-bottom: var(--border);
-
-  @include breakpoint(tablet) {
-    @media (min-height: 600px) {
-      position: sticky;
-      top: 0;
-      margin-top: calc(-1 * var(--problems-h));
-    }
-  }
 
   // Mixed with .container.
   &__wrap {
@@ -60,11 +31,7 @@
       grid-auto-columns: 1fr;
       grid-auto-flow: column;
       grid-template-rows: 1fr auto auto;
-      height: 420px;
-
-      @media (min-height: 600px) {
-        height: var(--problems-h);
-      }
+      min-height: 420px;
     }
   }
 }
@@ -109,13 +76,11 @@
       font-size: 13px;
     }
 
-    // Sits at the bottom of the 1fr row, above the title (like the
-    // solution icons).
+    // Top of the card; title and text hug the bottom (1fr row between).
     @include breakpoint(tablet) {
       grid-row: 1;
-      align-self: end;
+      align-self: start;
       justify-self: start;
-      margin-bottom: 138px;
     }
   }
 
@@ -166,8 +131,6 @@
    BANNER (03_3)
    ============================================================ */
 .banner {
-  position: relative;
-  z-index: 6;
   background: var(--c-banner);
   border-bottom: var(--border);
 
@@ -209,25 +172,10 @@
 }
 
 /* ============================================================
-   SOLUTIONS (03_4) — no background fill since the redesign (п.3);
-   the page colour keeps the layer opaque over the sticky problems.
-   From tablet up the row is viewport-tall again (580px floor), fully
-   covering the pinned problems row.
+   SOLUTIONS (03_4) — 420px row from tablet up, like the problems.
    ============================================================ */
-// Sticks to the bottom (as before 7303610): the screen-tall row rides up
-// hidden behind the banner, stops once it fills the viewport, and the banner
-// slides off it. `bottom` skips the section-gap spacer (section::after).
 .solutions {
-  position: relative;
-  z-index: 3;
   background: var(--c-bg);
-
-  @include breakpoint(tablet) {
-    @media (min-height: 600px) {
-      position: sticky;
-      bottom: calc(-1 * var(--section-gap));
-    }
-  }
 
   // Mixed with .container.
   &__wrap {
@@ -248,8 +196,7 @@
       grid-auto-columns: 1fr;
       grid-auto-flow: column;
       grid-template-rows: 1fr auto auto;
-      min-height: max(580px, 100vh);
-      min-height: max(580px, 100svh);
+      min-height: 420px;
     }
   }
 }
@@ -282,16 +229,14 @@
     }
   }
 
-  // Icon sits at the bottom of the 1fr row, right above the title, so the
-  // whole card content hugs the bottom (as before 7303610).
+  // Icon at the top of the card; title and text hug the bottom.
   &__media {
     display: flex;
     align-items: flex-start;
 
     @include breakpoint(tablet) {
       grid-row: 1;
-      align-self: end;
-      margin-bottom: 138px;
+      align-self: start;
     }
   }
 

@@ -34,7 +34,7 @@ Single CPT, blog and archive templates (`single*.php`, `home.php`, `archive-*.ph
 
 - `starter_vite_enqueue_editor_canvas_assets()` (`configure/js-css.php`) loads, for the **page** editor only, `main.scss`, every section stylesheet (with `starter-editor-main` as dependency — the front-end `main` handle does not exist in the editor), `editor-section-blocks.scss` and `editor-section-blocks.js`; `editor-link-guard.js` is loaded for every post type so links and form submits in block previews cannot navigate the canvas away.
 - `starter_strip_admin_styles_from_page_canvas()` (filter `block_editor_settings_all`) removes wp-admin stylesheets and the article editor stylesheet from the page canvas so previews match the front end. It leaves one empty `theme` style entry: with none left, the editor falls back to core default editor styles (system font, 18px body).
-- Section JS (AOS, reveal animations, accordions) does not run in the editor. `editor-section-blocks.scss` resets `[data-aos]` and other pre-reveal hidden states (`.hero__title`, `.hero__button`, `.why-message`) to their final visible state — add new ones there. Scroll-effect layers (`fixed` / `sticky`, currently `.problems`) are put back in flow there too, otherwise they cover neighbouring blocks and their fields cannot be selected.
+- Section JS (AOS, reveal animations, accordions) does not run in the editor. `editor-section-blocks.scss` resets `[data-aos]` and other pre-reveal hidden states (`.hero__title`, `.hero__button`, `.why-message`) to their final visible state — add new ones there. If a section ever gets a scroll-effect layer (`fixed` / `sticky`), put it back in flow there too, otherwise it covers neighbouring blocks and their fields cannot be selected.
 - Carousels are the exception: `editor-section-blocks.js` (re)initialises them in the canvas whenever ACF re-renders a preview and destroys detached instances. To add a slider section, make its init accept a root element and register it in the `CAROUSELS` list.
 
 ## Current sections (front page)
@@ -44,7 +44,7 @@ Single CPT, blog and archive templates (`single*.php`, `home.php`, `archive-*.ph
 | `home-hero` | Hero with glitch image (`image` desktop, `image_mobile` below `mobile`, falls back to `image`); primary CTA opens the contact drawer | `heroTitle` (title scramble) |
 | `clinics` | Clinics grid 3×2 + aside (2 columns on phones, aside full width) | — |
 | `quote` | Centred quote text | — |
-| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (shared scroll wrapper, `.problems` sticky from `tablet`) | — |
+| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (static flow; problems and solutions rows are 420px tall from `tablet`) | — |
 | `services` | Centred title, services accordion with image (image is not sticky on phones) | accordion + glitch image |
 | `cases` | Cases slider (Swiper, dot pagination on phones) | `casesSlider` |
 | `process` | Process title + steps with 50px icons (anchor `#process`); optional `title_mobile` replaces the title below 766px | — |
