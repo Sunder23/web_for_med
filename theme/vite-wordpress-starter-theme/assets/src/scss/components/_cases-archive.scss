@@ -461,12 +461,10 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
     .cases-archive__stage {
         @include slider {
             --gap: 16px;
-            --frag-max: 120px;
-            --frag-min: 24px;
+            --frag-min: 24px; // smallest PREV / NEXT fragment
             --stage-w: min(100cqw, calc(var(--page-w) - 2 * var(--pad-x)));
             --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((100cqh - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
             --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
-            --frag: clamp(var(--frag-min), calc((100cqh - var(--cover-h) - 2 * var(--gap)) / 2), var(--frag-max));
 
             grid-template-columns: minmax(0, 1fr) calc(var(--cover-w) + 35px);
             grid-template-rows: 1fr auto auto 1fr;
@@ -507,10 +505,14 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         @include slider {
             align-self: center;
             width: var(--cover-w);
-            height: calc(var(--cover-h) + 2 * (var(--frag) + var(--gap)));
+            // The active cover only, centred in the stage. The height does not
+            // follow the stage, so the footer sliding in (the stage shrinks)
+            // does not resize Swiper mid-slide — a resize would cut the slide
+            // short and jump to the end (casesArchive.js).
+            height: var(--cover-h);
             margin: 0;
-            // Covers beyond PREV / NEXT stay visible up to the stage edges
-            // (the stage clips them), so a tall screen has no empty bands.
+            // PREV / NEXT and the covers beyond stay visible up to the stage
+            // edges (the stage clips them), so a tall screen has no empty bands.
             overflow: visible;
             scroll-snap-type: none;
         }
