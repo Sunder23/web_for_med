@@ -185,9 +185,9 @@ $ab_intro_text = implode(
 
 $ab_members = array(
 	array( 'team-syschuk-2x.png', 'Валерій Сищук', 'Founder / Project Manager / SEO & Web Analytics', 'Іронічний прагматик' ),
-	array( 'team-buhutska-2x.png', 'Іра Бугуцька', 'Backend Developer / DevOps Engineer', 'Володарка коду' ),
-	array( 'team-unhurian-2x.png', 'Оля Унгурян', 'Web Designer', 'Адвокат деталей' ),
-	array( 'team-kravchuk-2x.png', 'Макс Кравчук', 'Frontend Developer / AI Explorer', 'Верстає силою думки' ),
+	array( 'team-buhutska-2x.png', 'Іра Бугуцька', 'Full Stack Developer / DevOps Engineer', 'Володарка коду' ),
+	array( 'team-unhurian-2x.png', 'Оля Унгурян', 'Design Engineer', 'Адвокат деталей' ),
+	array( 'team-kravchuk-2x.png', 'Макс Кравчук', 'Full Stack Developer / AI Explorer', 'Верстає силою думки' ),
 );
 
 $ab_team = array( 'members' => count( $ab_members ) );

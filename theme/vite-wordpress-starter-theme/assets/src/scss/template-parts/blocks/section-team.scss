@@ -20,7 +20,7 @@
     @include breakpoint(tablet) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 20px;
-      padding: 48px 35px;
+      padding: 48px 35px 55px;
     }
   }
 

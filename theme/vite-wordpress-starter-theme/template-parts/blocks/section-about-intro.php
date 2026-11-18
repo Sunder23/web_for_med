@@ -6,7 +6,8 @@
  * The page has no visible heading here: the page title is printed as a
  * visually hidden <h1>. The image comes first in the DOM (it is the LCP
  * element and goes on top on phones); from the tablet breakpoint the text
- * column is moved to the left with `order`.
+ * column is moved to the left with `order`. On hover (real pointers only)
+ * the image glitches like the home hero image.
  *
  * @package Vite_Starter
  */
@@ -29,6 +30,15 @@ if ( ! $image_id ) {
 	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional WARN-level diagnostic (minimal logging policy).
 	error_log( 'WARN [section-about-intro] image is empty, rendering text only' );
 }
+
+// Hover glitch overlay (same .glitch layers as the home hero): the channels
+// inherit the image as a CSS background.
+$glitch_url = $image_id ? (string) wp_get_attachment_image_url( $image_id, 'large' ) : '';
+
+if ( $image_id && '' === $glitch_url ) {
+	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional WARN-level diagnostic (minimal logging policy).
+	error_log( 'WARN [section-about-intro] image url not found, glitch overlay skipped' );
+}
 ?>
 <section class="about-intro">
 	<div class="about-intro__wrap container">
@@ -36,19 +46,28 @@ if ( ! $image_id ) {
 			<h1 class="screen-reader-text"><?php echo esc_html( get_the_title() ); ?></h1>
 			<?php if ( $image_id ) : ?>
 				<figure class="about-intro__media">
-					<?php
-					echo wp_get_attachment_image(
-						$image_id,
-						'large',
-						false,
-						array(
-							'class'         => 'about-intro__image',
-							'sizes'         => '(min-width: 1024px) 802px, 100vw',
-							'loading'       => 'eager',
-							'fetchpriority' => 'high',
-						)
-					);
-					?>
+					<div class="about-intro__frame">
+						<?php
+						echo wp_get_attachment_image(
+							$image_id,
+							'large',
+							false,
+							array(
+								'class'         => 'about-intro__image',
+								'sizes'         => '(min-width: 1024px) 802px, 100vw',
+								'loading'       => 'eager',
+								'fetchpriority' => 'high',
+							)
+						);
+						?>
+						<?php if ( $glitch_url ) : ?>
+							<div class="about-intro__glitch glitch" aria-hidden="true" style="<?php echo esc_attr( "--about-image: url('" . esc_url( $glitch_url ) . "');" ); ?>">
+								<div class="glitch__channel glitch__channel--r"></div>
+								<div class="glitch__channel glitch__channel--g"></div>
+								<div class="glitch__channel glitch__channel--b"></div>
+							</div>
+						<?php endif; ?>
+					</div>
 					<?php if ( '' !== $caption ) : ?>
 						<figcaption class="about-intro__caption"><?php echo esc_html( $caption ); ?></figcaption>
 					<?php endif; ?>

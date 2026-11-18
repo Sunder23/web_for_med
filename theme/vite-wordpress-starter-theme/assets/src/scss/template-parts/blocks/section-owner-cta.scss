@@ -3,8 +3,11 @@
 /* ============================================================
    OWNER CTA — Figma desktop 3241:4222, mobile 3255:920
    Phones: illustration, quote, full-width buttons in a column.
-   Tablet: person on top, buttons in a row below.
-   Laptop: person on the left, buttons on the right (bottom-aligned).
+   Mobile (766+): person in a row, buttons in a row below.
+   Desktop (tablet, 1024+): person on the left, buttons on the right
+   (bottom-aligned with the subtext line), Figma 3390:417. Up to 1279px
+   the buttons are stacked so the quote keeps ~370px; from `notebook`
+   (1280+) they sit in a row as in the mockup.
    The strip before the footer is 40px (Figma 3241:4234).
    ============================================================ */
 .owner-cta {
@@ -23,14 +26,11 @@
     }
 
     @include breakpoint(tablet) {
-      padding: 48px 35px;
-    }
-
-    @include breakpoint(laptop) {
       flex-direction: row;
       align-items: flex-end;
       justify-content: space-between;
-      gap: 40px;
+      gap: 24px;
+      padding: 48px 35px;
     }
   }
 
@@ -43,6 +43,11 @@
       flex-direction: row;
       align-items: stretch;
       gap: 16px;
+    }
+
+    @include breakpoint(tablet) {
+      flex: 0 1 auto;
+      min-width: 0;
     }
   }
 
@@ -105,9 +110,16 @@
       gap: 24px;
     }
 
-    @include breakpoint(laptop) {
+    @include breakpoint(tablet) {
+      flex-direction: column;
       flex-shrink: 0;
       flex-wrap: nowrap;
+      gap: 12px;
+    }
+
+    @include breakpoint(notebook) {
+      flex-direction: row;
+      gap: 24px;
     }
   }
 

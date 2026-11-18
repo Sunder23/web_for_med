@@ -41,7 +41,58 @@
     }
   }
 
+  &__frame {
+    position: relative;
+
+    // Glitch runs only while hovered with a real pointer; touch screens and
+    // reduced motion keep the static image. Animation names come from the
+    // global `.glitch` keyframes (_animations.scss); re-entering restarts them.
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      &:hover .about-intro__glitch {
+        opacity: 1;
+      }
+
+      &:hover .about-intro__glitch::before {
+        animation: glitch-before 3s linear 2 forwards;
+      }
+
+      &:hover .about-intro__glitch::after {
+        animation: glitch-after 3s linear 2 forwards;
+      }
+
+      &:hover .glitch__channel--r {
+        animation: rgb-shift-r 3s steps(1, jump-end) infinite alternate both;
+      }
+
+      &:hover .glitch__channel--g {
+        animation: rgb-shift-g 3s steps(1, jump-end) infinite alternate both;
+      }
+
+      &:hover .glitch__channel--b {
+        animation: rgb-shift-b 3s steps(1, jump-end) infinite alternate both;
+      }
+    }
+  }
+
+  // Overlay over the <img> (the img stays for LCP). `.glitch` paints a black
+  // base and the screen-blended channels rebuild the image on top of it.
+  &__glitch.glitch {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    background-image: var(--about-image);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__glitch.glitch::before,
+  &__glitch.glitch::after,
+  &__glitch .glitch__channel {
+    animation: none;
+  }
+
   &__image {
+    display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 802 / 810;
@@ -62,20 +113,17 @@
     flex-direction: column;
     gap: 16px;
     font-size: 16px;
-    font-weight: 500;
-    line-height: 1.55;
+    font-weight: 400;
+    line-height: 1.57;
     color: var(--c-grey);
 
+    // Figma 3390:387: fixed 328px text + 50px right padding (378px column).
     @include breakpoint(tablet) {
-      flex: 0 0 40%;
+      flex: 0 0 auto;
       order: 1;
       gap: 10px;
-      max-width: 378px;
-      padding-right: 0;
-    }
-
-    @include breakpoint(laptop) {
-      flex-basis: 378px;
+      box-sizing: content-box;
+      width: 328px;
       padding-right: 50px;
     }
   }
