@@ -12,14 +12,14 @@ import { Keyboard, Mousewheel } from 'swiper/modules';
  *   The block fills the screen under the header; the footer is out of the
  *   flow, below the viewport edge (`body.is-footer-hidden`). The wheel and
  *   the arrow keys switch cases, first to last without a loop (up at the
- *   first case does nothing). The last case is the end: a new downward
- *   gesture there slides the footer up while the block
- *   shrinks by its height, as in the mockup (on screens too low to fit, the
- *   page then scrolls on). An upward gesture at the page top slides it back
- *   down; the next one goes to the previous case. Any switch to another case
- *   (dots, fragments) hides it as well. Scrolling the page or tabbing into
- *   the footer reveals it. With a mouse, the header slides up ~2s after load
- *   and comes back over the bar from the top edge (headerAutoHide.js).
+ *   first case does nothing); it opens on the second case. The footer comes
+ *   in together with the last case — it slides up while the block shrinks by
+ *   its height, as in the mockup — and leaves with it, whatever switched the
+ *   case (wheel, keys, dots, fragments). Down at the last case is the end (on
+ *   screens too low to fit, the page scrolls on). Scrolling the page or
+ *   tabbing into the footer reveals it too. With a mouse, the header slides
+ *   up ~2s after load and comes back over the bar from the top edge
+ *   (headerAutoHide.js).
  * - `lane` (phones, low screens): horizontal, the next cover peeks in.
  * - `static`: a single case, no Swiper.
  *
@@ -98,12 +98,9 @@ export function initCasesArchive() {
 	let footerShown = false;
 	let footerAnim = null;
 	let lastWheelAt = 0;
-	let lastChangeAt = 0;
 	let gesture = 0;
-	// The gesture that hid the footer: its inertia must not move the slider.
-	let hideGesture = -1;
-	// The gesture that scrolled the page back up: its inertia must not hide
-	// the footer once the top is reached.
+	// The gesture that scrolled the page back up: its inertia must not move
+	// the slider off the last case once the top is reached.
 	let scrollGesture = -1;
 
 	const atLastCase = () => index === count - 1;
@@ -226,13 +223,13 @@ export function initCasesArchive() {
 		index = instance.realIndex ?? 0;
 		if (from === index) return;
 
-		lastChangeAt = performance.now();
 		render();
 		logDebug('[casesArchive] slide', { from, to: index, mode });
 
-		// Dots, fragment clicks: leaving the last case closes the footer.
-		if (mode === 'slider' && footerShown && !atLastCase()) {
-			setFooter(false, 'slide change');
+		// The footer comes in together with the last case and leaves with it
+		// (wheel, keys, dots, fragment clicks alike).
+		if (mode === 'slider') {
+			setFooter(atLastCase(), 'slide change');
 		}
 	};
 
@@ -280,74 +277,40 @@ export function initCasesArchive() {
 
 	// --- Gates (slider mode) --------------------------------------------------
 
-	const gateLog = (action, extra) =>
-		logDebug('[casesArchive] gate', { action, index, ...extra });
-
 	const onPageScroll = () => {
 		if (!atTop()) setFooter(true, 'page scroll');
 	};
 	const onFooterFocus = () => setFooter(true, 'focus');
 
+	// The footer follows the last case (onSlideChange), so the gates only
+	// decide who gets the event. At the page top it is Swiper, except going
+	// down from the last case: that is the end (the page scrolls on if it is
+	// taller than the screen). Below the top the page scrolls natively.
+
 	// Runs before Swiper (window, capture). `stopPropagation` keeps the event
 	// from Swiper and leaves the native scroll; `preventDefault` swallows it.
 	const onWheelGate = (e) => {
 		const now = performance.now();
-		const newGesture = now - lastWheelAt > WHEEL_IDLE_MS;
+		if (now - lastWheelAt > WHEEL_IDLE_MS) gesture += 1;
 		lastWheelAt = now;
-		if (newGesture) gesture += 1;
 
 		if (isOverlayOpen() || e.ctrlKey) {
 			e.stopPropagation();
 			return;
 		}
 
-		const down = e.deltaY > 0;
-		const up = e.deltaY < 0;
-
-		if (footerShown) {
-			e.stopPropagation();
-			// Scrolled (low screens): the page scrolls back to the top first.
-			if (!atTop()) {
-				scrollGesture = gesture;
-				return;
-			}
-
-			if (down) {
-				// Nothing below the footer: no loop to the first case.
-				if (!pageScrolls()) e.preventDefault();
-				return;
-			}
-
-			if (up) {
-				e.preventDefault();
-				if (gesture === scrollGesture) return;
-				hideGesture = gesture;
-				setFooter(false, 'wheel up');
-				gateLog('hide footer', { deltaY: e.deltaY });
-			}
-			return;
-		}
-
 		if (!atTop()) {
 			e.stopPropagation();
+			scrollGesture = gesture;
 			return;
 		}
 
-		if (gesture === hideGesture) {
-			// Inertia of the gesture that hid the footer.
-			e.stopPropagation();
-			e.preventDefault();
-			return;
-		}
+		const end = e.deltaY > 0 && atLastCase();
 
-		if (down && atLastCase()) {
+		if (end || gesture === scrollGesture) {
+			// The end, or the inertia of the scroll back up to the top.
 			e.stopPropagation();
-			e.preventDefault();
-			// Inertia of the gesture that brought the last case: swallow it.
-			if (!newGesture || now - lastChangeAt < SPEED) return;
-
-			setFooter(true, 'wheel at last case');
-			gateLog('show footer', { deltaY: e.deltaY });
+			if (!end || !pageScrolls()) e.preventDefault();
 			return;
 		}
 
@@ -364,30 +327,13 @@ export function initCasesArchive() {
 		const up = KEYS_UP.includes(e.key);
 		if (!down && !up) return;
 
-		if (footerShown) {
-			e.stopPropagation();
-			if (!atTop()) return;
+		const end = down && atLastCase();
+		if (atTop() && !end) return; // Swiper
 
-			if (up) {
-				e.preventDefault();
-				setFooter(false, 'key up');
-				gateLog('hide footer', { key: e.key });
-			} else if (!pageScrolls()) {
-				e.preventDefault();
-			}
-			return;
-		}
-
-		if (!atTop()) {
-			e.stopPropagation();
-			return;
-		}
-
-		if (down && atLastCase()) {
-			e.stopPropagation();
-			e.preventDefault();
-			setFooter(true, 'key at last case');
-			gateLog('show footer', { key: e.key });
+		e.stopPropagation();
+		if (end && atTop() && !pageScrolls()) e.preventDefault();
+		if (end) {
+			logDebug('[casesArchive] gate', { action: 'end', key: e.key, index });
 		}
 	};
 
@@ -428,9 +374,9 @@ export function initCasesArchive() {
 			swiper = new Swiper(viewport, options(mode === 'slider'));
 		}
 		if (mode === 'slider') {
-			// Loaded or resized while scrolled down: the footer is in view.
-			footerShown = !atTop();
-			hideGesture = -1;
+			// On the last case, or loaded / resized while scrolled down: the
+			// footer is in view.
+			footerShown = atLastCase() || !atTop();
 			scrollGesture = -1;
 			bindGates(true);
 			// The stage grows by the header height: re-measure the covers.

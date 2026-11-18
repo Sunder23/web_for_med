@@ -5,9 +5,9 @@
 // Base (mobile, low screens): normal page flow — title, horizontal cover lane
 // (scroll-snap without JS, a horizontal Swiper with JS), description, link.
 // Slider (`.is-enhanced` + `slider` mixin): the block fills the screen under
-// the header (bar, stage, a 40px gap); at the last case the footer slides up
-// and the block shrinks to the mockup layout (header, bar, stage, gap, footer
-// in one screen), on the way back up it slides down again; ~2s after load the
+// the header (bar, stage, a 40px gap); together with the last case the footer
+// slides up and the block shrinks to the mockup layout (header, bar, stage,
+// gap, footer in one screen), leaving the last case it slides down; ~2s after load the
 // header slides up and the archive grows by its height (headerAutoHide.js).
 // See the page-level rules below. Text on the left, a vertical Swiper
 // on the right with PREV / NEXT fragments. Sizes are pure CSS
@@ -29,11 +29,12 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // One screen: the archive takes the height between the header and the bottom
-// of the viewport. Until the last case the footer is out of the flow (fixed,
-// below the viewport edge), so the archive gets the whole screen; then it
-// slides up while the archive shrinks by its height, and back down on the way
-// up (casesArchive.js animates `.site-content` padding-bottom with the footer
-// fixed — `is-footer-moving` — and puts it back into the flow once it is in). This stylesheet is loaded on /cases/ only.
+// of the viewport. Before the last case the footer is out of the flow (fixed,
+// below the viewport edge), so the archive gets the whole screen; with the
+// last case it slides up while the archive shrinks by its height, and back
+// down when the slider leaves it (casesArchive.js animates `.site-content`
+// padding-bottom with the footer fixed — `is-footer-moving` — and puts it
+// back into the flow once it is in). This stylesheet is loaded on /cases/ only.
 .is-cases-archive {
     @include slider {
         .site {
