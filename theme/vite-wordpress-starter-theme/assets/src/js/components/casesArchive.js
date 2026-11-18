@@ -89,6 +89,16 @@ export function initCasesArchive() {
 	const footer = document.querySelector('.footer');
 	const content = document.querySelector('.site-content');
 
+	// The covers are sized for the mockup layout with the footer in
+	// (_cases-archive.scss, --stage-ref-h): hand CSS the footer height.
+	if (footer && 'ResizeObserver' in window) {
+		new ResizeObserver(() => {
+			const height = footer.offsetHeight;
+			root.style.setProperty('--cases-footer-h', `${height}px`);
+			logDebug('[casesArchive] footer height', { height });
+		}).observe(footer);
+	}
+
 	let swiper = null;
 	let headerAuto = null;
 	let mode = 'static';

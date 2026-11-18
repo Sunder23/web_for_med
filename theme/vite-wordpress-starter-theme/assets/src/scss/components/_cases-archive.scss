@@ -463,7 +463,13 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             --gap: 16px;
             --frag-min: 24px; // smallest PREV / NEXT fragment
             --stage-w: min(100cqw, calc(var(--page-w) - 2 * var(--pad-x)));
-            --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((100cqh - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
+            // Stage height in the mockup layout: header, bar (40), stage, gap
+            // (40), footer in one screen. The covers are sized from it, not
+            // from the live stage height, so they keep their size while the
+            // footer slides in and the header slides away (the stage only
+            // moves them). --cases-footer-h is measured by casesArchive.js.
+            --stage-ref-h: max(420px, calc(100svh - var(--wp-admin--admin-bar--height, 0px) - var(--header-h) - 80px - var(--cases-footer-h, 200px)));
+            --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((var(--stage-ref-h) - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
             --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
 
             grid-template-columns: minmax(0, 1fr) calc(var(--cover-w) + 35px);
