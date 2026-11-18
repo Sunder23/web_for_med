@@ -31,13 +31,14 @@ function starter_get_case_term_names( $post, $taxonomy ) {
 }
 
 /**
- * Builds the data for the single case page: /*FILE*\/ label, intro, image, sidebar details
+ * Builds the data for the single case page: /*CASE*\/ label, intro, image, sidebar details
  * and the number of sections for the "Section: NN/MM" counter.
  *
- * Fallbacks: client → post title, intro text → case_hero.subtitle, image → featured image.
+ * Fallbacks: project_name → client → post title, intro text → case_hero.subtitle,
+ * image → featured image → theme placeholder (only when the case has content).
  *
  * @param int|WP_Post $post Case post or ID.
- * @return array{client:string,intro_html:string,image_id:int,details:array<int,array{label:string,value:string,url:string}>,sections_total:int}|null Page data, or null for an invalid post.
+ * @return array{client:string,project_name:string,intro_html:string,image_id:int,placeholder:array{url:string,width:int,height:int}|null,details:array<int,array{key:string,label:string,value:string,url:string}>,sections_total:int}|null Page data, or null for an invalid post.
  */
 function starter_get_case_single_data( $post ) {
 	$post = get_post( $post );
@@ -56,6 +57,13 @@ function starter_get_case_single_data( $post ) {
 		$client = get_the_title( $post );
 	}
 
+	// Utility bar label /*CASE: …*/: project name → client → post title.
+	$project_name = trim( (string) starter_get_array_value( $intro, 'project_name', '' ) );
+	if ( '' === $project_name ) {
+		$project_name = $client;
+		error_log( 'WARN [case-single] no project_name for case ' . $post->ID . ', using client/title' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	}
+
 	$intro_html = trim( (string) starter_get_array_value( $intro, 'text', '' ) );
 	if ( '' === $intro_html ) {
 		$hero     = starter_get_field( 'case_hero', $post->ID, array() );
@@ -72,8 +80,19 @@ function starter_get_case_single_data( $post ) {
 	if ( ! $image_id ) {
 		$image_id = (int) get_post_thumbnail_id( $post );
 	}
+	// No intro image and no featured image: the theme placeholder (Figma 3155:3274),
+	// but only for a case that has something to show next to it.
+	$placeholder = null;
 	if ( ! $image_id ) {
-		error_log( 'WARN [case-single] no intro image for case ' . $post->ID ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		$has_content = '' !== $intro_html || '' !== trim( (string) $post->post_content );
+		if ( $has_content ) {
+			$placeholder = array(
+				'url'    => starter_get_static_dir() . '/images/case-placeholder.webp',
+				'width'  => 1200,
+				'height' => 795,
+			);
+		}
+		error_log( 'WARN [case-single] no intro image for case ' . $post->ID . ( $placeholder ? ', using placeholder' : ', no content either' ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}
 
 	$statuses = starter_get_case_term_names( $post, 'case_status' );
@@ -112,8 +131,10 @@ function starter_get_case_single_data( $post ) {
 
 	return array(
 		'client'         => $client,
+		'project_name'   => $project_name,
 		'intro_html'     => $intro_html,
 		'image_id'       => $image_id,
+		'placeholder'    => $placeholder,
 		'details'        => $details_rows,
 		'sections_total' => $sections_total,
 	);

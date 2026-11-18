@@ -5,7 +5,7 @@
 //
 // Mobile: one column — intro, project details, content. Text sits 10px inside
 // the frame, images and figures run edge to edge of the container.
-// From `tablet`: the details become a 180px sticky column on the left, the
+// From `tablet`: the details become a 180px column on the left (scrolls with the page), the
 // intro and the content share the 880px column on the right.
 
 $col-meta: 180px;
@@ -16,7 +16,7 @@ $figure-bg: rgb(80 111 115 / 4%);
 //
 // The utility bar sticks under the smart header while it is shown and slides up
 // to the viewport edge once the header hides (smartHeader.js toggles
-// `.header.is-hidden`). The details sidebar keeps its gap under the bar.
+// `.header.is-hidden`). The details sidebar is not sticky.
 // Same duration and easing as the header transform (components/_header.scss).
 
 .case-single {
@@ -212,14 +212,7 @@ body:has(.header.is-hidden) .case-single {
     margin: 0;
 
     @include breakpoint(tablet) {
-        position: sticky;
-        top: calc(var(--case-sticky-top) + var(--case-bar-h) + 20px);
         gap: 24px;
-        transition: top 0.3s ease;
-
-        @media (prefers-reduced-motion: reduce) {
-            transition: none;
-        }
     }
 }
 

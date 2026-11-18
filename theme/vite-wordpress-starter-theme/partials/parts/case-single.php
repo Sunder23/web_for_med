@@ -1,11 +1,11 @@
 <?php
 /**
- * Single case body (Figma 3061:891 desktop, 3124:1383 mobile): utility bar with the
- * /*FILE*\/ label and the "Section: NN/MM" counter, then the intro (title, lead, image),
- * the "project metadata" sidebar and the block-editor content.
+ * Single case body (Figma 3061:891 / 3402:462 desktop, 3124:1383 mobile): utility bar with
+ * the /*CASE: project_name*\/ label and the "Section: NN/MM" counter, then the intro (title,
+ * lead, image or the theme placeholder), the "project metadata" sidebar and the content.
  *
  * One sidebar in the DOM: the grid areas put it between the intro and the content on
- * mobile and into a sticky left column from `tablet`. Uses the current loop post.
+ * mobile and into a left column (not sticky) from `tablet`. Uses the current loop post.
  *
  * @package Vite_Starter
  */
@@ -20,7 +20,7 @@ $case_total = (int) $case_data['sections_total'];
 ?>
 <div class="case-single__bar">
 	<div class="case-single__bar-inner">
-		<span class="case-single__label">/*FILE: <?php echo esc_html( $case_data['client'] ); ?> */</span>
+		<span class="case-single__label">/*CASE: <?php echo esc_html( $case_data['project_name'] ); ?> */</span>
 		<?php if ( $case_total > 1 ) : ?>
 			<p class="case-single__counter" data-case-section-counter>
 				<?php esc_html_e( 'Section', 'vite-starter' ); ?>: <span data-case-section-current>01</span>/<span data-case-section-total><?php echo esc_html( str_pad( (string) $case_total, 2, '0', STR_PAD_LEFT ) ); ?></span>
@@ -53,6 +53,18 @@ $case_total = (int) $case_data['sections_total'];
 						)
 					);
 					?>
+				</figure>
+			<?php elseif ( $case_data['placeholder'] ) : ?>
+				<figure class="case-single__image">
+					<img
+						class="case-single__img case-single__img--placeholder"
+						src="<?php echo esc_url( $case_data['placeholder']['url'] ); ?>"
+						width="<?php echo esc_attr( (string) $case_data['placeholder']['width'] ); ?>"
+						height="<?php echo esc_attr( (string) $case_data['placeholder']['height'] ); ?>"
+						alt=""
+						loading="eager"
+						decoding="async"
+					>
 				</figure>
 			<?php endif; ?>
 		</header>

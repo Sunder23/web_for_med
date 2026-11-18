@@ -42,7 +42,28 @@
                     "name": "client",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Коротка назва клієнта для мітки /*FILE*/. Якщо порожньо — заголовок запису.",
+                    "instructions": "Коротка назва клієнта. Запасне значення для мітки /*CASE*/, якщо «Назва проєкту» порожня.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_c7d41e13",
+                    "label": "Назва проєкту",
+                    "name": "project_name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Мітка в утилітарній смузі: /*CASE: … */ (виводиться великими літерами). Якщо порожньо — «Клієнт», потім заголовок запису.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -636,5 +657,5 @@
     "active": true,
     "description": "Fields for the cases CPT single pages.",
     "show_in_rest": 0,
-    "modified": 1794419419
+    "modified": 1795010500
 }
