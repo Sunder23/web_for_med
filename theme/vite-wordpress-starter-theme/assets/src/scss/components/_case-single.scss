@@ -316,8 +316,18 @@ body:has(.header.is-hidden) .case-single {
         font-weight: 700;
         line-height: 1.25;
 
+        // Desktop: same size as h2, as in Figma 3402:566 / 3402:577.
         @include breakpoint(tablet) {
-            margin-block: 24px 14px;
+            margin-block: 50px 28px;
+            font-size: 36px;
+            line-height: 1.18;
+        }
+    }
+
+    // A chapter heading followed by its first sub-heading: 28px between them (Figma 3402:561).
+    >h2.is-style-chapter + h3 {
+        @include breakpoint(tablet) {
+            margin-top: 0;
         }
     }
 

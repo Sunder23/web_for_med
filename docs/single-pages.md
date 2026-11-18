@@ -31,29 +31,31 @@ The `*_cta` ACF groups are no longer rendered. There is no form before the foote
 
 ## Single case
 
-`single-cases.php` does not use the article layout (Figma `3061:891` desktop, `3124:1383` mobile). No breadcrumbs, TOC, FAQ, CTA or related cases.
+`single-cases.php` does not use the article layout (Figma `3061:891` / `3402:462` desktop, `3124:1383` mobile). No breadcrumbs, TOC, FAQ, CTA or related cases.
 
 | Order | Part | Partial |
 |-------|------|---------|
-| 1 | Utility bar: `/*FILE: {client} */` label + `Section: NN/MM` counter | `partials/parts/case-single.php` |
-| 2 | Intro: H1 (`the_title()`), lead, image (`full`, eager, `fetchpriority="high"`) | ″ |
+| 1 | Utility bar (sticky): `/*CASE: {project_name} */` label + `Section: NN/MM` counter | `partials/parts/case-single.php` |
+| 2 | Intro: H1 (`the_title()`), lead, image (`full`, eager, `fetchpriority="high"`) or the theme placeholder | ″ |
 | 3 | Project details sidebar (`dl`) | ″ |
 | 4 | Post content in `.entry-content.case-single__content` | ″ (`the_content()`) |
 | 5 | Prev / next strip (loops at the ends, titles hidden on phones) | `partials/parts/case-nav.php` |
 
-Layout: one column on phones (intro → details → content). From `tablet` (1024px) the details are a 180px sticky column on the left and the intro and content share an 880px column. The sidebar is rendered once and placed with grid areas.
+Layout: one column on phones (intro → details → content). From `tablet` (1024px) the details are a 180px column on the left (not sticky, it scrolls with the page) and the intro and content share an 880px column. The sidebar is rendered once and placed with grid areas.
 
 Data (`starter_get_case_single_data()` in `configure/helpers/get-case-single-data.php`):
 
 | Field | Source | Fallback |
 |-------|--------|----------|
-| Label `client` | ACF `case_intro.client` | post title |
+| Label `project_name` | ACF `case_intro.project_name` | `case_intro.client` → post title |
 | Lead | ACF `case_intro.text` (wysiwyg) | `case_hero.subtitle` |
-| Intro image | ACF `case_intro.image` | featured image |
+| Intro image | ACF `case_intro.image` | featured image → `static/images/case-placeholder.webp` (Figma `3155:3274`), only when the case has a lead or content |
 | Deliverables / Technology / Status | taxonomies `case_deliverable`, `case_technology`, `case_status` (`configure/taxonomies/`, hierarchical, no public URLs); terms by name, Status — first term | skipped |
 | Duration, Live Project | ACF `case_details.duration`, `case_details.live_url` + `live_label` (default "View Website") | skipped |
 
-The counter total is 1 (intro) + the content H2s. `assets/src/js/components/caseSectionCounter.js` updates the current section on scroll: the last section whose top passed the upper third of the viewport, the last one at the page bottom. Content images and galleries with a caption sit on a light panel; images in a gallery share one height (`caseGalleries.js` sets `--case-ratio` per image). `case_faq` and `case_cta` are kept in the field group but not rendered; `case_hero.subtitle` is still used by the cases archive.
+The counter total is 1 (intro) + the content H2s. `assets/src/js/components/caseSectionCounter.js` updates the current section on scroll: the last section whose top passed the upper third of the viewport, the last one at the page bottom. Content headings from `tablet`: H2 36px, H2 with the block style `chapter` 38px, H3 36px (50px above, 28px below; 28px between a chapter and its first H3). Content images and galleries with a caption sit on a light panel; images in a gallery share one height (`caseGalleries.js` sets `--case-ratio` per image). `case_faq` and `case_cta` are kept in the field group but not rendered; `case_hero.subtitle` is still used by the cases archive.
+
+Content scripts: `scripts/update-promedi-case.php` (block styles, phone 404 image) and `scripts/update-khmilclinic-case.php` (full refill of the Khmilclinic case from Figma `3402:462`: media, ACF intro/details, terms, block content; dry run by default, `apply` to write, original content in `_khmilclinic_content_backup`).
 
 Prev / next for both strips comes from `starter_get_adjacent_posts()` (`configure/helpers/get-adjacent-posts.php`).
 

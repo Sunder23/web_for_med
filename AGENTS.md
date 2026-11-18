@@ -19,7 +19,7 @@ wp-boilerplate/
 ├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
 ├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-main-menu.php (short menu Про нас / Кейси / Контакти → menu-main + menu-footer), seed-turnstile.php (Simple Cloudflare Turnstile on login/register/reset/comments + all CF7 forms, Interaction Only; keys: `CF_TURNSTILE_*` test constants in compose locally, plugin settings on production)
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-khmilclinic-case.php (+ data/khmilclinic/; refill of the Khmilclinic case from Figma: media, ACF, terms, content), update-main-menu.php (short menu Про нас / Кейси / Контакти → menu-main + menu-footer), seed-turnstile.php (Simple Cloudflare Turnstile on login/register/reset/comments + all CF7 forms, Interaction Only; keys: `CF_TURNSTILE_*` test constants in compose locally, plugin settings on production)
 ├── theme/vite-wordpress-starter-theme/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
@@ -42,7 +42,7 @@ wp-boilerplate/
 │   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, headerAutoHide (cases archive slider), contactDrawer, teamHoverLabel, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
-│   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons)
+│   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons), images/case-placeholder.webp (single case image placeholder)
 │   ├── vite.config.js, package.json, biome.json, .stylelintrc.json
 │   └── composer.json, phpcs.xml.dist, phpstan.neon, phpstan-baseline.neon, phpstan-bootstrap.php
 ├── docs/                            # getting-started.md, page-sections.md
