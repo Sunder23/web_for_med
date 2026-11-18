@@ -419,6 +419,12 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
             visibility 0s linear 0s;
     }
+
+    // Start case set by casesArchive.js on load: no fade from the first case.
+    &.is-instant .cases-archive__panel,
+    &.is-instant .cases-archive__dot {
+        transition: none;
+    }
 }
 
 // --- Slider (tablet+ and tall enough) ----------------------------------------

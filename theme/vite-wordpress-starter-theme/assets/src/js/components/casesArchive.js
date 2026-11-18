@@ -38,6 +38,10 @@ const GAP_LANE = 10;
 const SPEED = 750;
 // Loop needs a slide on each side of the active one plus one to move.
 const LOOP_MIN = 3;
+// The slider opens on the second case, so a PREV fragment sits above it
+// (as in the mockup). Needs a case after it too, or it would be the end.
+const SLIDER_START = 1;
+const SLIDER_START_MIN = 3;
 // A pause in the wheel stream longer than this starts a new gesture
 // (trackpad inertia keeps firing events — they belong to the same gesture).
 const WHEEL_IDLE_MS = 150;
@@ -415,6 +419,11 @@ export function initCasesArchive() {
 		}
 		mode = next;
 
+		if (mode === 'slider' && from === 'static' && count >= SLIDER_START_MIN) {
+			// First load on desktop only; a resize from the lane keeps the case.
+			index = SLIDER_START;
+		}
+
 		if (mode !== 'static') {
 			swiper = new Swiper(viewport, options(mode === 'slider'));
 		}
@@ -428,7 +437,12 @@ export function initCasesArchive() {
 			headerAuto = initHeaderAutoHide({ onCollapse: () => swiper?.update() });
 		}
 
+		// The markup marks the first case active: switch to the start case
+		// without the text fade.
+		root.classList.add('is-instant');
 		render();
+		void root.offsetHeight;
+		root.classList.remove('is-instant');
 		logDebug('[casesArchive] mode', {
 			from,
 			to: mode,
@@ -465,11 +479,11 @@ export function initCasesArchive() {
 	});
 
 	setMode(resolveMode());
-	render();
 
 	logDebug('[casesArchive] init', {
 		count,
 		mode,
+		index,
 		lenis: Boolean(window.lenis),
 	});
 }
