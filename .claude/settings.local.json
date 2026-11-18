@@ -41,13 +41,7 @@
       "Bash(netstat -ano)",
       "Bash(npx --no-install sass --load-path=node_modules assets/src/scss/main.scss /tmp/_check2.css)",
       "Bash(git commit *)",
-      "Skill(aif-plan)",
-      "mcp__playwright__browser_navigate",
-      "mcp__playwright__browser_take_screenshot",
-      "mcp__playwright__browser_console_messages",
-      "mcp__playwright__browser_resize",
-      "mcp__playwright__browser_evaluate",
-      "mcp__playwright__browser_click"
+      "Skill(aif-plan)"
     ]
   }
 }

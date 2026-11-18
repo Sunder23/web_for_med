@@ -17,13 +17,6 @@
         "chrome-devtools-mcp@latest",
         "--no-usage-statistics"
       ]
-    },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@playwright/mcp@latest"
-      ]
     }
   }
 }
