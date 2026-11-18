@@ -9,7 +9,7 @@
 // and the block shrinks to the mockup layout (header, bar, stage, gap, footer
 // in one screen), on the way back up it slides down again; ~2s after load the
 // header slides up and the archive grows by its height (headerAutoHide.js).
-// See the page-level rules below. Text on the left, a looped vertical Swiper
+// See the page-level rules below. Text on the left, a vertical Swiper
 // on the right with PREV / NEXT fragments. Sizes are pure CSS
 // (container units of `__wrap`); casesArchive.js toggles `is-active`.
 // Swiper core CSS is not imported: the few rules it needs are below.

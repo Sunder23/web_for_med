@@ -4,15 +4,16 @@ import Swiper from 'swiper';
 import { Keyboard, Mousewheel } from 'swiper/modules';
 
 /*
- * Cases archive (/cases/): looped case slider on Swiper (Figma 3025:141,
- * mobile 3166:3416).
+ * Cases archive (/cases/): case slider on Swiper (Figma 3025:141, mobile
+ * 3166:3416).
  *
  * Modes (recreated on SLIDER_QUERY change):
  * - `slider`: vertical, the active cover centred with PREV / NEXT fragments.
  *   The block fills the screen under the header; the footer is out of the
  *   flow, below the viewport edge (`body.is-footer-hidden`). The wheel and
- *   the arrow keys switch cases. The slider loops, but the last case is the
- *   end: a new downward gesture there slides the footer up while the block
+ *   the arrow keys switch cases, first to last without a loop (up at the
+ *   first case does nothing). The last case is the end: a new downward
+ *   gesture there slides the footer up while the block
  *   shrinks by its height, as in the mockup (on screens too low to fit, the
  *   page then scrolls on). An upward gesture at the page top slides it back
  *   down; the next one goes to the previous case. Any switch to another case
@@ -253,6 +254,11 @@ export function initCasesArchive() {
 
 		return {
 			...base,
+			// A straight 01 → last run: the footer waits past the last case, so
+			// wrapping around (up from the first case) would reach "the end" the
+			// wrong way.
+			loop: false,
+			rewind: false,
 			direction: 'vertical',
 			centeredSlides: true,
 			spaceBetween: GAP_SLIDER,

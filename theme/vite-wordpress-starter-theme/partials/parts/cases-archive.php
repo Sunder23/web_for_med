@@ -1,6 +1,6 @@
 <?php
 /**
- * Cases archive (/cases/): utility bar + looped case slider (Figma 3025:141, mobile 3166:3416).
+ * Cases archive (/cases/): utility bar + case slider (vertical on desktop, looped lane on phones) (Figma 3025:141, mobile 3166:3416).
  *
  * Text panels (head: client + title, details: description + link) and covers are
  * rendered for every case; casesArchive.js runs Swiper on the covers (viewport =
