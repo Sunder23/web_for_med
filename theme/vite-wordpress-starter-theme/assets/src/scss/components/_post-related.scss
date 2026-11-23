@@ -4,11 +4,12 @@
 // Figma 3481:1404 desktop, 3493:839 mobile): heading + arrows, then a Swiper row of
 // compact blog cards (361px from `tablet`, full width on phones). The row is clipped
 // at the frame lines, so the last card is cut as in the design.
+// Closes with the global `section::after` strip (_base.scss), 40px as in the design.
 
 .post-related {
-    margin-bottom: 40px; // empty strip above the footer
+    --section-gap: 40px;
+
     border-top: var(--border);
-    border-bottom: var(--border);
 
     &__head {
         display: flex;
@@ -108,7 +109,8 @@
         overflow: visible;
     }
 
-    &__slide {
+    // Doubled with the slider class: swiper.css (`.swiper-slide { width: 100% }`) loads later.
+    &__slider &__slide {
         width: 100%;
         height: auto;
 

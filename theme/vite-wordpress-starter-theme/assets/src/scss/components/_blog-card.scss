@@ -52,6 +52,11 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         line-clamp: 2;
+
+        // Two lines reserved from `mobile` so the author lines of a row align (Figma: 50px box).
+        @include breakpoint(mobile) {
+            min-height: 2lh;
+        }
     }
 
     &__link {

@@ -3,9 +3,15 @@
 // Blog listing (partials/parts/blog-archive.php; Figma 3446:656 desktop, 3493:1082 mobile):
 // hero «section owner» inside the page frame, a grid of blog cards without side lines,
 // «Показати ще» and a 40px strip above the footer.
+// Sections get the global `section::after` divider strip (_base.scss): none under the
+// hero (the grid's top line follows it directly), 40px under the grid.
+
+// Same specificity as the _base.scss rule (loaded earlier, in main.css).
+section.blog-archive__hero::after {
+    content: none;
+}
 
 .blog-archive {
-    padding-bottom: 40px; // empty strip between the grid's bottom line and the footer
 
     &__hero-inner {
         display: flex;
@@ -72,8 +78,9 @@
     }
 
     &__list {
+        --section-gap: 40px;
+
         border-top: var(--border);
-        border-bottom: var(--border);
     }
 
     &__container {

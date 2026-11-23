@@ -2,7 +2,7 @@
 
 # Single Pages (articles)
 
-Services, directions and blog posts share one article layout; cases have their own layout (see [Single case](#single-case)). These templates are plain PHP — they are **not** built from `acf/section-*` blocks. The body text is regular block-editor content (`the_content()`).
+Services and directions share one article layout; blog posts (see [Blog post](#blog-post)) and cases (see [Single case](#single-case)) have their own layouts. These templates are plain PHP — they are **not** built from `acf/section-*` blocks. The body text is regular block-editor content (`the_content()`).
 
 ## Page structure
 
@@ -25,9 +25,27 @@ Layout: one column on phones (hero → image → blurbs → sidebar → content)
 |----------|--------|------------|------------------|
 | `single-services.php` | `service_hero.subtitle` | `note` = `text`, `buttons`, `blurbs` | `service_faq` |
 | `single-directions.php` | `direction_hero.description` | `blurbs` | `direction_faq` |
-| `single.php` | post excerpt (if set) | `meta` = first category tag + date `d.m.Y` | — |
 
-The `*_cta` ACF groups are no longer rendered. There is no form before the footer any more: every contact CTA opens the contact drawer (see [Page Sections → Contact drawer and footer](page-sections.md#contact-drawer-and-footer)), and the footer of inner pages has no "Далі буде…" cover. Empty fields are skipped. The FAQ heading falls back to "Часті запитання". The related row shows nothing when there are no other posts. Blog posts are matched by first category, with the latest posts as a fallback.
+The `*_cta` ACF groups are no longer rendered. There is no form before the footer any more: every contact CTA opens the contact drawer (see [Page Sections → Contact drawer and footer](page-sections.md#contact-drawer-and-footer)), and the footer of inner pages has no "Далі буде…" cover. Empty fields are skipped. The FAQ heading falls back to "Часті запитання". The related row shows nothing when there are no other posts.
+
+## Blog post
+
+`single.php` (Figma `3453:479` desktop, `3493:839` mobile) uses `partials/parts/post-single.php`, not the article layout. No sidebar, FAQ or prev/next.
+
+| Order | Part | Partial |
+|-------|------|---------|
+| 1 | Utility bar (sticky, shared `mixins/_utility-bar.scss` with the case page): breadcrumbs `home / blog / title` in one line (`partials/breadcrumbs.php` with `class` `breadcrumbs--bar` and `labels`) + `section: NN/MM` counter | `partials/parts/post-single.php` |
+| 2 | 880px column: H1 (centred from `tablet`), author line, lead = post excerpt, cover = featured image (`full`, eager, `fetchpriority="high"`, crop 880/583) | ″ + `partials/parts/post-author.php` |
+| 3 | «Зміст»: `[ 01 ]` + H2 text, anchor links, built by `starter_get_toc()` | ″ |
+| 4 | Post content in `.entry-content.post-single__content` | ″ (`the_content()`) |
+| 5 | «Актуальні теми»: Swiper row of compact blog cards | `partials/parts/post-related.php` + `blog-card.php` |
+
+- **Author:** `starter_get_post_author()` (`configure/helpers/get-post-author.php`) → name, author archive URL, avatar from the user ACF field `user_avatar` (`group_starter_user_profile`); without it `get_avatar()`. A post without an author logs `WARN [blog] post #ID has no author`.
+- **Counter:** total = 1 (intro, incl. «Зміст») + content H2s. `assets/src/js/components/sectionCounter.js` (shared with the case page; markup `[data-section-counter]` > `[data-section-current]` / `[data-section-total]`, selectors passed to `initSectionCounter({ intro, headings })`). H2 have `scroll-margin-top` = header + bar + 24px, so «Зміст» anchors are not hidden under the sticky bar.
+- **Content styles** live only under `.post-single__content` (`_post-single.scss`), so CPT singles and cases are untouched: H2 Grunt 36/1.18 (phones 26/32), paragraphs 17/1.55 (16/25), `core/pullquote` without citation (lines above and below, Fixel Medium 32 → 20 on phones), block styles on `core/group` — `is-style-figure` (light panel, two pictures + one caption paragraph `article-figure__caption`) and `is-style-callout` (light panel, H3 so it stays out of «Зміст», paragraphs, `core/button` → `#contact-form` opens the contact drawer; full width on phones). Helpers `is-hidden-mobile` / `is-hidden-desktop` switch at `tablet` (the figure shows a horizontal scheme on desktop and a vertical one on phones). Styles are registered in `configure/theme-hooks/register-block-styles.php` (list of `[ block, style ]` pairs). They are not mirrored in `style-editor.css`.
+- **«Актуальні теми»:** up to 8 latest posts of the same category, topped up with the latest posts when fewer than 2; nothing without other posts. `postRelatedSlider.js`: `slidesPerView: 'auto'`, cards 361px from `tablet` / 335px from `mobile` / full width below, arrows from `tablet` only, hidden when everything fits (`watchOverflow`). Swiper CSS comes with the JS entry, only on single posts.
+
+Content script: `scripts/add-blog-post-private-practice.php` (+ `scripts/data/blog/`) creates or updates the post «Від приватної практики до власного центру: коли потрібен сайт» (texts verbatim from the design, media uploaded once by `_starter_source`, old content kept in `_starter_content_backup`). `scripts/update-blog-author.php` creates the author user `valerii-syshchuk` with the avatar and sets it as the author of all posts. Both: dry run by default, `apply` to write.
 
 ## Single case
 
@@ -53,7 +71,7 @@ Data (`starter_get_case_single_data()` in `configure/helpers/get-case-single-dat
 | Deliverables / Technology / Status | taxonomies `case_deliverable`, `case_technology`, `case_status` (`configure/taxonomies/`, hierarchical, no public URLs); terms by name, Status — first term | skipped |
 | Duration, Live Project | ACF `case_details.duration`, `case_details.live_url` + `live_label` (default "View Website") | skipped |
 
-The counter total is 1 (intro) + the content H2s. `assets/src/js/components/caseSectionCounter.js` updates the current section on scroll: the last section whose top passed the upper third of the viewport, the last one at the page bottom. Content headings from `tablet`: H2 36px, H2 with the block style `chapter` 38px, H3 36px (50px above, 28px below; 28px between a chapter and its first H3). Content images and galleries with a caption sit on a light panel; images in a gallery share one height (`caseGalleries.js` sets `--case-ratio` per image). `case_faq` and `case_cta` are kept in the field group but not rendered; `case_hero.subtitle` is still used by the cases archive.
+The counter total is 1 (intro) + the content H2s. `assets/src/js/components/sectionCounter.js` (shared with the blog post) updates the current section on scroll: the last section whose top passed the upper third of the viewport, the last one at the page bottom. Content headings from `tablet`: H2 36px, H2 with the block style `chapter` 38px, H3 36px (50px above, 28px below; 28px between a chapter and its first H3). Content images and galleries with a caption sit on a light panel; images in a gallery share one height (`caseGalleries.js` sets `--case-ratio` per image). `case_faq` and `case_cta` are kept in the field group but not rendered; `case_hero.subtitle` is still used by the cases archive.
 
 Content scripts: `scripts/update-promedi-case.php` (block styles, phone 404 image) and `scripts/update-khmilclinic-case.php` (full refill of the Khmilclinic case from Figma `3402:462`: media, ACF intro/details, terms, block content; dry run by default, `apply` to write, original content in `_khmilclinic_content_backup`).
 
@@ -77,8 +95,9 @@ Prev / next for both strips comes from `starter_get_adjacent_posts()` (`configur
 | Entry | Enqueued on | Includes |
 |-------|-------------|----------|
 | `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( services, directions )` | article, entry-content, lightbox, toc, faq-section, faq, post-card, related-posts, post-nav; `initToc`, `initFaqAccordion` |
-| `single-post.scss` + `single-post.js` | `is_singular( 'post' )` | same, without FAQ; `initToc` |
-| `single-case.scss` + `single-case.js` | `is_singular( 'cases' )` | entry-content, case-single; `initCaseSectionCounter`, `initCaseGalleries` |
+| `single-post.scss` + `single-post.js` | `is_singular( 'post' )` | entry-content, post-author, post-single, blog-card, post-related (+ Swiper CSS); `initSectionCounter`, `initPostRelatedSlider` |
+| `single-case.scss` + `single-case.js` | `is_singular( 'cases' )` | entry-content, case-single; `initSectionCounter`, `initCaseGalleries` |
+| `blog-archive.scss` + `blog-archive.js` | `starter_is_blog_listing()`: `is_home()`, category, tag, author, date | post-author, blog-card, blog-archive; `initBlogLoadMore` |
 
 All are enqueued from `configure/theme-hooks/enqueue-listing-templates-assets.php` (priority 110, style depends on `main`).
 
@@ -86,12 +105,19 @@ All are enqueued from `configure/theme-hooks/enqueue-listing-templates-assets.ph
 
 | Template | Layout | Styles |
 |----------|--------|--------|
-| `home.php` (posts page), `archive.php` (category, tag, date) | `partials/parts/blog-archive.php`: breadcrumbs, H1, term description, category chips (`category-nav.php`, shown with 2+ non-empty categories), `post-card` grid | `archive.scss` |
+| `home.php` (posts page), `archive.php` (category, tag, date, author) | `partials/parts/blog-archive.php` (Figma `3446:656` / `3493:1082`): hero `/*blog*/` + H1 (posts page: «Досвід, помилки та несподівані відкриття»; archives: term or author name + description), grid of `blog-card` (1 → 2 columns from `mobile` → 3 from `tablet`), «Показати ще» | `blog-archive.scss` |
 | `archive-{services,directions}.php` | `partials/parts/archive-cpt.php` | `archive.scss` |
 | `archive-cases.php` | `partials/parts/cases-archive.php`: utility bar + vertical case slider | `cases-archive.scss` |
 | `404.php` | Big "404", heading, home/blog buttons, list of services | `error-404.scss` (`starter_enqueue_404_assets`) |
 
-Breadcrumbs (`starter_get_breadcrumb_items()`): post archives show Головна → Блог → term; 404 shows Головна → Сторінку не знайдено.
+Blog listing details:
+
+- 6 posts per page in the main query (`configure/theme-hooks/blog-query.php`).
+- `partials/parts/blog-card.php`: cover in the `blog-card` image size (822×500, 2× of 411×250; after changing it run `wp media regenerate --image_size=blog-card --yes`), placeholder without a featured image; title up to two lines (two lines reserved so the author lines of a row align), its link stretched over the card; author line on top. `variant` `compact` is used by «Актуальні теми». CPT cards keep `post-card.php`.
+- «Показати ще» is a link to the next page (`/blog/page/2/`) and works without JS. `blogLoadMore.js` fetches that page, appends its `.blog-archive__item` cards (short fade-in), moves focus to the first new card, takes the next link or removes the button; on an error it falls back to normal navigation.
+- The hero has no `section::after` divider strip; the grid section ends with a 40px strip above the footer (`--section-gap: 40px`).
+
+Breadcrumbs (`starter_get_breadcrumb_items( $labels )`): post archives show Головна → Блог → term; 404 shows Головна → Сторінку не знайдено. `$labels` (`home`, `blog`) overrides the first two labels (single post bar: `home / blog`). The blog listing itself shows no breadcrumbs.
 
 ## See Also
 

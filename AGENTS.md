@@ -19,7 +19,7 @@ wp-boilerplate/
 ├── docker/                          # compose.yml (name: web_for_med), .env(.example), uploads.ini
 ├── mu-plugins/mailpit.php           # Local mail catcher (local env only)
 ├── plugin/                          # WordPress plugin scaffold
-├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-khmilclinic-case.php (+ data/khmilclinic/; refill of the Khmilclinic case from Figma: media, ACF, terms, content), update-main-menu.php (short menu Про нас / Кейси / Контакти → menu-main + menu-footer), seed-turnstile.php (Simple Cloudflare Turnstile on login/register/reset/comments + all CF7 forms, Interaction Only; keys: `CF_TURNSTILE_*` test constants in compose locally, plugin settings on production)
+├── scripts/                         # WP-CLI import/migration scripts (mounted at /scripts), incl. convert-media-to-webp.php, update-home-redesign.php (+ data/home-redesign/), update-about-page.php (+ data/about/), update-promedi-case.php (+ data/promedi/; block styles + phone 404 in the Promedi case), update-khmilclinic-case.php (+ data/khmilclinic/; refill of the Khmilclinic case from Figma: media, ACF, terms, content), update-main-menu.php (short menu Про нас / Кейси / Блог / Контакти → menu-main + menu-footer), update-blog-author.php (blog author user + ACF avatar), add-blog-post-private-practice.php (+ data/blog/; the «Від приватної практики…» post from Figma), seed-turnstile.php (Simple Cloudflare Turnstile on login/register/reset/comments + all CF7 forms, Interaction Only; keys: `CF_TURNSTILE_*` test constants in compose locally, plugin settings on production)
 ├── theme/vite-wordpress-starter-theme/
 │   ├── functions.php                # Composition root ($starter_modules list)
 │   ├── configure/
@@ -37,12 +37,12 @@ wp-boilerplate/
 │   │   ├── toc.php, admin.php
 │   │   └── acf/{acf-json,acf-blocks,section-blocks}/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
-│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php, cases-archive.php, case-single.php, case-nav.php)
+│   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php, cases-archive.php, case-single.php, case-nav.php, blog-archive.php, blog-card.php, post-author.php, post-single.php, post-related.php)
 │   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
-│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, components/ (smartHeader, headerAutoHide (cases archive slider), contactDrawer, teamHoverLabel, …), template-parts/blocks/
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, blog-archive.js, components/ (smartHeader, headerAutoHide (cases archive slider), contactDrawer, teamHoverLabel, sectionCounter (case + post `section: NN/MM`), blogLoadMore, postRelatedSlider, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
-│   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons), images/case-placeholder.webp (single case image placeholder)
+│   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons), images/case-placeholder.webp (single case image placeholder), images/icons/arrow-{prev,next}.svg («Актуальні теми» slider)
 │   ├── vite.config.js, package.json, biome.json, .stylelintrc.json
 │   └── composer.json, phpcs.xml.dist, phpstan.neon, phpstan-baseline.neon, phpstan-bootstrap.php
 ├── docs/                            # getting-started.md, page-sections.md
@@ -57,7 +57,7 @@ wp-boilerplate/
 | `theme/vite-wordpress-starter-theme/functions.php` | Theme bootstrap — defines `WFB_THEME_*`, requires modules |
 | `.../configure/js-css.php` | Vite integration (`VITE_BUILD` / `VITE_DEV`, manifest, register helpers) |
 | `.../configure/section-blocks.php` | Section slugs, rendering, conditional assets |
-| `.../configure/theme-hooks/enqueue-listing-templates-assets.php` | Per-template entries (archive, cases-archive, single-cpt, single-case, single-post) |
+| `.../configure/theme-hooks/enqueue-listing-templates-assets.php` | Per-template entries (archive, blog-archive, cases-archive, single-cpt, single-case, single-post) |
 | `.../vite.config.js` | Flat SCSS/JS entries + `template-parts/blocks/` level |
 | `.../assets/src/js/main.js`, `.../scss/main.scss` | Global entries |
 | `docker/compose.yml` | Dev environment |
@@ -68,7 +68,7 @@ wp-boilerplate/
 | README | README.md | Project landing page |
 | Getting Started | docs/getting-started.md | Environment, commands, asset modes |
 | Page Sections | docs/page-sections.md | `acf/section-*` blocks (front and about pages) and content scripts |
-| Single Pages | docs/single-pages.md | Article layout for CPT and blog singles, single case layout |
+| Single Pages | docs/single-pages.md | Article layout for CPT singles, blog post and blog listing, single case layout |
 | AI Context | .ai-factory/DESCRIPTION.md | Project specification and tech stack |
 | Architecture | .ai-factory/ARCHITECTURE.md | Layers, module layout, asset pipeline |
 | Base Rules | .ai-factory/rules/base.md | Naming and coding conventions |

@@ -34,9 +34,9 @@ wp-boilerplate/
     ├── partials/                        # breadcrumbs, header/{header,logo}, parts/*
     ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
     └── assets/src/
-        ├── js/        main.js, single-cpt.js, single-post.js, editor-link-guard.js, editor-section-blocks.js,
+        ├── js/        main.js, single-cpt.js, single-post.js, single-case.js, blog-archive.js, cases-archive.js, editor-link-guard.js, editor-section-blocks.js,
         │              components/, utils/, template-parts/blocks/section-<slug>.js
-        └── scss/      main.scss, single-cpt.scss, single-post.scss, archive.scss,
+        └── scss/      main.scss, single-cpt.scss, single-post.scss, single-case.scss, archive.scss, blog-archive.scss,
                        block-<slug>.scss, editor-section-blocks.scss, _tokens/_fonts/_base/_animations,
                        components/, mixins/, template-parts/blocks/section-<slug>.scss
 ```
@@ -64,8 +64,9 @@ assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 ## Asset Pipeline
 - **Entries** (`vite.config.js`): every non-underscore `.scss` / `.js` in `assets/src/{scss,js}/` plus one flat level `template-parts/blocks/`. Manifest keys are `assets/src/{js,scss}/<path>`.
 - **Global** (`main.scss`, `main.js`): tokens (incl. `--font-heading` Grunt Grotesk, `--section-gap`), fonts, base, header/footer/forms/grid, shared components, smooth scroll, mobile nav, smart header (`smartHeader.js`: fixed header hidden on scroll down, shown on scroll up), contact drawer (`partials/parts/contact-drawer.php` + `_contact-drawer.scss` + `contactDrawer.js`, opened by `[data-contact-open]` / `#contact-form` links), footer animations.
-- **Per template**: `archive.scss`, `single-cpt.scss/js`, `single-post.scss/js` (see `theme-hooks/enqueue-listing-templates-assets.php`).
-- **Article singles** (`single.php`, `single-{services,directions,cases}.php`): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_lightbox`, `_toc`, `_faq-section`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
+- **Per template**: `archive.scss` (CPT archives), `blog-archive.scss/js` (posts page + post archives), `cases-archive.scss/js`, `single-cpt.scss/js`, `single-post.scss/js`, `single-case.scss/js` (see `theme-hooks/enqueue-listing-templates-assets.php`).
+- **Blog post** (`single.php`): `partials/parts/post-single.php` (utility bar, 880px column, «Зміст», content styles scoped to `.post-single__content`) + `post-related.php` (Swiper); it does not use `article-layout`. **Single case**: `case-single.php` + `case-nav.php`.
+- **Article singles** (`single-{services,directions}.php`): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_lightbox`, `_toc`, `_faq-section`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
 - **Per section block**: `section-{slug}.scss/js`, enqueued only when the block is on the page (`section-blocks.php`).
 - **JS-imported CSS** (vendors) is resolved through manifest `css` + `imports` (`starter_vite_entry_css_files()`).
 - **Modes**: `VITE_BUILD` (manifest exists) → hashed files; `VITE_DEV` (no manifest, local env) → `localhost:5173`.
