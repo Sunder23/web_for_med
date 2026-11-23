@@ -1,0 +1,16 @@
+// Sticky utility bar under the smart header (single case, single post):
+// full-width bottom line, page background, slides up with the header.
+// $top — the sticky offset (a custom property of the page block).
+@mixin utility-bar($top) {
+    position: sticky;
+    top: $top;
+    z-index: 100; // under the header (200), above the content
+    padding: 0 var(--pad-x);
+    border-bottom: var(--border);
+    background: var(--c-bg);
+    transition: top 0.3s ease; // same as the header transform (components/_header.scss)
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}

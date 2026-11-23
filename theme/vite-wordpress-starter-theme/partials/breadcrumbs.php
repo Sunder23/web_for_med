@@ -1,17 +1,24 @@
 <?php
 /**
- * Theme file.
+ * Breadcrumb trail.
+ *
+ * @param array $args {
+ *     @type string $class  Optional extra classes (e.g. `breadcrumbs--bar` for a one-line utility bar).
+ *     @type array  $labels Optional label overrides, see starter_get_breadcrumb_items().
+ * }
  *
  * @package Vite_Starter
  */
 
-$starter_breadcrumb_items = starter_get_breadcrumb_items();
+$starter_breadcrumb_args  = isset( $args ) && is_array( $args ) ? $args : array();
+$starter_breadcrumb_items = starter_get_breadcrumb_items( isset( $starter_breadcrumb_args['labels'] ) && is_array( $starter_breadcrumb_args['labels'] ) ? $starter_breadcrumb_args['labels'] : array() );
+$starter_breadcrumb_class = ! empty( $starter_breadcrumb_args['class'] ) ? ' ' . $starter_breadcrumb_args['class'] : '';
 
 if ( empty( $starter_breadcrumb_items ) ) {
 	return;
 }
 ?>
-<nav class="breadcrumbs" aria-label="<?php esc_attr_e( 'Хлібні крихти', 'vite-starter' ); ?>">
+<nav class="breadcrumbs<?php echo esc_attr( $starter_breadcrumb_class ); ?>" aria-label="<?php esc_attr_e( 'Хлібні крихти', 'vite-starter' ); ?>">
 	<ol class="breadcrumbs__list">
 		<?php foreach ( $starter_breadcrumb_items as $starter_breadcrumb_item ) : ?>
 			<li class="breadcrumbs__item">

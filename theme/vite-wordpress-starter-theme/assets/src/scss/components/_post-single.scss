@@ -1,0 +1,451 @@
+@use "../mixins/breakpoint" as *;
+@use "../mixins/utility-bar" as *;
+
+// Single blog post (partials/parts/post-single.php; Figma 3453:479 desktop, 3493:839 mobile).
+//
+// Utility bar (breadcrumbs + "section: NN/MM"), then one centred 880px column:
+// intro (title, author, lead, cover, «Зміст») and the content. Content blocks are
+// styled here, inside `.post-single__content`, so CPT singles and cases that share
+// components/entry-content stay untouched.
+
+$col-main: 880px;
+$panel-bg: rgb(80 111 115 / 4%);
+
+.post-single {
+    --post-admin-bar: var(--wp-admin--admin-bar--height, 0px);
+    --post-bar-h: 58px;
+    --post-sticky-top: calc(var(--post-admin-bar) + var(--header-h));
+
+    @include breakpoint(tablet) {
+        --post-bar-h: 40px;
+    }
+}
+
+body:has(.header.is-hidden) .post-single {
+    --post-sticky-top: var(--post-admin-bar);
+}
+
+// --- Utility bar ------------------------------------------------------------------
+
+.post-single__bar {
+    @include utility-bar(var(--post-sticky-top));
+}
+
+// Phones: breadcrumbs and the counter one under the other; one row from `tablet`.
+.post-single__bar-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    max-width: calc(var(--page-w) - 2 * var(--pad-x));
+    min-height: calc(var(--post-bar-h) - 1px); // with the bar's bottom border
+    margin: 0 auto;
+    padding: 10px 4px;
+
+    @include breakpoint(mobile) {
+        padding: 10px 20px;
+        border-left: var(--border);
+        border-right: var(--border);
+    }
+
+    @include breakpoint(tablet) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 0 35px;
+    }
+}
+
+.post-single__counter {
+    flex-shrink: 0;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--c-caption);
+    font-variant-numeric: tabular-nums;
+}
+
+// --- Column -------------------------------------------------------------------------
+
+.post-single__frame {
+    display: flex;
+    justify-content: center;
+    padding: 36px 4px;
+    // Mixed with .frame: side lines from the `mobile` breakpoint up, as on the case page.
+    border-left: 0;
+    border-right: 0;
+
+    @include breakpoint(mobile) {
+        padding: 40px 24px;
+        border-left: var(--border);
+        border-right: var(--border);
+    }
+
+    @include breakpoint(tablet) {
+        padding: 40px 35px;
+    }
+}
+
+.post-single__column {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    width: 100%;
+    max-width: $col-main;
+    min-width: 0;
+
+    @include breakpoint(tablet) {
+        gap: 40px;
+    }
+}
+
+// --- Intro ----------------------------------------------------------------------
+
+.post-single__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-single__title {
+    margin: 0;
+    font-family: var(--f-heading);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.1667; // 35px
+    color: var(--c-dark);
+    overflow-wrap: break-word;
+
+    @include breakpoint(tablet) {
+        font-size: 40px;
+        line-height: 1.1;
+        text-align: center;
+    }
+}
+
+.post-single__author {
+    @include breakpoint(tablet) {
+        justify-content: center;
+    }
+}
+
+.post-single__lead {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5625; // 25px
+    color: var(--c-grey);
+
+    @include breakpoint(tablet) {
+        font-size: 18px;
+        line-height: 1.45;
+    }
+}
+
+.post-single__cover {
+    margin: 0;
+    padding: 4px 0;
+
+    @include breakpoint(tablet) {
+        padding: 20px 0;
+    }
+}
+
+// Crop as in the design: 335×222 on phones, 880×583 on desktop (both ≈ 3:2).
+.post-single__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 880 / 583;
+    object-fit: cover;
+}
+
+// --- «Зміст» --------------------------------------------------------------------
+
+.post-single__toc {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.post-single__toc-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--c-dark);
+
+    @include breakpoint(tablet) {
+        font-size: 13px;
+    }
+}
+
+.post-single__toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.post-single__toc-link {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 0;
+    color: var(--c-dark);
+    text-decoration: none;
+
+    @include breakpoint(tablet) {
+        padding: 6px 0;
+    }
+
+    &:hover {
+        color: var(--c-blue);
+    }
+}
+
+.post-single__toc-number {
+    flex-shrink: 0;
+    width: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-grey);
+    white-space: nowrap;
+}
+
+.post-single__toc-text {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.3;
+
+    @include breakpoint(tablet) {
+        font-size: 12px;
+        line-height: normal;
+    }
+}
+
+// --- Content: overrides of components/entry-content -----------------------------
+
+.post-single__content {
+    min-width: 0;
+    font-size: 16px;
+    line-height: 1.5625; // 25px
+
+    @include breakpoint(tablet) {
+        font-size: 17px;
+        line-height: 1.55;
+    }
+
+    >p,
+    >ul,
+    >ol {
+        margin-block: 16px;
+
+        @include breakpoint(tablet) {
+            margin-block: 14px;
+        }
+    }
+
+    // Sections: 36px (desktop 40) above each H2, 20px (28) to its text.
+    >h2 {
+        margin-block: 36px 20px;
+        font-family: var(--f-heading);
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.2308; // 32px
+        color: var(--c-dark);
+        scroll-margin-top: calc(var(--header-h) + var(--post-bar-h) + 24px);
+
+        @include breakpoint(tablet) {
+            margin-block: 40px 28px;
+            font-size: 36px;
+            line-height: 1.18;
+        }
+    }
+
+    >h3 {
+        margin-block: 28px 16px;
+        font-family: var(--f-heading);
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.25;
+        color: var(--c-dark);
+
+        @include breakpoint(tablet) {
+            font-size: 28px;
+            line-height: 1.18;
+        }
+    }
+
+    // Visibility helpers ("Additional CSS class"): the figure swaps its picture at `tablet`.
+    .is-hidden-mobile {
+        display: none;
+
+        @include breakpoint(tablet) {
+            display: block;
+        }
+    }
+
+    .is-hidden-desktop {
+        @include breakpoint(tablet) {
+            display: none;
+        }
+    }
+
+    // Pull quote (Figma 3472:844 / 3472:846): lines above and below, no citation.
+    >.wp-block-pullquote {
+        margin: 24px 0 0; // 8 + the 16px paragraph rhythm on phones
+        padding: 22px 15px;
+        border-top: var(--border);
+        border-bottom: var(--border);
+        border-left: 0;
+        border-right: 0;
+        text-align: left;
+        color: var(--c-dark-blue);
+
+        @include breakpoint(tablet) {
+            margin-top: 34px; // 20 + the 14px paragraph rhythm
+            padding: 32px 40px;
+        }
+    }
+
+    // Figure (block style "figure", Figma 3478:1252): one caption for two pictures.
+    >.wp-block-group.is-style-figure {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-block: 24px;
+        padding: 0 10px 12px;
+        background: $panel-bg;
+
+        @include breakpoint(tablet) {
+            margin-block: 20px;
+            padding: 20px;
+        }
+    }
+
+    // Callout with a CTA (block style "callout", Figma 3474:1240).
+    >.wp-block-group.is-style-callout {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin: 32px 0 0;
+        padding: 24px 20px;
+        background: $panel-bg;
+        color: var(--c-dark-blue);
+
+        @include breakpoint(tablet) {
+            gap: 22px;
+            margin-top: 34px;
+            padding: 38px 40px;
+        }
+    }
+}
+
+// Inner elements of the content blocks (one level below `.post-single__content > …`).
+.post-single__content .wp-block-pullquote {
+    blockquote {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+    }
+
+    p {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+
+        @include breakpoint(tablet) {
+            font-size: 32px;
+            letter-spacing: 0;
+        }
+    }
+}
+
+.post-single__content .is-style-figure {
+    figure {
+        margin: 0;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+    }
+
+    .article-figure__caption {
+        margin: 0;
+        padding: 0 10px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: var(--c-dark-blue);
+    }
+}
+
+.post-single__content .is-style-callout {
+    h3 {
+        margin: 0;
+        font-family: var(--f-heading);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.3333; // 32px
+        color: var(--c-dark);
+
+        @include breakpoint(tablet) {
+            font-size: 28px;
+            line-height: 1.18;
+        }
+    }
+
+    p {
+        margin: 0;
+        color: var(--c-dark-blue);
+    }
+
+    // 14px between the paragraphs, 32px (desktop) before the button.
+    p + p {
+        margin-top: -4px;
+
+        @include breakpoint(tablet) {
+            margin-top: -8px;
+        }
+    }
+
+    .wp-block-buttons {
+        margin: 0;
+
+        @include breakpoint(tablet) {
+            margin-top: 10px;
+        }
+    }
+
+    .wp-block-button {
+        width: 100%;
+
+        @include breakpoint(mobile) {
+            width: auto;
+        }
+    }
+
+    .wp-block-button__link {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 16px;
+
+        @include breakpoint(mobile) {
+            width: auto;
+            padding: 18px 24px;
+            font-size: 18px;
+        }
+    }
+}

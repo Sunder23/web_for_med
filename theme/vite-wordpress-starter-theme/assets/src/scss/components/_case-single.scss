@@ -1,4 +1,5 @@
 @use "../mixins/breakpoint" as *;
+@use "../mixins/utility-bar" as *;
 
 // Single case (Figma 3061:891 desktop, 3124:1383 mobile), markup in
 // partials/parts/case-single.php and case-nav.php.
@@ -36,17 +37,7 @@ body:has(.header.is-hidden) .case-single {
 // --- Utility bar (same frame as .cases-archive__bar) -------------------------
 
 .case-single__bar {
-    position: sticky;
-    top: var(--case-sticky-top);
-    z-index: 100; // under the header (200), above the content
-    padding: 0 var(--pad-x);
-    border-bottom: var(--border);
-    background: var(--c-bg);
-    transition: top 0.3s ease;
-
-    @media (prefers-reduced-motion: reduce) {
-        transition: none;
-    }
+    @include utility-bar(var(--case-sticky-top));
 }
 
 .case-single__bar-inner {

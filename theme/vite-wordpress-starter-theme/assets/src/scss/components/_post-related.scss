@@ -1,0 +1,123 @@
+@use "../mixins/breakpoint" as *;
+
+// «Актуальні теми» under a blog post (partials/parts/post-related.php;
+// Figma 3481:1404 desktop, 3493:839 mobile): heading + arrows, then a Swiper row of
+// compact blog cards (361px from `tablet`, full width on phones). The row is clipped
+// at the frame lines, so the last card is cut as in the design.
+
+.post-related {
+    margin-bottom: 40px; // empty strip above the footer
+    border-top: var(--border);
+    border-bottom: var(--border);
+
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        padding: 40px 4px 20px;
+        // Mixed with .frame: side lines from the `mobile` breakpoint up.
+        border-left: 0;
+        border-right: 0;
+
+        @include breakpoint(mobile) {
+            padding: 56px 24px 20px;
+            border-left: var(--border);
+            border-right: var(--border);
+        }
+
+        @include breakpoint(tablet) {
+            padding: 80px 35px 20px;
+        }
+    }
+
+    &__title {
+        flex: 1 1 0;
+        min-width: 0;
+        margin: 0;
+        font-family: var(--f-heading);
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.2308; // 32px
+        color: var(--c-dark);
+
+        @include breakpoint(tablet) {
+            font-size: 40px;
+            line-height: 1.15;
+        }
+    }
+
+    // Arrows only from `tablet` (phones swipe), as in the mobile design.
+    &__nav {
+        display: none;
+
+        @include breakpoint(tablet) {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            height: 40px;
+        }
+    }
+
+    &__arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 4px;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
+
+        &:hover {
+            opacity: 0.7;
+        }
+
+        &.is-disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        &.is-locked {
+            display: none;
+        }
+
+        img {
+            display: block;
+        }
+    }
+
+    &__body {
+        overflow: hidden;
+        padding: 20px 4px 40px;
+        border-left: 0;
+        border-right: 0;
+
+        @include breakpoint(mobile) {
+            padding: 20px 24px 56px;
+            border-left: var(--border);
+            border-right: var(--border);
+        }
+
+        @include breakpoint(tablet) {
+            padding: 20px 35px 80px;
+        }
+    }
+
+    // The section clips the row, not Swiper, so the cards run up to the frame line.
+    &__slider {
+        overflow: visible;
+    }
+
+    &__slide {
+        width: 100%;
+        height: auto;
+
+        @include breakpoint(mobile) {
+            width: 335px;
+        }
+
+        @include breakpoint(tablet) {
+            width: 361px;
+        }
+    }
+}

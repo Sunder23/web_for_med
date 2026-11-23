@@ -48,3 +48,39 @@
     color: var(--c-grey);
 }
 
+
+// One line inside a utility bar (single post, Figma 3453:483): `home / blog / title`,
+// Fixel Medium 12, all items in the accent colour, the last one cut with an ellipsis.
+.breadcrumbs--bar {
+    min-width: 0;
+    font-size: 12px;
+    font-weight: 500;
+
+    .breadcrumbs__list {
+        flex-wrap: nowrap;
+        gap: 0.35em;
+    }
+
+    .breadcrumbs__item {
+        flex-shrink: 0;
+        gap: 0.35em;
+        color: var(--c-blue-light);
+
+        &:not(:last-child)::after {
+            content: "/";
+            color: inherit;
+        }
+
+        &:last-child {
+            flex-shrink: 1;
+            min-width: 0;
+        }
+    }
+
+    .breadcrumbs__current {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--c-blue-light);
+    }
+}

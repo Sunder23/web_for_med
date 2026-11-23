@@ -1,8 +1,6 @@
-// Single blog post template (partials/parts/article-layout.php).
+// Single blog post (partials/parts/post-single.php, post-related.php).
 @use "components/entry-content";
-@use "components/lightbox";
-@use "components/toc";
-@use "components/article";
-@use "components/post-card";
-@use "components/related-posts";
-@use "components/post-nav";
+@use "components/post-author";
+@use "components/post-single";
+@use "components/blog-card";
+@use "components/post-related";

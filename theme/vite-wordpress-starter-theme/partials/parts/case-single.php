@@ -22,8 +22,8 @@ $case_total = (int) $case_data['sections_total'];
 	<div class="case-single__bar-inner">
 		<span class="case-single__label">/*CASE: <?php echo esc_html( $case_data['project_name'] ); ?> */</span>
 		<?php if ( $case_total > 1 ) : ?>
-			<p class="case-single__counter" data-case-section-counter>
-				<?php esc_html_e( 'Section', 'vite-starter' ); ?>: <span data-case-section-current>01</span>/<span data-case-section-total><?php echo esc_html( str_pad( (string) $case_total, 2, '0', STR_PAD_LEFT ) ); ?></span>
+			<p class="case-single__counter" data-section-counter>
+				<?php esc_html_e( 'Section', 'vite-starter' ); ?>: <span data-section-current>01</span>/<span data-section-total><?php echo esc_html( str_pad( (string) $case_total, 2, '0', STR_PAD_LEFT ) ); ?></span>
 			</p>
 		<?php endif; ?>
 	</div>
