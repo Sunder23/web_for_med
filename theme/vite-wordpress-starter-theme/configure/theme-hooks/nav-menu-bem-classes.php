@@ -58,7 +58,8 @@ function starter_nav_menu_bem_item_class( $classes, $menu_item, $args ) {
 	if ( in_array( 'menu-item-has-children', $classes, true ) ) {
 		$classes[] = $block . '__item--parent';
 	}
-	if ( in_array( 'current-menu-item', $classes, true ) ) {
+	// `current_page_parent`: the posts page item on single posts and post archives.
+	if ( array_intersect( array( 'current-menu-item', 'current_page_parent' ), $classes ) ) {
 		$classes[] = $block . '__item--current';
 	}
 

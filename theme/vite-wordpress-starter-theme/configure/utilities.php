@@ -17,6 +17,7 @@ $starter_helpers = array(
 	'get-case-archive-item.php',
 	'get-case-single-data.php',
 	'get-adjacent-posts.php',
+	'get-post-author.php',
 );
 
 foreach ( $starter_helpers as $starter_helper ) {
