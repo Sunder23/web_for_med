@@ -1,19 +1,18 @@
 <?php
 /**
- * Posts page (blog home).
+ * Posts page (blog home). The page itself keeps the title «Блог» (menu, breadcrumbs);
+ * the listing heading comes from the design (Figma 3446:656).
  *
  * @package Vite_Starter
  */
 
 get_header();
 
-$posts_page = (int) get_option( 'page_for_posts' );
-
 get_template_part(
 	'partials/parts/blog-archive',
 	null,
 	array(
-		'title' => $posts_page ? get_the_title( $posts_page ) : __( 'Блог', 'vite-starter' ),
+		'title' => __( 'Досвід, помилки та несподівані відкриття', 'vite-starter' ),
 	)
 );
 

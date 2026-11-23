@@ -29,5 +29,17 @@ function starter_remove_default_image_sizes( $sizes ) {
 }
 add_filter( 'intermediate_image_sizes_advanced', 'starter_remove_default_image_sizes' );
 
+/**
+ * Registers theme image sizes.
+ * `blog-card`: 2× the 411×250 card cover (blog listing, «Актуальні теми»).
+ * After adding a size run `wp media regenerate --image_size=blog-card --yes`.
+ *
+ * @return void
+ */
+function starter_register_image_sizes() {
+	add_image_size( 'blog-card', 822, 500, true );
+}
+add_action( 'after_setup_theme', 'starter_register_image_sizes' );
+
 // Disable the "scaled" big image size.
 add_filter( 'big_image_size_threshold', '__return_false' );

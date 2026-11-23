@@ -1,6 +1,5 @@
-// CPT archives, the blog home and post archives (categories, tags, dates).
+// CPT archives (archive-{post_type}.php). The blog listing uses blog-archive.scss.
 @use "components/cpt-common";
 @use "components/post-card";
 @use "components/archive";
-@use "components/blog-archive";
 @use "components/category-nav";

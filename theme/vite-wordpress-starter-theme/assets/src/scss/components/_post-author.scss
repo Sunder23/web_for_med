@@ -1,0 +1,63 @@
+@use "../mixins/breakpoint" as *;
+
+// Author line (partials/parts/post-author.php): square avatar 32×32, underlined name
+// (Fixel 14/20 `#3b3e41`), date on the right (12/18 caption colour).
+// Blog cards keep the date at the right edge; the single post centres the line.
+
+.post-author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-width: 0;
+
+    &__person {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        color: var(--c-grey);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--c-blue);
+        }
+    }
+
+    &__avatar {
+        flex-shrink: 0;
+        display: block;
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+    }
+
+    &__name {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 20px;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 2px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__date {
+        flex-shrink: 0;
+        font-size: 12px;
+        line-height: 18px;
+        color: var(--c-caption);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // «Актуальні теми» on phones: 13px name (Figma 3493:839).
+    &--small &__name {
+        font-size: 13px;
+
+        @include breakpoint(tablet) {
+            font-size: 14px;
+        }
+    }
+}

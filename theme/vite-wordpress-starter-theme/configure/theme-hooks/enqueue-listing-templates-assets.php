@@ -29,18 +29,42 @@ function starter_enqueue_template_assets( $handle, $style, $script = null, array
 }
 
 /**
- * Enqueues assets for CPT archives and the blog home template.
+ * Whether the current view is the blog listing: the posts page or a post archive
+ * (category, tag, author, date) — partials/parts/blog-archive.php.
+ *
+ * @return bool
+ */
+function starter_is_blog_listing() {
+	return is_home() || is_category() || is_tag() || is_author() || is_date();
+}
+
+/**
+ * Enqueues assets for CPT archives (the blog listing and /cases/ have their own).
  *
  * @return void
  */
 function starter_enqueue_archive_assets() {
-	if ( ( ! is_archive() && ! is_home() ) || is_post_type_archive( 'cases' ) ) {
+	if ( ! is_archive() || starter_is_blog_listing() || is_post_type_archive( 'cases' ) ) {
 		return;
 	}
 
 	starter_enqueue_template_assets( 'starter-archive', 'archive.scss' );
 }
 add_action( 'wp_enqueue_scripts', 'starter_enqueue_archive_assets', 110 );
+
+/**
+ * Enqueues assets for the blog listing (cards, «Показати ще»).
+ *
+ * @return void
+ */
+function starter_enqueue_blog_archive_assets() {
+	if ( ! starter_is_blog_listing() ) {
+		return;
+	}
+
+	starter_enqueue_template_assets( 'starter-blog-archive', 'blog-archive.scss', 'blog-archive.js' );
+}
+add_action( 'wp_enqueue_scripts', 'starter_enqueue_blog_archive_assets', 110 );
 
 /**
  * Enqueues assets for the cases archive (/cases/, vertical case slider).
