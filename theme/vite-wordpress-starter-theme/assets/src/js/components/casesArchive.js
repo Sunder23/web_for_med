@@ -1,3 +1,4 @@
+import { createReel } from '@js/components/casesReel.js';
 import { initHeaderAutoHide } from '@js/components/headerAutoHide.js';
 import { logDebug } from '@js/utils/logDebug.js';
 import Swiper from 'swiper';
@@ -8,24 +9,33 @@ import { Keyboard, Mousewheel } from 'swiper/modules';
  * 3166:3416).
  *
  * Modes (recreated on SLIDER_QUERY change):
- * - `slider`: vertical, the active cover centred with PREV / NEXT fragments.
- *   The block fills the screen under the header; the footer is out of the
- *   flow, below the viewport edge (`body.is-footer-hidden`). The wheel and
- *   the arrow keys switch cases, first to last without a loop (up at the
- *   first case does nothing); it opens on the second case. The footer comes
- *   in together with the last case — it slides up while the block shrinks by
- *   its height, as in the mockup — and leaves with it, whatever switched the
- *   case (wheel, keys, dots, fragments). Down at the last case is the end (on
- *   screens too low to fit, the page scrolls on). Scrolling the page or
- *   tabbing into the footer reveals it too. With a mouse, the header slides
- *   up ~2s after load and comes back over the bar from the top edge
- *   (headerAutoHide.js).
+ * - `slider`: vertical, the active cover centred with PREV / NEXT fragments,
+ *   an endless loop (1 → 2 → 3 → 1 and back) that opens on case 01. The block
+ *   always fills the screen under the header; the footer stays in the normal
+ *   flow below it and has nothing to do with the slider. At the page top the
+ *   wheel and the arrow keys switch cases (onWheelGate / onKeyGate); scrolled
+ *   down, the page scrolls natively and the case does not change. With a
+ *   mouse, the header slides up ~2s after load and comes back over the bar
+ *   from the top edge (headerAutoHide.js).
+ *   Loop: Swiper's loop moves slides from one end to the other. With the
+ *   viewport one cover high it keeps a single slide on each side, so on 3
+ *   covers the moved one would vanish from the PREV / NEXT place mid-slide.
+ *   Below LOOP_FILL covers the set is duplicated in the DOM (slider mode
+ *   only, `data-cases-clone`): the slide being moved is then always beyond
+ *   the stage edge. Indices are folded back with `realIndex % count`.
  * - `lane` (phones, low screens): horizontal, the next cover peeks in.
  * - `static`: a single case, no Swiper.
  *
- * Swiper moves the covers; text panels, dots and the counter follow
- * `realIndex`. Sizes live in CSS (_cases-archive.scss). Lenis is off on this
- * page (smoothScroll.js): Swiper owns the wheel over the stage.
+ * Swiper moves the covers; the title and description reels, the «Читати
+ * кейс» link, dots and the counter follow `realIndex`. Text switch as on
+ * grndwrk.studio: both reels slide in step with the covers (blur-fade on the
+ * items), across the loop edge too, in the covers' direction (casesReel.js).
+ * Sizes live in CSS (_cases-archive.scss). Lenis is off on this page
+ * (smoothScroll.js): Swiper owns the wheel over the stage.
+ * Bottom zone (slider, page top): the pointer in the bottom FOOTER_ZONE of
+ * the screen shows «До футера ↓» and the wheel down there scrolls the page
+ * to the footer; without a fine pointer the hint is a button; End does the
+ * same. Back up at the top the loop goes on from the same case.
  */
 
 // Keep in sync with the `slider` mixin in scss/components/_cases-archive.scss.
@@ -35,21 +45,29 @@ const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 // Keep in sync with --gap in _cases-archive.scss (slider) and the lane gap.
 const GAP_SLIDER = 16;
 const GAP_LANE = 10;
-const SPEED = 750;
-// Loop needs a slide on each side of the active one plus one to move.
+// Slide switch as on grndwrk.studio: 0.6s, cubic-bezier(0.25, 0.2, 0, 1) (SCSS
+// $ease-track). The title reel uses the same duration: keep $text-speed in sync.
+const SPEED = 600;
+// Lane loop needs a slide on each side of the active one plus one to move.
 const LOOP_MIN = 3;
-// The slider opens on the second case, so a PREV fragment sits above it
-// (as in the mockup). Needs a case after it too, or it would be the end.
-const SLIDER_START = 1;
-const SLIDER_START_MIN = 3;
+// Slider loop: covers in the DOM (real + clones). Swiper keeps loopedSlides
+// = 1 + LOOP_EXTRA around the active one; 6 leaves the slide it moves
+// beyond the PREV / NEXT fragments and the covers past them on tall screens.
+const LOOP_FILL = 6;
+const LOOP_EXTRA = 1;
 // A pause in the wheel stream longer than this starts a new gesture
 // (trackpad inertia keeps firing events — they belong to the same gesture).
 const WHEEL_IDLE_MS = 150;
-// Footer slide is 0.8s (_cases-archive.scss); fallback if transitionend is lost.
-const FOOTER_FALLBACK_MS = 1000;
 
-const KEYS_DOWN = ['ArrowDown', 'PageDown', 'End', ' '];
-const KEYS_UP = ['ArrowUp', 'PageUp', 'Home'];
+// At the page top these go to Swiper (keyboard module); scrolled down they
+// scroll the page. Space, Home and End stay native (page scroll).
+const SLIDER_KEYS = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'];
+
+// Bottom share of the screen where the wheel down scrolls to the footer
+// (keep in sync with $footer-zone in _cases-archive.scss).
+const FOOTER_ZONE = 0.15;
+// The hint follows the pointer only with a mouse; touch screens get a button.
+const FINE_POINTER_QUERY = '(hover: hover) and (pointer: fine)';
 
 const isOverlayOpen = () =>
 	document.body.classList.contains('is-drawer-open') ||
@@ -61,9 +79,15 @@ const isTypingTarget = (el) =>
 
 const atTop = () => window.scrollY <= 1;
 
-// The page is taller than the screen (low screens with the footer in).
-const pageScrolls = () =>
-	document.documentElement.scrollHeight > window.innerHeight + 1;
+const inFooterZone = (clientY) =>
+	clientY >= window.innerHeight * (1 - FOOTER_ZONE);
+
+// Shortest signed step from `from` to `to` on a ring of `total` slots.
+const ringStep = (from, to, total) => {
+	let step = (((to - from) % total) + total) % total;
+	if (step > total / 2) step -= total;
+	return step;
+};
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -77,60 +101,85 @@ export function initCasesArchive() {
 	}
 
 	const viewport = stage.querySelector('[data-cases-viewport]');
+	const track = stage.querySelector('[data-cases-track]');
 	const covers = [...stage.querySelectorAll('[data-cases-cover]')];
-	const panels = [...stage.querySelectorAll('[data-cases-panel]')];
 	const dots = [...root.querySelectorAll('[data-cases-dot]')];
+	const reelEls = [...stage.querySelectorAll('[data-cases-reel]')];
+	// «Читати кейс»: one link, the URL of each case sits on its title.
+	const link = stage.querySelector('[data-cases-link]');
+	const urls = [
+		...stage.querySelectorAll(
+			'[data-cases-reel="title"] [data-cases-reel-item]',
+		),
+	].map((el) => el.dataset.url);
 	const current = root.querySelector('[data-cases-current]');
 	const count = covers.length;
 
+	const footerHint = root.querySelector('[data-cases-footer-hint]');
+
 	const sliderMq = window.matchMedia(SLIDER_QUERY);
 	const reducedMq = window.matchMedia(REDUCED_MOTION_QUERY);
-
-	const footer = document.querySelector('.footer');
-	const content = document.querySelector('.site-content');
-
-	// The covers are sized for the mockup layout with the footer in
-	// (_cases-archive.scss, --stage-ref-h): hand CSS the footer height.
-	if (footer && 'ResizeObserver' in window) {
-		new ResizeObserver(() => {
-			const height = footer.offsetHeight;
-			root.style.setProperty('--cases-footer-h', `${height}px`);
-			logDebug('[casesArchive] footer height', { height });
-		}).observe(footer);
-	}
+	const finePointerMq = window.matchMedia(FINE_POINTER_QUERY);
 
 	let swiper = null;
 	let headerAuto = null;
 	let mode = 'static';
 	let index = 0;
+	// Swiper's realIndex (0…total-1, clones included): direction of a step.
+	let rawIndex = 0;
 
-	// Footer state (slider mode) and wheel gesture tracking.
-	let footerShown = false;
-	let footerAnim = null;
+	// Wheel gesture tracking (slider mode).
 	let lastWheelAt = 0;
 	let gesture = 0;
-	// The gesture that scrolled the page back up: its inertia must not move
-	// the slider off the last case once the top is reached.
+	// The gesture that scrolled the page back up: its inertia must not switch
+	// the case once the top is reached.
 	let scrollGesture = -1;
+	let lastGate = '';
+	// The gesture that started the scroll to the footer (wheel in the zone).
+	let footerGesture = -1;
+	// Footer zone hint (slider mode, mouse).
+	let hintShown = false;
+	let pointerFrame = 0;
+	let pointerY = -1;
 
-	const atLastCase = () => index === count - 1;
+	// Title and description reels (casesReel.js), in step with the covers.
+	const reels =
+		count > 1
+			? reelEls
+					.map((el) =>
+						createReel(el, {
+							count,
+							speed: reducedMq.matches ? 0 : SPEED,
+							name: el.dataset.casesReel,
+						}),
+					)
+					.filter(Boolean)
+			: [];
 
-	const render = () => {
-		panels.forEach((panel) => {
-			const active = Number(panel.dataset.casesPanel) === index;
-			panel.classList.toggle('is-active', active);
-			panel.inert = !active;
-			panel.toggleAttribute('aria-hidden', !active);
+	// `dir`: +1 / -1 — the way the covers went (the reels follow it across
+	// the loop edge), 0 — no animation (start case, mode change).
+	const render = (dir = 0) => {
+		reels.forEach((reel) => {
+			reel.go(index, dir);
 		});
+		if (link && urls[index]) link.href = urls[index];
 
 		covers.forEach((cover) => {
-			const active = Number(cover.dataset.casesCover) === index;
-			cover.classList.toggle('is-active', active);
-			// Fragments are previews: keyboard focus goes to the active cover only.
-			if (mode === 'slider' && !active) {
-				cover.setAttribute('tabindex', '-1');
-			} else {
+			cover.classList.toggle(
+				'is-active',
+				Number(cover.dataset.casesCover) === index,
+			);
+		});
+
+		// Fragments (and clones) are previews: keyboard focus goes to the
+		// cover in the centre only — a real one or a clone in the loop.
+		const centre =
+			mode === 'slider' ? swiper?.slides[swiper.activeIndex] : null;
+		[...track.children].forEach((cover) => {
+			if (mode !== 'slider' || cover === centre) {
 				cover.removeAttribute('tabindex');
+			} else {
+				cover.setAttribute('tabindex', '-1');
 			}
 		});
 
@@ -147,99 +196,45 @@ export function initCasesArchive() {
 		if (current) current.textContent = pad(index + 1);
 	};
 
-	// --- Footer: slides up at the last case, back down on the way up ---------
-
-	// Ends a running slide at once: footer at its final place, padding off.
-	const settleFooter = () => {
-		if (!footerAnim) return;
-
-		window.clearTimeout(footerAnim.timer);
-		footer.removeEventListener('transitionend', footerAnim.onEnd);
-		footerAnim = null;
-
-		content.style.transition = 'none';
-		document.body.classList.remove('is-footer-moving');
-		content.style.paddingBottom = '';
-		void content.offsetHeight; // apply without the transition
-		content.style.transition = '';
-		logDebug('[casesArchive] footer settled', { shown: footerShown });
-	};
-
-	const cancelFooterAnim = () => {
-		if (!footerAnim) return;
-		settleFooter();
-		logDebug('[casesArchive] footer anim cancelled');
-	};
-
-	// While hidden the footer is fixed below the viewport. It moves fixed
-	// (`is-footer-moving`) while `.site-content` padding-bottom keeps the
-	// archive in step: shrinking by the footer height as it comes up, growing
-	// back as it goes down. Shown and settled, it is back in the flow.
-	const setFooter = (shown, reason) => {
-		if (shown === footerShown) return;
-
-		cancelFooterAnim();
-		footerShown = shown;
-
-		const { body } = document;
-		const animate =
-			mode === 'slider' && footer && content && !reducedMq.matches;
-
-		logDebug('[casesArchive] footer', { shown, reason, animate, index });
-
-		if (!shown && !atTop()) {
-			window.scrollTo({ top: 0, behavior: 'instant' });
-		}
-
-		if (!animate) {
-			body.classList.toggle('is-footer-hidden', !shown);
-			return;
-		}
-
-		const onEnd = (e) => {
-			if (e.target === footer && e.propertyName === 'transform') {
-				settleFooter();
-			}
-		};
-
-		footerAnim = {
-			onEnd,
-			timer: window.setTimeout(settleFooter, FOOTER_FALLBACK_MS),
-		};
-		footer.addEventListener('transitionend', onEnd);
-
-		const height = `${footer.offsetHeight}px`;
-
-		if (shown) {
-			body.classList.add('is-footer-moving');
-			body.classList.remove('is-footer-hidden');
-			content.style.paddingBottom = height;
-			return;
-		}
-
-		// Take the footer out of the flow without a visible change, then
-		// let it slide down while the padding goes back to zero.
-		content.style.transition = 'none';
-		body.classList.add('is-footer-moving');
-		content.style.paddingBottom = height;
-		void content.offsetHeight;
-		content.style.transition = '';
-		body.classList.add('is-footer-hidden');
-		content.style.paddingBottom = '';
-	};
-
 	const onSlideChange = (instance) => {
 		const from = index;
-		index = instance.realIndex ?? 0;
-		if (from === index) return;
+		const raw = instance.realIndex ?? 0;
+		if (raw === rawIndex) return;
 
-		render();
-		logDebug('[casesArchive] slide', { from, to: index, mode });
+		const dir = Math.sign(ringStep(rawIndex, raw, instance.slides.length));
+		rawIndex = raw;
+		index = raw % count;
 
-		// The footer comes in together with the last case and leaves with it
-		// (wheel, keys, dots, fragment clicks alike).
-		if (mode === 'slider') {
-			setFooter(atLastCase(), 'slide change');
+		render(dir);
+		logDebug('[casesArchive] slide', { from, to: index, raw, dir, mode });
+	};
+
+	// --- Loop clones (slider mode) --------------------------------------------
+
+	const addLoopClones = () => {
+		if (count >= LOOP_FILL) return 0;
+
+		const sets = Math.ceil(LOOP_FILL / count) - 1;
+		for (let k = 0; k < sets; k += 1) {
+			covers.forEach((cover) => {
+				const clone = cover.cloneNode(true);
+				clone.setAttribute('data-cases-clone', '');
+				clone.setAttribute('aria-hidden', 'true');
+				clone.setAttribute('tabindex', '-1');
+				clone.classList.remove('is-active');
+				track.append(clone);
+			});
+		}
+		return sets * count;
+	};
+
+	const removeLoopClones = () => {
+		const clones = track.querySelectorAll('[data-cases-clone]');
+		clones.forEach((clone) => {
+			clone.remove();
+		});
+		if (clones.length) {
+			logDebug('[casesArchive] clones removed', { n: clones.length });
 		}
 	};
 
@@ -265,18 +260,17 @@ export function initCasesArchive() {
 
 		return {
 			...base,
-			// A straight 01 → last run: the footer waits past the last case, so
-			// wrapping around (up from the first case) would reach "the end" the
-			// wrong way.
-			loop: false,
+			// Endless: real covers + clones (addLoopClones), always enough.
+			loop: true,
 			rewind: false,
+			loopAdditionalSlides: LOOP_EXTRA,
 			direction: 'vertical',
 			centeredSlides: true,
 			spaceBetween: GAP_SLIDER,
 			// Mouse users switch with the wheel; dragging would fight link clicks.
 			simulateTouch: false,
-			// The whole page: the block fills the screen; casesArchive gates the
-			// events (onWheelGate) so the page can scroll on to the footer.
+			// The whole page: the block fills the screen; onWheelGate decides
+			// whether the event switches the case or scrolls the page.
 			mousewheel: {
 				eventsTarget: 'body',
 				thresholdDelta: 30,
@@ -286,16 +280,16 @@ export function initCasesArchive() {
 	};
 
 	// --- Gates (slider mode) --------------------------------------------------
+	//
+	// Who gets the event: at the page top it is Swiper (the loop); scrolled
+	// down, the page scrolls natively and the case stays as it is.
 
-	const onPageScroll = () => {
-		if (!atTop()) setFooter(true, 'page scroll');
+	const logGate = (action, extra) => {
+		const key = `${gesture}:${action}`;
+		if (key === lastGate) return;
+		lastGate = key;
+		logDebug('[casesArchive] gate', { action, gesture, ...extra });
 	};
-	const onFooterFocus = () => setFooter(true, 'focus');
-
-	// The footer follows the last case (onSlideChange), so the gates only
-	// decide who gets the event. At the page top it is Swiper, except going
-	// down from the last case: that is the end (the page scrolls on if it is
-	// taller than the screen). Below the top the page scrolls natively.
 
 	// Runs before Swiper (window, capture). `stopPropagation` keeps the event
 	// from Swiper and leaves the native scroll; `preventDefault` swallows it.
@@ -309,52 +303,133 @@ export function initCasesArchive() {
 			return;
 		}
 
-		if (!atTop()) {
+		if (gesture === footerGesture && e.deltaY > 0) {
+			// The rest of the gesture that started the smooth scroll to the
+			// footer: a native wheel scroll would cut it short.
 			e.stopPropagation();
-			scrollGesture = gesture;
+			e.preventDefault();
 			return;
 		}
 
-		const end = e.deltaY > 0 && atLastCase();
-
-		if (end || gesture === scrollGesture) {
-			// The end, or the inertia of the scroll back up to the top.
+		if (!atTop()) {
 			e.stopPropagation();
-			if (!end || !pageScrolls()) e.preventDefault();
+			scrollGesture = gesture;
+			logGate('page', { dy: e.deltaY });
+			return;
+		}
+
+		if (gesture === scrollGesture) {
+			// The inertia of the scroll back up to the top: not a case switch.
+			e.stopPropagation();
+			e.preventDefault();
+			logGate('inertia', { dy: e.deltaY });
+			return;
+		}
+
+		if (e.deltaY > 0 && inFooterZone(e.clientY)) {
+			// Wheel down in the bottom zone: to the footer, not the next case
+			// (wheel up there switches cases as anywhere else).
+			e.stopPropagation();
+			e.preventDefault();
+			logGate('footer', { dy: e.deltaY });
+			scrollToFooter('wheel');
 			return;
 		}
 
 		// The slider takes it. Swiper listens on <body>, which Chrome makes
 		// passive, so its own preventDefault is ignored: stop the page here.
 		e.preventDefault();
+		logGate('slider', { dy: e.deltaY });
 	};
 
 	const onKeyGate = (e) => {
 		if (isOverlayOpen() || isTypingTarget(e.target)) return;
 		if (e.altKey || e.ctrlKey || e.metaKey) return;
 
-		const down = KEYS_DOWN.includes(e.key);
-		const up = KEYS_UP.includes(e.key);
-		if (!down && !up) return;
-
-		const end = down && atLastCase();
-		if (atTop() && !end) return; // Swiper
-
-		e.stopPropagation();
-		if (end && atTop() && !pageScrolls()) e.preventDefault();
-		if (end) {
-			logDebug('[casesArchive] gate', { action: 'end', key: e.key, index });
+		if (e.key === 'End' && atTop()) {
+			e.preventDefault();
+			e.stopPropagation();
+			logDebug('[casesArchive] key gate', { key: e.key, action: 'footer' });
+			scrollToFooter('key');
+			return;
 		}
+
+		if (!SLIDER_KEYS.includes(e.key)) return; // Home, Space: native
+		if (atTop()) return; // Swiper
+
+		e.stopPropagation(); // the page scrolls natively
+		logDebug('[casesArchive] key gate', { key: e.key, action: 'page' });
 	};
+
+	// --- Footer zone (slider mode) ----------------------------------------------
+	//
+	// The footer is in the flow: the page simply scrolls down to it. Back at
+	// the top the case is the one left behind and the loop goes on.
+
+	const setHint = (shown) => {
+		if (shown === hintShown) return;
+		hintShown = shown;
+		root.classList.toggle('is-footer-hint', shown);
+		logDebug('[casesArchive] footer zone', { inside: shown });
+	};
+
+	function scrollToFooter(reason) {
+		const to = document.documentElement.scrollHeight - window.innerHeight;
+		logDebug('[casesArchive] scroll to footer', {
+			reason,
+			from: window.scrollY,
+			to,
+		});
+		// The rest of this wheel gesture (trackpad inertia) must not switch
+		// the case if it ends back at the top.
+		scrollGesture = gesture;
+		footerGesture = reason === 'wheel' ? gesture : -1;
+		setHint(false);
+		window.scrollTo({
+			top: to,
+			behavior: reducedMq.matches ? 'instant' : 'smooth',
+		});
+	}
+
+	const onPointerMove = (e) => {
+		if (e.pointerType !== 'mouse' || !finePointerMq.matches) return;
+
+		pointerY = e.clientY;
+		if (pointerFrame) return;
+		pointerFrame = window.requestAnimationFrame(() => {
+			pointerFrame = 0;
+			setHint(atTop() && inFooterZone(pointerY));
+		});
+	};
+
+	const onPointerOut = () => setHint(false);
+
+	const onScroll = () => {
+		const scrolled = !atTop();
+		root.classList.toggle('is-scrolled', scrolled);
+		if (scrolled) setHint(false);
+	};
+
+	const onHintClick = () => scrollToFooter('button');
 
 	const bindGates = (on) => {
 		const method = on ? 'addEventListener' : 'removeEventListener';
 		window[method]('wheel', onWheelGate, { capture: true, passive: false });
 		window[method]('keydown', onKeyGate, { capture: true });
-		window[method]('scroll', onPageScroll, { passive: true });
-		footer?.[method]('focusin', onFooterFocus);
-		if (!on) cancelFooterAnim();
-		document.body.classList.toggle('is-footer-hidden', on && !footerShown);
+		window[method]('pointermove', onPointerMove, { passive: true });
+		window[method]('scroll', onScroll, { passive: true });
+		window[method]('blur', onPointerOut);
+		document.documentElement[method]('pointerleave', onPointerOut);
+		footerHint?.[method]('click', onHintClick);
+
+		if (on) {
+			onScroll();
+			return;
+		}
+		window.cancelAnimationFrame(pointerFrame);
+		pointerFrame = 0;
+		setHint(false);
+		root.classList.remove('is-scrolled');
 	};
 
 	const destroy = () => {
@@ -372,22 +447,28 @@ export function initCasesArchive() {
 			headerAuto?.destroy();
 			headerAuto = null;
 			bindGates(false);
+			// Lane and static run on the real covers only.
+			removeLoopClones();
 		}
 		mode = next;
+		// A mode change keeps the case (initialSlide), clones come after it.
+		rawIndex = index;
 
-		if (mode === 'slider' && from === 'static' && count >= SLIDER_START_MIN) {
-			// First load on desktop only; a resize from the lane keeps the case.
-			index = SLIDER_START;
-		}
-
-		if (mode !== 'static') {
-			swiper = new Swiper(viewport, options(mode === 'slider'));
+		if (mode === 'slider') {
+			const clones = addLoopClones();
+			swiper = new Swiper(viewport, options(true));
+			logDebug('[casesArchive] loop', {
+				count,
+				total: swiper.slides.length,
+				clones,
+				loopFill: LOOP_FILL,
+			});
+		} else if (mode === 'lane') {
+			swiper = new Swiper(viewport, options(false));
 		}
 		if (mode === 'slider') {
-			// On the last case, or loaded / resized while scrolled down: the
-			// footer is in view.
-			footerShown = atLastCase() || !atTop();
 			scrollGesture = -1;
+			footerGesture = -1;
 			bindGates(true);
 			// The stage grows by the header height: re-measure the covers.
 			headerAuto = initHeaderAutoHide({ onCollapse: () => swiper?.update() });
@@ -403,7 +484,6 @@ export function initCasesArchive() {
 			from,
 			to: mode,
 			loop: swiper?.params.loop,
-			footerShown,
 			headerAuto: Boolean(headerAuto),
 		});
 	};
@@ -413,25 +493,42 @@ export function initCasesArchive() {
 		return sliderMq.matches ? 'slider' : 'lane';
 	};
 
+	// The slide of case `i` closest around the ring (clones included).
 	dots.forEach((dot, i) => {
-		dot.addEventListener('click', () => swiper?.slideToLoop(i));
+		dot.addEventListener('click', () => {
+			if (!swiper) return;
+
+			const total = swiper.slides.length;
+			let target = i;
+			for (let r = i + count; r < total; r += count) {
+				const now = Math.abs(ringStep(rawIndex, target, total));
+				if (Math.abs(ringStep(rawIndex, r, total)) < now) target = r;
+			}
+			logDebug('[casesArchive] dot', { i, from: rawIndex, to: target });
+			swiper.slideToLoop(target);
+		});
 	});
 
-	// A click on a PREV / NEXT fragment brings that case in instead of opening it.
-	covers.forEach((cover) => {
-		cover.addEventListener('click', (e) => {
-			const i = Number(cover.dataset.casesCover);
-			if (mode !== 'slider' || i === index || !swiper) return;
+	// A click on a PREV / NEXT fragment (a clone too) brings that case in
+	// instead of opening it; the centred cover opens the case as a link.
+	viewport.addEventListener('click', (e) => {
+		const cover = e.target.closest('[data-cases-cover]');
+		if (mode !== 'slider' || !swiper || !cover) return;
+		if (cover.classList.contains('is-current')) return;
 
-			e.preventDefault();
-			swiper.slideToLoop(i);
-			logDebug('[casesArchive] fragment click', { to: i });
-		});
+		e.preventDefault();
+		const to = Number(cover.dataset.swiperSlideIndex);
+		swiper.slideToLoop(to);
+		logDebug('[casesArchive] fragment click', { to });
 	});
 
 	sliderMq.addEventListener('change', () => setMode(resolveMode()));
 	reducedMq.addEventListener('change', () => {
-		if (swiper) swiper.params.speed = reducedMq.matches ? 0 : SPEED;
+		const speed = reducedMq.matches ? 0 : SPEED;
+		if (swiper) swiper.params.speed = speed;
+		reels.forEach((reel) => {
+			reel.setSpeed(speed);
+		});
 	});
 
 	setMode(resolveMode());
