@@ -3,8 +3,8 @@
  * Cases archive (/cases/): utility bar + case slider (endless vertical loop on desktop, looped lane on phones) (Figma 3025:141, mobile 3166:3416).
  * The slider fills the screen under the header; the footer is always in the normal flow below it.
  *
- * The captions (Client / Final product) are static. Case titles and descriptions
- * form two vertical reels (all items stacked, the track slides to the active one,
+ * The captions (Client / Final product), case titles and descriptions
+ * form vertical reels (all items stacked, the track slides to the active one,
  * as on grndwrk.studio; casesReel.js); one «Читати кейс» link under them points
  * at the active case. Covers are rendered for every case; casesArchive.js runs
  * Swiper on the covers (viewport = container, track = wrapper, cover = slide)
@@ -77,7 +77,14 @@ $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
 				aria-label="<?php esc_attr_e( 'Кейси', 'vite-starter' ); ?>"
 			>
 				<div class="cases-archive__heads">
-					<p class="cases-archive__caption"><?php esc_html_e( 'Client', 'vite-starter' ); ?></p>
+					<?php // Captions slide in step with the title / description (same reel, one item per case). ?>
+					<div class="cases-archive__reel cases-archive__reel--caption" data-cases-reel="client">
+						<div class="cases-archive__reel-track" data-cases-reel-track>
+							<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
+								<p class="cases-archive__caption cases-archive__reel-item<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-reel-item="<?php echo esc_attr( (string) $starter_i ); ?>"><?php esc_html_e( 'Client', 'vite-starter' ); ?></p>
+							<?php endforeach; ?>
+						</div>
+					</div>
 					<div class="cases-archive__reel" data-cases-reel="title">
 						<div class="cases-archive__reel-track" data-cases-reel-track>
 							<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
@@ -89,7 +96,13 @@ $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
 
 				<div class="cases-archive__details">
 					<?php if ( $starter_has_description ) : ?>
-						<p class="cases-archive__caption"><?php esc_html_e( 'Final product', 'vite-starter' ); ?></p>
+						<div class="cases-archive__reel cases-archive__reel--caption" data-cases-reel="product">
+							<div class="cases-archive__reel-track" data-cases-reel-track>
+								<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
+									<p class="cases-archive__caption cases-archive__reel-item<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-reel-item="<?php echo esc_attr( (string) $starter_i ); ?>"><?php esc_html_e( 'Final product', 'vite-starter' ); ?></p>
+								<?php endforeach; ?>
+							</div>
+						</div>
 					<?php endif; ?>
 					<?php // Same reel as the titles; an empty item keeps the indices for a case without a description. ?>
 					<div class="cases-archive__reel cases-archive__reel--text" data-cases-reel="description">

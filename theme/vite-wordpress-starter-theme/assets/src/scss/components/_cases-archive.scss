@@ -278,6 +278,12 @@ $footer-zone: 15svh;
         }
     }
 
+    // Caption reels repeat the caption per case (they slide with the title /
+    // description); without JS one is enough.
+    &:not(.is-enhanced) &__reel--caption &__reel-item:not(:first-child) {
+        display: none;
+    }
+
     // Without JS a case without a description has nothing to list; enhanced,
     // the empty item stays in the reel (its window closes to 0).
     &:not(.is-enhanced) &__description:empty {
