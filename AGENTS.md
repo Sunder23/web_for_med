@@ -39,7 +39,7 @@ wp-boilerplate/
 │   ├── template-parts/blocks/       # section-{slug}.php section markup
 │   ├── partials/                    # breadcrumbs.php, header/{header,logo}.php, parts/* (incl. contact-drawer.php, cases-archive.php, case-single.php, case-nav.php, blog-archive.php, blog-card.php, post-author.php, post-single.php, post-related.php)
 │   ├── page.php, single*.php, archive.php, archive-*.php, home.php, header.php, footer.php, 404.php
-│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, blog-archive.js, components/ (smartHeader, headerAutoHide (cases archive slider), contactDrawer, teamHoverLabel, sectionCounter (case + post `section: NN/MM`), blogLoadMore, postRelatedSlider, …), template-parts/blocks/
+│   ├── assets/src/js/               # main.js, single-cpt.js, single-post.js, single-case.js, cases-archive.js, blog-archive.js, components/ (smartHeader, headerAutoHide (cases archive slider), casesReel (title / description reels on /cases/), contactDrawer, teamHoverLabel, cardReveal (problems/solutions cards), sectionCounter (case + post `section: NN/MM`), blogLoadMore, postRelatedSlider, …), template-parts/blocks/
 │   ├── assets/src/scss/             # main.scss + per-template/section entries, components/, mixins/
 │   ├── assets/dist/                 # Vite build output (gitignored)
 │   ├── static/                      # fonts/ (Fixel, GruntGrotesk-Bold.woff2), images/home/*.svg (section icons), images/case-placeholder.webp (single case image placeholder), images/icons/arrow-{prev,next}.svg («Актуальні теми» slider)

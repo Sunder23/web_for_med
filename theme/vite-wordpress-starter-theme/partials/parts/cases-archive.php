@@ -1,11 +1,16 @@
 <?php
 /**
- * Cases archive (/cases/): utility bar + case slider (vertical on desktop, looped lane on phones) (Figma 3025:141, mobile 3166:3416).
+ * Cases archive (/cases/): utility bar + case slider (endless vertical loop on desktop, looped lane on phones) (Figma 3025:141, mobile 3166:3416).
+ * The slider fills the screen under the header; the footer is always in the normal flow below it.
  *
- * Text panels (head: client + title, details: description + link) and covers are
- * rendered for every case; casesArchive.js runs Swiper on the covers (viewport =
- * container, track = wrapper, cover = slide) and switches the active panels.
- * Without JS the covers form a horizontal scroll-snap lane.
+ * The captions (Client / Final product), case titles and descriptions
+ * form vertical reels (all items stacked, the track slides to the active one,
+ * as on grndwrk.studio; casesReel.js); one «Читати кейс» link under them points
+ * at the active case. Covers are rendered for every case; casesArchive.js runs
+ * Swiper on the covers (viewport = container, track = wrapper, cover = slide)
+ * and drives the reels.
+ * Without JS the covers form a horizontal scroll-snap lane, titles and
+ * descriptions are listed.
  *
  * @package Vite_Starter
  */
@@ -20,12 +25,14 @@ while ( have_posts() ) {
 }
 wp_reset_postdata();
 
+$starter_has_description = in_array( true, array_map( static fn( $c ) => '' !== (string) $c['description'], $starter_cases ), true );
+
 $starter_count     = count( $starter_cases );
 $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
 ?>
 <main class="cases-archive" data-cases-archive data-count="<?php echo esc_attr( (string) $starter_count ); ?>">
-	<?php // Before the first paint: no flash of the unenhanced layout or of the footer (it comes in at the last case, see casesArchive.js). ?>
-	<script>document.currentScript.parentElement.classList.add('is-enhanced');<?php echo $starter_count > 1 ? "document.body.classList.add('is-footer-hidden');" : ''; ?></script>
+	<?php // Before the first paint: no flash of the unenhanced layout (the footer is always in the flow below). ?>
+	<script>document.currentScript.parentElement.classList.add('is-enhanced');</script>
 	<h1 class="cases-archive__title"><?php post_type_archive_title(); ?></h1>
 
 	<div class="cases-archive__bar">
@@ -70,26 +77,45 @@ $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
 				aria-label="<?php esc_attr_e( 'Кейси', 'vite-starter' ); ?>"
 			>
 				<div class="cases-archive__heads">
-					<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
-						<div class="cases-archive__panel cases-archive__panel--head<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-panel="<?php echo esc_attr( (string) $starter_i ); ?>">
-							<p class="cases-archive__caption"><?php esc_html_e( 'Client', 'vite-starter' ); ?></p>
-							<h2 class="cases-archive__case-title"><?php echo esc_html( $starter_case['title'] ); ?></h2>
+					<?php // Captions slide in step with the title / description (same reel, one item per case). ?>
+					<div class="cases-archive__reel cases-archive__reel--caption" data-cases-reel="client">
+						<div class="cases-archive__reel-track" data-cases-reel-track>
+							<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
+								<p class="cases-archive__caption cases-archive__reel-item<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-reel-item="<?php echo esc_attr( (string) $starter_i ); ?>"><?php esc_html_e( 'Client', 'vite-starter' ); ?></p>
+							<?php endforeach; ?>
 						</div>
-					<?php endforeach; ?>
+					</div>
+					<div class="cases-archive__reel" data-cases-reel="title">
+						<div class="cases-archive__reel-track" data-cases-reel-track>
+							<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
+								<h2 class="cases-archive__case-title cases-archive__reel-item<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-reel-item="<?php echo esc_attr( (string) $starter_i ); ?>" data-url="<?php echo esc_url( $starter_case['url'] ); ?>"><?php echo esc_html( $starter_case['title'] ); ?></h2>
+							<?php endforeach; ?>
+						</div>
+					</div>
 				</div>
 
 				<div class="cases-archive__details">
-					<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
-						<div class="cases-archive__panel cases-archive__panel--details<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-panel="<?php echo esc_attr( (string) $starter_i ); ?>">
-							<?php if ( $starter_case['description'] ) : ?>
-								<p class="cases-archive__caption"><?php esc_html_e( 'Final product', 'vite-starter' ); ?></p>
-								<p class="cases-archive__description"><?php echo esc_html( $starter_case['description'] ); ?></p>
-							<?php endif; ?>
-							<a class="button button--secondary cases-archive__link" href="<?php echo esc_url( $starter_case['url'] ); ?>">
-								<?php esc_html_e( 'Читати кейс', 'vite-starter' ); ?>
-							</a>
+					<?php if ( $starter_has_description ) : ?>
+						<div class="cases-archive__reel cases-archive__reel--caption" data-cases-reel="product">
+							<div class="cases-archive__reel-track" data-cases-reel-track>
+								<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
+									<p class="cases-archive__caption cases-archive__reel-item<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-reel-item="<?php echo esc_attr( (string) $starter_i ); ?>"><?php esc_html_e( 'Final product', 'vite-starter' ); ?></p>
+								<?php endforeach; ?>
+							</div>
 						</div>
-					<?php endforeach; ?>
+					<?php endif; ?>
+					<?php // Same reel as the titles; an empty item keeps the indices for a case without a description. ?>
+					<div class="cases-archive__reel cases-archive__reel--text" data-cases-reel="description">
+						<div class="cases-archive__reel-track" data-cases-reel-track>
+							<?php foreach ( $starter_cases as $starter_i => $starter_case ) : ?>
+								<p class="cases-archive__description cases-archive__reel-item<?php echo 0 === $starter_i ? ' is-active' : ''; ?>" data-cases-reel-item="<?php echo esc_attr( (string) $starter_i ); ?>"><?php echo esc_html( (string) $starter_case['description'] ); ?></p>
+							<?php endforeach; ?>
+						</div>
+					</div>
+					<?php // One link, casesArchive.js points it at the active case (without JS the covers are the links). ?>
+					<a class="button button--secondary cases-archive__link" href="<?php echo esc_url( $starter_cases[0]['url'] ); ?>" data-cases-link>
+						<?php esc_html_e( 'Читати кейс', 'vite-starter' ); ?>
+					</a>
 				</div>
 
 				<div class="cases-archive__viewport" data-cases-viewport>
@@ -115,7 +141,14 @@ $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
 										)
 									);
 								} else {
-									echo '<span class="cases-archive__image cases-archive__image--placeholder" aria-hidden="true"></span>';
+									$starter_placeholder = starter_get_case_placeholder_image();
+									printf(
+										'<img class="cases-archive__image cases-archive__image--placeholder" src="%1$s" width="%2$d" height="%3$d" alt="" loading="%4$s" decoding="async">',
+										esc_url( $starter_placeholder['url'] ),
+										(int) $starter_placeholder['width'],
+										(int) $starter_placeholder['height'],
+										esc_attr( 0 === $starter_i ? 'eager' : 'lazy' )
+									);
 								}
 								?>
 							</a>
@@ -125,4 +158,12 @@ $starter_count_str = str_pad( (string) $starter_count, 2, '0', STR_PAD_LEFT );
 			</div>
 		<?php endif; ?>
 	</div>
+
+	<?php if ( $starter_count > 1 ) : ?>
+		<?php // Slider mode: bottom zone hint, wheel down there scrolls to the footer (casesArchive.js); a button on touch screens. ?>
+		<button type="button" class="cases-archive__footer-hint" data-cases-footer-hint aria-controls="contacts">
+			<span><?php esc_html_e( 'До футера', 'vite-starter' ); ?></span>
+			<span class="cases-archive__footer-arrow" aria-hidden="true">↓</span>
+		</button>
+	<?php endif; ?>
 </main>

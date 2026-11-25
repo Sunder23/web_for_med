@@ -4,14 +4,12 @@
 //
 // Base (mobile, low screens): normal page flow — title, horizontal cover lane
 // (scroll-snap without JS, a horizontal Swiper with JS), description, link.
-// Slider (`.is-enhanced` + `slider` mixin): the block fills the screen under
-// the header (bar, stage, a 40px gap); together with the last case the footer
-// slides up and the block shrinks to the mockup layout (header, bar, stage,
-// gap, footer in one screen), leaving the last case it slides down; ~2s after load the
-// header slides up and the archive grows by its height (headerAutoHide.js).
-// See the page-level rules below. Text on the left, a vertical Swiper
-// on the right with PREV / NEXT fragments. Sizes are pure CSS
-// (container units of `__wrap`); casesArchive.js toggles `is-active`.
+// Slider (`.is-enhanced` + `slider` mixin): the block always fills the screen
+// under the header (bar, stage, a 40px gap), the footer follows in the flow;
+// ~2s after load the header slides up and the archive grows by its height
+// (headerAutoHide.js). See the page-level rules below. Text on the left, an
+// endless vertical Swiper on the right with PREV / NEXT fragments. Covers are a fixed 522×382 on
+// every desktop screen; casesArchive.js toggles `is-active`.
 // Swiper core CSS is not imported: the few rules it needs are below.
 // Keep the media query in sync with SLIDER_QUERY in components/casesArchive.js.
 
@@ -19,8 +17,16 @@ $cover-w: 522;
 $cover-h: 382;
 // Below this the slider stage stops shrinking (the page scrolls instead).
 $stage-min-h: 320px;
-$ease-track: cubic-bezier(0.65, 0, 0.35, 1);
-$ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
+// Fast start, soft landing (grndwrk.studio); duration: SPEED in casesArchive.js.
+$ease-track: cubic-bezier(0.25, 0.2, 0, 1);
+// Title reel slide: as the covers (keep in sync with SPEED in casesArchive.js).
+$text-speed: 0.6s;
+// Title blur-fade (grndwrk.studio text reel).
+$ease-blur: cubic-bezier(0.7, 0.2, 0, 1);
+// Bottom zone of the slider: hint + wheel down to the footer (keep in sync
+// with FOOTER_ZONE in casesArchive.js). The archive ends at the bottom edge
+// of the screen at the page top, so the zone is a share of the viewport.
+$footer-zone: 15svh;
 
 @mixin slider {
     @include breakpoint(tablet) {
@@ -31,36 +37,16 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // One screen: the archive takes the height between the header and the bottom
-// of the viewport. Before the last case the footer is out of the flow (fixed,
-// below the viewport edge), so the archive gets the whole screen; with the
-// last case it slides up while the archive shrinks by its height, and back
-// down when the slider leaves it (casesArchive.js animates `.site-content`
-// padding-bottom with the footer fixed — `is-footer-moving` — and puts it
-// back into the flow once it is in). This stylesheet is loaded on /cases/ only.
+// of the viewport (`.cases-archive.is-enhanced` below); the footer is always
+// in the normal flow under it. This stylesheet is loaded on /cases/ only.
 .is-cases-archive {
     @include slider {
         .site {
-            display: flex;
-            flex-direction: column;
-            min-height: calc(100svh - var(--wp-admin--admin-bar--height, 0px));
             transition: padding-top 0.3s ease; // in step with the .header slide
         }
 
-        .site-content {
-            display: flex;
-            flex: 1 0 auto;
-            flex-direction: column;
-            transition: padding-bottom 0.8s $ease-footer;
-        }
-
-        .footer {
-            transition: transform 0.8s $ease-footer;
-        }
-
         @media (prefers-reduced-motion: reduce) {
-            .site,
-            .site-content,
-            .footer {
+            .site {
                 transition: none;
             }
         }
@@ -74,25 +60,9 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         .site {
             padding-top: 0;
         }
-    }
-}
 
-.is-cases-archive.is-footer-hidden,
-.is-cases-archive.is-footer-moving {
-    @include slider {
-        .footer {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            left: 0;
-        }
-    }
-}
-
-.is-cases-archive.is-footer-hidden {
-    @include slider {
-        .footer {
-            transform: translateY(100%);
+        .cases-archive.is-enhanced {
+            height: calc(100svh - var(--wp-admin--admin-bar--height, 0px));
         }
     }
 }
@@ -242,11 +212,17 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         color: var(--c-grey);
     }
 
+    // Static caption + the title reel / the details panels.
     &__heads,
     &__details {
         display: grid;
-        gap: 40px;
+        gap: 4px;
+        min-width: 0;
         padding-right: 10px;
+
+        @include breakpoint(tablet) {
+            gap: 8px;
+        }
     }
 
     &__heads {
@@ -257,16 +233,12 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         grid-area: details;
     }
 
-    &__panel {
+    // Without JS: all titles / descriptions listed; enhanced: a one-item
+    // window (below).
+    &__reel-track {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-        min-width: 0;
-
-        @include breakpoint(tablet) {
-            gap: 8px;
-        }
+        gap: 12px;
     }
 
     &__caption {
@@ -306,12 +278,31 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
         }
     }
 
+    // Caption reels repeat the caption per case (they slide with the title /
+    // description); without JS one is enough.
+    &:not(.is-enhanced) &__reel--caption &__reel-item:not(:first-child) {
+        display: none;
+    }
+
+    // Without JS a case without a description has nothing to list; enhanced,
+    // the empty item stays in the reel (its window closes to 0).
+    &:not(.is-enhanced) &__description:empty {
+        display: none;
+    }
+
+    // One link for the active case (casesArchive.js). Without JS the covers
+    // are the links.
     &__link {
+        justify-self: start;
         margin-top: 18px;
 
         @include breakpoint(tablet) {
-            margin-top: 44px; // + panel gap 8 = 52 in the mockup
+            margin-top: 44px; // + details gap 8 = 52 from the description
         }
+    }
+
+    &:not(.is-enhanced) &__link {
+        display: none;
     }
 
     // Mobile: horizontal lane, the next cover peeks in from the right edge.
@@ -383,50 +374,92 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             background: linear-gradient(135deg, var(--c-banner), var(--c-dark-blue));
         }
     }
-}
 
-// --- Enhanced (JS ready): one active text panel ------------------------------
-
-.cases-archive.is-enhanced {
-    .cases-archive__heads,
-    .cases-archive__details {
-        gap: 0;
+    // «До футера ↓»: slider mode only (see the slider rules below).
+    &__footer-hint {
+        display: none;
     }
 
-    // All panels share one grid cell, so switching never changes the height.
-    // Sequential: the outgoing text only fades (0.5s, no movement), then the
-    // incoming one fades in and rises; it settles ~1.6s after the switch.
-    .cases-archive__panel {
-        grid-area: 1 / 1;
+    &__footer-arrow {
+        display: inline-block;
+    }
+}
 
-        @media (prefers-reduced-motion: reduce) {
-            transition: none !important;
+@keyframes cases-archive-hint-bob {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(3px);
+    }
+}
+
+// --- Enhanced (JS ready): text switch as on grndwrk.studio --------------------
+//
+// Title and description: two vertical reels. The window (`__reel`) is one item
+// high, the track with every item slides to the active one in step with the
+// covers, the outgoing item fades out blurred while the incoming one comes in
+// sharp. casesReel.js sets --reel-y / --reel-h (items wrap to several lines,
+// so the window follows the active item's height; an empty description
+// closes it to 0) and `is-ready`; at the loop edge (3 → 1, 1 → 3) it slides
+// to a clone and jumps back to the real item without a transition.
+
+.cases-archive.is-enhanced {
+    .cases-archive__reel {
+        height: var(--reel-h, auto);
+        overflow: hidden;
+        transition: height $text-speed $ease-track;
+    }
+
+    .cases-archive__reel-track {
+        position: relative; // offsetParent of the titles (JS measures in it)
+        gap: 0;
+        transform: translateY(var(--reel-y, 0));
+        transition: transform $text-speed $ease-track;
+    }
+
+    .cases-archive__reel-item {
+        opacity: 0;
+        filter: blur(2px);
+        transition:
+            opacity 0.35s $ease-blur,
+            filter 0.35s $ease-blur;
+
+        &.is-active {
+            opacity: 1;
+            filter: blur(0);
         }
     }
 
-    // Leaving: fade out, then drop to the start position unseen.
-    .cases-archive__panel:not(.is-active) {
-        visibility: hidden;
-        opacity: 0;
-        transform: translateY(12px);
-        transition:
-            opacity 0.5s ease,
-            transform 0s linear 0.5s,
-            visibility 0s linear 0.5s;
+    // Before the first measure only the active title takes space (no flash
+    // of the whole list).
+    .cases-archive__reel:not(.is-ready) .cases-archive__reel-item:not(.is-active) {
+        display: none;
     }
 
-    // Entering: wait for the old text to fade, then come in.
-    .cases-archive__panel.is-active {
-        transition:
-            opacity 1s ease 0.4s,
-            transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
-            visibility 0s linear 0s;
-    }
-
-    // Start case set by casesArchive.js on load: no fade from the first case.
-    &.is-instant .cases-archive__panel,
+    // Start case set by casesArchive.js on load / mode change: no animation.
+    &.is-instant .cases-archive__reel,
+    &.is-instant .cases-archive__reel-track,
+    &.is-instant .cases-archive__reel-item,
     &.is-instant .cases-archive__dot {
         transition: none;
+    }
+
+    // Edge jump (casesReel.js): from the clone to the real item, no animation.
+    .cases-archive__reel.is-instant,
+    .cases-archive__reel.is-instant .cases-archive__reel-track,
+    .cases-archive__reel.is-instant .cases-archive__reel-item {
+        transition: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .cases-archive__reel,
+        .cases-archive__reel-track,
+        .cases-archive__reel-item {
+            transition: none;
+        }
     }
 }
 
@@ -434,10 +467,20 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 
 .cases-archive.is-enhanced {
     @include slider {
+        position: relative; // the footer hint
         display: flex;
-        flex: 1 0 auto;
         flex-direction: column;
+        // One screen under the header (collapsed header: see the page-level
+        // rules above), the slider never resizes while cases switch.
+        height: calc(
+            100svh - var(--wp-admin--admin-bar--height, 0px) - var(--header-h)
+        );
         padding-bottom: 40px;
+        transition: height 0.3s ease; // in step with the .header slide
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
     }
 
     .cases-archive__bar {
@@ -462,24 +505,10 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
 
     .cases-archive__stage {
         @include slider {
-            --gap: 16px;
-            --frag-min: 24px; // smallest PREV / NEXT fragment
-            --stage-w: min(100cqw, calc(var(--page-w) - 2 * var(--pad-x)));
-            // Stage height in the mockup layout: header, bar (40), stage, gap
-            // (40), footer in one screen. The covers are sized from it, not
-            // from the live stage height, so they keep their size while the
-            // footer slides in and the header slides away (the stage only
-            // moves them). --cases-footer-h is measured by casesArchive.js.
-            // With a mouse the header slides away for good (headerAutoHide.js),
-            // so its height is not taken off (same media query as there).
-            --stage-ref-header: var(--header-h);
-            --stage-ref-h: max(#{$stage-min-h}, calc(100svh - var(--wp-admin--admin-bar--height, 0px) - var(--stage-ref-header) - 80px - var(--cases-footer-h, 200px)));
-
-            @media (hover: hover) and (pointer: fine) {
-                --stage-ref-header: 0px;
-            }
-            --cover-w: min(#{$cover-w}px, calc(var(--stage-w) * 0.4), calc((var(--stage-ref-h) - 2 * var(--gap) - 2 * var(--frag-min)) * #{$cover-w} / #{$cover-h}));
-            --cover-h: calc(var(--cover-w) * #{$cover-h} / #{$cover-w});
+            // Fixed cover size on every desktop screen (design: 522×382). It
+            // never follows the viewport or the stage.
+            --cover-w: #{$cover-w}px;
+            --cover-h: #{$cover-h}px;
 
             grid-template-columns: minmax(0, 1fr) calc(var(--cover-w) + 35px);
             grid-template-rows: 1fr auto auto 1fr;
@@ -521,9 +550,8 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             align-self: center;
             width: var(--cover-w);
             // The active cover only, centred in the stage. The height does not
-            // follow the stage, so the footer sliding in (the stage shrinks)
-            // does not resize Swiper mid-slide — a resize would cut the slide
-            // short and jump to the end (casesArchive.js).
+            // follow the stage, so the header sliding up (the stage grows)
+            // does not resize Swiper mid-slide.
             height: var(--cover-h);
             margin: 0;
             // PREV / NEXT and the covers beyond stay visible up to the stage
@@ -545,6 +573,79 @@ $ease-footer: cubic-bezier(0.22, 1, 0.36, 1);
             width: var(--cover-w);
             height: var(--cover-h);
             aspect-ratio: auto;
+        }
+    }
+
+    // Bottom zone hint. With a mouse it is visual only: casesArchive.js
+    // finds the zone by the pointer Y and sets `is-footer-hint`, so the NEXT
+    // fragment under it stays clickable. Without a fine pointer it is always
+    // shown and works as a button (tap → footer).
+    .cases-archive__footer-hint {
+        @include slider {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            height: $footer-zone;
+            padding: 0 16px 12px; // the text sits in the bottom 40px band
+            border: 0;
+            background: linear-gradient(to bottom, transparent, var(--c-bg) 80%);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.25;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--c-blue-light);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+
+            @media not ((hover: hover) and (pointer: fine)) {
+                right: auto;
+                left: 50%;
+                height: auto;
+                padding: 12px 16px;
+                background: var(--c-bg);
+                opacity: 1;
+                pointer-events: auto;
+                cursor: pointer;
+                transform: translateX(-50%);
+            }
+
+            &:focus-visible {
+                outline: 2px solid var(--c-blue);
+                outline-offset: -2px;
+            }
+        }
+    }
+
+    &.is-footer-hint .cases-archive__footer-hint {
+        @include slider {
+            opacity: 1;
+        }
+    }
+
+    &.is-footer-hint .cases-archive__footer-arrow {
+        @include slider {
+            animation: cases-archive-hint-bob 1.2s ease-in-out infinite;
+
+            @media (prefers-reduced-motion: reduce) {
+                animation: none;
+            }
+        }
+    }
+
+    // The page is scrolled down: no hint.
+    &.is-scrolled .cases-archive__footer-hint {
+        @include slider {
+            opacity: 0;
+            pointer-events: none;
         }
     }
 }

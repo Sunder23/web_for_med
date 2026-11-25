@@ -67,7 +67,7 @@ Data (`starter_get_case_single_data()` in `configure/helpers/get-case-single-dat
 |-------|--------|----------|
 | Label `project_name` | ACF `case_intro.project_name` | `case_intro.client` → post title |
 | Lead | ACF `case_intro.text` (wysiwyg) | `case_hero.subtitle` |
-| Intro image | ACF `case_intro.image` | featured image → `static/images/case-placeholder.webp` (Figma `3155:3274`), only when the case has a lead or content |
+| Intro image | ACF `case_intro.image` | featured image → placeholder `starter_get_case_placeholder_image()` (`static/images/case-placeholder.webp`, 783×573, "Case file is rendering"), only when the case has a lead or content. The cases archive slider uses the same placeholder for a case without `case_archive.cover` and featured image |
 | Deliverables / Technology / Status | taxonomies `case_deliverable`, `case_technology`, `case_status` (`configure/taxonomies/`, hierarchical, no public URLs); terms by name, Status — first term | skipped |
 | Duration, Live Project | ACF `case_details.duration`, `case_details.live_url` + `live_label` (default "View Website") | skipped |
 
@@ -107,7 +107,7 @@ All are enqueued from `configure/theme-hooks/enqueue-listing-templates-assets.ph
 |----------|--------|--------|
 | `home.php` (posts page), `archive.php` (category, tag, date, author) | `partials/parts/blog-archive.php` (Figma `3446:656` / `3493:1082`): hero `/*blog*/` + H1 (posts page: «Досвід, помилки та несподівані відкриття»; archives: term or author name + description), grid of `blog-card` (1 → 2 columns from `mobile` → 3 from `tablet`), «Показати ще» | `blog-archive.scss` |
 | `archive-{services,directions}.php` | `partials/parts/archive-cpt.php` | `archive.scss` |
-| `archive-cases.php` | `partials/parts/cases-archive.php`: utility bar + vertical case slider | `cases-archive.scss` |
+| `archive-cases.php` | `partials/parts/cases-archive.php`: utility bar + vertical case slider (see [Cases archive slider](#cases-archive-slider)) | `cases-archive.scss` |
 | `404.php` | Big "404", heading, home/blog buttons, list of services | `error-404.scss` (`starter_enqueue_404_assets`) |
 
 Blog listing details:
@@ -116,6 +116,16 @@ Blog listing details:
 - `partials/parts/blog-card.php`: cover in the `blog-card` image size (822×500, 2× of 411×250; after changing it run `wp media regenerate --image_size=blog-card --yes`), placeholder without a featured image; title up to two lines (two lines reserved so the author lines of a row align), its link stretched over the card; author line on top. `variant` `compact` is used by «Актуальні теми». CPT cards keep `post-card.php`.
 - «Показати ще» is a link to the next page (`/blog/page/2/`) and works without JS. `blogLoadMore.js` fetches that page, appends its `.blog-archive__item` cards (short fade-in), moves focus to the first new card, takes the next link or removes the button; on an error it falls back to normal navigation.
 - The hero has no `section::after` divider strip; the grid section ends with a 40px strip above the footer (`--section-gap: 40px`).
+
+### Cases archive slider
+
+`casesArchive.js` picks a mode by `(min-width: 1024px) and (min-height: 520px)`:
+
+- **slider** — an endless vertical loop (1 → 2 → 3 → 1 and back) that opens on case 01, the active cover centred with PREV / NEXT fragments. Below 6 covers the set is cloned in the DOM (`data-cases-clone`, slider mode only) so Swiper's loop always moves a slide beyond the stage edge. The block always takes the screen under the header (`height: 100svh − admin bar − --header-h`; when the header auto-hides, the full screen); the footer stays in the normal flow below. At the page top the wheel and ↑ / ↓ / PageUp / PageDown switch cases; scrolled down, the page scrolls natively and the case stays (trackpad inertia of the scroll back up does not switch it).
+- **Bottom zone** (15% of the screen, `FOOTER_ZONE` / `$footer-zone`): with a mouse, the pointer in it shows «До футера ↓» (visual only, `pointer-events: none`), the wheel down there scrolls smoothly to the footer, the wheel up switches cases as usual. Without a fine pointer the hint is always shown and works as a button. `End` at the top also scrolls to the footer; Space / Home stay native. Back at the top the loop goes on from the same case.
+- **lane** (phones, low screens) — a horizontal Swiper, the next cover peeks in; **static** — one case, no Swiper.
+
+Text switch as on grndwrk.studio: the captions (Client / Final product, one item per case, `__reel--caption`), titles and descriptions form reels (`casesReel.js`: the track slides 0.6s in step with the covers, items blur-fade, the window takes the active item's height via `--reel-y` / `--reel-h`; an empty description closes it to 0). Across the loop edge each reel slides one step to a clone (last item before the first, first after the last) and jumps back to the real item without a transition, so the text moves the same way as the covers. One «Читати кейс» link under the reels points at the active case (`data-url` on each title). Without JS the covers form a scroll-snap lane, titles and descriptions are listed and the link is hidden.
 
 Breadcrumbs (`starter_get_breadcrumb_items( $labels )`): post archives show Головна → Блог → term; 404 shows Головна → Сторінку не знайдено. `$labels` (`home`, `blog`) overrides the first two labels (single post bar: `home / blog`). The blog listing itself shows no breadcrumbs.
 
