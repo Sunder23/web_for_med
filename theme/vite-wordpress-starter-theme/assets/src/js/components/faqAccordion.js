@@ -1,48 +1,46 @@
 import { logDebug } from '../utils/logDebug.js';
 
+// FAQ accordion (`.faq[data-faq]`, partials/parts/faq-list.php).
+//
+// Only the state is toggled here: `faq__item--open` on the item,
+// `aria-expanded` on the question, `aria-hidden` + `inert` on the answer. The
+// height animates in CSS (grid-template-rows 0fr → 1fr, components/_faq.scss),
+// so a closed answer takes no space and nothing shifts after AOS caches its
+// offsets. An item rendered with `faq__item--open` (`open_first`) starts open.
+
+function setAnswerState(answer, open) {
+	if (!answer) return;
+	answer.setAttribute('aria-hidden', String(!open));
+	answer.inert = !open;
+}
+
 export function initFaqAccordion() {
-	const $ = window.jQuery;
+	const faqs = [...document.querySelectorAll('[data-faq]')];
 
-	if (!$) {
-		console.warn(
-			'[web_for_med] FAQ accordion skipped: jQuery is not available',
-		);
-		return;
-	}
-
-	const $faqs = $('[data-faq]');
-
-	if (!$faqs.length) {
+	if (!faqs.length) {
 		logDebug('FAQ accordion skipped: no [data-faq] blocks found');
 		return;
 	}
 
-	$faqs.each((_, faq) => {
-		const $items = $(faq).find('.faq__item');
+	for (const faq of faqs) {
+		for (const item of faq.querySelectorAll('.faq__item')) {
+			const question = item.querySelector('.faq__question');
+			const answer = item.querySelector('.faq__answer');
+			if (!question) continue;
 
-		$items.each((_, item) => {
-			const $item = $(item);
-			const $question = $item.find('.faq__question').first();
-			const $answer = $item.find('.faq__answer').first();
+			const startsOpen = item.classList.contains('faq__item--open');
+			question.setAttribute('aria-expanded', String(startsOpen));
+			setAnswerState(answer, startsOpen);
 
-			// Answers start collapsed via CSS (display: none), so no
-			// JS-driven layout shift happens after AOS caches its offsets.
-			// An item rendered with `faq__item--open` (partials/parts/faq-list.php,
-			// `open_first`) starts open; CSS shows its answer.
-			const startsOpen = $item.hasClass('faq__item--open');
-			$question.attr('aria-expanded', String(startsOpen));
-			$answer.attr('aria-hidden', String(!startsOpen));
-
-			$question.on('click', () => {
-				const isOpen = $item.hasClass('faq__item--open');
-
-				$item.toggleClass('faq__item--open', !isOpen);
-				$question.attr('aria-expanded', String(!isOpen));
-				$answer.attr('aria-hidden', String(isOpen));
-				$answer.stop(true, true)[isOpen ? 'slideUp' : 'slideDown'](250);
+			question.addEventListener('click', () => {
+				const open = !item.classList.contains('faq__item--open');
+				item.classList.toggle('faq__item--open', open);
+				question.setAttribute('aria-expanded', String(open));
+				setAnswerState(answer, open);
+				logDebug('FAQ item toggled', { open });
 			});
-		});
-	});
+		}
+	}
 
-	logDebug('FAQ accordion initialized', { blocks: $faqs.length });
+	logDebug('FAQ accordion initialized', { blocks: faqs.length });
 }

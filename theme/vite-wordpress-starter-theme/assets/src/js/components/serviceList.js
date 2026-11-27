@@ -82,11 +82,34 @@ function initList(root) {
 		});
 	});
 
+	// «Перейти до кейсів»: no slide, the active service stays in the preview,
+	// only the row tint moves to the link (see section-service-list.scss).
+	const link = root.querySelector('.service-list__link');
+	const setLinkHover = (on, source) => {
+		if (root.classList.contains('is-link-hover') === on) return;
+		root.classList.toggle('is-link-hover', on);
+		logDebug('[service-list] link hover', { on, source });
+	};
+
+	if (link) {
+		link.addEventListener('pointerenter', () => {
+			if (desktop.matches && hover.matches) setLinkHover(true, 'hover');
+		});
+		link.addEventListener('pointerleave', () => {
+			if (!link.matches(':focus-visible')) setLinkHover(false, 'hover');
+		});
+		link.addEventListener('focus', () => {
+			if (desktop.matches) setLinkHover(true, 'focus');
+		});
+		link.addEventListener('blur', () => setLinkHover(false, 'focus'));
+	}
+
 	desktop.addEventListener('change', () => {
 		if (desktop.matches) {
 			if (open >= 0) setActive(open, 'layout');
 		} else {
 			setOpen(active);
+			setLinkHover(false, 'layout');
 		}
 		syncAria();
 		logDebug('[service-list] layout change', {

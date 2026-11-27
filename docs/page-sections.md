@@ -74,7 +74,7 @@ The "Про нас" page (`/about/`, Figma desktop `3241:4188`, mobile `3255:874
 
 ## Services page sections
 
-The "Послуги" page (`/services/`, Figma desktop `3534:2180`, mobile `3589:7251`) is a regular page built from five blocks, in this order. It replaced the removed `services` post type: old `/services/<slug>/` URLs answer 301 → `/services/` (`configure/theme-hooks/redirect-legacy-services.php`, on `template_redirect` priority 9 so it runs before the core 404 slug guess). The page is not in the main menu (the design menu is Про нас / Кейси / Блог / Контакти); the 404 screen links to it.
+The "Послуги" page (`/services/`, Figma desktop `3534:2180`, mobile `3589:7251`) is a regular page built from five blocks, in this order. It replaced the removed `services` post type: old `/services/<slug>/` URLs answer 301 → `/services/` (`configure/theme-hooks/redirect-legacy-services.php`, on `template_redirect` priority 9 so it runs before the core 404 slug guess). It is the second item of the main menu (Про нас / Послуги / Кейси / Блог, `scripts/update-main-menu.php`); the 404 screen links to it too.
 
 | Slug | Contents | Script |
 |------|----------|--------|

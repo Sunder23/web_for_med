@@ -1,16 +1,18 @@
 <?php
 /**
- * Short main menu "Головне меню" (slug `main-menu-short`): Про нас / Кейси / Блог / Контакти.
+ * Short main menu "Головне меню" (slug `main-menu-short`): Про нас / Послуги / Кейси / Блог.
  *
  * Items:
- *   Про нас  → the `about` page;
- *   Кейси    → the `cases` post type archive (`/cases/`);
- *   Блог     → the posts page (`page_for_posts`); WordPress marks it
- *              `current_page_parent` on single posts and post archives;
- *   Контакти → `#contacts` (opens the contact drawer).
+ *   Про нас → the `about` page;
+ *   Послуги → the `services` page;
+ *   Кейси   → the `cases` post type archive (`/cases/`);
+ *   Блог    → the posts page (`page_for_posts`); WordPress marks it
+ *             `current_page_parent` on single posts and post archives.
  *
  * Items are matched by target (page ID / URL), so re-running never duplicates them;
  * their order is restored to the list above (`menu_order`).
+ * The former «Контакти» item (custom link `#contacts`) is removed: the contact
+ * drawer opens from the header button (`data-contact-open`).
  *
  * The menu is looked up by slug, then by the `menu-main` location (the slug may
  * have been edited in the admin), and only created when neither exists.
@@ -20,7 +22,7 @@
  *
  * Args:
  *   (none)  dry run — logs what would change, writes nothing;
- *   apply   create the menu / items and assign the locations.
+ *   apply   create the menu / items, remove the obsolete ones and assign the locations.
  *
  * Run: docker compose -f docker/compose.yml run --rm wpcli wp eval-file /scripts/update-main-menu.php [apply]
  * (On Windows/Git Bash, prefix with MSYS_NO_PATHCONV=1.)
@@ -66,12 +68,17 @@ if ( $mm_menu_id ) {
 }
 
 // 2. Items, in order.
-$mm_about = get_page_by_path( 'about' );
-$mm_blog  = (int) get_option( 'page_for_posts' );
-$mm_items = array(
+$mm_about    = get_page_by_path( 'about' );
+$mm_services = get_page_by_path( 'services' );
+$mm_blog     = (int) get_option( 'page_for_posts' );
+$mm_items    = array(
 	array(
 		'title' => 'Про нас',
 		'page'  => $mm_about instanceof WP_Post ? (int) $mm_about->ID : 0,
+	),
+	array(
+		'title' => 'Послуги',
+		'page'  => $mm_services instanceof WP_Post ? (int) $mm_services->ID : 0,
 	),
 	array(
 		'title'   => 'Кейси',
@@ -81,11 +88,10 @@ $mm_items = array(
 		'title' => 'Блог',
 		'page'  => $mm_blog,
 	),
-	array(
-		'title' => 'Контакти',
-		'url'   => '#contacts',
-	),
 );
+
+// Custom links that are no longer part of the menu.
+$mm_obsolete_urls = array( '#contacts' );
 
 $mm_existing = $mm_menu_id ? (array) wp_get_nav_menu_items( $mm_menu_id ) : array();
 $mm_order    = array(); // Menu item ID => wanted menu_order.
@@ -147,6 +153,23 @@ foreach ( $mm_items as $mm_position => $mm_item ) {
 	}
 	WP_CLI::log( "[main-menu] item \"{$mm_item['title']}\": created (#{$mm_item_id})" );
 	$mm_order[ (int) $mm_item_id ] = $mm_position + 1;
+}
+
+// 2a. Obsolete items.
+foreach ( $mm_existing as $mm_old ) {
+	if ( 'custom' !== $mm_old->type || ! in_array( $mm_old->url, $mm_obsolete_urls, true ) ) {
+		continue;
+	}
+	++$mm_changes;
+	if ( ! $mm_apply ) {
+		WP_CLI::log( "[main-menu] item \"{$mm_old->title}\" ({$mm_old->url}, #{$mm_old->ID}): would be removed" );
+		continue;
+	}
+	if ( wp_delete_post( (int) $mm_old->ID, true ) ) {
+		WP_CLI::log( "[main-menu] item \"{$mm_old->title}\" ({$mm_old->url}, #{$mm_old->ID}): removed" );
+	} else {
+		WP_CLI::warning( "[main-menu] item #{$mm_old->ID}: cannot be removed" );
+	}
 }
 
 // 2b. Order: a new item may land after the old ones, so put every item back in place.

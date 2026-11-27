@@ -40,4 +40,21 @@
         background-color: var(--c-blue);
         box-shadow: inset 0 0 0 1px var(--c-blue);
     }
+
+    // Entrance (taskChipsReveal.js): hidden until the panel is in view, then
+    // fades in one by one; the stagger delay applies to opacity / transform only.
+    &.is-reveal-pending {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(18px);
+    }
+
+    &.is-revealed {
+        transition:
+            opacity 320ms ease var(--chip-delay, 0ms),
+            transform 320ms ease var(--chip-delay, 0ms),
+            background-color 0.25s ease,
+            color 0.25s ease,
+            box-shadow 0.25s ease;
+    }
 }

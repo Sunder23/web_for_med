@@ -118,7 +118,6 @@ $ease: cubic-bezier(0.5, 0, 0, 1);
         color: var(--c-dark);
         background: none;
         border: 0;
-        border-radius: 8px;
         transition: background-color 0.3s ease, padding 0.3s ease;
 
         @include breakpoint(tablet) {
@@ -259,6 +258,25 @@ $ease: cubic-bezier(0.5, 0, 0, 1);
     &__item.is-active &__toggle {
         @include breakpoint(tablet) {
             background-color: var(--c-card-hover);
+        }
+    }
+
+    // Desktop: the «Перейти до кейсів» row has no slide, so hovering it does
+    // not change the active service — the link itself is tinted instead and
+    // the active row loses its tint while the pointer / focus is on the link
+    // (`is-link-hover` from serviceList.js).
+    &__link {
+        @include breakpoint(tablet) {
+            &:hover,
+            &:focus-visible {
+                background-color: var(--c-card-hover);
+            }
+        }
+    }
+
+    &.is-link-hover &__item.is-active &__toggle {
+        @include breakpoint(tablet) {
+            background-color: transparent;
         }
     }
 }

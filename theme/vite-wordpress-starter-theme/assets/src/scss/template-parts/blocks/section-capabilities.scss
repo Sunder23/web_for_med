@@ -167,5 +167,19 @@
             width: auto;
             padding: 20px 28px;
         }
+
+        // Entrance after the chips (taskChipsReveal.js sets `--chip-delay`).
+        &.is-reveal-pending {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(18px);
+        }
+
+        &.is-revealed {
+            transition:
+                opacity 320ms ease var(--chip-delay, 0ms),
+                transform 320ms ease var(--chip-delay, 0ms),
+                background 0.3s ease-in-out;
+        }
     }
 }

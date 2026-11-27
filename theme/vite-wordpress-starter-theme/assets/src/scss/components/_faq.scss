@@ -65,21 +65,34 @@
         }
     }
 
+    &__item--open &__answer-inner {
+        opacity: 1;
+    }
+
     &__item--open &__icon::after {
         transform: translate(-50%, -50%) rotate(0deg);
     }
 
+    // Collapsed answer: 0fr row (no height), opened by faqAccordion.js via
+    // `faq__item--open` (also rendered open with `open_first`). The bottom
+    // padding sits on the inner element, inside `overflow: hidden`, so it
+    // animates together with the height.
     &__answer {
-        display: none; // opened by faqAccordion.js
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.45s cubic-bezier(0.5, 0, 0, 1);
     }
 
-    // Rendered open (`open_first`); jQuery slideUp/slideDown set inline display later.
     &__item--open > &__answer {
-        display: block;
+        grid-template-rows: 1fr;
     }
 
     &__answer-inner {
+        min-height: 0;
         padding: 0 0 24px;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease;
 
         @include breakpoint(mobile) {
             padding-right: 52px;
