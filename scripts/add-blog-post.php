@@ -1,27 +1,35 @@
 <?php
 /**
- * Blog post «Від приватної практики до власного центру: коли потрібен сайт»
- * (Figma huDLClWg3dIpXyzLMuVHEs, desktop 3453:479, mobile 3493:839).
+ * Blog post from a data file in scripts/data/blog/<name>.php (Figma huDLClWg3dIpXyzLMuVHEs):
+ *   private-practice — «Від приватної практики до власного центру: коли потрібен сайт»
+ *                      (desktop 3453:479, mobile 3493:839);
+ *   ai-trends        — «Як не відставати від трендів в AI» (desktop 3591:7885).
  *
- *   1. Media from scripts/data/blog/: cover (featured image) and the figure in two
- *      versions (horizontal for desktop, vertical for phones), uploaded once
- *      (looked up by `_starter_source`).
- *   2. Post: created, or updated when a post with the same slug or title exists
+ *   1. Author from the data `author` key (default `valerii-syshchuk`, see
+ *      scripts/update-blog-author.php). With `name` the user is created when missing
+ *      (role author, random password, no e-mail); with `avatar` the image is uploaded
+ *      and stored in the user ACF field `user_avatar`.
+ *   2. Media from scripts/data/blog/: cover (featured image) and every figure image,
+ *      uploaded once (looked up by `_starter_source`).
+ *   3. Post: created, or updated when a post with the same slug or title exists
  *      (the old content is kept once in `_starter_content_backup`). Title, slug,
- *      excerpt (= lead), date, status publish, author `valerii-syshchuk`
- *      (scripts/update-blog-author.php), category of the other posts, featured image.
- *   3. post_content as block markup, texts verbatim from scripts/data/blog/private-practice.php:
- *      H2 sections (they feed the «Зміст» list and the section counter), core/pullquote
- *      without citation, a `core/group` with the block style `is-style-figure`
- *      (two images toggled by `is-hidden-mobile` / `is-hidden-desktop` + one caption),
- *      a `core/group` with `is-style-callout` (H3 so it stays out of the TOC, two
- *      paragraphs, a button to `#contact-form` which opens the contact drawer).
+ *      excerpt (= lead), date, status publish, author, category of the other posts,
+ *      featured image.
+ *   4. post_content as block markup, texts verbatim from the data file:
+ *      H2 sections (they feed the «Зміст» list and the section counter; a section with
+ *      an empty heading has no H2), core/pullquote without citation, a `core/group`
+ *      with the block style `is-style-figure` (its image list, each image with its own
+ *      class, e.g. `is-hidden-mobile` / `is-hidden-desktop`, + one caption), a
+ *      `core/group` with `is-style-callout` (H3 so it stays out of the TOC, paragraphs,
+ *      a button, e.g. to `#contact-form` which opens the contact drawer).
  *
  * Args:
- *   (none)  dry run — logs what would change, writes nothing;
- *   apply   upload the media and write the post.
+ *   <name>  data file name without `.php` (required);
+ *   apply   create the author, upload the media and write the post;
+ *           without it — dry run: logs what would change, writes nothing.
  *
- * Run: docker compose -f docker/compose.yml run --rm wpcli wp eval-file /scripts/add-blog-post-private-practice.php [apply]
+ * Run: docker compose -f docker/compose.yml run --rm wpcli wp eval-file /scripts/add-blog-post.php <name> [apply]
+ *   e.g. … /scripts/add-blog-post.php ai-trends apply
  * (On Windows/Git Bash, prefix with MSYS_NO_PATHCONV=1.)
  *
  * @package Vite_Starter
@@ -35,17 +43,27 @@ if ( ! defined( 'WP_CLI' ) ) {
 $bp_args  = isset( $args ) && is_array( $args ) ? $args : array();
 $bp_apply = in_array( 'apply', $bp_args, true );
 $bp_tag   = '[blog-post]';
-$bp_data  = require __DIR__ . '/data/blog/private-practice.php';
+$bp_names = array_values( array_diff( $bp_args, array( 'apply' ) ) );
+$bp_name  = $bp_names ? (string) $bp_names[0] : '';
 
-if ( ! is_array( $bp_data ) || empty( $bp_data['sections'] ) ) {
-	WP_CLI::error( "{$bp_tag} data file scripts/data/blog/private-practice.php is invalid" );
+if ( ! preg_match( '/^[a-z0-9-]+$/', $bp_name ) ) {
+	WP_CLI::error( "{$bp_tag} pass the data file name, e.g. `wp eval-file /scripts/add-blog-post.php ai-trends [apply]`" );
+}
+$bp_file = __DIR__ . '/data/blog/' . $bp_name . '.php';
+if ( ! file_exists( $bp_file ) ) {
+	WP_CLI::error( "{$bp_tag} data file scripts/data/blog/{$bp_name}.php not found" );
+}
+$bp_data = require $bp_file;
+
+if ( ! is_array( $bp_data ) || empty( $bp_data['sections'] ) || empty( $bp_data['title'] ) || empty( $bp_data['slug'] ) ) {
+	WP_CLI::error( "{$bp_tag} data file scripts/data/blog/{$bp_name}.php is invalid" );
 }
 
-WP_CLI::log( "{$bp_tag} mode: " . ( $bp_apply ? 'apply' : 'dry run' ) );
+WP_CLI::log( "{$bp_tag} mode: " . ( $bp_apply ? 'apply' : 'dry run' ) . ", data: {$bp_name}" );
 
 $bp_changes = 0;
 
-// --- 0. Existing post, author, category -----------------------------------------
+// --- 0. Existing post, category ---------------------------------------------------
 
 $bp_post = get_page_by_path( $bp_data['slug'], OBJECT, 'post' );
 if ( ! $bp_post instanceof WP_Post ) {
@@ -60,12 +78,6 @@ if ( ! $bp_post instanceof WP_Post ) {
 	$bp_post     = $bp_by_title ? $bp_by_title[0] : null;
 }
 WP_CLI::log( $bp_post ? "{$bp_tag} found post #{$bp_post->ID}" : "{$bp_tag} post not found, will create" );
-
-$bp_author = get_user_by( 'login', 'valerii-syshchuk' );
-if ( ! $bp_author instanceof WP_User ) {
-	WP_CLI::warning( "{$bp_tag} user valerii-syshchuk is missing — run scripts/update-blog-author.php apply first; the post keeps the current user as author" );
-}
-$bp_author_id = $bp_author instanceof WP_User ? (int) $bp_author->ID : 0;
 
 // Same category as the other published posts (the most used one).
 $bp_categories  = get_terms(
@@ -145,12 +157,90 @@ $bp_attachment = static function ( $file, $alt ) use ( $bp_apply, $bp_tag, &$bp_
 	return (int) $id;
 };
 
-$bp_cover_id   = $bp_attachment( $bp_data['cover'][0], $bp_data['cover'][1] );
-$bp_desktop_id = $bp_attachment( $bp_data['figure']['desktop'][0], $bp_data['figure']['desktop'][1] );
-$bp_mobile_id  = $bp_attachment( $bp_data['figure']['mobile'][0], $bp_data['figure']['mobile'][1] );
+$bp_cover_id = $bp_attachment( $bp_data['cover'][0], $bp_data['cover'][1] );
 
-if ( 0 === $bp_cover_id || 0 === $bp_desktop_id || 0 === $bp_mobile_id ) {
+// Figure images, keyed by file name.
+$bp_media = array();
+foreach ( $bp_data['sections'] as $bp_section ) {
+	foreach ( $bp_section['items'] as $bp_item ) {
+		if ( 'figure' !== $bp_item[0] ) {
+			continue;
+		}
+		if ( empty( $bp_item[2] ) || ! is_array( $bp_item[2] ) ) {
+			WP_CLI::error( "{$bp_tag} figure «{$bp_item[1]}» has no image list" );
+		}
+		foreach ( $bp_item[2] as $bp_image_data ) {
+			if ( ! isset( $bp_media[ $bp_image_data[0] ] ) ) {
+				$bp_media[ $bp_image_data[0] ] = $bp_attachment( $bp_image_data[0], $bp_image_data[1] );
+			}
+		}
+	}
+}
+WP_CLI::log( "{$bp_tag} figure images: " . count( $bp_media ) );
+
+if ( 0 === $bp_cover_id || in_array( 0, $bp_media, true ) ) {
 	WP_CLI::error( "{$bp_tag} media is missing, nothing written" );
+}
+
+// --- 1b. Author -------------------------------------------------------------------
+
+$bp_author_data = isset( $bp_data['author'] ) && is_array( $bp_data['author'] ) ? $bp_data['author'] : array();
+$bp_login       = ! empty( $bp_author_data['login'] ) ? (string) $bp_author_data['login'] : 'valerii-syshchuk';
+$bp_author      = get_user_by( 'login', $bp_login );
+$bp_author_id   = 0;
+
+if ( $bp_author instanceof WP_User ) {
+	$bp_author_id = (int) $bp_author->ID;
+	WP_CLI::log( "{$bp_tag} author {$bp_login}: already (#{$bp_author_id})" );
+} elseif ( empty( $bp_author_data['name'] ) ) {
+	WP_CLI::warning( "{$bp_tag} user {$bp_login} is missing — run scripts/update-blog-author.php apply first; the post keeps the current user as author" );
+} elseif ( ! $bp_apply ) {
+	++$bp_changes;
+	WP_CLI::log( "{$bp_tag} would create user {$bp_login} ({$bp_author_data['name']}, author)" );
+} else {
+	++$bp_changes;
+	$bp_name_parts = explode( ' ', (string) $bp_author_data['name'], 2 );
+	$bp_new_user   = wp_insert_user(
+		array(
+			'user_login'   => $bp_login,
+			'user_pass'    => wp_generate_password( 24 ),
+			'user_email'   => $bp_login . '@example.invalid',
+			'display_name' => $bp_author_data['name'],
+			'nickname'     => $bp_author_data['name'],
+			'first_name'   => $bp_name_parts[0],
+			'last_name'    => isset( $bp_name_parts[1] ) ? $bp_name_parts[1] : '',
+			'role'         => 'author',
+		)
+	);
+	if ( is_wp_error( $bp_new_user ) ) {
+		WP_CLI::error( "{$bp_tag} cannot create user {$bp_login}: " . $bp_new_user->get_error_message() );
+	}
+	$bp_author_id = (int) $bp_new_user;
+	WP_CLI::log( "{$bp_tag} created user {$bp_login} → #{$bp_author_id}" );
+}
+
+if ( ! empty( $bp_author_data['avatar'] ) ) {
+	if ( ! function_exists( 'update_field' ) ) {
+		WP_CLI::warning( "{$bp_tag} Secure Custom Fields is not active, avatar skipped" );
+	} else {
+		$bp_avatar_id = $bp_attachment( (string) $bp_author_data['avatar'], '' );
+		if ( $bp_author_id > 0 && $bp_avatar_id > 0 ) {
+			if ( (int) get_field( 'user_avatar', 'user_' . $bp_author_id, false ) === $bp_avatar_id ) {
+				WP_CLI::log( "{$bp_tag} user_avatar: already" );
+			} elseif ( ! $bp_apply ) {
+				++$bp_changes;
+				WP_CLI::log( "{$bp_tag} would set user_avatar = #{$bp_avatar_id}" );
+			} else {
+				++$bp_changes;
+				update_field( 'field_starter_user_profile_avatar', $bp_avatar_id, 'user_' . $bp_author_id );
+				WP_CLI::log( "{$bp_tag} user_avatar set to #{$bp_avatar_id}" );
+			}
+		} elseif ( ! $bp_apply ) {
+			WP_CLI::log( "{$bp_tag} would set user_avatar after the user/avatar are created" );
+		} else {
+			WP_CLI::warning( "{$bp_tag} user_avatar not set (user #{$bp_author_id}, avatar #{$bp_avatar_id})" );
+		}
+	}
 }
 
 // --- 2. Block markup --------------------------------------------------------------
@@ -180,10 +270,12 @@ $bp_image = static function ( $id, $alt, $css_class ) use ( $bp_json ) {
 		'id'              => (int) $id,
 		'sizeSlug'        => 'full',
 		'linkDestination' => 'none',
-		'className'       => $css_class,
 	);
+	if ( '' !== $css_class ) {
+		$attrs['className'] = $css_class;
+	}
 	return '<!-- wp:image' . $bp_json( $attrs ) . " -->\n"
-		. '<figure class="wp-block-image size-full ' . esc_attr( $css_class ) . '"><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $alt ) . '" class="wp-image-' . (int) $id . '"/></figure>' . "\n"
+		. '<figure class="' . esc_attr( trim( 'wp-block-image size-full ' . $css_class ) ) . '"><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $alt ) . '" class="wp-image-' . (int) $id . '"/></figure>' . "\n"
 		. '<!-- /wp:image -->';
 };
 
@@ -202,7 +294,9 @@ $bp_button = static function ( $label, $url ) {
 
 $bp_blocks = array();
 foreach ( $bp_data['sections'] as $bp_section ) {
-	$bp_blocks[] = $bp_heading( $bp_section['heading'] );
+	if ( '' !== (string) $bp_section['heading'] ) {
+		$bp_blocks[] = $bp_heading( $bp_section['heading'] );
+	}
 	foreach ( $bp_section['items'] as $bp_item ) {
 		switch ( $bp_item[0] ) {
 			case 'p':
@@ -212,14 +306,12 @@ foreach ( $bp_data['sections'] as $bp_section ) {
 				$bp_blocks[] = $bp_quote( $bp_item[1] );
 				break;
 			case 'figure':
-				$bp_blocks[] = $bp_group(
-					'figure',
-					array(
-						$bp_image( $bp_desktop_id, $bp_data['figure']['desktop'][1], 'is-hidden-mobile' ),
-						$bp_image( $bp_mobile_id, $bp_data['figure']['mobile'][1], 'is-hidden-desktop' ),
-						$bp_paragraph( $bp_item[1], 'article-figure__caption' ),
-					)
-				);
+				$bp_inner = array();
+				foreach ( $bp_item[2] as $bp_image_data ) {
+					$bp_inner[] = $bp_image( $bp_media[ $bp_image_data[0] ], $bp_image_data[1], isset( $bp_image_data[2] ) ? (string) $bp_image_data[2] : '' );
+				}
+				$bp_inner[]  = $bp_paragraph( $bp_item[1], 'article-figure__caption' );
+				$bp_blocks[] = $bp_group( 'figure', $bp_inner );
 				break;
 			case 'callout':
 				$bp_inner = array( $bp_heading( $bp_item[1], 3 ) );
@@ -236,7 +328,7 @@ foreach ( $bp_data['sections'] as $bp_section ) {
 }
 
 $bp_content = implode( "\n\n", $bp_blocks );
-WP_CLI::log( "{$bp_tag} content: " . count( $bp_blocks ) . ' top-level blocks, ' . count( $bp_data['sections'] ) . ' H2 sections' );
+WP_CLI::log( "{$bp_tag} content: " . count( $bp_blocks ) . ' top-level blocks, ' . count( array_filter( array_column( $bp_data['sections'], 'heading' ) ) ) . ' H2 sections' );
 
 // --- 3. Post ----------------------------------------------------------------------
 

@@ -44,7 +44,16 @@ The `*_cta` ACF groups are no longer rendered. There is no form before the foote
 - **Content styles** live only under `.post-single__content` (`_post-single.scss`), so CPT singles and cases are untouched: H2 Grunt 36/1.18 (phones 26/32), paragraphs 17/1.55 (16/25), `core/pullquote` without citation (lines above and below, Fixel Medium 32 → 20 on phones), block styles on `core/group` — `is-style-figure` (light panel, two pictures + one caption paragraph `article-figure__caption`) and `is-style-callout` (light panel, H3 so it stays out of «Зміст», paragraphs, `core/button` → `#contact-form` opens the contact drawer; full width on phones). Helpers `is-hidden-mobile` / `is-hidden-desktop` switch at `tablet` (the figure shows a horizontal scheme on desktop and a vertical one on phones). Styles are registered in `configure/theme-hooks/register-block-styles.php` (list of `[ block, style ]` pairs). They are not mirrored in `style-editor.css`.
 - **«Актуальні теми»:** up to 8 latest posts of the same category, topped up with the latest posts when fewer than 2; nothing without other posts. `postRelatedSlider.js`: `slidesPerView: 'auto'`, cards 361px from `tablet` / 335px from `mobile` / full width below, arrows from `tablet` only, hidden when everything fits (`watchOverflow`). Swiper CSS comes with the JS entry, only on single posts.
 
-Content script: `scripts/add-blog-post-private-practice.php` (+ `scripts/data/blog/`) creates or updates the post «Від приватної практики до власного центру: коли потрібен сайт» (texts verbatim from the design, media uploaded once by `_starter_source`, old content kept in `_starter_content_backup`). `scripts/update-blog-author.php` creates the author user `valerii-syshchuk` with the avatar and sets it as the author of all posts. Both: dry run by default, `apply` to write.
+Content script: `scripts/add-blog-post.php <name> [apply]` creates or updates a post from the data file `scripts/data/blog/<name>.php` (texts verbatim from the design, media uploaded once by `_starter_source`, old content kept in `_starter_content_backup`). Posts so far: `private-practice` («Від приватної практики до власного центру: коли потрібен сайт») and `ai-trends` («Як не відставати від трендів в AI»). `scripts/update-blog-author.php` creates the default author user `valerii-syshchuk` with the avatar and sets it as the author of all posts. Both: dry run by default, `apply` to write.
+
+To add a post, put its media into `scripts/data/blog/` and copy a data file:
+
+- `title`, `slug`, `date`, `excerpt` (rendered as the lead), `cover` `[ file, alt ]` (featured image).
+- `author` — `[ 'login' => … ]` for an existing user (default `valerii-syshchuk`); add `name` to create the user when missing (role author, no e-mail) and `avatar` (file) to upload it into the user ACF field `user_avatar`.
+- `sections` — each `[ 'heading' => …, 'items' => … ]` becomes an H2 (TOC entry + section counter); an empty `heading` gives an intro without H2.
+- Items: `[ 'p', text ]`, `[ 'quote', text ]` (pull quote), `[ 'figure', caption, [ [ file, alt, class ], … ] ]` (`is-style-figure` group: one image with an empty class, or a desktop/mobile pair with `is-hidden-mobile` / `is-hidden-desktop`), `[ 'callout', heading, [ paragraphs ], [ label, url ] ]` (`is-style-callout`, H3 stays out of the TOC).
+
+Run: `MSYS_NO_PATHCONV=1 docker compose -f docker/compose.yml run --rm wpcli wp eval-file /scripts/add-blog-post.php ai-trends apply`; a second run reports «nothing to change».
 
 ## Single case
 

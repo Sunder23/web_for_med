@@ -2,10 +2,11 @@
 /**
  * Texts of the post «Від приватної практики до власного центру: коли потрібен сайт»,
  * verbatim from the design (Figma huDLClWg3dIpXyzLMuVHEs, desktop 3453:479).
- * Consumed by scripts/add-blog-post-private-practice.php.
+ * Consumed by scripts/add-blog-post.php (`private-practice`).
  *
  * Section items: [ 'p', text ] paragraph, [ 'quote', text ] pull quote,
- * [ 'figure', caption ] two-image figure, [ 'callout', heading, [ paragraphs ], button ] CTA.
+ * [ 'figure', caption, [ [ file, alt, class ], … ] ] figure (here two images toggled by
+ * `is-hidden-mobile` / `is-hidden-desktop`), [ 'callout', heading, [ paragraphs ], [ label, url ] ] CTA.
  *
  * @package Vite_Starter
  */
@@ -16,9 +17,8 @@ return array(
 	'date'     => '2026-11-12 10:00:00',
 	'excerpt'  => 'Поки ви працюєте самостійно, клієнтів можуть забезпечувати рекомендації та Instagram. Але з появою нових спеціалістів і послуг виникає інше завдання: як заповнювати графіки всієї команди? Розбираємося, коли власний сайт справді допомагає розвивати практику, а коли можна обійтися без нього.',
 	'cover'    => array( 'cover-team.png', 'Команда медичного центру: фахівчиня в центрі під світлом прожектора, поруч колеги' ),
-	'figure'   => array(
-		'desktop' => array( 'figure-search-steps-desktop.png', '5 кроків пошуку кабінету масажу через Google: пошук у Google, ознайомлення з варіантами, порівняння, перехід до детальнішої інформації, запис' ),
-		'mobile'  => array( 'figure-search-steps-mobile.png', '5 кроків пошуку кабінету масажу через Google: пошук у Google, ознайомлення з варіантами, порівняння, перехід до детальнішої інформації, запис' ),
+	'author'   => array(
+		'login' => 'valerii-syshchuk',
 	),
 	'sections' => array(
 		array(
@@ -38,7 +38,14 @@ return array(
 				array( 'p', 'Для масажного кабінету чи центру реабілітації важливим може бути розташування, тому потенційні клієнти переглядають Google Maps, відгуки та заклади поблизу. Натомість людина, яка шукає психолога для онлайн-консультацій, може обирати серед спеціалістів з усієї України, звертаючи більше уваги на їхній досвід, спеціалізацію та підхід до роботи.' ),
 				array( 'p', 'Для локальних послуг важливу роль відіграє Google Business Profile. Завдяки йому інформація про кабінет може з\'являтися в Google Maps і локальних результатах пошуку.' ),
 				array( 'p', 'Власний сайт дозволяє детальніше представити команду, послуги й умови роботи, а також залучати відвідувачів за відповідними пошуковими запитами. Однак для цього сайт потрібно не просто створити, а й підготувати до пошукового просування.' ),
-				array( 'figure', '[5 кроків пошуку кабінету масажу через Google]' ),
+				array(
+					'figure',
+					'[5 кроків пошуку кабінету масажу через Google]',
+					array(
+						array( 'figure-search-steps-desktop.png', '5 кроків пошуку кабінету масажу через Google: пошук у Google, ознайомлення з варіантами, порівняння, перехід до детальнішої інформації, запис', 'is-hidden-mobile' ),
+						array( 'figure-search-steps-mobile.png', '5 кроків пошуку кабінету масажу через Google: пошук у Google, ознайомлення з варіантами, порівняння, перехід до детальнішої інформації, запис', 'is-hidden-desktop' ),
+					),
+				),
 			),
 		),
 		array(
