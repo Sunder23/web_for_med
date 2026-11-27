@@ -1,0 +1,134 @@
+@use "../../mixins/breakpoint" as *;
+
+/* ============================================================
+   STAGES — Figma desktop 3539:2727, mobile 3589:7492
+   Grid band (112px, the mobile frame shows it scaled: 31px with
+   a 12.5px step), heading, then the stage cards separated by 1px
+   rules (the list background shows through a 1px gap).
+   The strip after the section is 40px on phones, 80px from `tablet`.
+   ============================================================ */
+$ease: cubic-bezier(0.5, 0, 0, 1);
+
+.stages {
+    --section-gap: 40px;
+
+    @include breakpoint(tablet) {
+        --section-gap: 80px;
+    }
+
+    // Phones: edge to edge, as in the mobile frame.
+    &__wrap {
+        padding-inline: 0;
+
+        @include breakpoint(mobile) {
+            padding-inline: var(--pad-x);
+        }
+    }
+
+    &__band {
+        --grid-step: 12.5px;
+
+        height: 31px;
+        border-bottom: var(--border);
+
+        @include breakpoint(tablet) {
+            --grid-step: 45px;
+
+            height: 112px;
+        }
+    }
+
+    &__head {
+        padding: 32px 25px;
+        border-bottom: var(--border);
+
+        @include breakpoint(tablet) {
+            padding: 48px 40px;
+        }
+    }
+
+    &__title {
+        max-width: 990px;
+    }
+
+    &__list {
+        display: grid;
+        gap: 1px;
+        background-color: var(--c-border);
+
+        @include breakpoint(mobile) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @include breakpoint(notebook) {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        padding: 35px 25px 36px;
+        overflow: hidden;
+        background-color: var(--c-bg);
+
+        @include breakpoint(tablet) {
+            padding: 48px 40px;
+        }
+
+        // Reveal on scroll (components/cardReveal.js): content starts one card
+        // height lower and transparent while `.is-reveal-pending` is set.
+        &.is-reveal-pending > * {
+            opacity: 0;
+            transform: translateY(var(--card-reveal-y, 100%));
+        }
+
+        &.is-revealed > * {
+            transition:
+                transform 1s $ease var(--card-reveal-delay, 0ms),
+                opacity 1s $ease var(--card-reveal-delay, 0ms);
+        }
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        height: 32px;
+
+        img {
+            width: auto;
+            height: 32px;
+        }
+    }
+
+    &__item-title {
+        margin-top: 12px;
+        font-family: var(--f-main);
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 22px;
+        color: var(--c-grey);
+
+        @include breakpoint(tablet) {
+            display: flex;
+            align-items: center;
+            min-height: 48px;
+            margin-top: 20px;
+            font-size: 20px;
+            line-height: 1.2;
+        }
+    }
+
+    &__text {
+        margin-top: 16px;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 22px;
+        color: var(--c-grey);
+
+        @include breakpoint(tablet) {
+            margin-top: 12px;
+            line-height: 1.55;
+        }
+    }
+}

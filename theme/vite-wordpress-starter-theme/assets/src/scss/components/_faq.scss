@@ -73,11 +73,64 @@
         display: none; // opened by faqAccordion.js
     }
 
+    // Rendered open (`open_first`); jQuery slideUp/slideDown set inline display later.
+    &__item--open > &__answer {
+        display: block;
+    }
+
     &__answer-inner {
         padding: 0 0 24px;
 
         @include breakpoint(mobile) {
             padding-right: 52px;
+        }
+    }
+}
+
+// Services page FAQ (template-parts/blocks/section-faq.php, Figma 3534:2493 /
+// 3589:7577): no top rule, rows padded inside the column, a borderless
+// dark-blue «+» / «−».
+.faq--block {
+    border-top: 0;
+
+    // The section's closing strip draws the last rule.
+    .faq__item:last-child {
+        border-bottom: 0;
+    }
+
+    .faq__question {
+        gap: 12px;
+        padding: 24px 25px;
+        font-size: 18px;
+        line-height: 22px;
+
+        @include breakpoint(mobile) {
+            font-size: 20px;
+        }
+
+        @include breakpoint(tablet) {
+            gap: 24px;
+            padding: 28px 32px;
+            line-height: 1.2;
+        }
+    }
+
+    .faq__icon {
+        width: 36px;
+        height: 36px;
+        color: var(--c-dark-blue);
+        border: 0;
+    }
+
+    .faq__answer-inner {
+        padding: 0 25px 24px;
+        font-size: 16px;
+        line-height: 22px;
+        color: var(--c-grey);
+
+        @include breakpoint(tablet) {
+            padding: 0 32px 28px;
+            line-height: 25px;
         }
     }
 }

@@ -27,8 +27,11 @@ export function initFaqAccordion() {
 
 			// Answers start collapsed via CSS (display: none), so no
 			// JS-driven layout shift happens after AOS caches its offsets.
-			$question.attr('aria-expanded', 'false');
-			$answer.attr('aria-hidden', 'true');
+			// An item rendered with `faq__item--open` (partials/parts/faq-list.php,
+			// `open_first`) starts open; CSS shows its answer.
+			const startsOpen = $item.hasClass('faq__item--open');
+			$question.attr('aria-expanded', String(startsOpen));
+			$answer.attr('aria-hidden', String(!startsOpen));
 
 			$question.on('click', () => {
 				const isOpen = $item.hasClass('faq__item--open');

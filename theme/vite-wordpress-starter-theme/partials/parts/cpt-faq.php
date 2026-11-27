@@ -29,24 +29,16 @@ if ( empty( $items ) ) {
 					<a class="button button--primary faq-section__ask-button" href="#contact-form" data-contact-open><?php esc_html_e( 'Поставити запитання', 'vite-starter' ); ?></a>
 				</div>
 			</div>
-			<div class="faq faq-section__list" data-faq>
-				<?php foreach ( $items as $key => $item ) : ?>
-					<?php
-					if ( empty( $item['question'] ) ) {
-						continue;
-					}
-					?>
-					<div class="faq__item">
-						<button class="faq__question" type="button" aria-expanded="false" aria-controls="faq-answer-<?php echo esc_attr( (string) $key ); ?>">
-							<span class="faq__question-text"><?php echo esc_html( $item['question'] ); ?></span>
-							<span class="faq__icon" aria-hidden="true"></span>
-						</button>
-						<div class="faq__answer" id="faq-answer-<?php echo esc_attr( (string) $key ); ?>">
-							<div class="faq__answer-inner entry-content"><?php echo wp_kses_post( $item['answer'] ?? '' ); ?></div>
-						</div>
-					</div>
-				<?php endforeach; ?>
-			</div>
+			<?php
+			get_template_part(
+				'partials/parts/faq-list',
+				null,
+				array(
+					'items' => $items,
+					'class' => 'faq-section__list',
+				)
+			);
+			?>
 		</div>
 	</div>
 </section>
