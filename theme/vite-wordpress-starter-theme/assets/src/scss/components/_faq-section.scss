@@ -21,12 +21,8 @@
         @include breakpoint(tablet) {
             grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
             align-items: start;
-            column-gap: 64px;
-            padding: 72px 40px 80px;
-        }
-
-        @include breakpoint(laptop) {
             column-gap: 100px;
+            padding: 72px 40px 80px;
         }
     }
 

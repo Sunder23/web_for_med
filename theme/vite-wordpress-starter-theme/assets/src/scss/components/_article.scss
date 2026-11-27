@@ -30,12 +30,8 @@
                 "content aside";
             grid-template-rows: auto auto auto 1fr;
             justify-content: space-between;
-            column-gap: 48px;
-            padding: 48px 40px 80px;
-        }
-
-        @include breakpoint(laptop) {
             column-gap: 100px;
+            padding: 48px 40px 80px;
         }
     }
 

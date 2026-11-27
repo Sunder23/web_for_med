@@ -13,7 +13,7 @@
 - Imports in JS/SCSS go through the aliases `@js`, `@scss`, `@src`, `@`
 
 ## SCSS Conventions
-- **Mobile first:** base styles target the smallest screen; widen only through `@include breakpoint(small|mobile|tablet|laptop|desktop)` from `mixins/_breakpoint.scss` (`@use "../mixins/breakpoint" as *;` in every file that needs it). No raw `@media (max-width|min-width|width: …)`; non-width queries (`prefers-reduced-motion`, `hover`, `orientation`) are fine.
+- **Mobile first:** base styles target the smallest screen; widen only through `@include breakpoint(small|mobile|tablet|notebook|desktop)` from `mixins/_breakpoint.scss` (`@use "../mixins/breakpoint" as *;` in every file that needs it). No raw `@media (max-width|min-width|width: …)`; non-width queries (`prefers-reduced-motion`, `hover`, `orientation`) are fine.
 - Put the breakpoint inside the selector it modifies (`&__el { …; @include breakpoint(tablet) { … } }`), not in a block at the end of the file.
 - **Nesting ≤ 3 selector levels:** `.block` → `&__el` → `&--mod` / `&:hover` / `&::before`. At-rules (`@include`, `@media`, …) do not count. Instead of a block cascading into another block (`.why .container`), use a mix (`class="container why__container"`) or a modifier.
 - **BEM without prefixes:** `block`, `block__element`, `block--modifier`, kebab-case, full words — no `s-`, `l-`, `c-`, `svc-`, `br-`. One block is defined in one file.

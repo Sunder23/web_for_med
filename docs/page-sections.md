@@ -41,10 +41,10 @@ Single CPT, blog and archive templates (`single*.php`, `home.php`, `archive-*.ph
 
 | Slug | Contents | Script |
 |------|----------|--------|
-| `home-hero` | Hero with glitch image (`image` desktop, `image_mobile` below `mobile`, falls back to `image`); primary CTA opens the contact drawer | `heroTitle` (title scramble) |
+| `home-hero` | Hero with glitch image (`image` desktop, `image_mobile` below `mobile`, falls back to `image`; a fixed 630×380 from `notebook`, 380px high and column-wide on `tablet`); primary CTA opens the contact drawer | `heroTitle` (title scramble) |
 | `clinics` | Clinics grid 3×2 + aside (2 columns on phones, aside full width) | — |
 | `quote` | Centred quote text | — |
-| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (static flow; problems and solutions rows are 420px tall from `tablet`) | — |
+| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (static flow; problems and solutions rows are 420px tall from `tablet`). Card content slides up from the card edge when it enters the viewport (`components/cardReveal.js`, as on prjctr.com: 1s `cubic-bezier(0.5, 0, 0, 1)`, 0.1s step between cards of a row, starts at 30% visible, once; skipped with reduced motion) | `section-problems-solutions.js` |
 | `services` | Centred title, services accordion with image (image is not sticky on phones) | accordion + glitch image |
 | `cases` | Cases slider (Swiper, dot pagination on phones) | `casesSlider` |
 | `process` | Process title + steps with 50px icons (anchor `#process`); optional `title_mobile` replaces the title below 766px | — |

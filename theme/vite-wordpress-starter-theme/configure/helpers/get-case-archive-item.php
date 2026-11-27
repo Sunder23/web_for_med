@@ -9,7 +9,8 @@
  * Builds the data for one case on the cases archive page.
  *
  * Fallbacks: title → post title, description → case_hero.subtitle,
- * cover → featured image, otherwise 0 (the template renders a placeholder).
+ * cover → featured image, otherwise 0 (the template renders
+ * starter_get_case_placeholder_image()).
  *
  * @param int|WP_Post $post Case post or ID.
  * @return array{id:int,url:string,title:string,description:string,cover_id:int}|null Item data, or null for an invalid post.
@@ -41,7 +42,7 @@ function starter_get_case_archive_item( $post ) {
 	}
 
 	if ( ! $cover_id ) {
-		error_log( 'WARN [cases-archive] no cover for case ' . $post->ID ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( 'WARN [cases-archive] no cover for case ' . $post->ID . ', using placeholder' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}
 
 	return array(
