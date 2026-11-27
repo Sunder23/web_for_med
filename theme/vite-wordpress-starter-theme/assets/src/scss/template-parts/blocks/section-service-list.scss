@@ -12,7 +12,12 @@ $ease: cubic-bezier(0.5, 0, 0, 1);
 
 .service-list {
     &__inner {
-        padding: 40px 25px;
+        // 25px from the screen edge on phones (the container adds --pad-x).
+        padding: 40px calc(25px - var(--pad-x));
+
+        @include breakpoint(mobile) {
+            padding: 40px 25px;
+        }
 
         @include breakpoint(tablet) {
             display: grid;

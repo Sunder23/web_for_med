@@ -81,7 +81,7 @@ MSYS_NO_PATHCONV=1 docker compose -f docker/compose.yml run --rm wpcli wp eval-f
 
 ## Placeholder featured images
 
-Until the real covers are ready, `scripts/assign-placeholder-thumbnails.php` gives each published `services`, `directions`, `cases` and `post` entry a random featured image. It picks from three images in the media library (`2026/10/web_site_development.webp`, `2026/10/seo_medicine_web_site.webp`, `2026/05/hero_image.webp`), which it finds by file path. Posts that already have a thumbnail are skipped. Each placeholder is marked with the `_w4m_placeholder_thumb` postmeta, so `reset` removes only placeholders and keeps real covers.
+Until the real covers are ready, `scripts/assign-placeholder-thumbnails.php` gives each published `directions`, `cases` and `post` entry a random featured image. It picks from three images in the media library (`2026/10/web_site_development.webp`, `2026/10/seo_medicine_web_site.webp`, `2026/05/hero_image.webp`), which it finds by file path. Posts that already have a thumbnail are skipped. Each placeholder is marked with the `_w4m_placeholder_thumb` postmeta, so `reset` removes only placeholders and keeps real covers.
 
 ```bash
 make placeholder-thumbs args="dry-run"   # preview
@@ -90,7 +90,7 @@ make placeholder-thumbs args="force"     # also replace existing thumbnails
 make placeholder-thumbs args="reset"     # remove placeholders
 ```
 
-Add `types=services,cases` to limit the post types.
+Add `types=directions,cases` to limit the post types.
 
 ## Form anti-spam: Cloudflare Turnstile
 
@@ -121,7 +121,7 @@ Then open **Settings → Cloudflare Turnstile**, complete the widget and click *
 
 ## Verifying a refactor
 
-1. Take screenshots before (desktop 1440 / mobile 390) of `/`, `/services/`, one service, direction, case, `/blog/` and a blog post.
+1. Take screenshots before (desktop 1440 / mobile 390) of `/`, `/services/`, one direction, case, `/blog/` and a blog post.
 2. Rebuild and compare after. Heights must match exactly; remaining differences should be limited to animation phases (footer glitch cover on the front page, glitch images, text scramble).
 3. Check `wp-content/debug.log` for notices.
 

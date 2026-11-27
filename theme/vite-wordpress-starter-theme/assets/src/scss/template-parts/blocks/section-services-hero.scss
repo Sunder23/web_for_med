@@ -13,7 +13,12 @@
         display: flex;
         flex-direction: column;
         gap: 24px;
-        padding: 40px 25px;
+        // 25px from the screen edge on phones (the container adds --pad-x).
+        padding: 40px calc(25px - var(--pad-x));
+
+        @include breakpoint(mobile) {
+            padding: 40px 25px;
+        }
 
         @include breakpoint(tablet) {
             gap: 52px;
@@ -21,23 +26,30 @@
         }
     }
 
+    // Figma: 12px Medium on phones, 13px SemiBold on desktop.
     &__caption {
-        font-size: 13px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 500;
         line-height: 1.25;
         letter-spacing: 0.04em;
+
+        @include breakpoint(tablet) {
+            font-size: 13px;
+            font-weight: 600;
+        }
         text-transform: uppercase;
         color: var(--c-blue-light);
     }
 
     &__title {
         max-width: 990px;
-        font-size: 30px;
-        line-height: 1.15;
+        font-size: 26px;
+        line-height: 1.05;
         color: var(--c-dark);
 
         @include breakpoint(tablet) {
             font-size: 40px;
+            line-height: 1.15;
         }
     }
 

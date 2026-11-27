@@ -12,6 +12,9 @@ $ease: cubic-bezier(0.5, 0, 0, 1);
 .stages {
     --section-gap: 40px;
 
+    // Full-width rule on top (after the previous strip / the service list).
+    border-top: var(--border);
+
     @include breakpoint(tablet) {
         --section-gap: 80px;
     }
