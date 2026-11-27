@@ -12,3 +12,13 @@
         repeating-linear-gradient(to bottom, var(--grid-line) 0 1px, transparent 1px var(--grid-step));
     box-shadow: inset 1px 0 0 var(--c-border), inset -1px 0 0 var(--c-border);
 }
+
+// Inside an element that already draws the frame (`.frame` borders) and the
+// top rule: no own edge lines, and the pattern is shifted by 1px so its first
+// vertical / horizontal line falls under those borders instead of doubling
+// them (`no-repeat` keeps the next tile from adding a line at the far edge).
+.grid-lines--framed {
+    background-position: -1px -1px;
+    background-repeat: no-repeat;
+    box-shadow: none;
+}

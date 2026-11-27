@@ -33,7 +33,7 @@ if ( empty( $items ) ) {
 <section class="stages">
 	<div class="stages__wrap container">
 		<div class="stages__frame frame">
-			<div class="stages__band grid-lines" aria-hidden="true"></div>
+			<div class="stages__band grid-lines grid-lines--framed" aria-hidden="true"></div>
 			<?php if ( '' !== $section_title ) : ?>
 				<div class="stages__head">
 					<h2 class="section-title stages__title"><?php echo esc_html( $section_title ); ?></h2>
