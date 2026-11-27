@@ -14,7 +14,6 @@
 
 // Per-CPT source of the card excerpt: [ group field, sub field ]; blog posts use the post excerpt.
 $excerpt_map = array(
-	'services'   => array( 'service_hero', 'subtitle' ),
 	'directions' => array( 'direction_hero', 'description' ),
 	'cases'      => array( 'case_hero', 'subtitle' ),
 );

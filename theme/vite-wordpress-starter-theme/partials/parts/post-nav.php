@@ -12,7 +12,6 @@ $nav_post_type = get_post_type();
 // Labels per type: [ previous, next ].
 $nav_labels = array(
 	'cases'      => array( __( 'Попередній кейс', 'vite-starter' ), __( 'Наступний кейс', 'vite-starter' ) ),
-	'services'   => array( __( 'Попередня послуга', 'vite-starter' ), __( 'Наступна послуга', 'vite-starter' ) ),
 	'directions' => array( __( 'Попередній напрям', 'vite-starter' ), __( 'Наступний напрям', 'vite-starter' ) ),
 	'post'       => array( __( 'Попередня стаття', 'vite-starter' ), __( 'Наступна стаття', 'vite-starter' ) ),
 );

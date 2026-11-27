@@ -19,13 +19,9 @@
         @include breakpoint(tablet) {
             grid-template-columns: minmax(0, 1fr) 380px;
             grid-template-rows: auto 1fr;
-            column-gap: 64px;
+            column-gap: 120px;
             row-gap: 48px;
             padding: 48px 40px 120px;
-        }
-
-        @include breakpoint(laptop) {
-            column-gap: 120px;
         }
     }
 

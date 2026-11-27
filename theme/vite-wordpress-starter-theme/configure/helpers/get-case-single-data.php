@@ -86,11 +86,7 @@ function starter_get_case_single_data( $post ) {
 	if ( ! $image_id ) {
 		$has_content = '' !== $intro_html || '' !== trim( (string) $post->post_content );
 		if ( $has_content ) {
-			$placeholder = array(
-				'url'    => starter_get_static_dir() . '/images/case-placeholder.webp',
-				'width'  => 1200,
-				'height' => 795,
-			);
+			$placeholder = starter_get_case_placeholder_image();
 		}
 		error_log( 'WARN [case-single] no intro image for case ' . $post->ID . ( $placeholder ? ', using placeholder' : ', no content either' ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}

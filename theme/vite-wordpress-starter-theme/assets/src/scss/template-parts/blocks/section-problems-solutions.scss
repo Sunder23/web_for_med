@@ -1,8 +1,43 @@
+@use "sass:list";
 @use "../../mixins/breakpoint" as *;
 
 // Problems + banner + solutions (Figma 3287:1416: 03_2 / 03_3 / 03_4).
 // Plain static flow on every screen: from tablet up the problems and
 // solutions rows are 420px tall (min-height, so long texts still fit).
+
+// Reveal on scroll (js/components/cardReveal.js, as on prjctr.com): while
+// `.is-reveal-pending` is set the card clips its content and every item sits
+// one card height lower (`--card-reveal-y`, set by JS) and transparent;
+// `.is-revealed` slides them up. Leaf items are moved because the card bodies
+// are `display: contents` (subgrid) from `tablet`, where a transform has no effect.
+@mixin card-reveal($block, $items) {
+  $list: ();
+
+  @each $item in $items {
+    $list: list.append($list, ".#{$block}__#{$item}", comma);
+  }
+
+  // Clipped while hidden and while (and after) the items slide up.
+  .#{$block}.is-reveal-pending,
+  .#{$block}.is-revealed {
+    overflow: hidden;
+  }
+
+  .#{$block}.is-reveal-pending :is(#{$list}) {
+    opacity: 0;
+    transform: translateY(var(--card-reveal-y, 100%));
+  }
+
+  .#{$block}.is-revealed :is(#{$list}) {
+    // Per-card delay from JS: a row cascades 0 / 0.1 / 0.2s (prjctr.com values).
+    transition:
+      transform 1s cubic-bezier(0.5, 0, 0, 1) var(--card-reveal-delay, 0ms),
+      opacity 1s cubic-bezier(0.5, 0, 0, 1) var(--card-reveal-delay, 0ms);
+  }
+}
+
+@include card-reveal(problem-card, (tag, title, text));
+@include card-reveal(solution-card, (media, title, text));
 
 /* ============================================================
    PROBLEMS (03_2)

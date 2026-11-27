@@ -1,0 +1,72 @@
+@use "../../mixins/breakpoint" as *;
+@use "../../components/clinic-dashboard";
+
+/* ============================================================
+   SERVICES HERO — Figma desktop 3537:2555 + 3537:2570,
+   mobile 3589:7272 + 3589:7275
+   Caption + h1 in the framed column, then the dashboard cover
+   (full-bleed on phones, the column width from `mobile`).
+   No `--section-gap` strip after it (see _base.scss).
+   ============================================================ */
+.services-hero {
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        // 25px from the screen edge on phones (the container adds --pad-x).
+        padding: 40px calc(25px - var(--pad-x));
+
+        @include breakpoint(mobile) {
+            padding: 40px 25px;
+        }
+
+        @include breakpoint(tablet) {
+            gap: 52px;
+            padding: 80px 35px;
+        }
+    }
+
+    // Figma: 12px Medium on phones, 13px SemiBold on desktop.
+    &__caption {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: 0.04em;
+
+        @include breakpoint(tablet) {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        text-transform: uppercase;
+        color: var(--c-blue-light);
+    }
+
+    &__title {
+        max-width: 990px;
+        font-size: 26px;
+        line-height: 1.05;
+        color: var(--c-dark);
+
+        @include breakpoint(tablet) {
+            font-size: 40px;
+            line-height: 1.15;
+        }
+    }
+
+    // Full-width rules above and below the cover; the grid's own first line
+    // sits on the top rule (-1px).
+    &__cover {
+        border-top: var(--border);
+        border-bottom: var(--border);
+    }
+
+    // The mobile frame shows the dashboard edge to edge.
+    &__cover-inner {
+        margin-top: -1px;
+        padding-inline: 0;
+
+        @include breakpoint(mobile) {
+            padding-inline: var(--pad-x);
+        }
+    }
+}

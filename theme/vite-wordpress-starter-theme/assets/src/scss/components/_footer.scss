@@ -3,6 +3,7 @@
 .footer {
     position: relative;
     z-index: 10;
+    margin-top: -1px; // overlap the border of the last section, no double line
     background: var(--c-bg);
 
     // Mixed with .container: edge-to-edge on phones, page gutter from the mobile breakpoint.

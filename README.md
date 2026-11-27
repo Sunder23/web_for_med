@@ -2,7 +2,7 @@
 
 > Hybrid WordPress theme: pages are built from ACF section blocks, CPT/blog templates stay plain PHP. Vite + SCSS frontend, Docker dev environment.
 
-A custom theme for a medical-marketing agency site (services, directions, cases, blog). Pages are assembled in the block editor from `acf/section-*` blocks; single/archive templates reuse PHP partials directly.
+A custom theme for a medical-marketing agency site (services page, directions, cases, blog). Pages are assembled in the block editor from `acf/section-*` blocks; single/archive templates reuse PHP partials directly.
 
 ## Quick Start
 

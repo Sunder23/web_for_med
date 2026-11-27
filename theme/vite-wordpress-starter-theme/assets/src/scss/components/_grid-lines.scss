@@ -1,0 +1,24 @@
+// Decorative square grid (Figma «Концептуальна панель на сітці»): 1px lines
+// every `--grid-step`, drawn with two repeating gradients instead of dozens of
+// DOM lines. Grid lines are 48% #dbdbdb (Figma opacity 0.48); both edges are
+// drawn as solid page-frame lines, so the grid lines up with the frame.
+.grid-lines {
+    --grid-step: 45px;
+    --grid-line: rgb(219 219 219 / 48%);
+
+    background-color: var(--c-bg);
+    background-image:
+        repeating-linear-gradient(to right, var(--grid-line) 0 1px, transparent 1px var(--grid-step)),
+        repeating-linear-gradient(to bottom, var(--grid-line) 0 1px, transparent 1px var(--grid-step));
+    box-shadow: inset 1px 0 0 var(--c-border), inset -1px 0 0 var(--c-border);
+}
+
+// Inside an element that already draws the frame (`.frame` borders) and the
+// top rule: no own edge lines, and the pattern is shifted by 1px so its first
+// vertical / horizontal line falls under those borders instead of doubling
+// them (`no-repeat` keeps the next tile from adding a line at the far edge).
+.grid-lines--framed {
+    background-position: -1px -1px;
+    background-repeat: no-repeat;
+    box-shadow: none;
+}

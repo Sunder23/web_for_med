@@ -266,6 +266,11 @@ $footer-zone: 15svh;
             font-size: clamp(28px, 1.5vw + 12px, 40px);
             line-height: 1.15;
         }
+
+        // Design size (40px) on every notebook+ screen, not only from ~1870px.
+        @include breakpoint(notebook) {
+            font-size: 40px;
+        }
     }
 
     &__description {

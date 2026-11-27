@@ -1,0 +1,50 @@
+@use "../../mixins/breakpoint" as *;
+@use "../../components/faq";
+
+/* ============================================================
+   FAQ BLOCK — Figma desktop 3534:2487, mobile 3589:7573
+   Heading column (713px) + accordion column (634px) with a rule
+   between them from `tablet`; stacked on phones. 40px strip
+   before the footer (as on the about page).
+   ============================================================ */
+.faq-block {
+    --section-gap: 40px;
+
+    // Full-width rule on top (after the previous strip / the service list).
+    border-top: var(--border);
+
+    &__wrap {
+        padding-inline: 0;
+
+        @include breakpoint(mobile) {
+            padding-inline: var(--pad-x);
+        }
+    }
+
+    &__inner {
+        @include breakpoint(tablet) {
+            display: grid;
+            grid-template-columns: minmax(0, 713fr) minmax(0, 635fr);
+        }
+    }
+
+    &__aside {
+        padding: 32px 25px;
+        border-bottom: var(--border);
+
+        @include breakpoint(tablet) {
+            padding: 80px 40px;
+            border-bottom: 0;
+        }
+    }
+
+    &__title {
+        max-width: 580px;
+    }
+
+    &__list {
+        @include breakpoint(tablet) {
+            border-left: var(--border);
+        }
+    }
+}

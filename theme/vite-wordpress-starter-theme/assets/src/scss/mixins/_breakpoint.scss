@@ -1,14 +1,13 @@
 @use 'sass:map';
 
 // Mobile-first breakpoints: base styles target the smallest screens and each
-// key opens a `min-width` query. `small`, `laptop` and `desktop` keep the
-// exact boundaries of the former `max-width: 480 / 1400 / 1440px` queries.
+// key opens a `min-width` query. `small` and `desktop` keep the exact
+// boundaries of the former `max-width: 480 / 1440px` queries.
 $breakpoints: (
     small: 481px,
     mobile: 766px,
     tablet: 1024px,
     notebook: 1280px,
-    laptop: 1401px,
     desktop: 1441px,
 );
 

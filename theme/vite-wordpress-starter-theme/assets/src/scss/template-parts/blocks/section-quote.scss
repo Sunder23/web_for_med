@@ -24,7 +24,7 @@
       text-align: center;
     }
 
-    @include breakpoint(laptop) {
+    @include breakpoint(tablet) {
       padding: 80px 151px;
     }
   }

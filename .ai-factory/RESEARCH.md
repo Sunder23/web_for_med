@@ -1,26 +1,39 @@
 # Research
 
-Updated: 2026-10-08 18:38
+Updated: 2026-11-25 16:27
 Status: active
 
 ## Active Summary (input for /aif-plan)
 
 <!-- aif:active-summary:start -->
-Topic: ChatGPT prompts for cover images (featured images) of posts, services, directions, cases
-Goal: Generate a consistent series of 17 cover images in the web4med hero style (`screens/image copy 3.png`) via ChatGPT image generation, then attach them as Featured Image per post ID.
+Topic: Cases archive (/cases/) slider rework after designer feedback — looped slider, footer hint zone, description reel
+Goal: Desktop slider mode becomes an endless vertical loop decoupled from the footer; the main section always fills the screen; a bottom hover zone offers (and on wheel-down performs) a scroll to the footer; the description switches with the same reel animation as the title.
 Constraints:
-- Style: blue monochrome (#0A1F44 / #13407F / #1F5FA8 + cyan glow #7FD3FF), semi-realistic painterly illustration, holographic dashboards, NO text/logos/numbers.
-- Format 3:2 (1536x1024), negative space on the left third (theme has no `add_image_size` / fixed `aspect-ratio` — cards may crop).
-- Sensitive topics (addiction: 273, 285): no substances, no people in distress.
-- Real brands in cases (Lviv Medical Center, Compliment): no logos; better to composite a real site screenshot into the mockup later.
+- Scope: slider mode only (`SLIDER_QUERY` = min-width 1024px and min-height 520px). Lane mode (phones / low screens) and static mode stay as they are.
+- Only 3 published cases right now (Doctor Blago, Promedi, "великий сайт"); Doctor Blago has no description.
+- Swiper 12.1.4; loop mode rearranges slides (no clones); slider has `overflow: visible`, `centeredSlides`, `slidesPerView: 'auto'`.
+- Lenis is off on /cases/ (smoothScroll.js); headerAutoHide.js stays as is.
+- SCSS rules: mobile first via `breakpoint()`, nesting ≤ 3, BEM, `is-*` for JS states.
 Decisions:
-- One master style prompt + one short "Scene:" prompt per post (full texts in Session 2026-10-08 18:38).
-- Visual language per type: services = specialist + service-specific hologram; directions = clinic interior of that profile + digital layer; cases = device mockups with abstract site; posts = conceptual metaphor.
-- Workflow: new ChatGPT chat → send master prompt → one Scene per message → name files by post ID (264.png…) → if style drifts send "Keep exactly the same style…"; after ~8–10 images start a new chat with master prompt + one good image as style reference.
-Open questions: final card crop ratio (3:2 vs 16:9); whether to replace AI case covers with real site screenshots.
-Success signals: 17 covers in one consistent style, no text artifacts, uploaded as Featured Images to the matching post IDs.
-Next step: generate images in ChatGPT; optionally a WP-CLI script in `scripts/` to attach `{ID}.png` as featured images.
-(Previous summary — ref/html_ready_pages port onto single templates — was implemented and merged in 1bfc42c; details remain in Session 2026-08-03 23:15.)
+- Loop: the existing vertical slider, just looped (1 → 2 → 3 → 1 and back). No coupling to the footer anymore.
+- Footer: always in the normal flow below the slider section. The main (slider) section is never shrunk — remove `setFooter` / `settleFooter` / `is-footer-hidden` / `is-footer-moving` / `.site-content` padding-bottom animation, the inline `is-footer-hidden` script in cases-archive.php and the `atLastCase` "end" gates.
+- Bottom zone: an overlay over the bottom 15–20% of the screen. Pointer in the zone → show a "go to footer" hint (no design spec — styled with the site's common styles: caption typography like `/*CASE ARCHIVE*/`, ↓ arrow). Wheel DOWN in the zone → smooth page scroll to the footer instead of switching the case.
+- Footer → up: plain page scroll back up; the case index is untouched, so the user lands on the last viewed case and the loop works again. Keep the trackpad-inertia guard (`scrollGesture`) so the return gesture doesn't also switch a case.
+- Description: same reel as the title (track slides in step with covers, blur-fade on items, same speed/easing). Reel window height follows the active item for now. Empty item for a case without a description. "Читати кейс" button sits below the reel, not inside it, and only swaps its href.
+- Reel edge crossing (3 → 1, 1 → 3): add clones (last item before the first, first after the last) to both reels; animate one step to the clone, then jump without transition to the real item — text moves in the same direction as the covers. One shared helper for both reels.
+- Fixed title height ("as for Promedi"): POSTPONED, not in this task.
+Proposed defaults (not contradicted by the user; confirm during planning):
+- The overlay is visual only (`pointer-events: none`), the zone is detected by pointer Y, so the NEXT fragment / "Читати кейс" in the zone stay clickable.
+- Wheel UP in the zone switches to the previous case as usual (only down is overridden).
+- Start case 01 (PREV fragment is always present in a loop; drop `SLIDER_START`).
+- No fine pointer (iPad landscape in slider mode): the hint is always visible and works as a button; keyboard `End` → footer, arrows switch cases; footer `focusin` keeps working.
+Open questions:
+- Swiper loop with only 3 slides + centered + auto width + visible overflow: likely visible slide jumps / "not enough slides" — probably render covers twice when count < ~5 and map `realIndex % count` (spike first).
+- Hint text/wording (UA), exact zone height (15 vs 20%).
+Success signals: wheel cycles cases endlessly both ways; title + description reels always move with the covers (also across the edge); section height never changes; hovering the bottom zone shows the hint, wheel-down there scrolls to the footer, scrolling up returns to the same case and the loop resumes; no inertia double-switch; iPad/keyboard can reach the footer.
+Next step: `/aif-plan` for the cases archive rework (start with a loop spike on 3 cases).
+Files: theme/vite-wordpress-starter-theme/assets/src/js/components/casesArchive.js, assets/src/scss/components/_cases-archive.scss, partials/parts/cases-archive.php, docs/single-pages.md (cases section).
+(Previous summary — ChatGPT cover image prompts — details remain in Session 2026-10-08 18:38.)
 <!-- aif:active-summary:end -->
 
 ## Sessions
@@ -131,4 +144,18 @@ posts
 Links (paths):
 - screens/image copy 3.png (style reference — hero)
 - wp_posts (post / services / directions / cases, post_status=publish)
+### 2026-11-25 16:27 — Cases archive: looped slider + footer hint zone (designer feedback)
+What changed:
+- Mapped the designer's feedback onto the current slider (linear 01 → last, starts on 02, footer slides in with the last case while the section shrinks via `.site-content` padding-bottom; description crossfades).
+- User clarified: loop the existing vertical slider with no footer coupling; bottom 15–20% overlay shows a footer hint on hover and turns wheel-down into a scroll to the footer; return from the footer is a plain scroll up; the slider section height never changes; description gets the same reel animation as the title; fixed title height postponed.
+Key notes:
+- Dropping the footer choreography removes most of the gate/footer code in casesArchive.js — the wheel gate reduces to: page scrolled → native; pointer in bottom zone and deltaY > 0 → scroll to footer; else Swiper.
+- Reel edge crossing needs clones, otherwise on 3 → 1 the text track rolls back through all items opposite to the covers.
+- Risk: Swiper 12 loop with 3 slides and visible overflow on tall screens — spike before the main work.
+- Mouse-only zone leaves iPad landscape (slider mode) and keyboard users without a way to the footer — hint as a button + `End` key.
+Links (paths):
+- theme/vite-wordpress-starter-theme/assets/src/js/components/casesArchive.js
+- theme/vite-wordpress-starter-theme/assets/src/scss/components/_cases-archive.scss
+- theme/vite-wordpress-starter-theme/partials/parts/cases-archive.php
+- theme/vite-wordpress-starter-theme/assets/src/js/components/headerAutoHide.js
 <!-- aif:sessions:end -->

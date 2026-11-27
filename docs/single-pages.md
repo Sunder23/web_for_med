@@ -2,7 +2,7 @@
 
 # Single Pages (articles)
 
-Services and directions share one article layout; blog posts (see [Blog post](#blog-post)) and cases (see [Single case](#single-case)) have their own layouts. These templates are plain PHP — they are **not** built from `acf/section-*` blocks. The body text is regular block-editor content (`the_content()`).
+Directions use the shared article layout (the `services` post type was removed — services are now the `/services/` page, see [Page Sections → Services page sections](page-sections.md#services-page-sections)); blog posts (see [Blog post](#blog-post)) and cases (see [Single case](#single-case)) have their own layouts. These templates are plain PHP — they are **not** built from `acf/section-*` blocks. The body text is regular block-editor content (`the_content()`).
 
 ## Page structure
 
@@ -13,7 +13,7 @@ Services and directions share one article layout; blog posts (see [Blog post](#b
 | 3 | Blurb cards | ″ |
 | 4 | Sidebar: table of contents + quick-contact CTA | `partials/parts/toc.php` |
 | 5 | Post content in `.entry-content` | ″ (`the_content()`) |
-| 6 | FAQ accordion (CPT only) | `partials/parts/cpt-faq.php` |
+| 6 | FAQ accordion (CPT only) | `partials/parts/cpt-faq.php` (list markup: `partials/parts/faq-list.php`) |
 | 7 | Previous / next post of the same type (loops at the ends) | `partials/parts/post-nav.php` |
 | 8 | "Схожі …" — 3 posts of the same type | `partials/parts/related-posts.php` + `post-card.php` |
 
@@ -23,7 +23,6 @@ Layout: one column on phones (hero → image → blurbs → sidebar → content)
 
 | Template | `lead` | Other args | FAQ group |
 |----------|--------|------------|------------------|
-| `single-services.php` | `service_hero.subtitle` | `note` = `text`, `buttons`, `blurbs` | `service_faq` |
 | `single-directions.php` | `direction_hero.description` | `blurbs` | `direction_faq` |
 
 The `*_cta` ACF groups are no longer rendered. There is no form before the footer any more: every contact CTA opens the contact drawer (see [Page Sections → Contact drawer and footer](page-sections.md#contact-drawer-and-footer)), and the footer of inner pages has no "Далі буде…" cover. Empty fields are skipped. The FAQ heading falls back to "Часті запитання". The related row shows nothing when there are no other posts.
@@ -94,7 +93,7 @@ Prev / next for both strips comes from `starter_get_adjacent_posts()` (`configur
 
 | Entry | Enqueued on | Includes |
 |-------|-------------|----------|
-| `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( services, directions )` | article, entry-content, lightbox, toc, faq-section, faq, post-card, related-posts, post-nav; `initToc`, `initFaqAccordion` |
+| `single-cpt.scss` + `single-cpt.js` (deps `jquery`) | `is_singular( 'directions' )` | article, entry-content, lightbox, toc, faq-section, faq, post-card, related-posts, post-nav; `initToc`, `initFaqAccordion` |
 | `single-post.scss` + `single-post.js` | `is_singular( 'post' )` | entry-content, post-author, post-single, blog-card, post-related (+ Swiper CSS); `initSectionCounter`, `initPostRelatedSlider` |
 | `single-case.scss` + `single-case.js` | `is_singular( 'cases' )` | entry-content, case-single; `initSectionCounter`, `initCaseGalleries` |
 | `blog-archive.scss` + `blog-archive.js` | `starter_is_blog_listing()`: `is_home()`, category, tag, author, date | post-author, blog-card, blog-archive; `initBlogLoadMore` |
@@ -106,9 +105,9 @@ All are enqueued from `configure/theme-hooks/enqueue-listing-templates-assets.ph
 | Template | Layout | Styles |
 |----------|--------|--------|
 | `home.php` (posts page), `archive.php` (category, tag, date, author) | `partials/parts/blog-archive.php` (Figma `3446:656` / `3493:1082`): hero `/*blog*/` + H1 (posts page: «Досвід, помилки та несподівані відкриття»; archives: term or author name + description), grid of `blog-card` (1 → 2 columns from `mobile` → 3 from `tablet`), «Показати ще» | `blog-archive.scss` |
-| `archive-{services,directions}.php` | `partials/parts/archive-cpt.php` | `archive.scss` |
+| `archive-directions.php` | `partials/parts/archive-cpt.php` | `archive.scss` |
 | `archive-cases.php` | `partials/parts/cases-archive.php`: utility bar + vertical case slider (see [Cases archive slider](#cases-archive-slider)) | `cases-archive.scss` |
-| `404.php` | Big "404", heading, home/blog buttons, list of services | `error-404.scss` (`starter_enqueue_404_assets`) |
+| `404.php` | Big "404", heading, home/blog buttons, links to the main sections (Послуги page, cases archive, Про нас — each only when it exists; a missing services page logs `WARN [404] services page not found`) | `error-404.scss` (`starter_enqueue_404_assets`) |
 
 Blog listing details:
 

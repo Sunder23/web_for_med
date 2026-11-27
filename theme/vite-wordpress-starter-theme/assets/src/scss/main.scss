@@ -6,6 +6,7 @@
 
 // layout primitives (before components so blocks can override them)
 @use "components/grid";
+@use "components/grid-lines";
 
 // global components
 @use "components/buttons";

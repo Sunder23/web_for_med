@@ -1,6 +1,6 @@
 <?php
 /**
- * Shared archive layout for the services / directions / cases CPTs:
+ * Shared archive layout for the directions / cases CPTs:
  * hero (title, lead, section switcher, CTA) + card grid over the main query.
  *
  * @package Vite_Starter
@@ -8,7 +8,6 @@
 
 // Archive intro under the heading, per post type.
 $archive_leads = array(
-	'services'   => __( 'Сайти, SEO, реклама та аналітика для медичних закладів. Кожна послуга працює на записи пацієнтів, а не на трафік заради трафіку.', 'vite-starter' ),
 	'directions' => __( 'Готові рішення під профіль закладу: від приватного кабінету до багатопрофільної клініки. Враховуємо специфіку пацієнтів, обмеження реклами та правила медичної сфери.', 'vite-starter' ),
 	'cases'      => __( 'Реальні проєкти для клінік і медичних центрів: з чого починали, що зробили і який результат отримали.', 'vite-starter' ),
 );

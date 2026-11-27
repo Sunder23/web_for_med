@@ -29,7 +29,7 @@ function starter_get_breadcrumb_items( array $labels = array() ) {
 		),
 	);
 
-	if ( is_singular( array( 'services', 'directions', 'cases' ) ) ) {
+	if ( is_singular( array( 'directions', 'cases' ) ) ) {
 		$post_type_object = get_post_type_object( get_post_type() );
 		$items[]          = array(
 			'label' => $post_type_object->labels->name,

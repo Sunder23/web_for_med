@@ -13,5 +13,5 @@
  * @return bool Whether the current view renders block content.
  */
 function starter_is_block_content_view() {
-	return is_singular( array( 'post', 'services', 'directions', 'cases' ) );
+	return is_singular( array( 'post', 'directions', 'cases' ) );
 }

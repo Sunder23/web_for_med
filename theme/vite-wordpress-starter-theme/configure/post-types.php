@@ -6,7 +6,6 @@
  */
 
 $starter_post_types = array(
-	'services.php',
 	'directions.php',
 	'cases.php',
 );

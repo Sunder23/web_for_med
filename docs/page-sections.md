@@ -41,10 +41,10 @@ Single CPT, blog and archive templates (`single*.php`, `home.php`, `archive-*.ph
 
 | Slug | Contents | Script |
 |------|----------|--------|
-| `home-hero` | Hero with glitch image (`image` desktop, `image_mobile` below `mobile`, falls back to `image`); primary CTA opens the contact drawer | `heroTitle` (title scramble) |
+| `home-hero` | Hero with glitch image (`image` desktop, `image_mobile` below `mobile`, falls back to `image`; a fixed 630×380 from `notebook`, 380px high and column-wide on `tablet`); primary CTA opens the contact drawer | `heroTitle` (title scramble) |
 | `clinics` | Clinics grid 3×2 + aside (2 columns on phones, aside full width) | — |
 | `quote` | Centred quote text | — |
-| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (static flow; problems and solutions rows are 420px tall from `tablet`) | — |
+| `problems-solutions` | Problems cards + banner text + solutions with 50px icons (static flow; problems and solutions rows are 420px tall from `tablet`). Card content slides up from the card edge when it enters the viewport (`components/cardReveal.js`, as on prjctr.com: 1s `cubic-bezier(0.5, 0, 0, 1)`, 0.1s step between cards of a row, starts at 30% visible, once; skipped with reduced motion) | `section-problems-solutions.js` |
 | `services` | Centred title, services accordion with image (image is not sticky on phones) | accordion + glitch image |
 | `cases` | Cases slider (Swiper, dot pagination on phones) | `casesSlider` |
 | `process` | Process title + steps with 50px icons (anchor `#process`); optional `title_mobile` replaces the title below 766px | — |
@@ -71,6 +71,22 @@ The "Про нас" page (`/about/`, Figma desktop `3241:4188`, mobile `3255:874
 
 - Rhythm: these sections are joined by a single `var(--border)` line, with no `--section-gap` strip between them (`.about-intro` and `.team` are in the `section:not(...)::after` exclusions in `_base.scss`). `owner-cta` sets `--section-gap: 40px` locally, which gives the 40px strip before the footer.
 - `.button--outline` (`components/_buttons.scss`): white button with a 1px blue outline drawn as an inset `box-shadow`, so it is as tall as `.button--primary`; on hover it turns blue like primary.
+
+## Services page sections
+
+The "Послуги" page (`/services/`, Figma desktop `3534:2180`, mobile `3589:7251`) is a regular page built from five blocks, in this order. It replaced the removed `services` post type: old `/services/<slug>/` URLs answer 301 → `/services/` (`configure/theme-hooks/redirect-legacy-services.php`, on `template_redirect` priority 9 so it runs before the core 404 slug guess). The page is not in the main menu (the design menu is Про нас / Кейси / Блог / Контакти); the 404 screen links to it.
+
+| Slug | Contents | Script |
+|------|----------|--------|
+| `services-hero` | `caption` (`/*services*/`, shown uppercase) + `title` (h1; empty → `WARN`, nothing rendered), then the decorative "Клініка · огляд" dashboard (`partials/parts/clinic-dashboard.php`, `aria-hidden`; its numbers are constants in that file, not fields). The 1350×540 stage (grid + 1280×448 panel) is drawn at design size and scaled to the column width via `--dashboard-scale`; phones show it edge to edge, as the mobile frame does. The panel uses Fixel instead of the mock-up's Inter. | `dashboardScale` (ResizeObserver), `dashboardReveal` (once at 30% in view; the timeline is set in the partial as `--d` / `data-delay` per element: texts float up, menu items slide in one by one, KPI numbers and source percentages count up, chart rules draw from the left, bars rise one after another with a small overshoot, source bars fill; then `.is-live` — the bars keep moving gently, paused off screen. Transitions live on `.is-revealed` only, so the pending state hides elements at once; skipped with reduced motion) |
+| `service-list` | `intro`, repeater `items` (`icon`, `title`, `text`, `image` 375×375 @2x), `default_active` (1-based, default 2; out of range → first + `WARN`), `link_icon` + `link` (last row, e.g. «Перейти до кейсів»; empty link → no row). From `tablet`: preview column (image + description of the active service, crossfade) next to the list; hover (fine pointer), focus or click makes a row active. Phones: accordion, one row open at a time, «+» → «−». Class is `.service-list`, not `.services` (that one belongs to the front page `servicesAccordion.js`). | `serviceList` |
+| `capabilities` | `title`, repeater `items` (`icon`, `text`), `tasks_title`, repeater `tasks` (`label`), `button_label`. Task chips (`.task-chip`, `components/_task-chip.scss`) are toggles (`aria-pressed`; selected = blue fill — the mock-up has no selected state). «Обговоримо?» opens the contact drawer and writes `Завдання: a; b` as the first line of the CF7 `your-message` (a repeated click replaces only that line; nothing selected removes it; the visitor's own text stays). | `taskPicker` (listens on `window` capture, before `contactDrawer`) |
+| `stages` | `title`, repeater `items` (`icon` 32px high, `title`, `text`). A band of the decorative grid on top (112px; 31px with a 12.5px step on phones), cards in 1 / 2 (`mobile`) / 4 (`notebook`) columns separated by 1px rules. | `cardReveal` (`.stages__item`) |
+| `faq` | `title`, repeater `items` (`question`, `answer` wysiwyg), `open_first` (default on). Accordion markup is the shared `partials/parts/faq-list.php` (also used by `cpt-faq.php`), modifier `.faq--block`; no "Не знайшли відповідь?" box. | `faqAccordion` (an item rendered with `faq__item--open` starts open) |
+
+- Decorative grid: `.grid-lines` (`components/_grid-lines.scss`, in `main.scss`) — two repeating gradients every `--grid-step` (45px), lines at 48% `#dbdbdb`, solid frame lines on both edges.
+- Rhythm: `.services-hero` and `.service-list` are in the `section:not(...)::after` exclusions (joined by single rules); `capabilities` and `stages` close with a 40px strip on phones / 80px from `tablet`, `faq` with 40px before the footer.
+- The editor canvas does not run section scripts, so the dashboard is not scaled there (it is clipped at its design size).
 
 ## Contact drawer and footer
 
@@ -118,6 +134,20 @@ The Telegram / WhatsApp buttons are created with placeholder URLs (`https://t.me
 MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php"              # dry run
 MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php apply"        # upload media + write
 MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-about-page.php apply force"  # overwrite existing blocks
+```
+
+### Services page content (November 2026)
+
+`scripts/remove-services-cpt.php` deletes what is left of the removed `services` post type (posts with their meta, menu items pointing to them) and flushes rewrite rules. Run it first: `scripts/update-services-page.php` stops while such posts exist.
+
+`scripts/update-services-page.php` creates (or refills) the page with slug `services` from the five blocks above with the texts of `scripts/data/services/content.php`. Service descriptions are copied once from the front page `acf/section-services` block (`items_N_text`, same order); an empty one falls back to the shared text in `content.php` with a warning. Service icons reuse the front page attachments (`_starter_source` `home-redesign/service-*.svg`); the service images and the other icons are sideloaded from `scripts/data/services/` once and tagged `services/<file>`. The FAQ has one shared answer for every question for now — replace answers and descriptions in the block editor when real texts are ready. The Rank Math (or Yoast) description is set when the plugin is active. A page that already has section blocks is left alone unless `force` is passed.
+
+```bash
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/remove-services-cpt.php"               # dry run
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/remove-services-cpt.php apply"         # delete posts + flush rewrites
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-services-page.php"              # dry run
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-services-page.php apply"        # upload media + create the page
+MSYS_NO_PATHCONV=1 make wp cmd="eval-file /scripts/update-services-page.php apply force"  # overwrite existing blocks
 ```
 
 ## See Also

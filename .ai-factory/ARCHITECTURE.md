@@ -15,7 +15,7 @@ wp-boilerplate/
 └── theme/vite-wordpress-starter-theme/
     ├── functions.php                    # composition root ($starter_modules)
     ├── configure/
-    │   ├── post-types.php  + post-types/{services,directions,cases}.php
+    │   ├── post-types.php  + post-types/{directions,cases}.php
     │   ├── taxonomies.php  + taxonomies/
     │   ├── theme-hooks.php + theme-hooks/*.php   # one hook concern per file
     │   ├── utilities.php   + helpers/*.php       # starter_get_* helpers
@@ -66,7 +66,7 @@ assets/src (compiled by Vite, enqueued by js-css.php and per-template hooks)
 - **Global** (`main.scss`, `main.js`): tokens (incl. `--font-heading` Grunt Grotesk, `--section-gap`), fonts, base, header/footer/forms/grid, shared components, smooth scroll, mobile nav, smart header (`smartHeader.js`: fixed header hidden on scroll down, shown on scroll up), contact drawer (`partials/parts/contact-drawer.php` + `_contact-drawer.scss` + `contactDrawer.js`, opened by `[data-contact-open]` / `#contact-form` links), footer animations.
 - **Per template**: `archive.scss` (CPT archives), `blog-archive.scss/js` (posts page + post archives), `cases-archive.scss/js`, `single-cpt.scss/js`, `single-post.scss/js`, `single-case.scss/js` (see `theme-hooks/enqueue-listing-templates-assets.php`).
 - **Blog post** (`single.php`): `partials/parts/post-single.php` (utility bar, 880px column, «Зміст», content styles scoped to `.post-single__content`) + `post-related.php` (Swiper); it does not use `article-layout`. **Single case**: `case-single.php` + `case-nav.php`.
-- **Article singles** (`single-{services,directions}.php`): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_lightbox`, `_toc`, `_faq-section`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
+- **Article singles** (`single-directions.php`; the `services` CPT was removed — `/services/` is a page of section blocks): one shared `partials/parts/article-layout.php` (hero, image, blurbs, sticky TOC + CTA sidebar, `.entry-content`) followed by `cpt-faq`, `related-posts`, `cpt-cta`; styles `_article`, `_entry-content`, `_lightbox`, `_toc`, `_faq-section`, `_faq`, `_post-card`, `_related-posts`, `_cta-banner`. See `docs/single-pages.md`.
 - **Per section block**: `section-{slug}.scss/js`, enqueued only when the block is on the page (`section-blocks.php`).
 - **JS-imported CSS** (vendors) is resolved through manifest `css` + `imports` (`starter_vite_entry_css_files()`).
 - **Modes**: `VITE_BUILD` (manifest exists) → hashed files; `VITE_DEV` (no manifest, local env) → `localhost:5173`.

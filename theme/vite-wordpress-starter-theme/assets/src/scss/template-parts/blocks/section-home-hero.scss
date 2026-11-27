@@ -34,16 +34,18 @@
     }
 
     @include breakpoint(tablet) {
-      // 1024–1400: a wider text column keeps both CTAs on one row.
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 550px 1fr;
       align-items: center;
-      gap: 40px;
+      gap: 100px;
       padding: 50px 35px 0;
     }
 
-    @include breakpoint(laptop) {
-      grid-template-columns: 550px 1fr;
-      gap: 100px;
+    // The image is a fixed 630px from `notebook`; the text column takes the
+    // rest up to 550px. At 1440 that is 550 + 100 + 630 as in the mockup.
+    @include breakpoint(notebook) {
+      grid-template-columns: minmax(0, 550px) 630px;
+      justify-content: space-between;
+      gap: 40px;
     }
   }
 
@@ -82,10 +84,6 @@
     }
 
     @include breakpoint(tablet) {
-      font-size: 34px;
-    }
-
-    @include breakpoint(laptop) {
       font-size: 40px;
     }
 
@@ -133,10 +131,6 @@
     }
 
     @include breakpoint(tablet) {
-      gap: 16px;
-    }
-
-    @include breakpoint(laptop) {
       gap: 24px;
     }
   }
@@ -175,9 +169,13 @@
       background-image: var(--hero-image);
     }
 
-    @include breakpoint(laptop) {
+    @include breakpoint(tablet) {
       height: 380px;
       aspect-ratio: auto;
+    }
+
+    @include breakpoint(notebook) {
+      width: 630px;
     }
   }
 }

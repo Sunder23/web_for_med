@@ -31,6 +31,11 @@ function starter_get_section_slugs() {
 		'about-intro',
 		'team',
 		'owner-cta',
+		'services-hero',
+		'service-list',
+		'capabilities',
+		'stages',
+		'faq',
 	);
 }
 

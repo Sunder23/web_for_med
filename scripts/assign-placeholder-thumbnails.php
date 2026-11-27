@@ -8,12 +8,12 @@
  * real cover set later.
  *
  * Run:
- *   wp eval-file /scripts/assign-placeholder-thumbnails.php [dry-run] [force] [reset] [types=services,cases]
+ *   wp eval-file /scripts/assign-placeholder-thumbnails.php [dry-run] [force] [reset] [types=directions,cases]
  *
  *   dry-run — print what would change, write nothing
  *   force   — also replace existing thumbnails (default: posts with a thumbnail are skipped)
  *   reset   — remove placeholder thumbnails (only posts marked with _w4m_placeholder_thumb)
- *   types=  — comma-separated subset of post types (default: services,directions,cases,post)
+ *   types=  — comma-separated subset of post types (default: directions,cases,post)
  *
  * Add --debug to see the resolved attachments and query args.
  *
@@ -31,7 +31,7 @@ $w4m_cli_args   = isset( $args ) ? (array) $args : array();
 $dry_run        = in_array( 'dry-run', $w4m_cli_args, true );
 $force          = in_array( 'force', $w4m_cli_args, true );
 $reset          = in_array( 'reset', $w4m_cli_args, true );
-$w4m_post_types = array( 'services', 'directions', 'cases', 'post' );
+$w4m_post_types = array( 'directions', 'cases', 'post' );
 $marker_key     = '_w4m_placeholder_thumb';
 
 foreach ( $w4m_cli_args as $w4m_arg ) {
