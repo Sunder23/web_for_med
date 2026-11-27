@@ -96,12 +96,12 @@ function starter_cases_archive_body_class( $classes ) {
 add_filter( 'body_class', 'starter_cases_archive_body_class' );
 
 /**
- * Enqueues assets for single services / directions templates.
+ * Enqueues assets for the single directions template.
  *
  * @return void
  */
 function starter_enqueue_single_cpt_assets() {
-	if ( ! is_singular( array( 'services', 'directions' ) ) ) {
+	if ( ! is_singular( 'directions' ) ) {
 		return;
 	}
 

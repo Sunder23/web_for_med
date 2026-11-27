@@ -20,6 +20,7 @@ $starter_theme_hooks = array(
 	'cases-archive-query.php',
 	'blog-query.php',
 	'register-block-styles.php',
+	'redirect-legacy-services.php',
 );
 
 foreach ( $starter_theme_hooks as $starter_theme_hook ) {
